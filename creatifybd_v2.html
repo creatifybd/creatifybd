@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreatifyBD — Digital Marketing & Creative Agency, Dhaka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --red: #E8192C;
+  --red-light: #fff0f1;
+  --red-mid: #ffd6d9;
+  --black: #0f0f0f;
+  --gray-900: #1a1a1a;
+  --gray-700: #444;
+  --gray-500: #777;
+  --gray-300: #c8c8c8;
+  --gray-100: #f5f5f3;
+  --gray-50: #fafaf8;
+  --white: #ffffff;
+  --border: #e8e8e4;
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  height: 68px;
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--black);
+  text-decoration: none;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.nav-logo .dot { color: var(--red); }
+
+.nav-center {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+.nav-center a {
+  text-decoration: none;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  transition: all 0.18s;
+}
+.nav-center a:hover { background: var(--gray-100); color: var(--black); }
+
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+.btn-ghost {
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.18s;
+}
+.btn-ghost:hover { background: var(--gray-100); }
+
+.btn-red {
+  background: var(--red);
+  color: var(--white);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.18s;
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.btn-red:hover { background: #c8101f; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,25,44,0.25); }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 120px 3rem 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--red-light);
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--red-mid);
+  animation: fadeUp 0.6s ease both;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7.5vw, 6.5rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  color: var(--black);
+  max-width: 900px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 .red { color: var(--red); }
+.hero h1 .wavy {
+  position: relative;
+  display: inline-block;
+}
+.hero h1 .wavy::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 0; right: 0;
+  height: 5px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'%3E%3Cpath d='M0 4 Q25 0 50 4 Q75 8 100 4 Q125 0 150 4 Q175 8 200 4' fill='none' stroke='%23E8192C' stroke-width='3'/%3E%3C/svg%3E") repeat-x center;
+}
+
+.hero-sub {
+  margin-top: 1.75rem;
+  font-size: 1.1rem;
+  color: var(--gray-500);
+  max-width: 520px;
+  line-height: 1.65;
+  font-weight: 300;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+  animation: fadeUp 0.6s 0.25s ease both;
+}
+.btn-outline-dark {
+  background: transparent;
+  color: var(--black);
+  border: 1.5px solid var(--border);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.18s;
+}
+.btn-outline-dark:hover { border-color: var(--gray-300); background: var(--gray-50); }
+
+.hero-mockup {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 4rem;
+  animation: fadeUp 0.8s 0.35s ease both;
+  position: relative;
+}
+
+/* Decorative hero image placeholder — gradient mock dashboard */
+.hero-mockup-inner {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%);
+  border-radius: 20px 20px 0 0;
+  height: 480px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 -20px 80px rgba(0,0,0,0.12), 0 30px 80px rgba(0,0,0,0.1);
+}
+
+/* Simulated UI elements inside mockup */
+.mock-bar {
+  height: 42px;
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  gap: 0.5rem;
+}
+.mock-dot { width: 11px; height: 11px; border-radius: 50%; }
+.mock-body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: calc(100% - 42px);
+}
+.mock-sidebar {
+  background: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(255,255,255,0.05);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.mock-sidebar-item {
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+}
+.mock-sidebar-item.active { background: rgba(232,25,44,0.25); }
+.mock-content {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 160px 100px 80px;
+  gap: 1rem;
+}
+.mock-card {
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.mock-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; right: -30px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,25,44,0.3), transparent 70%);
+}
+.mock-card.span2 { grid-column: span 2; }
+.mock-card.span3 { grid-column: span 3; }
+.mock-card-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-family: var(--font-body); }
+.mock-card-val { font-size: 1.8rem; font-weight: 800; color: white; font-family: var(--font-display); }
+.mock-card-val span { font-size: 0.9rem; font-weight: 400; color: rgba(255,255,255,0.5); }
+.mock-bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 60px; margin-top: 0.75rem; }
+.bar-col { flex: 1; background: rgba(232,25,44,0.4); border-radius: 3px 3px 0 0; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── CLIENTS MARQUEE ─── */
+.clients-section {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--gray-50);
+}
+.clients-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.marquee-wrap { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
+.marquee-row {
+  display: flex;
+  gap: 2.5rem;
+  animation: slide 22s linear infinite;
+  width: max-content;
+}
+.marquee-row.reverse { animation-direction: reverse; margin-top: 1rem; }
+.client-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 2rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+@keyframes slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ─── SECTION COMMON ─── */
+.section { padding: 6rem 3rem; }
+.section-sm { padding: 5rem 3rem; }
+.container { max-width: 1140px; margin: 0 auto; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 20px; height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+}
+
+h2.section-h {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--black);
+}
+h2.section-h .red { color: var(--red); }
+
+.section-sub {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--gray-500);
+  max-width: 480px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ─── INTRO BAND ─── */
+.intro-band {
+  background: var(--black);
+  padding: 5rem 3rem;
+  text-align: center;
+}
+.intro-band h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.15;
+}
+.intro-band h2 .red { color: var(--red); }
+.intro-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.pillar {
+  background: #161616;
+  padding: 2.2rem 1.8rem;
+  text-align: left;
+  transition: background 0.2s;
+}
+.pillar:hover { background: #1e1e1e; }
+.pillar-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+.pillar h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+.pillar p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.6; font-weight: 300; }
+
+/* ─── SERVICES ─── */
+.services-section { background: var(--gray-50); }
+.services-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.services-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin: 0 -3rem;
+  padding: 0.5rem 3rem 1.5rem;
+}
+.services-scroll-wrap::-webkit-scrollbar { display: none; }
+
+.services-row {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+}
+
+.service-card {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.25s;
+  cursor: default;
+}
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  border-color: var(--gray-300);
+}
+.service-img {
+  height: 170px;
+  position: relative;
+  overflow: hidden;
+}
+.service-img-bg {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  transition: transform 0.4s ease;
+}
+.service-card:hover .service-img-bg { transform: scale(1.08); }
+
+.s1 { background: linear-gradient(135deg, #fef3f4, #ffe0e3); }
+.s2 { background: linear-gradient(135deg, #f0f4ff, #dce8ff); }
+.s3 { background: linear-gradient(135deg, #f3fff0, #d6f5cf); }
+.s4 { background: linear-gradient(135deg, #fff8f0, #ffe5c6); }
+.s5 { background: linear-gradient(135deg, #f8f0ff, #ead6ff); }
+.s6 { background: linear-gradient(135deg, #f0fdff, #c6f2ff); }
+
+.service-body { padding: 1.3rem 1.4rem; }
+.service-body h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+}
+.service-body p { font-size: 0.82rem; color: var(--gray-500); line-height: 1.55; }
+.service-tag {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--red);
+  background: var(--red-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+/* ─── PORTFOLIO GRID ─── */
+.portfolio-section { background: var(--white); }
+.portfolio-header { text-align: center; margin-bottom: 3.5rem; }
+.portfolio-header .section-sub { margin: 1rem auto 0; }
+
+.portfolio-masonry {
+  column-count: 3;
+  column-gap: 1.25rem;
+}
+.portfolio-item {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: default;
+}
+.portfolio-item:hover .portfolio-overlay { opacity: 1; }
+.portfolio-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(232,25,44,0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.portfolio-overlay span {
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.portfolio-img {
+  width: 100%;
+  display: block;
+}
+
+/* Fake portfolio images using CSS art */
+.pf-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: rgba(0,0,0,0.35);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+.pf-1  { height: 220px; background: linear-gradient(135deg, #fce4e7, #f9b8be); }
+.pf-2  { height: 170px; background: linear-gradient(135deg, #e4eeff, #b8ccf9); }
+.pf-3  { height: 250px; background: linear-gradient(135deg, #e4ffe8, #b8f9c0); }
+.pf-4  { height: 190px; background: linear-gradient(135deg, #fff4e4, #f9d8b8); }
+.pf-5  { height: 230px; background: linear-gradient(135deg, #f4e4ff, #d8b8f9); }
+.pf-6  { height: 175px; background: linear-gradient(135deg, #e4f9ff, #b8eef9); }
+.pf-7  { height: 260px; background: linear-gradient(135deg, #fffde4, #f9f1b8); }
+.pf-8  { height: 200px; background: linear-gradient(135deg, #ffe4f4, #f9b8df); }
+.pf-9  { height: 185px; background: linear-gradient(135deg, #e4fff7, #b8f9e8); }
+
+/* ─── PROCESS ─── */
+.process-section { background: var(--gray-50); }
+.process-header { margin-bottom: 3.5rem; }
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.07); }
+.step-num {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--gray-100);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.04em;
+}
+.step-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+.step-card h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+.step-card p { font-size: 0.82rem; color: var(--gray-500); line-height: 1.6; }
+
+/* ─── FEATURES / WHY ─── */
+.features-section { background: var(--white); }
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.feature-list { display: flex; flex-direction: column; gap: 1rem; }
+.feature-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.4rem;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.feature-item:hover { background: var(--gray-50); border-color: var(--border); }
+.feature-icon-wrap {
+  width: 46px; height: 46px;
+  background: var(--red-light);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  border: 1px solid var(--red-mid);
+}
+.feature-item h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.3rem;
+}
+.feature-item p { font-size: 0.83rem; color: var(--gray-500); line-height: 1.6; }
+
+.features-visual {
+  position: relative;
+}
+.feat-card-big {
+  background: var(--black);
+  border-radius: 24px;
+  padding: 2.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card-big::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(232,25,44,0.25), transparent 70%);
+  border-radius: 50%;
+}
+.feat-card-big h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+.feat-card-big h3 span { color: var(--red); }
+.feat-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.feat-stat {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1.2rem;
+}
+.feat-stat-val {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+.feat-stat-val em { color: var(--red); font-style: normal; }
+.feat-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.45); margin-top: 0.3rem; }
+
+.badge-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.badge {
+  padding: 0.35rem 0.85rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+}
+.badge.hot { background: rgba(232,25,44,0.2); border-color: rgba(232,25,44,0.3); color: #ff8891; }
+
+/* ─── PRICING ─── */
+.pricing-section { background: var(--gray-50); }
+.pricing-header { text-align: center; margin-bottom: 1rem; }
+.pricing-header .section-sub { margin: 0.75rem auto 0; }
+
+.pricing-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 2rem 0 3rem;
+  background: var(--white);
+  padding: 0.35rem;
+  border-radius: 14px;
+  width: fit-content;
+  margin-left: auto; margin-right: auto;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.ptab {
+  padding: 0.55rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+.ptab.active { background: var(--red); color: white; }
+.ptab:hover:not(.active) { background: var(--gray-100); color: var(--black); }
+
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.price-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 2.2rem;
+  position: relative;
+  transition: all 0.25s;
+}
+.price-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.07); }
+.price-card.featured {
+  border-color: var(--red);
+  background: linear-gradient(160deg, #fff8f8 0%, white 60%);
+  box-shadow: 0 8px 40px rgba(232,25,44,0.1);
+}
+.popular-badge {
+  position: absolute;
+  top: -1px; right: 1.5rem;
+  background: var(--red);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0 0 8px 8px;
+}
+.price-tier {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-500);
+  margin-bottom: 1.2rem;
+}
+.price-amount {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.price-amount .currency { font-size: 1.2rem; vertical-align: top; margin-top: 0.4rem; display: inline-block; }
+.price-amount .suffix { font-size: 0.9rem; font-weight: 400; color: var(--gray-500); }
+.price-desc { font-size: 0.82rem; color: var(--gray-500); margin: 0.6rem 0 1.5rem; }
+.price-divider { height: 1px; background: var(--border); margin-bottom: 1.5rem; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+.price-features li { font-size: 0.85rem; color: var(--gray-700); display: flex; align-items: flex-start; gap: 0.6rem; }
+.price-features li::before { content: '✓'; color: var(--red); font-weight: 700; flex-shrink: 0; }
+.price-cta { display: block; text-align: center; }
+
+.pricebox { display: none; }
+.pricebox.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+/* ─── TESTIMONIALS ─── */
+.testimonials-section { background: var(--white); overflow: hidden; }
+.testi-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+.rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.2rem;
+  border-radius: 14px;
+}
+.rating-val { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--black); }
+.rating-stars { color: #f59e0b; font-size: 0.9rem; }
+.rating-count { font-size: 0.78rem; color: var(--gray-500); }
+
+.testi-scroll {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
+}
+.testi-scroll::-webkit-scrollbar { display: none; }
+.testi-card {
+  flex-shrink: 0;
+  width: 320px;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.75rem;
+}
+.testi-stars { color: #f59e0b; font-size: 0.85rem; margin-bottom: 1rem; }
+.testi-text { font-size: 0.9rem; color: var(--gray-700); line-height: 1.65; margin-bottom: 1.25rem; font-weight: 300; }
+.testi-text strong { font-weight: 600; color: var(--black); }
+.testi-author { display: flex; align-items: center; gap: 0.8rem; }
+.testi-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+.av1 { background: linear-gradient(135deg, #E8192C, #ff6b6b); }
+.av2 { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+.av3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.av4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+.av5 { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+.testi-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--black); }
+.testi-role { font-size: 0.75rem; color: var(--gray-500); }
+
+/* ─── CTA BAND ─── */
+.cta-section {
+  background: var(--black);
+  padding: 6rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,25,44,0.15), transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.04em;
+  max-width: 700px;
+  margin: 0 auto 1rem;
+  line-height: 1.1;
+  position: relative;
+}
+.cta-section h2 .red { color: var(--red); }
+.cta-section p { color: rgba(255,255,255,0.5); font-size: 1rem; margin-bottom: 2.5rem; font-weight: 300; position: relative; }
+.cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+.btn-white {
+  background: white;
+  color: var(--black);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.18s;
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,255,255,0.15); }
+.btn-red-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.75rem 1.75rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.18s;
+}
+.btn-red-outline:hover { border-color: rgba(255,255,255,0.4); color: white; }
+
+/* ─── CONTACT ─── */
+.contact-section { background: var(--gray-50); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 5rem;
+  align-items: start;
+}
+.contact-info h2 { margin-bottom: 1rem; }
+.contact-info p { color: var(--gray-500); font-size: 0.95rem; line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+.contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+.clink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--black);
+  transition: all 0.2s;
+}
+.clink:hover { border-color: var(--red); transform: translateX(4px); }
+.clink-icon {
+  width: 42px; height: 42px;
+  background: var(--red-light);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  border: 1px solid var(--red-mid);
+  flex-shrink: 0;
+}
+.clink-info small { font-size: 0.72rem; color: var(--gray-500); display: block; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.clink-info strong { font-size: 0.875rem; font-weight: 600; }
+
+.contact-form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.04);
+}
+.contact-form-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  margin-bottom: 0.4rem;
+}
+.contact-form-card p { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1.75rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.fg { margin-bottom: 1rem; }
+.fg label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.fg input, .fg textarea, .fg select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--black);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.18s;
+  -webkit-appearance: none;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(232,25,44,0.08); }
+.fg textarea { min-height: 90px; resize: vertical; }
+.fg select option { background: white; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--black);
+  color: rgba(255,255,255,0.55);
+  padding: 4rem 3rem 2rem;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 2rem;
+}
+.footer-brand h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+}
+.footer-brand h3 .dot { color: var(--red); }
+.footer-brand p { font-size: 0.85rem; line-height: 1.65; margin-bottom: 1.5rem; }
+.footer-social { display: flex; gap: 0.6rem; }
+.f-social-btn {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  transition: all 0.18s;
+}
+.f-social-btn:hover { background: var(--red); border-color: var(--red); color: white; }
+.footer-col h4 { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-col ul li a { font-size: 0.82rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.18s; }
+.footer-col ul li a:hover { color: white; }
+.footer-contact-info { display: flex; flex-direction: column; gap: 0.75rem; }
+.f-contact-item { display: flex; flex-direction: column; gap: 0.1rem; }
+.f-contact-item small { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); font-weight: 600; }
+.f-contact-item a { font-size: 0.82rem; color: rgba(255,255,255,0.55); text-decoration: none; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-bottom p { font-size: 0.8rem; }
+.footer-legal { display: flex; gap: 1.5rem; }
+.footer-legal a { font-size: 0.8rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.18s; }
+.footer-legal a:hover { color: rgba(255,255,255,0.7); }
+
+/* ─── SCROLL REVEAL ─── */
+.sr { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.sr.vis { opacity: 1; transform: translateY(0); }
+.sr-delay-1 { transition-delay: 0.1s; }
+.sr-delay-2 { transition-delay: 0.2s; }
+.sr-delay-3 { transition-delay: 0.3s; }
+
+/* ─── MOBILE ─── */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 68px; left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 150;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+.mobile-menu a { text-decoration: none; color: var(--gray-700); font-size: 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.hamburger-btn span { width: 22px; height: 2px; background: var(--black); border-radius: 2px; display: block; transition: all 0.3s; }
+
+@media (max-width: 900px) {
+  .nav-center, .nav-right .btn-ghost { display: none; }
+  .hamburger-btn { display: flex; }
+  .hero { padding: 100px 1.5rem 0; }
+  .section, .section-sm { padding: 4rem 1.5rem; }
+  .intro-pillars { grid-template-columns: 1fr; }
+  .portfolio-masonry { column-count: 2; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .pricebox.active { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .intro-band { padding: 4rem 1.5rem; }
+}
+@media (max-width: 600px) {
+  .portfolio-masonry { column-count: 1; }
+  .process-steps { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Creatify<span class="dot">BD</span></a>
+  <ul class="nav-center">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Our Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="tel:+8801951676600" class="btn-ghost">📞 Call Us</a>
+    <a href="#contact" class="btn-red">Get Started →</a>
+    <button class="hamburger-btn" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMobile()">Services</a>
+  <a href="#portfolio" onclick="toggleMobile()">Our Work</a>
+  <a href="#process" onclick="toggleMobile()">Process</a>
+  <a href="#pricing" onclick="toggleMobile()">Pricing</a>
+  <a href="#contact" onclick="toggleMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">🇧🇩 Based in Dhaka, Bangladesh</div>
+  <h1>Your <span class="red">Creative</span> Partner<br>for <span class="wavy">Digital Growth</span></h1>
+  <p class="hero-sub">Affordable, high-quality digital marketing for startups & small businesses. Social media, branding, photography, web development — all under one roof.</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-red" style="font-size:0.95rem;padding:0.75rem 1.75rem;">Start a Project →</a>
+    <a href="#portfolio" class="btn-outline-dark" style="padding:0.75rem 1.75rem;font-size:0.95rem;">See Our Work</a>
+  </div>
+  <div class="hero-mockup">
+    <div class="hero-mockup-inner">
+      <div class="mock-bar">
+        <div class="mock-dot" style="background:#ff5f57"></div>
+        <div class="mock-dot" style="background:#febc2e"></div>
+        <div class="mock-dot" style="background:#28c840"></div>
+        <div style="flex:1;margin-left:1rem;background:rgba(255,255,255,0.06);height:22px;border-radius:6px;max-width:280px"></div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-sidebar-item active"></div>
+          <div class="mock-sidebar-item" style="width:70%"></div>
+          <div class="mock-sidebar-item" style="width:85%"></div>
+          <div class="mock-sidebar-item" style="width:60%"></div>
+          <div class="mock-sidebar-item" style="width:75%"></div>
+          <div class="mock-sidebar-item" style="width:50%"></div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-card">
+            <div class="mock-card-label">Reach</div>
+            <div class="mock-card-val">48K <span>+12%</span></div>
+            <div class="mock-bar-chart">
+              <div class="bar-col" style="height:40%"></div>
+              <div class="bar-col" style="height:60%;background:rgba(232,25,44,0.7)"></div>
+              <div class="bar-col" style="height:50%"></div>
+              <div class="bar-col" style="height:80%;background:rgba(232,25,44,0.85)"></div>
+              <div class="bar-col" style="height:65%"></div>
+              <div class="bar-col" style="height:90%;background:var(--red)"></div>
+            </div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-label">Conversions</div>
+            <div class="mock-card-val">3.2K <span>+28%</span></div>
+            <div class="mock-bar-chart">
+              <div class="bar-col" style="height:30%"></div>
+              <div class="bar-col" style="height:55%;background:rgba(232,25,44,0.7)"></div>
+              <div class="bar-col" style="height:70%;background:rgba(232,25,44,0.85)"></div>
+              <div class="bar-col" style="height:85%;background:var(--red)"></div>
+              <div class="bar-col" style="height:60%"></div>
+              <div class="bar-col" style="height:95%;background:var(--red)"></div>
+            </div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-label">ROI</div>
+            <div class="mock-card-val">2.4x</div>
+            <div style="margin-top:0.75rem;height:50px;background:conic-gradient(from 0deg, #E8192C 0% 68%, rgba(255,255,255,0.1) 68% 100%);border-radius:50%;width:50px"></div>
+          </div>
+          <div class="mock-card span2">
+            <div class="mock-card-label">Active Campaigns</div>
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap">
+              <div style="padding:0.3rem 0.7rem;background:rgba(232,25,44,0.25);border-radius:6px;font-size:0.7rem;color:#ff8891">Facebook Ads</div>
+              <div style="padding:0.3rem 0.7rem;background:rgba(255,255,255,0.07);border-radius:6px;font-size:0.7rem;color:rgba(255,255,255,0.5)">Instagram</div>
+              <div style="padding:0.3rem 0.7rem;background:rgba(255,255,255,0.07);border-radius:6px;font-size:0.7rem;color:rgba(255,255,255,0.5)">Google Ads</div>
+            </div>
+          </div>
+          <div class="mock-card span3" style="display:flex;align-items:center;gap:1rem">
+            <div style="color:rgba(255,255,255,0.3);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;font-family:'DM Sans',sans-serif;">Brand Visibility Growth</div>
+            <div style="flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden">
+              <div style="width:74%;height:100%;background:var(--red);border-radius:2px"></div>
+            </div>
+            <div style="color:white;font-size:0.8rem;font-weight:700">74%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<div class="clients-section">
+  <div class="clients-label">Trusted by businesses across Bangladesh</div>
+  <div class="marquee-wrap">
+    <div class="marquee-row">
+      <div class="client-logo">Fashion House BD</div>
+      <div class="client-logo">TechStart Dhaka</div>
+      <div class="client-logo">Green Eats</div>
+      <div class="client-logo">Nova Clothing</div>
+      <div class="client-logo">EduBridge BD</div>
+      <div class="client-logo">HealthPlus</div>
+      <div class="client-logo">CraftNest</div>
+      <div class="client-logo">ShopLocal BD</div>
+      <div class="client-logo">ByteWave</div>
+      <div class="client-logo">Riverside Resto</div>
+      <div class="client-logo">Fashion House BD</div>
+      <div class="client-logo">TechStart Dhaka</div>
+      <div class="client-logo">Green Eats</div>
+      <div class="client-logo">Nova Clothing</div>
+      <div class="client-logo">EduBridge BD</div>
+      <div class="client-logo">HealthPlus</div>
+      <div class="client-logo">CraftNest</div>
+      <div class="client-logo">ShopLocal BD</div>
+      <div class="client-logo">ByteWave</div>
+      <div class="client-logo">Riverside Resto</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO BAND -->
+<div class="intro-band">
+  <h2>Stop struggling with <span class="red">low visibility</span> and ineffective marketing</h2>
+  <div class="intro-pillars">
+    <div class="pillar">
+      <div class="pillar-icon">💸</div>
+      <h4>Affordable Pricing</h4>
+      <p>Professional marketing that fits within your budget. High ROI without burning your funds.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🎯</div>
+      <h4>Proven Local Results</h4>
+      <p>Deep understanding of the Bangladeshi market. Strategies that actually work here.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🏠</div>
+      <h4>One-Stop Agency</h4>
+      <p>Branding, social media, video, photography, web — all from one trusted partner.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section services-section" id="services">
+  <div class="container">
+    <div class="services-header sr">
+      <div>
+        <div class="eyebrow">What We Do</div>
+        <h2 class="section-h">Our <span class="red">Services</span></h2>
+      </div>
+      <a href="#contact" class="btn-red">Get a Free Quote →</a>
+    </div>
+  </div>
+  <div class="services-scroll-wrap sr sr-delay-1">
+    <div class="services-row">
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s1">📱</div></div>
+        <div class="service-body">
+          <h3>Social Media Management</h3>
+          <p>Facebook & Instagram setup, content creation, community management, and follower growth.</p>
+          <span class="service-tag">From ৳1,500</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s2">🎨</div></div>
+        <div class="service-body">
+          <h3>Branding & Logo Design</h3>
+          <p>Impactful logos and branding materials with unlimited revisions and full brand guidelines.</p>
+          <span class="service-tag">From ৳1,000</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s3">📸</div></div>
+        <div class="service-body">
+          <h3>Product Photography</h3>
+          <p>Studio, lifestyle, and white background shots. Professional lighting and post-editing.</p>
+          <span class="service-tag">From ৳1,500</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s4">🎬</div></div>
+        <div class="service-body">
+          <h3>Video Production</h3>
+          <p>15 to 60-second cinematic brand videos with voice-over and licensed soundtracks.</p>
+          <span class="service-tag">From ৳500</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s5">💻</div></div>
+        <div class="service-body">
+          <h3>Website Design & Dev</h3>
+          <p>Responsive, SEO-optimized WordPress websites from single-page to full e-commerce.</p>
+          <span class="service-tag">From ৳8,000</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s6">📢</div></div>
+        <div class="service-body">
+          <h3>Advertising Campaigns</h3>
+          <p>Targeted Facebook, Instagram & Google ads. Full campaign management and optimization.</p>
+          <span class="service-tag">Custom Pricing</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-img"><div class="service-img-bg s1">🖼️</div></div>
+        <div class="service-body">
+          <h3>Thumbnail & Poster Design</h3>
+          <p>Eye-catching YouTube thumbnails and creative campaign posters built for maximum CTR.</p>
+          <span class="service-tag">From ৳200</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="section portfolio-section" id="portfolio">
+  <div class="container">
+    <div class="portfolio-header sr">
+      <div class="eyebrow" style="justify-content:center">Our Work</div>
+      <h2 class="section-h">Creative Work That <span class="red">Converts</span></h2>
+      <p class="section-sub">A glimpse of what we've created for local businesses across Bangladesh.</p>
+    </div>
+    <div class="portfolio-masonry sr sr-delay-1">
+      <div class="portfolio-item"><div class="pf-block pf-1">Social Media Design</div><div class="portfolio-overlay"><span>Brand Identity</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-2">Website Design</div><div class="portfolio-overlay"><span>Web Design</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-3">Product Photography</div><div class="portfolio-overlay"><span>Photography</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-4">Logo Design</div><div class="portfolio-overlay"><span>Branding</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-5">Ad Campaign Creative</div><div class="portfolio-overlay"><span>Ad Design</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-6">Thumbnail Design</div><div class="portfolio-overlay"><span>YouTube</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-7">Brand Video</div><div class="portfolio-overlay"><span>Videography</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-8">Poster Design</div><div class="portfolio-overlay"><span>Print Design</span></div></div>
+      <div class="portfolio-item"><div class="pf-block pf-9">E-commerce Site</div><div class="portfolio-overlay"><span>Web Dev</span></div></div>
+    </div>
+    <div style="text-align:center;margin-top:3rem" class="sr">
+      <a href="#contact" class="btn-red" style="font-size:0.95rem;padding:0.8rem 2rem;">See All Projects →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section process-section" id="process">
+  <div class="container">
+    <div class="process-header sr">
+      <div class="eyebrow">How It Works</div>
+      <h2 class="section-h">Simple 4-Step <span class="red">Process</span></h2>
+      <p class="section-sub">From first contact to delivered results — fast, smooth, and transparent.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step-card sr">
+        <div class="step-num">01</div>
+        <div class="step-icon">💬</div>
+        <h4>Tell Us Your Needs</h4>
+        <p>Contact us via phone, email, or social media. We'll learn about your business and goals in a quick chat.</p>
+      </div>
+      <div class="step-card sr sr-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-icon">🗂️</div>
+        <h4>Choose Your Package</h4>
+        <p>Pick from our clear, affordable packages — or we'll create a custom plan tailored to your budget.</p>
+      </div>
+      <div class="step-card sr sr-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-icon">⚙️</div>
+        <h4>We Get to Work</h4>
+        <p>Our creative team starts on your project immediately, keeping you updated throughout the process.</p>
+      </div>
+      <div class="step-card sr sr-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-icon">🚀</div>
+        <h4>Review & Launch</h4>
+        <p>Review the deliverables, request any revisions, and then go live. We don't stop until you're happy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY / FEATURES -->
+<section class="section features-section" id="why">
+  <div class="container">
+    <div class="features-grid">
+      <div>
+        <div class="eyebrow sr">Why CreatifyBD</div>
+        <h2 class="section-h sr sr-delay-1">Built for <span class="red">Bangladesh.</span><br>Built for Growth.</h2>
+        <p class="section-sub sr sr-delay-1">We're not just another agency. We understand the local market deeply and we're obsessed with your results.</p>
+        <div class="feature-list" style="margin-top:2.5rem">
+          <div class="feature-item sr">
+            <div class="feature-icon-wrap">🎯</div>
+            <div>
+              <h4>Deep Local Market Knowledge</h4>
+              <p>We know what works in Bangladesh — the platforms, the audiences, the trends. No guesswork.</p>
+            </div>
+          </div>
+          <div class="feature-item sr sr-delay-1">
+            <div class="feature-icon-wrap">💰</div>
+            <div>
+              <h4>Transparent, Budget-Friendly</h4>
+              <p>No hidden fees. No bloated agency overhead. You pay for results, not fancy office rent.</p>
+            </div>
+          </div>
+          <div class="feature-item sr sr-delay-2">
+            <div class="feature-icon-wrap">⚡</div>
+            <div>
+              <h4>Fast Turnaround</h4>
+              <p>We move fast. Most deliverables are turned around within 2–5 business days.</p>
+            </div>
+          </div>
+          <div class="feature-item sr sr-delay-3">
+            <div class="feature-icon-wrap">🤝</div>
+            <div>
+              <h4>Personalized for Your Brand</h4>
+              <p>We take time to understand your vision, voice, and goals before we create anything.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="features-visual sr sr-delay-2">
+        <div class="feat-card-big">
+          <h3>Trusted by <span>100+</span> businesses across Bangladesh</h3>
+          <div class="feat-stats">
+            <div class="feat-stat">
+              <div class="feat-stat-val">100<em>+</em></div>
+              <div class="feat-stat-label">Projects Delivered</div>
+            </div>
+            <div class="feat-stat">
+              <div class="feat-stat-val">6<em>+</em></div>
+              <div class="feat-stat-label">Core Services</div>
+            </div>
+            <div class="feat-stat">
+              <div class="feat-stat-val">2<em>x</em></div>
+              <div class="feat-stat-label">Avg. Brand Growth</div>
+            </div>
+            <div class="feat-stat">
+              <div class="feat-stat-val">5<em>★</em></div>
+              <div class="feat-stat-label">Client Rating</div>
+            </div>
+          </div>
+          <div class="badge-row">
+            <span class="badge hot">🔥 Social Media</span>
+            <span class="badge">Branding</span>
+            <span class="badge">Web Design</span>
+            <span class="badge hot">⚡ Fast Delivery</span>
+            <span class="badge">Photography</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="pricing-header sr">
+      <div class="eyebrow" style="justify-content:center">Pricing</div>
+      <h2 class="section-h">Clear, Affordable <span class="red">Packages</span></h2>
+      <p class="section-sub">No hidden costs. No contracts. Just great work at the right price.</p>
+    </div>
+    <div class="pricing-tabs sr">
+      <button class="ptab active" onclick="showTab('social', this)">Social Media</button>
+      <button class="ptab" onclick="showTab('branding', this)">Branding</button>
+      <button class="ptab" onclick="showTab('web', this)">Website</button>
+      <button class="ptab" onclick="showTab('video', this)">Video</button>
+    </div>
+
+    <div id="tab-social" class="pricebox active sr">
+      <div class="price-card">
+        <div class="price-tier">Basic</div>
+        <div class="price-amount"><span class="currency">৳</span>1,500</div>
+        <div class="price-desc">Perfect for getting started online</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Facebook page setup & optimization</li>
+          <li>Instagram page setup</li>
+          <li>Profile & cover photo design</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-amount"><span class="currency">৳</span>3,000</div>
+        <div class="price-desc">Best for growing businesses</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Full Facebook & Instagram setup</li>
+          <li>Logo design included</li>
+          <li>Profile & cover photo design</li>
+          <li>1-week content scheduling guidance</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Premium</div>
+        <div class="price-amount"><span class="currency">৳</span>5,000</div>
+        <div class="price-desc">Full brand launch package</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Advanced FB & Instagram setup</li>
+          <li>Strong account privacy backup</li>
+          <li>Full branding strategy</li>
+          <li>2-week content calendar</li>
+          <li>Audience targeting strategy</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+    </div>
+
+    <div id="tab-branding" class="pricebox sr">
+      <div class="price-card">
+        <div class="price-tier">Basic</div>
+        <div class="price-amount"><span class="currency">৳</span>1,000</div>
+        <div class="price-desc">Clean, simple logo</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>1 logo concept</li>
+          <li>1 round of revisions</li>
+          <li>PNG & AI file formats</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-amount"><span class="currency">৳</span>2,000</div>
+        <div class="price-desc">More options, more revisions</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>2 unique logo concepts</li>
+          <li>2 revision rounds</li>
+          <li>PNG, JPG, PDF & AI formats</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Premium</div>
+        <div class="price-amount"><span class="currency">৳</span>3,000</div>
+        <div class="price-desc">Complete brand identity</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>3 premium logo concepts</li>
+          <li>Unlimited revisions</li>
+          <li>Full brand guidelines doc</li>
+          <li>All file formats</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+    </div>
+
+    <div id="tab-web" class="pricebox sr">
+      <div class="price-card">
+        <div class="price-tier">Basic</div>
+        <div class="price-amount"><span class="currency">৳</span>8,000</div>
+        <div class="price-desc">Single-page site to get you online</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>1-page responsive WordPress</li>
+          <li>Contact form</li>
+          <li>Social media links</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-amount"><span class="currency">৳</span>15,000</div>
+        <div class="price-desc">Full business website</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Up to 5 pages</li>
+          <li>Responsive WordPress design</li>
+          <li>Speed & security optimized</li>
+          <li>Social integration</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Premium</div>
+        <div class="price-amount"><span class="currency">৳</span>25,000</div>
+        <div class="price-desc">E-commerce ready site</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Up to 10 pages</li>
+          <li>WooCommerce e-commerce</li>
+          <li>Premium WordPress theme</li>
+          <li>Speed & security optimized</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+    </div>
+
+    <div id="tab-video" class="pricebox sr">
+      <div class="price-card">
+        <div class="price-tier">Basic</div>
+        <div class="price-amount"><span class="currency">৳</span>500</div>
+        <div class="price-desc">Quick brand video ad</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>15-second video ad</li>
+          <li>Premium stock footage</li>
+          <li>Professional voice-over</li>
+          <li>Licensed soundtrack</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-amount"><span class="currency">৳</span>1,000</div>
+        <div class="price-desc">Professional promo video</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>30-second video ad</li>
+          <li>Premium stock footage</li>
+          <li>Voice-over + text overlay</li>
+          <li>Licensed soundtrack</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Premium</div>
+        <div class="price-amount"><span class="currency">৳</span>20,000</div>
+        <div class="price-desc">Cinematic brand film</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>60-second cinematic video</li>
+          <li>Premium grade stock footage</li>
+          <li>Professional voice-over</li>
+          <li>Licensed soundtrack</li>
+        </ul>
+        <a href="#contact" class="btn-red price-cta">Get Started →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="testi-header sr">
+      <div>
+        <div class="eyebrow">Reviews</div>
+        <h2 class="section-h">What Our <span class="red">Clients</span> Say</h2>
+      </div>
+      <div class="rating-summary">
+        <div class="rating-val">5.0</div>
+        <div>
+          <div class="rating-stars">★★★★★</div>
+          <div class="rating-count">From 50+ reviews</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-scroll sr sr-delay-1">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">CreatifyBD completely transformed our online presence. <strong>Our Facebook page went from 200 to 5,000 followers</strong> in just 3 months. Truly amazing work!</p>
+        <div class="testi-author">
+          <div class="testi-avatar av1">R</div>
+          <div>
+            <div class="testi-name">Rahim Uddin</div>
+            <div class="testi-role">Owner, Nova Fashion House</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">The logo they designed for us is exactly what we wanted. <strong>Professional, affordable, and delivered on time.</strong> We've gotten so many compliments on it!</p>
+        <div class="testi-author">
+          <div class="testi-avatar av2">S</div>
+          <div>
+            <div class="testi-name">Sumaiya Ahmed</div>
+            <div class="testi-role">Founder, Green Eats Café</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Our product photos are stunning. <strong>Sales increased 40% after using CreatifyBD's photography</strong> for our e-commerce listings. Absolutely worth it.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av3">K</div>
+          <div>
+            <div class="testi-name">Karim Hossain</div>
+            <div class="testi-role">CEO, CraftNest BD</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">They built our website in under 2 weeks and it looks incredible. <strong>Very responsive team and great communication</strong> throughout the whole process.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av4">N</div>
+          <div>
+            <div class="testi-name">Nadia Rahman</div>
+            <div class="testi-role">Co-founder, ByteWave Tech</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">The Facebook ad campaign they ran for us <strong>generated 3x return on investment</strong> in the first month. I highly recommend CreatifyBD to every business owner.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av5">T</div>
+          <div>
+            <div class="testi-name">Tanvir Islam</div>
+            <div class="testi-role">Director, ShopLocal BD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to <span class="red">Grow</span> Your Business?</h2>
+  <p>Join 100+ businesses in Bangladesh that trust CreatifyBD with their digital growth.</p>
+  <div class="cta-actions">
+    <a href="#contact" class="btn-white">Start a Project Today →</a>
+    <a href="tel:+8801951676600" class="btn-red-outline">📞 +880 01951 676600</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info sr">
+        <div class="eyebrow">Get In Touch</div>
+        <h2 class="section-h">Let's Build <span class="red">Something Great</span></h2>
+        <p>Have a project in mind? Tell us what you need and we'll put together the perfect plan for your business and budget.</p>
+        <div class="contact-links">
+          <a href="tel:+8801951676600" class="clink">
+            <div class="clink-icon">📞</div>
+            <div class="clink-info"><small>Call Us</small><strong>+880 01951 676600</strong></div>
+          </a>
+          <a href="mailto:creatifybd@gmail.com" class="clink">
+            <div class="clink-icon">✉️</div>
+            <div class="clink-info"><small>Email</small><strong>creatifybd@gmail.com</strong></div>
+          </a>
+          <a href="https://facebook.com/creatifybd" target="_blank" class="clink">
+            <div class="clink-icon">📘</div>
+            <div class="clink-info"><small>Facebook</small><strong>@creatifybd</strong></div>
+          </a>
+          <a href="https://instagram.com/creatifybd" target="_blank" class="clink">
+            <div class="clink-icon">📸</div>
+            <div class="clink-info"><small>Instagram</small><strong>@creatifybd</strong></div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-card sr sr-delay-1">
+        <h3>Send Us a Message</h3>
+        <p>We typically respond within a few hours.</p>
+        <div class="form-row">
+          <div class="fg"><label>Your Name</label><input type="text" placeholder="Mohammad Ali"></div>
+          <div class="fg"><label>Phone / Email</label><input type="text" placeholder="01XXXXXXXXX"></div>
+        </div>
+        <div class="fg">
+          <label>Business Name</label>
+          <input type="text" placeholder="Your Company Name">
+        </div>
+        <div class="fg">
+          <label>Service Needed</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Social Media Management</option>
+            <option>Branding & Logo Design</option>
+            <option>Product Photography</option>
+            <option>Video Production</option>
+            <option>Website Design & Development</option>
+            <option>Advertising Campaigns</option>
+            <option>Thumbnail / Poster Design</option>
+            <option>Multiple Services</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Tell Us About Your Project</label>
+          <textarea placeholder="Briefly describe your business and what you need help with..."></textarea>
+        </div>
+        <button class="btn-red" style="width:100%;justify-content:center;padding:0.85rem;font-size:0.95rem;border-radius:12px;" onclick="submitForm(this)">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Creatify<span class="dot">BD</span></h3>
+        <p>Leading digital marketing and creative agency based in Dhaka, Bangladesh. Helping businesses grow their online presence since day one.</p>
+        <div class="footer-social">
+          <a href="https://facebook.com/creatifybd" class="f-social-btn" target="_blank">f</a>
+          <a href="https://instagram.com/creatifybd" class="f-social-btn" target="_blank">in</a>
+          <a href="mailto:creatifybd@gmail.com" class="f-social-btn">@</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Social Media Management</a></li>
+          <li><a href="#services">Branding & Logo Design</a></li>
+          <li><a href="#services">Product Photography</a></li>
+          <li><a href="#services">Video Production</a></li>
+          <li><a href="#services">Website Development</a></li>
+          <li><a href="#services">Ad Campaigns</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#why">About Us</a></li>
+          <li><a href="#portfolio">Our Work</a></li>
+          <li><a href="#process">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-contact-info">
+          <div class="f-contact-item">
+            <small>Phone</small>
+            <a href="tel:+8801951676600">+880 01951 676600</a>
+          </div>
+          <div class="f-contact-item">
+            <small>Email</small>
+            <a href="mailto:creatifybd@gmail.com">creatifybd@gmail.com</a>
+          </div>
+          <div class="f-contact-item">
+            <small>Location</small>
+            <a href="#">Dhaka, Bangladesh</a>
+          </div>
+          <div class="f-contact-item">
+            <small>Website</small>
+            <a href="#">www.creatifybd.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 CreatifyBD. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Mobile menu
+function toggleMobile() {
+  const m = document.getElementById('mobileMenu');
+  m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+}
+
+// Pricing tabs
+function showTab(name, btn) {
+  document.querySelectorAll('.pricebox').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.sr').forEach(el => io.observe(el));
+
+// Form submit
+function submitForm(btn) {
+  const original = btn.textContent;
+  btn.textContent = '✓ Message Sent! We\'ll reply soon.';
+  btn.style.background = '#15803d';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.style.background = '';
+    btn.disabled = false;
+  }, 4000);
+}
+</script>
+</body>
+</html>
