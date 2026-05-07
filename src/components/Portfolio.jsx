@@ -125,6 +125,7 @@ function WorkCard({ item, onClick }) {
         data-cursor="View"
       >
         <div className="wk-card-img-wrap">
+          <ImageReveal>
             <img 
               src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'} 
               alt={item.title} 
@@ -135,6 +136,7 @@ function WorkCard({ item, onClick }) {
                 e.target.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
               }}
             />
+          </ImageReveal>
           <div className="wk-card-overlay">
             <div className="wk-card-overlay-inner">
               <span className="wk-cat-tag">{CAT_DISPLAY[item.category] || item.category}</span>

@@ -58,19 +58,33 @@ export const TextReveal = ({ children, className = '', delay = 0 }) => {
 };
 
 /**
- * ImageReveal: Animates images with a scaling and sliding mask effect.
+ * ImageReveal: Advanced creative mask reveal with scaling.
  */
 export const ImageReveal = ({ children, delay = 0 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 1, delay }}
-      style={{ width: '100%', height: '100%' }}
-    >
-      {children}
-    </motion.div>
+    <div className="image-reveal-wrap" style={{ position: 'relative', overflow: 'hidden', borderRadius: 'inherit' }}>
+      <motion.div
+        initial={{ y: "100%" }}
+        whileInView={{ y: "-100%" }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'var(--red)',
+          zIndex: 2,
+        }}
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 1.2 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: delay + 0.2 }}
+        style={{ width: '100%', height: '100%' }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 };
 
