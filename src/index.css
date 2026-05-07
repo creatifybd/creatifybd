@@ -34,28 +34,40 @@ a, button, [role="button"] {
   cursor: none !important;
 }
 
-.custom-cursor {
+.cursor-dot {
   position: fixed;
   top: 0;
   left: 0;
-  width: 20px;
-  height: 20px;
-  background: rgba(232, 25, 44, 0.4);
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10001;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(232, 25, 44, 0.4);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  mix-blend-mode: difference;
+  transition: border-color 0.3s;
 }
 
 .cursor-text {
   color: white;
-  font-size: 0.65rem;
-  font-weight: 800;
+  font-size: 0.7rem;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
 }
 
 body.lang-bn {
@@ -824,8 +836,10 @@ h2.section-h .red { color: var(--red); }
 
 .cs-section {
   background: #f5f4f0;
-  padding: 7rem 0 5rem;
+  padding: 8rem 0 5rem;
   overflow: hidden;
+  margin-top: 6rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 .cs-header-wrap {
@@ -861,13 +875,14 @@ h2.section-h .red { color: var(--red); }
   gap: 2rem;
   flex-wrap: wrap;
 }
+
 .cs-heading {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
   color: var(--black);
-  line-height: 1.0;
+  line-height: 0.95;
 }
 .cs-heading span { color: var(--red); }
 .cs-subhead {

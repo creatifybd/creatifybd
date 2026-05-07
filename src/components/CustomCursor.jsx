@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring } from 'framer-motion';
 
 const CustomCursor = () => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [cursorText, setCursorText] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-
-  const springConfig = { damping: 25, stiffness: 250 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  // Snappier spring configuration
+  const springConfig = { damping: 30, stiffness: 400, mass: 0.5 };
+  const quickSpring = { damping: 20, stiffness: 600, mass: 0.2 };
+  
+  const dotX = useSpring(0, quickSpring);
+  const dotY = useSpring(0, quickSpring);
+  const ringX = useSpring(0, springConfig);
+  const ringY = useSpring(0, springConfig);
 
   useEffect(() => {
     const moveCursor = (e) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+      dotX.set(e.clientX);
+      dotY.set(e.clientY);
+      ringX.set(e.clientX);
+      ringY.set(e.clientY);
       if (!isVisible) setIsVisible(true);
     };
 
@@ -38,34 +43,52 @@ const CustomCursor = () => {
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, [dotX, dotY, ringX, ringY, isVisible]);
 
   if (!isVisible) return null;
 
   return (
-    <motion.div
-      className="custom-cursor"
-      style={{
-        translateX: cursorXSpring,
-        translateY: cursorYSpring,
-      }}
-      animate={{
-        width: isHovered ? 90 : 20,
-        height: isHovered ? 90 : 20,
-        backgroundColor: isHovered ? 'rgba(232, 25, 44, 0.9)' : 'rgba(232, 25, 44, 0.4)',
-      }}
-      transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
-    >
-      {isHovered && (
-        <motion.span
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="cursor-text"
-        >
-          {cursorText}
-        </motion.span>
-      )}
-    </motion.div>
+    <>
+      {/* Main Snappy Dot */}
+      <motion.div
+        className="cursor-dot"
+        style={{
+          x: dotX,
+          y: dotY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+      />
+      
+      {/* Delayed Fluid Ring */}
+      <motion.div
+        className="cursor-ring"
+        style={{
+          x: ringX,
+          y: ringY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          width: isHovered ? 90 : 40,
+          height: isHovered ? 90 : 40,
+          backgroundColor: isHovered ? 'rgba(232, 25, 44, 0.9)' : 'transparent',
+          borderColor: isHovered ? 'transparent' : 'rgba(232, 25, 44, 0.5)',
+          scale: isHovered ? 1.2 : 1,
+        }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+      >
+        {isHovered && (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="cursor-text"
+          >
+            {cursorText}
+          </motion.span>
+        )}
+      </motion.div>
+    </>
   );
 };
 
