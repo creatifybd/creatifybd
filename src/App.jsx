@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { LanguageProvider } from './context/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import Home from './pages/Home';
 import ServicesPage from './pages/public/ServicesPage';
 import PortfolioPage from './pages/public/PortfolioPage';
@@ -12,6 +13,7 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Lenis from 'lenis';
+import Preloader from './components/Preloader';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -21,7 +23,21 @@ function ScrollToTop() {
   return null;
 }
 
-function App() {
+const PageWrapper = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+function AppContent() {
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -40,34 +56,42 @@ function App() {
     }
 
     requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
+    return () => lenis.destroy();
   }, []);
 
+  return (
+    <>
+      {loading && <Preloader onComplete={() => setLoading(false)} />}
+      <ScrollToTop />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
+          <Route path="/work" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+          <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
+          <Route path="/pricing" element={<PageWrapper><PricingPage /></PageWrapper>} />
+          <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+          <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+          <Route 
+            path="/admin/*" 
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </AnimatePresence>
+    </>
+  );
+}
+
+function App() {
   return (
     <HelmetProvider>
       <LanguageProvider>
         <Router>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/work" element={<PortfolioPage />} />
-            <Route path="/process" element={<ProcessPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route 
-              path="/admin/*" 
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
+          <AppContent />
         </Router>
       </LanguageProvider>
     </HelmetProvider>

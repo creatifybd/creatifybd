@@ -67,8 +67,8 @@ const CaseStudies = ({ highlight = false }) => {
               
               <div className="duck-cs-visual">
                 <ImageReveal delay={0.4}>
-                  <div className="duck-cs-img-wrap">
-                    <img src={project.imageUrl} alt={project.title} className="duck-cs-img" />
+                  <div className="duck-cs-img-wrap" style={{ overflow: 'hidden' }}>
+                    <ParallaxImage src={project.imageUrl} alt={project.title} />
                   </div>
                 </ImageReveal>
               </div>
@@ -87,6 +87,27 @@ const CaseStudies = ({ highlight = false }) => {
         )}
       </div>
     </section>
+  );
+};
+
+// Helper component for parallax effect
+const ParallaxImage = ({ src, alt }) => {
+  const ref = React.useRef(null);
+  const { scrollYProgress } = motion.useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = motion.useTransform(scrollYProgress, [0, 1], [-50, 50]);
+
+  return (
+    <motion.img 
+      ref={ref}
+      src={src} 
+      alt={alt} 
+      className="duck-cs-img" 
+      style={{ y, scale: 1.2 }} // Initial scale for movement room
+    />
   );
 };
 

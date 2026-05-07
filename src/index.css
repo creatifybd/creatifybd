@@ -1940,3 +1940,72 @@ footer {
   overflow: hidden;
 }
 
+
+
+/* PRELOADER */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: #0D0D0D;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.preloader-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.preloader-brand {
+  font-family: " Outfit\, sans-serif;
+ font-size: 3rem;
+ font-weight: 800;
+ color: white;
+ margin-bottom: 2rem;
+ letter-spacing: -0.02em;
+}
+
+.preloader-brand span {
+ color: #E8192C;
+}
+
+.preloader-progress {
+ width: 200px;
+ height: 2px;
+ background: rgba(255,255,255,0.1);
+ margin: 0 auto 1rem;
+ position: relative;
+ overflow: hidden;
+ border-radius: 2px;
+}
+
+.preloader-bar {
+ height: 100%;
+ background: #E8192C;
+ transition: width 0.1s ease-out;
+}
+
+.preloader-num {
+ font-family: \DM Sans\, sans-serif;
+ font-size: 0.9rem;
+ color: rgba(255,255,255,0.4);
+ font-weight: 500;
+}
+
+.preloader-bg-text {
+ position: absolute;
+ bottom: 5vh;
+ left: 50%;
+ transform: translateX(-50%);
+ font-family: \Outfit\, sans-serif;
+ font-weight: 900;
+ font-size: 10vw;
+ color: rgba(255,255,255,0.02);
+ white-space: nowrap;
+ pointer-events: none;
+ user-select: none;
+}
