@@ -19,7 +19,7 @@ const Services = ({ highlight = false, fullPage = false }) => {
     return () => unsub();
   }, []);
 
-  const displayServices = highlight ? services.slice(0, 4) : services;
+  const displayServices = services;
 
   if (loading && services.length === 0) return (
     <section className="section services-section" id="services" style={{ minHeight: '400px' }}></section>

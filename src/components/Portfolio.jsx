@@ -118,7 +118,15 @@ function WorkCard({ item, onClick }) {
       >
         <div className="wk-card-img-wrap">
           <ImageReveal>
-            <img src={item.imageUrl} alt={item.title} className="wk-card-img" loading="lazy" />
+            <img 
+              src={item.imageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop'} 
+              alt={item.title} 
+              className="wk-card-img" 
+              loading="lazy"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop';
+              }}
+            />
           </ImageReveal>
           <div className="wk-card-overlay">
             <div className="wk-card-overlay-inner">

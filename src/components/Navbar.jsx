@@ -62,7 +62,7 @@ const Navbar = () => {
   return (
     <>
       <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
-        <Link to="/" className="nav-logo">Creatify<span className="dot">BD</span></Link>
+        <Link to="/" className="nav-logo" data-cursor="Click">Creatify<span className="dot">BD</span></Link>
         <ul className="nav-center">
           <li><MagneticLink to="/services">{t.services}</MagneticLink></li>
           <li><MagneticLink to="/work">{t.portfolio}</MagneticLink></li>
@@ -71,20 +71,39 @@ const Navbar = () => {
           <li><MagneticLink to="/contact">{t.contact}</MagneticLink></li>
         </ul>
         <div className="nav-right">
-          <a href="tel:+8801951676600" className="btn-ghost" data-cursor="Click">{t.callUs}</a>
+          <a href="tel:+8801951676600" className="btn-ghost" data-cursor="Call">{t.callUs}</a>
           <Link to="/contact" className="btn-red" data-cursor="Click">{t.cta} →</Link>
-          <button className="hamburger-btn" onClick={toggleMobile} aria-label="Menu">
+          <button 
+            className={`hamburger-btn ${isMobileOpen ? 'active' : ''}`} 
+            onClick={toggleMobile} 
+            aria-label="Menu"
+          >
             <span></span><span></span><span></span>
           </button>
         </div>
       </nav>
-      <div className="mobile-menu" id="mobileMenu" style={{ display: isMobileOpen ? 'flex' : 'none' }}>
-        <Link to="/services" onClick={toggleMobile}>Services</Link>
-        <Link to="/work" onClick={toggleMobile}>Our Work</Link>
-        <Link to="/process" onClick={toggleMobile}>Process</Link>
-        <Link to="/pricing" onClick={toggleMobile}>Pricing</Link>
-        <Link to="/contact" onClick={toggleMobile}>Contact</Link>
-      </div>
+
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mobile-menu-overlay"
+          >
+            <div className="mobile-menu-inner">
+              <Link to="/services" onClick={toggleMobile}>{t.services}</Link>
+              <Link to="/work" onClick={toggleMobile}>{t.portfolio}</Link>
+              <Link to="/process" onClick={toggleMobile}>{t.process}</Link>
+              <Link to="/pricing" onClick={toggleMobile}>{t.pricing}</Link>
+              <Link to="/contact" onClick={toggleMobile}>{t.contact}</Link>
+              <div className="mobile-menu-footer">
+                <a href="tel:+8801951676600" className="btn-red" style={{ width: '100%', justifyContent: 'center' }}>{t.callUs}</a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
