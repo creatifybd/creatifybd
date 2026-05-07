@@ -2543,3 +2543,8 @@ footer {
 .dropdown-item { flex-direction: row !important; align-items: center !important; }
 .dropdown-label { font-size: 1rem !important; margin-bottom: 0.1rem !important; }
 .dropdown-desc { font-size: 0.7rem !important; opacity: 0.6; }
+
+/* --- MINIMALIST DROPDOWN STYLES --- */
+.nav-minimal-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 200px; background: #fff; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.04); padding: 0.6rem; z-index: 1000; margin-top: 0.8rem; overflow: hidden; }
+.minimal-dropdown-item { display: block; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.9rem; font-weight: 600; color: rgba(0,0,0,0.7); text-decoration: none; transition: all 0.2s ease; }
+.minimal-dropdown-item:hover { background: rgba(0,0,0,0.03); color: var(--red); transform: translateX(5px); }

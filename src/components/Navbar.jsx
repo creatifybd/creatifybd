@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { translations } from '../utils/translations';
 import { motion, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, Briefcase, FileText, ArrowRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 const MagneticLink = ({ children, to, className, onClick }) => {
   const mouseX = useMotionValue(0);
@@ -98,7 +98,7 @@ const Navbar = () => {
             >
               <div className={`nav-link-wrap ${isActive('/work') || isActive('/case-studies') ? 'active' : ''}`}>
                 <span>{lang === 'bn' ? 'আমাদের কাজ' : 'Our Work'}</span>
-                <ChevronDown size={14} className={`dropdown-chevron ${workDropdown ? 'open' : ''}`} />
+                <ChevronDown size={12} className={`dropdown-chevron ${workDropdown ? 'open' : ''}`} />
                 {(isActive('/work') || isActive('/case-studies')) && (
                   <motion.div layoutId="activePill" className="nav-active-pill" />
                 )}
@@ -107,33 +107,16 @@ const Navbar = () => {
               <AnimatePresence>
                 {workDropdown && (
                   <motion.div 
-                    initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 15, scale: 0.98 }}
-                    className="nav-dropdown-menu premium-dropdown"
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    className="nav-minimal-dropdown"
                   >
-                    <Link to="/work" className="dropdown-item group" onClick={() => setWorkDropdown(false)}>
-                      <div className="dropdown-icon-box">
-                        <Briefcase size={18} />
-                      </div>
-                      <div className="dropdown-content">
-                        <span className="dropdown-label">{lang === 'bn' ? 'পোর্টফোলিও' : 'Our Works'}</span>
-                        <span className="dropdown-desc">{lang === 'bn' ? 'সব প্রজেক্ট দেখুন' : 'Explore our complete portfolio'}</span>
-                      </div>
-                      <ArrowRight size={14} className="dropdown-arrow" />
+                    <Link to="/work" className="minimal-dropdown-item" onClick={() => setWorkDropdown(false)}>
+                      {lang === 'bn' ? 'পোর্টফোলিও' : 'Our Works'}
                     </Link>
-
-                    <div className="dropdown-divider" />
-
-                    <Link to="/case-studies" className="dropdown-item group" onClick={() => setWorkDropdown(false)}>
-                      <div className="dropdown-icon-box">
-                        <FileText size={18} />
-                      </div>
-                      <div className="dropdown-content">
-                        <span className="dropdown-label">{lang === 'bn' ? 'কেস স্টাডিজ' : 'Case Studies'}</span>
-                        <span className="dropdown-desc">{lang === 'bn' ? 'বিস্তারিত গল্প' : 'Deep dive into strategic results'}</span>
-                      </div>
-                      <ArrowRight size={14} className="dropdown-arrow" />
+                    <Link to="/case-studies" className="minimal-dropdown-item" onClick={() => setWorkDropdown(false)}>
+                      {lang === 'bn' ? 'কেস স্টাডিজ' : 'Case Studies'}
                     </Link>
                   </motion.div>
                 )}
@@ -194,12 +177,8 @@ const Navbar = () => {
               <Link to="/services" onClick={toggleMobile}>{t.services}</Link>
               <div className="mobile-sub-group">
                 <span className="mobile-sub-title">{lang === 'bn' ? 'কাজ' : 'Our Work'}</span>
-                <Link to="/work" onClick={toggleMobile} style={{ paddingLeft: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <Briefcase size={16} style={{ opacity: 0.5 }} /> {lang === 'bn' ? 'সব কাজ' : 'Our Works'}
-                </Link>
-                <Link to="/case-studies" onClick={toggleMobile} style={{ paddingLeft: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <FileText size={16} style={{ opacity: 0.5 }} /> {lang === 'bn' ? 'কেস স্টাডিজ' : 'Case Studies'}
-                </Link>
+                <Link to="/work" onClick={toggleMobile} style={{ paddingLeft: '1.5rem' }}>{lang === 'bn' ? 'সব কাজ' : 'Our Works'}</Link>
+                <Link to="/case-studies" onClick={toggleMobile} style={{ paddingLeft: '1.5rem' }}>{lang === 'bn' ? 'কেস স্টাডিজ' : 'Case Studies'}</Link>
               </div>
               <Link to="/process" onClick={toggleMobile}>{t.process}</Link>
               <Link to="/pricing" onClick={toggleMobile}>{t.pricing}</Link>
