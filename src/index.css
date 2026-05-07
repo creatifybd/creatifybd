@@ -61,6 +61,22 @@ body {
   }
 }
 
+/* Admin: restore normal system cursor */
+.admin-layout,
+.admin-layout * {
+  cursor: auto !important;
+}
+.admin-layout a,
+.admin-layout button,
+.admin-layout label,
+.admin-layout [role="button"] {
+  cursor: pointer !important;
+}
+.admin-layout input[disabled],
+.admin-layout button[disabled] {
+  cursor: not-allowed !important;
+}
+
 body.lang-bn {
   font-family: var(--font-bn) !important;
   line-height: 1.65 !important;
@@ -2870,3 +2886,70 @@ footer {
   .cs-img-placeholder { height: 200px; }
 }
 
+/* Case Studies Teaser Grid (home page fallback) */
+.cs-teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.cs-teaser-card {
+  display: block;
+  text-decoration: none;
+  padding: 2.5rem 2rem;
+  border-radius: 24px;
+  border: 1px solid;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.cs-teaser-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+}
+
+.cs-teaser-num {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.cs-teaser-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.cs-teaser-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.cs-teaser-industry {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2rem;
+}
+
+.cs-teaser-cta {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  .cs-teaser-grid { grid-template-columns: 1fr; }
+}
