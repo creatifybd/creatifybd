@@ -6,25 +6,8 @@ import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 const IntroBand = () => {
   const { lang } = useLanguage();
 
-  const marqueeText = lang === 'bn' 
-    ? "সৃজনশীলতা • প্রবৃদ্ধি • কৌশল • ডিজাইন • কন্টেন্ট • ফলাফল • " 
-    : "STRATEGY • DESIGN • CONTENT • GROWTH • CREATIVITY • RESULTS • ";
-
   return (
     <div className="intro-band-v2">
-      <div className="marquee-wrap">
-        <motion.div 
-          className="marquee-content"
-          animate={{ x: [0, -50 + '%'] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          <span>{marqueeText}</span>
-          <span>{marqueeText}</span>
-          <span>{marqueeText}</span>
-          <span>{marqueeText}</span>
-        </motion.div>
-      </div>
-
       <div className="container">
         <div className="intro-main">
           <TextReveal className="intro-title-v2">

@@ -51,14 +51,6 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const t = translations[lang].nav;
 
-  // Scroll Progress
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 100);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -110,22 +102,6 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-
-        {/* Progress Bar */}
-        <motion.div 
-          className="nav-progress-bar" 
-          style={{ 
-            scaleX, 
-            position: 'absolute', 
-            bottom: 0, 
-            left: 0, 
-            right: 0, 
-            height: '2px', 
-            background: 'var(--red)', 
-            transformOrigin: '0%',
-            opacity: scrolled ? 1 : 0
-          }} 
-        />
       </nav>
 
       <AnimatePresence>
