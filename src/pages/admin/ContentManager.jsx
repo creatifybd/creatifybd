@@ -7,6 +7,7 @@ import { Layout, Type, Image as ImageIcon, Save, RefreshCw, Upload, Sparkles, Bo
 
 const defaultContent = {
   hero: {
+    theme: 'light',
     eyebrow: 'BD BASED IN DHAKA, BANGLADESH',
     title: 'Your Creative Partner for Digital <span class="wavy-text">Growth</span>',
     desc: 'Affordable, high-quality digital marketing for startups & small businesses. Social media, branding, photography, web development — all under one roof.',
@@ -15,6 +16,7 @@ const defaultContent = {
     mockup_primary: '/mockup.png'
   },
   process: {
+    theme: 'light',
     title: 'How We <span class="text-red">Work</span>',
     subtitle: 'A streamlined process from concept to completion.',
     steps: [
@@ -24,12 +26,14 @@ const defaultContent = {
     ]
   },
   contact: {
+    theme: 'light',
     heading: 'Ready to <span class="text-red">Grow?</span>',
     sub: "Let's build something amazing together.",
     address: 'Dhaka, Bangladesh',
     working_hours: 'Sat - Thu: 10 AM - 8 PM'
   }
 };
+
 
 const ContentManager = () => {
   const [content, setContent] = useState(defaultContent);
@@ -99,7 +103,20 @@ const ContentManager = () => {
       <div className="admin-card">
         {activeTab === 'hero' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <h3 style={{ color: 'white', fontSize: '1rem', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>Hero Customization</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>
+              <h3 style={{ color: 'white', fontSize: '1rem' }}>Hero Customization</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <label style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', fontWeight: '700' }}>THEME MODE:</label>
+                <select 
+                  value={content.hero.theme || 'light'} 
+                  onChange={(e) => handleUpdate('hero', 'theme', e.target.value)}
+                  style={{ background: '#222', color: 'white', border: '1px solid #444', borderRadius: '6px', padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
+                >
+                  <option value="light">Light (White Bg)</option>
+                  <option value="dark">Dark (Black Bg)</option>
+                </select>
+              </div>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               <CMSField label="Eyebrow Text" value={content.hero.eyebrow} onChange={(v) => handleUpdate('hero', 'eyebrow', v)} />
               <CMSField label="Main Title (HTML Supported)" value={content.hero.title} onChange={(v) => handleUpdate('hero', 'title', v)} />
@@ -114,7 +131,20 @@ const ContentManager = () => {
 
         {activeTab === 'process' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-             <h3 style={{ color: 'white', fontSize: '1rem', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>Workflow Section</h3>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>
+              <h3 style={{ color: 'white', fontSize: '1rem' }}>Workflow Section</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <label style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', fontWeight: '700' }}>THEME MODE:</label>
+                <select 
+                  value={content.process.theme || 'light'} 
+                  onChange={(e) => handleUpdate('process', 'theme', e.target.value)}
+                  style={{ background: '#222', color: 'white', border: '1px solid #444', borderRadius: '6px', padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
+                >
+                  <option value="light">Light (White Bg)</option>
+                  <option value="dark">Dark (Black Bg)</option>
+                </select>
+              </div>
+            </div>
              <CMSField label="Section Title" value={content.process.title} onChange={(v) => handleUpdate('process', 'title', v)} />
              <CMSField label="Section Subtitle" value={content.process.subtitle} onChange={(v) => handleUpdate('process', 'subtitle', v)} />
           </div>
@@ -122,7 +152,20 @@ const ContentManager = () => {
 
         {activeTab === 'contact' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-             <h3 style={{ color: 'white', fontSize: '1rem', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>Contact & Footer Text</h3>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #222', paddingBottom: '1rem' }}>
+              <h3 style={{ color: 'white', fontSize: '1rem' }}>Contact & Footer Text</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <label style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', fontWeight: '700' }}>THEME MODE:</label>
+                <select 
+                  value={content.contact.theme || 'light'} 
+                  onChange={(e) => handleUpdate('contact', 'theme', e.target.value)}
+                  style={{ background: '#222', color: 'white', border: '1px solid #444', borderRadius: '6px', padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
+                >
+                  <option value="light">Light (White Bg)</option>
+                  <option value="dark">Dark (Black Bg)</option>
+                </select>
+              </div>
+            </div>
              <CMSField label="Contact Heading" value={content.contact.heading} onChange={(v) => handleUpdate('contact', 'heading', v)} />
              <CMSField label="Contact Subtext" value={content.contact.sub} onChange={(v) => handleUpdate('contact', 'sub', v)} />
              <CMSField label="Physical Address" value={content.contact.address} onChange={(v) => handleUpdate('contact', 'address', v)} />

@@ -19,6 +19,19 @@ html { scroll-behavior: smooth; }
   --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-bn: 'Hind Siliguri', sans-serif;
+
+  /* Theme Defaults */
+  --section-bg: var(--white);
+  --section-text: var(--black);
+  --section-subtext: rgba(0, 0, 0, 0.6);
+}
+
+.dark-section {
+  --section-bg: var(--black);
+  --section-text: var(--white);
+  --section-subtext: rgba(255, 255, 255, 0.6);
+  background: var(--section-bg) !important;
+  color: var(--section-text) !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -26,8 +39,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.1;
-  color: var(--black);
+  color: var(--section-text);
 }
+
 
 body {
   font-family: var(--font-body);
@@ -2055,7 +2069,7 @@ footer {
   letter-spacing: -0.04em;
   line-height: 1.05;
   margin-bottom: 1.5rem;
-  color: var(--black);
+  color: var(--section-text);
 }
 
 .duck-cs-tags {
@@ -2073,13 +2087,13 @@ footer {
   background: var(--gray-50);
   border: 1px solid var(--border);
   border-radius: 100px;
-  color: var(--gray-500);
+  color: var(--section-subtext);
 }
 
 .duck-cs-desc {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: var(--gray-500);
+  color: var(--section-subtext);
   margin-bottom: 2.5rem;
   max-width: 480px;
   font-weight: 300;
@@ -2092,7 +2106,7 @@ footer {
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--black);
+  color: var(--section-text);
   text-decoration: none;
   border-bottom: 2px solid var(--red);
   padding-bottom: 0.5rem;
@@ -2746,7 +2760,7 @@ html, body {
   font-family: var(--font-display);
   font-size: clamp(3rem, 7vw, 5.5rem);
   font-weight: 900;
-  color: #000;
+  color: var(--section-text);
   line-height: 1.05;
   margin-bottom: 3.5rem;
 }
@@ -2786,22 +2800,28 @@ html, body {
 .method-val {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #000;
+  color: var(--section-text);
 }
 
 .contact-form-card {
-  background: #fcfcfc;
+  background: var(--gray-50);
   padding: 4rem;
   border-radius: 48px;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
   box-shadow: 0 40px 100px rgba(0,0,0,0.03);
 }
+
+.dark-section .contact-form-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 
 .form-title {
   font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 800;
-  color: #000;
+  color: var(--section-text);
   margin-bottom: 2.5rem;
 }
 
@@ -2825,13 +2845,19 @@ html, body {
 .luxury-input {
   width: 100%;
   padding: 1rem 1.2rem;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.1);
+  background: transparent;
+  border: 1px solid var(--border);
   border-radius: 12px;
   font-family: inherit;
   font-size: 1rem;
   transition: all 0.3s;
+  color: var(--section-text);
 }
+
+.dark-section .luxury-input {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 
 .luxury-input:focus {
   outline: none;

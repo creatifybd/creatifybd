@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 
-const Process = ({ highlight = false, fullPage = false }) => {
+const Process = ({ highlight = false, fullPage = false, theme = 'light' }) => {
   const { lang } = useLanguage();
   const containerRef = useRef(null);
   
@@ -27,7 +27,11 @@ const Process = ({ highlight = false, fullPage = false }) => {
   ];
 
   return (
-    <section className={`section process-section ${fullPage ? 'full-page-section' : ''}`} id="process" ref={containerRef}>
+    <section 
+      className={`section process-section ${fullPage ? 'full-page-section' : ''} ${theme === 'dark' ? 'dark-section' : ''}`} 
+      id="process" 
+      ref={containerRef}
+    >
       <div className="container">
         {!fullPage && (
           <div className="process-header">
@@ -38,10 +42,13 @@ const Process = ({ highlight = false, fullPage = false }) => {
               {lang === 'bn' ? 'নিখুঁত প্রসেস' : 'The Path to Excellence.'}
             </TextReveal>
             <FadeReveal delay={0.4}>
-              <p className="section-sub">{lang === 'bn' ? 'একটি সুশৃঙ্খল পদ্ধতির মাধ্যমে আমরা আপনার স্বপ্নকে বাস্তবে রূপান্তর করি।' : 'A proven 4-step framework designed to deliver consistent, high-end results with precision.'}</p>
+              <p className="section-sub" style={{ color: 'var(--section-subtext)' }}>
+                {lang === 'bn' ? 'একটি সুশৃঙ্খল পদ্ধতির মাধ্যমে আমরা আপনার স্বপ্নকে বাস্তবে রূপান্তর করি।' : 'A proven 4-step framework designed to deliver consistent, high-end results with precision.'}
+              </p>
             </FadeReveal>
           </div>
         )}
+
 
         <div className="timeline-container">
           {/* Animated Progress Line */}

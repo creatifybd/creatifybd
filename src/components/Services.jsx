@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 
-const Services = ({ highlight = false, fullPage = false }) => {
+const Services = ({ highlight = false, fullPage = false, theme = 'light' }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const { lang } = useLanguage();
@@ -26,23 +26,27 @@ const Services = ({ highlight = false, fullPage = false }) => {
   if (loading && services.length === 0) return null;
 
   return (
-    <section className={`section services-section ${fullPage ? 'full-page-section' : ''}`} id="services" style={{ background: '#fff' }}>
+    <section 
+      className={`section services-section ${fullPage ? 'full-page-section' : ''} ${theme === 'dark' ? 'dark-section' : ''}`} 
+      id="services"
+    >
       <div className="container">
         {!fullPage && (
           <div className="services-header text-center" style={{ marginBottom: '6rem' }}>
             <FadeReveal>
               <div className="eyebrow" style={{ color: 'var(--red)', marginBottom: '1.5rem' }}>{lang === 'bn' ? 'আমরা যা অফার করি' : 'Our Expertise'}</div>
             </FadeReveal>
-            <TextReveal className="section-h" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, color: '#000' }}>
+            <TextReveal className="section-h" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, color: 'var(--section-text)' }}>
               {lang === 'bn' ? 'সৃজনশীল পরিষেবা' : 'Design. Strategy. Growth.'}
             </TextReveal>
             <FadeReveal delay={0.4}>
-              <p className="section-sub" style={{ color: 'rgba(0,0,0,0.6)', maxWidth: '600px', margin: '2rem auto' }}>
+              <p className="section-sub" style={{ color: 'var(--section-subtext)', maxWidth: '600px', margin: '2rem auto' }}>
                 {lang === 'bn' ? 'আপনার ব্র্যান্ডের প্রসারে আমরা দিচ্ছি আধুনিক ও কার্যকর ডিজিটাল সমাধান।' : 'We blend absolute creativity with strategic precision to scale your brand in the digital age.'}
               </p>
             </FadeReveal>
           </div>
         )}
+
 
         <StaggerReveal delay={0.5}>
           <div className="services-grid">

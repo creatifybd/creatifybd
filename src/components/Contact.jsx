@@ -7,7 +7,7 @@ import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Loader2 } from 'lucid
 import { TextReveal, FadeReveal } from './MotionReveal';
 import toast from 'react-hot-toast';
 
-const Contact = () => {
+const Contact = ({ theme = 'light' }) => {
   const { lang } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -33,7 +33,8 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact-premium-section" id="contact">
+    <section className={`contact-premium-section ${theme === 'dark' ? 'dark-section' : ''}`} id="contact">
+
       <div className="container">
         <div className="contact-grid-wrap">
           

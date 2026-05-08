@@ -35,7 +35,7 @@ const ParallaxImage = ({ src, alt }) => {
   );
 };
 
-const CaseStudies = () => {
+const CaseStudies = ({ theme = 'light' }) => {
   const [images, setImages] = useState({});
   const { lang } = useLanguage();
 
@@ -49,7 +49,8 @@ const CaseStudies = () => {
   }, []);
 
   return (
-    <section className="duck-cs-section" id="case-studies">
+    <section className={`duck-cs-section ${theme === 'dark' ? 'dark-section' : ''}`} id="case-studies">
+
       <div className="container">
         <div className="cs-intro">
           <FadeReveal>

@@ -20,29 +20,24 @@ import Footer from '../components/Footer';
 import CustomCursor from '../components/CustomCursor';
 import SEO from '../components/SEO';
 
+import { useSettings } from '../context/SettingsContext';
+
 const Home = () => {
-  const [seo, setSeo] = useState({
-    title: "Best Creative Agency in Dhaka & Digital Marketing Bangladesh",
-    description: "CreatifyBD is the premier digital marketing and creative agency in Dhaka. We specialize in world-class branding, high-performance web development, and strategic social media marketing.",
-    keywords: "digital marketing agency dhaka, best creative agency bangladesh, social media management dhaka, web design bangladesh, branding agency dhaka, creatifybd"
-  });
+  const { settings, content, loading } = useSettings();
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Trigger reveal observer after Firestore data has loaded
+  // Trigger reveal observer
   useReveal(dataLoaded);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'settings'), (snap) => {
-      const siteDoc = snap.docs.find(d => d.id === 'site');
-      if (siteDoc) {
-        const d = siteDoc.data();
-        if (d.seo_title) setSeo(prev => ({ ...prev, title: d.seo_title }));
-        if (d.seo_description) setSeo(prev => ({ ...prev, description: d.seo_description }));
-      }
-      setDataLoaded(true);
-    });
-    return () => unsub();
-  }, []);
+    if (!loading) setDataLoaded(true);
+  }, [loading]);
+
+  const seo = {
+    title: settings?.seo_title || "Best Creative Agency in Dhaka & Digital Marketing Bangladesh",
+    description: settings?.seo_description || "CreatifyBD is the premier digital marketing and creative agency in Dhaka.",
+    keywords: "digital marketing agency dhaka, best creative agency bangladesh, social media management dhaka, web design bangladesh, branding agency dhaka, creatifybd"
+  };
 
   return (
     <div className="App">
@@ -57,24 +52,23 @@ const Home = () => {
       <Hero />
       <IntroBand />
       
-      {/* Featured Case Studies - Duck Design Style */}
-      <CaseStudies highlight={true} />
+      <CaseStudies highlight={true} theme={content?.hero?.theme} />
       
       <Clients />
       
-      {/* Highlights for other sections */}
-      <Services highlight={true} />
-      <Features />
-      <Portfolio highlight={true} />
-      <Process highlight={true} />
-      <Pricing highlight={true} />
+      <Services highlight={true} theme={content?.services?.theme} />
+      <Features theme={content?.features?.theme} />
+      <Portfolio highlight={true} theme={content?.portfolio?.theme} />
+      <Process highlight={true} theme={content?.process?.theme} />
+      <Pricing highlight={true} theme={content?.pricing?.theme} />
       
-      <Testimonials />
+      <Testimonials theme={content?.testimonials?.theme} />
       <CTABand />
-      <Contact highlight={true} />
+      <Contact highlight={true} theme={content?.contact?.theme} />
       <Footer />
     </div>
   );
 };
+
 
 export default Home;

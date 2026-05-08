@@ -1,8 +1,8 @@
 /* --- PREMIUM CASE STUDIES PAGE STYLES (DUCK.DESIGN INSPIRED) --- */
 :root {
-  --cs-bg: #ffffff;
-  --cs-text: #0b0b0b;
-  --cs-muted: #666666;
+  --cs-bg: var(--section-bg);
+  --cs-text: var(--section-text);
+  --cs-muted: var(--section-subtext);
   --cs-border: #eeeeee;
   --cs-accent: #E8192C;
   --cs-card-bg: #f9f9f9;
@@ -40,8 +40,10 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.04em;
+  color: var(--cs-text);
   margin-bottom: 2.5rem;
 }
+
 
 .premium-cs-sub {
   font-size: 1.25rem;
