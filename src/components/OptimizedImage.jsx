@@ -39,14 +39,6 @@ const OptimizedImage = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
             className="opt-img-skeleton"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 1,
-              background: 'linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%)',
-              backgroundSize: '200% 100%',
-              animation: 'shimmer 2s infinite linear'
-            }}
           />
         )}
       </AnimatePresence>
@@ -54,7 +46,7 @@ const OptimizedImage = ({
       {/* Error State */}
       {error && (
         <div className="opt-img-error" style={{
-          position: 'absolute',
+          position: absolute,
           inset: 0,
           display: 'flex',
           alignItems: 'center',
@@ -92,15 +84,9 @@ const OptimizedImage = ({
           willChange: 'transform, opacity'
         }}
       />
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}} />
     </div>
   );
 };
+
 
 export default OptimizedImage;

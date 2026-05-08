@@ -45,47 +45,21 @@ const Services = ({ highlight = false, fullPage = false }) => {
         )}
 
         <StaggerReveal delay={0.5}>
-          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2.5rem' }}>
+          <div className="services-grid">
             {displayServices.map((s, idx) => (
               <FadeReveal key={s.id || idx}>
                 <motion.div 
                   className="service-card-premium" 
                   whileHover={{ y: -12 }}
-                  style={{ 
-                    padding: '3.5rem 3rem', 
-                    background: '#fcfcfc', 
-                    borderRadius: '40px', 
-                    border: '1px solid rgba(0,0,0,0.05)',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                    cursor: 'default',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = '#fff';
-                    e.currentTarget.style.borderColor = 'var(--red)';
-                    e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.08)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = '#fcfcfc';
-                    e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
                 >
-                  <div className="service-icon" style={{ fontSize: '3rem', marginBottom: '2.5rem' }}>{s.icon}</div>
-                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#000', marginBottom: '1.2rem' }}>{s.title}</h3>
-                  <p style={{ color: 'rgba(0,0,0,0.5)', lineHeight: 1.6, fontSize: '1.05rem', marginBottom: '2rem', flex: 1 }}>{s.desc}</p>
+                  <div className="service-icon">{s.icon}</div>
+                  <h3>{s.title}</h3>
+                  <p>{s.desc}</p>
                   
-                  <div className="service-card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: 'var(--red)', fontWeight: 800, fontSize: '0.9rem' }}>{s.price}</span>
-                    <motion.div 
-                      className="service-arrow"
-                      style={{ width: '45px', height: '45px', borderRadius: '50%', background: 'rgba(0,0,0,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      <ArrowUpRight size={20} color="#000" />
+                  <div className="service-card-footer">
+                    <span className="service-price">{s.price}</span>
+                    <motion.div className="service-arrow">
+                      <ArrowUpRight size={20} />
                     </motion.div>
                   </div>
                 </motion.div>
@@ -93,6 +67,7 @@ const Services = ({ highlight = false, fullPage = false }) => {
             ))}
           </div>
         </StaggerReveal>
+
 
         {highlight && (
           <FadeReveal delay={0.8}>

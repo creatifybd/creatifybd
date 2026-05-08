@@ -7,16 +7,8 @@ const Hero = () => {
   const { lang } = useLanguage();
   const t = translations[lang].hero;
 
-  const plainTitle = t.title.replace(/<[^>]*>?/gm, '');
-
-  return (
-    <section className="hero">
-      <FadeReveal delay={0.2}>
-        <div className="hero-eyebrow">{t.eyebrow}</div>
-      </FadeReveal>
-      
       <TextReveal className="hero-main-title" delay={0.4}>
-        {plainTitle}
+        <span dangerouslySetInnerHTML={{ __html: t.title }} />
       </TextReveal>
       
       <FadeReveal delay={0.8}>

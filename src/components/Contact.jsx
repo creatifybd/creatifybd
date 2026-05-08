@@ -3,8 +3,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { db } from '../firebase/config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle2, MessageSquare, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Loader2 } from 'lucide-react';
 import { TextReveal, FadeReveal } from './MotionReveal';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
   const { lang } = useLanguage();
@@ -14,11 +15,20 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error(lang === 'bn' ? 'সবগুলো ঘর পূরণ করুন' : 'Please fill in all required fields');
+      return;
+    }
     setLoading(true);
+    const toastId = toast.loading(lang === 'bn' ? 'পাঠানো হচ্ছে...' : 'Sending your inquiry...');
     try {
       await addDoc(collection(db, 'messages'), { ...formData, timestamp: serverTimestamp() });
       setSubmitted(true);
-    } catch (err) { alert('Failed to send message. Please try again.'); }
+      toast.success(lang === 'bn' ? 'ধন্যবাদ! আমরা শীঘ্রই যোগাযোগ করব।' : 'Success! We will contact you soon.', { id: toastId });
+    } catch (err) { 
+      console.error(err);
+      toast.error(lang === 'bn' ? 'ব্যর্থ হয়েছে। আবার চেষ্টা করুন।' : 'Failed to send. Please try again.', { id: toastId }); 
+    }
     setLoading(false);
   };
 
@@ -134,7 +144,11 @@ const Contact = () => {
                   <button 
                     type="submit" disabled={loading} className="btn-huge-red w-full" 
                   >
-                    {loading ? 'Initiating...' : 'Send Inquiry'} <Send size={18} style={{ marginLeft: '1rem' }} />
+                    {loading ? (
+                      <>Processing... <Loader2 size={18} className="animate-spin" style={{ marginLeft: '1rem' }} /></>
+                    ) : (
+                      <>Send Inquiry <Send size={18} style={{ marginLeft: '1rem' }} /></>
+                    )}
                   </button>
                 </motion.form>
               ) : (

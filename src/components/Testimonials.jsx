@@ -7,6 +7,23 @@ import { Quote } from 'lucide-react';
 import { TextReveal, FadeReveal, ImageReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
 
+const fallbackItems = [
+  {
+    id: 'f1',
+    name: 'Sarah Jenkins',
+    role: 'CEO, Bloom Fashion',
+    text: 'CreatifyBD transformed our digital presence. Their attention to detail and creative vision helped us reach a global audience we never thought possible.',
+    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop'
+  },
+  {
+    id: 'f2',
+    name: 'Rahat Ahmed',
+    role: 'Founder, TechPulse BD',
+    text: 'তাদের সাথে কাজ করাটা ছিল এক অনন্য অভিজ্ঞতা। প্রফেশনালিজম এবং ক্রিয়েটিভিটির এক অসাধারণ সমন্বয় তাদের কাজে ফুটে ওঠে।',
+    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop'
+  }
+];
+
 const Testimonials = () => {
   const [items, setItems] = useState([]);
   const [active, setActive] = useState(0);
@@ -14,16 +31,19 @@ const Testimonials = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'testimonials'), (snap) => {
-      setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      if (!snap.empty) {
+        setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      }
     });
     return () => unsub();
   }, []);
 
-  if (items.length === 0) return null;
+  const displayItems = items.length > 0 ? items : fallbackItems;
 
   return (
     <section className="section testimonials-editorial" id="testimonials">
       <div className="container">
+
         <div className="editorial-header">
           <FadeReveal>
             <div className="eyebrow" style={{ color: 'var(--red)', marginBottom: '1.5rem' }}>{lang === 'bn' ? 'আমাদের ক্লায়েন্টদের কথা' : 'Voices of Success'}</div>
@@ -46,15 +66,15 @@ const Testimonials = () => {
               <div className="editorial-quote-box">
                 <Quote size={60} className="editorial-quote-icon" />
                 <h2 className="editorial-quote-text">
-                  "{items[active].text}"
+                  "{displayItems[active]?.text}"
                 </h2>
                 
                 <div className="editorial-author">
                   <div className="author-line"></div>
                   <div>
-                    <div className="author-name">{items[active].name}</div>
+                    <div className="author-name">{displayItems[active]?.name}</div>
                     <div className="author-role">
-                      {items[active].role}
+                      {displayItems[active]?.role}
                     </div>
                   </div>
                 </div>
@@ -63,8 +83,8 @@ const Testimonials = () => {
               <div className="editorial-visual">
                 <div className="editorial-img-wrap">
                   <OptimizedImage 
-                    src={items[active].imageUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop'} 
-                    alt={items[active].name} 
+                    src={displayItems[active]?.imageUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop'} 
+                    alt={displayItems[active]?.name} 
                     className="editorial-img"
                   />
                   <div className="editorial-img-overlay"></div>
@@ -74,7 +94,7 @@ const Testimonials = () => {
           </AnimatePresence>
 
           <div className="editorial-nav">
-            {items.map((_, i) => (
+            {displayItems.map((_, i) => (
               <button 
                 key={i} 
                 onClick={() => setActive(i)}
@@ -84,6 +104,7 @@ const Testimonials = () => {
             ))}
           </div>
         </div>
+
       </div>
     </section>
 

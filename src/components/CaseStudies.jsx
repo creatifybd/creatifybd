@@ -8,11 +8,10 @@ import { ArrowRight } from 'lucide-react';
 import { TextReveal, ImageReveal, FadeReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
 
-const masterpieces = [
-  { id: 'veldt-co', title: 'Veldt & Co.', sector: 'Luxe Sustainability', tagline: 'Conscious Craftsmanship, Redefined.' },
-  { id: 'aura-labs', title: 'Aura Labs', sector: 'AI Healthcare', tagline: 'Intelligence with a Human Pulse.' },
-  { id: 'lumina-watch', title: 'Lumina', sector: 'High Horology', tagline: 'The Architecture of Time.' }
-];
+import { detailedCaseStudies } from '../data/caseStudiesData';
+
+const masterpieces = Object.values(detailedCaseStudies).slice(0, 3);
+
 
 const ParallaxImage = ({ src, alt }) => {
   const ref = React.useRef(null);

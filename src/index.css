@@ -35,9 +35,15 @@ body {
   color: var(--black);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  cursor: none !important; /* Hide default cursor */
+  cursor: none; /* Removed !important to allow easier overrides */
   letter-spacing: -0.01em;
 }
+
+/* Enable default cursor on touch devices or if custom cursor fails */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto !important; }
+}
+
 
 
 /* ─── CUSTOM CURSOR ─── */
@@ -73,7 +79,24 @@ body {
   .custom-cursor-main {
     display: none;
   }
+  body { cursor: auto !important; }
 }
+
+/* ─── OPTIMIZED IMAGE SHIMMER ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.opt-img-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
 
 /* Admin: restore normal system cursor */
 .admin-layout,
@@ -587,7 +610,9 @@ h2.section-h .red { color: var(--red); }
   scrollbar-width: none;
   margin: 0 -3rem;
   padding: 0.5rem 3rem 1.5rem;
+  cursor: grab;
 }
+.services-scroll-wrap:active { cursor: grabbing; }
 .services-scroll-wrap::-webkit-scrollbar { display: none; }
 
 .services-row {
@@ -604,8 +629,8 @@ h2.section-h .red { color: var(--red); }
   border-radius: 18px;
   overflow: hidden;
   transition: all 0.25s;
-  cursor: default;
 }
+
 .service-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 50px rgba(0,0,0,0.08);
@@ -1499,8 +1524,11 @@ h2.section-h .red { color: var(--red); }
   overflow-x: auto;
   scrollbar-width: none;
   padding-bottom: 0.5rem;
+  cursor: grab;
 }
+.testi-scroll:active { cursor: grabbing; }
 .testi-scroll::-webkit-scrollbar { display: none; }
+
 .testi-card {
   flex-shrink: 0;
   width: 320px;
@@ -3036,5 +3064,59 @@ html, body {
   width: 100%;
   position: relative;
 }
+/* ─── SERVICES PREMIUM ─── */
+.service-card-premium {
+  padding: 3.5rem 3rem;
+  background: #fcfcfc;
+  border-radius: 40px;
+  border: 1px solid rgba(0,0,0,0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
 
+.service-card-premium:hover {
+  background: #fff !important;
+  border-color: var(--red) !important;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.08) !important;
+}
 
+.service-icon {
+  font-size: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+.service-card-premium h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 1.2rem;
+}
+
+.service-card-premium p {
+  color: rgba(0,0,0,0.5);
+  line-height: 1.6;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+
+.service-arrow {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.service-card-premium:hover .service-arrow {
+  background: var(--red);
+  color: #fff;
+}
