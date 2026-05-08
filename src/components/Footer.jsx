@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="footer-top">
           <div className="footer-brand">
             <FadeReveal>
-              <h3>Creatify<span className="dot">BD</span></h3>
+              <img src="/logo.png" alt="CreatifyBD" style={{ height: '50px', marginBottom: '2rem', filter: 'brightness(1.1)' }} />
               <p>
                 {lang === 'bn' 
                   ? 'ঢাকার অন্যতম শীর্ষস্থানীয় ডিজিটাল মার্কেটিং এবং ক্রিয়েটিভ এজেন্সি। আপনার ব্যবসার অনলাইন প্রবৃদ্ধি নিশ্চিত করাই আমাদের লক্ষ্য।' 

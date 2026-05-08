@@ -40,7 +40,7 @@ const Preloader = ({ onComplete }) => {
               animate={{ opacity: 1, y: 0 }}
               className="preloader-brand"
             >
-              Creatify<span>BD</span>
+              <img src="/favicon.png" alt="CreatifyBD" style={{ height: '80px', marginBottom: '1.5rem' }} />
             </motion.div>
             <div className="preloader-progress">
               <div className="preloader-bar" style={{ width: `${count}%` }}></div>

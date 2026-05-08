@@ -78,7 +78,9 @@ const Navbar = () => {
     <>
       <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
         <div className="nav-container-inner">
-          <Link to="/" className="nav-logo" data-cursor="Click">Creatify<span className="dot">BD</span></Link>
+          <Link to="/" className="nav-logo" data-cursor="Click">
+            <img src="/logo.png" alt="CreatifyBD" style={{ height: '32px', width: 'auto', display: 'block' }} />
+          </Link>
           
           <ul className="nav-center">
             <li>
