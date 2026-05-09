@@ -100,6 +100,120 @@ html { scroll-behavior: smooth; }
   color: rgba(255, 255, 255, 0.3) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL DARK THEME - For Body[data-theme="dark"]
+   This ensures navbar and all elements work properly on dark pages
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body[data-theme="dark"] {
+  /* Global dark theme variables */
+  --nav-text: var(--white);
+  --nav-text-muted: rgba(255, 255, 255, 0.7);
+}
+
+/* Navbar Global Dark Theme Styles */
+body[data-theme="dark"] nav {
+  /* Default navbar on dark theme pages */
+}
+
+body[data-theme="dark"] nav:not(.scrolled) .nav-logo,
+body[data-theme="dark"] nav:not(.scrolled) .nav-logo span {
+  color: var(--white) !important;
+  transition: color 0.3s ease;
+}
+
+body[data-theme="dark"] nav:not(.scrolled) .nav-center a {
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: color 0.3s ease;
+}
+
+body[data-theme="dark"] nav:not(.scrolled) .nav-center a:hover {
+  color: var(--white) !important;
+}
+
+body[data-theme="dark"] nav:not(.scrolled) .nav-center a.active {
+  color: var(--red) !important;
+}
+
+/* Nav link wrapper in dark theme */
+body[data-theme="dark"] .nav-link-wrap,
+body[data-theme="dark"] .nav-dropdown-trigger .nav-link-wrap {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme="dark"] .nav-link-wrap:hover {
+  color: var(--white);
+}
+
+/* Dropdown menu in dark theme */
+body[data-theme="dark"] .nav-minimal-dropdown {
+  background: rgba(15, 15, 15, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+}
+
+body[data-theme="dark"] .minimal-dropdown-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme="dark"] .minimal-dropdown-item:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Dropdown chevron in dark theme */
+body[data-theme="dark"] .dropdown-chevron {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Mobile menu in dark theme */
+body[data-theme="dark"] .mobile-menu-overlay {
+  background: rgba(15, 15, 15, 0.98);
+}
+
+body[data-theme="dark"] .mobile-menu-inner a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme="dark"] .mobile-menu-inner a:hover {
+  color: var(--white);
+}
+
+/* Hamburger button in dark theme */
+body[data-theme="dark"] .hamburger-btn span {
+  background: var(--white);
+}
+
+/* Scrolled navbar in dark theme (already has dark background) */
+body[data-theme="dark"] nav.scrolled {
+  background: rgba(15, 15, 15, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-theme="dark"] nav.scrolled .nav-logo,
+body[data-theme="dark"] nav.scrolled .nav-logo span {
+  color: var(--white) !important;
+}
+
+body[data-theme="dark"] nav.scrolled .nav-center a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+body[data-theme="dark"] nav.scrolled .nav-center a:hover {
+  color: var(--white) !important;
+}
+
+/* Right side buttons in dark theme */
+body[data-theme="dark"] nav:not(.scrolled) .btn-ghost {
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body[data-theme="dark"] nav:not(.scrolled) .btn-ghost:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 800;

@@ -46,7 +46,16 @@ export const SettingsProvider = ({ children }) => {
     // Listen to section content (Hero, Process, etc.)
     const unsubContent = onSnapshot(doc(db, 'settings', 'content'), (snap) => {
       if (snap.exists()) {
-        setContent(snap.data());
+        const data = snap.data();
+        setContent(data);
+        
+        // Check if any section has dark theme and apply to body
+        const hasDarkSection = Object.values(data).some(section => section?.theme === 'dark');
+        if (hasDarkSection) {
+          document.body.setAttribute('data-theme', 'dark');
+        } else {
+          document.body.removeAttribute('data-theme');
+        }
       }
       setLoading(false);
     }, (err) => {
