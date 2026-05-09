@@ -3282,6 +3282,54 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   NAVBAR DEFAULT STATE (NON-SCROLLED) - Dark Section Fixes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* When navbar is at top (not scrolled) on dark background */
+.dark-section nav:not(.scrolled) {
+  /* Keep transparent background but ensure text is visible */
+}
+
+.dark-section nav:not(.scrolled) .nav-logo {
+  color: var(--white) !important;
+}
+
+.dark-section nav:not(.scrolled) .nav-logo span {
+  color: var(--white) !important;
+}
+
+.dark-section nav:not(.scrolled) .nav-center a {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-section nav:not(.scrolled) .nav-center a:hover {
+  color: var(--white) !important;
+}
+
+.dark-section nav:not(.scrolled) .nav-center a.active {
+  color: var(--red) !important;
+}
+
+/* Nav links wrapper text in dark mode */
+.dark-section .nav-link-wrap {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-section .nav-link-wrap:hover {
+  color: var(--white);
+}
+
+/* Dropdown items in dark mode */
+.dark-section .minimal-dropdown-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-section .minimal-dropdown-item:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    COMPREHENSIVE AUTOMATIC CONTRAST - ALL COMPONENTS
    Any section with .dark-section class gets automatic white text
    ═══════════════════════════════════════════════════════════════════════════ */
