@@ -373,8 +373,16 @@ nav.scrolled {
 }
 
 @media (max-width: 1024px) {
-  nav { padding: 0 2rem; }
-  nav.scrolled { width: 94%; padding: 0 1rem; }
+  nav { padding: 0 1.5rem; height: 80px; }
+  nav.scrolled { width: 92%; padding: 0 1rem; top: 15px; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 0 1rem; }
+  .nav-logo img { height: 40px !important; }
+  .nav-logo span { font-size: 1.2rem !important; }
+  .nav-right { gap: 0.5rem; }
+  .nav-right .btn-red, .nav-right .btn-ghost { display: none; } /* Hide buttons on mobile to save space, they are in mobile menu */
 }
 
 .nav-logo {
@@ -2266,14 +2274,16 @@ footer {
 
 .duck-cs-num {
   font-family: var(--font-display);
-  font-size: 8rem;
+  font-size: clamp(5rem, 15vw, 8rem);
   font-weight: 900;
-  color: rgba(232, 25, 44, 0.05);
+  color: rgba(232, 25, 44, 0.035); /* Further reduced opacity */
   line-height: 1;
   position: absolute;
-  top: -2rem;
-  left: -2rem;
+  top: -2.5rem;
+  left: -2.5rem;
   z-index: -1;
+  user-select: none;
+  pointer-events: none;
 }
 
 .duck-cs-title {

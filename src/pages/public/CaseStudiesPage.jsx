@@ -124,11 +124,11 @@ const CaseStudyCard = ({ study, image }) => {
       >
         <div className="cs-card-visual">
           <div className="cs-card-tag">{study.category}</div>
-          {image ? (
-            <OptimizedImage src={image} alt={study.title} className="cs-card-img" />
-          ) : (
-            <div className="cs-placeholder-luxury">Project Showcase</div>
-          )}
+          <OptimizedImage 
+            src={image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'} 
+            alt={study.title} 
+            className="cs-card-img" 
+          />
           <div className="cs-results-overlay">
             {study.results.map((res, i) => (
               <div key={i} className="cs-overlay-item">

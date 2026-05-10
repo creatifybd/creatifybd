@@ -110,10 +110,11 @@ function Counter({ target, duration = 1200 }) {
 }
 
 // ── Work Card ─────────────────────────────────────────────────────────────────
-function WorkCard({ item, onClick }) {
+const WorkCard = React.forwardRef(({ item, onClick }, ref) => {
   return (
     <FadeReveal>
       <motion.div
+        ref={ref}
         layout
         className="wk-card wk-card--vis"
         onClick={() => onClick(item)}
@@ -144,7 +145,9 @@ function WorkCard({ item, onClick }) {
       </motion.div>
     </FadeReveal>
   );
-}
+});
+
+WorkCard.displayName = 'WorkCard';
 
 // ── Main Component ────────────────────────────────────────────────────────────
 const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => {
