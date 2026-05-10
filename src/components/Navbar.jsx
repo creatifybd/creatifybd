@@ -84,7 +84,7 @@ const Navbar = () => {
         <div className="nav-container-inner">
           <Link to="/" className="nav-logo" data-cursor="Click" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <img src={settings?.logo_url || '/favicon.png'} alt={settings?.site_name || 'CreatifyBD'} style={{ height: '52px', width: 'auto' }} />
-            <span style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#000' }}>
+            <span className="nav-logo-text">
               {settings?.site_name?.split('BD')[0] || 'Creatify'}<span style={{ color: 'var(--red)' }}>BD</span>
             </span>
           </Link>

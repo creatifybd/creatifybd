@@ -397,6 +397,12 @@ nav.scrolled {
   gap: 2px;
   z-index: 10;
 }
+.nav-logo-text {
+  font-size: 1.5rem; 
+  font-weight: 800; 
+  letter-spacing: -0.02em; 
+  color: inherit; /* Allow inheritance for dark mode */
+}
 .nav-logo .dot { color: var(--red); }
 
 .nav-center {
@@ -3800,14 +3806,51 @@ html, body {
   color: var(--red) !important;
 }
 
-/* Dark section - duck cs fixes */
-.dark-section .duck-cs-link {
-  color: var(--white);
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIVERSAL DARK THEME PAGE FIXES
+   Ensure navbar and content are white on black background pages
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) {
+  --black: var(--white);
+  --gray-700: rgba(255, 255, 255, 0.85);
 }
 
-.dark-section .duck-cs-link:hover {
-  color: var(--red);
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .nav-logo-text {
+  color: var(--white) !important;
 }
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .nav-center {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .nav-center a {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .nav-center a:hover {
+  color: var(--white) !important;
+}
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .btn-ghost {
+  color: var(--white) !important;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page) nav:not(.scrolled) .hamburger-btn span {
+  background: var(--white);
+}
+
+/* Page Header Text Fix */
+.page-header {
+  color: var(--white) !important;
+}
+.page-header .page-title, 
+.page-header .page-subtitle {
+  color: var(--white) !important;
+}
+
 
 /* Dark section CTA band */
 .dark-section .cta-section {
