@@ -6,7 +6,6 @@ import { db } from '../../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import CustomCursor from '../../components/CustomCursor';
 import SEO from '../../components/SEO';
 import { useLanguage } from '../../context/LanguageContext';
 import OptimizedImage from '../../components/OptimizedImage';
@@ -41,7 +40,6 @@ const CaseStudyDetailPage = () => {
 
   return (
     <div className="premium-cs-detail-page">
-      <CustomCursor />
       <SEO 
         title={`${study.client} | ${study.title}`}
         description={study.about}

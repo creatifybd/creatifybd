@@ -2,13 +2,11 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Contact from '../../components/Contact';
 import Footer from '../../components/Footer';
-import CustomCursor from '../../components/CustomCursor';
 import { motion } from 'framer-motion';
 
 const ContactPage = () => {
   return (
     <div className="contact-page">
-      <CustomCursor />
       <Navbar />
       <div className="page-header dark-section">
         <motion.div 

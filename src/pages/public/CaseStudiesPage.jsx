@@ -6,7 +6,6 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { useLanguage } from '../../context/LanguageContext';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import CustomCursor from '../../components/CustomCursor';
 import OptimizedImage from '../../components/OptimizedImage';
 import '../../styles/CaseStudies.css';
 import SEO from '../../components/SEO';
@@ -168,7 +167,6 @@ const CaseStudiesPage = () => {
 
   return (
     <div className="premium-cs-page">
-      <CustomCursor />
       <SEO 
         title={lang === 'bn' ? 'সাফল্যের আখ্যান — কেস স্টাডিজ' : 'Our Case Studies | Strategic Impact & Creative Excellence'} 
         description="Discover how CreatifyBD delivers measurable growth for global brands through strategic design, performance marketing, and cutting-edge web experiences."

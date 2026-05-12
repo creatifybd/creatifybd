@@ -2,13 +2,11 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Process from '../../components/Process';
 import Footer from '../../components/Footer';
-import CustomCursor from '../../components/CustomCursor';
 import { motion } from 'framer-motion';
 
 const ProcessPage = () => {
   return (
     <div className="process-page">
-      <CustomCursor />
       <Navbar />
       <div className="page-header dark-section">
         <motion.div 

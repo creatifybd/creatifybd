@@ -10,6 +10,7 @@ import Lenis from 'lenis';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import CustomCursor from './components/CustomCursor';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -71,6 +72,7 @@ function AppContent() {
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <ScrollToTop />
+      <CustomCursor />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />

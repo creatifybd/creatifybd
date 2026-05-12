@@ -17,7 +17,6 @@ import Testimonials from '../components/Testimonials';
 import CTABand from '../components/CTABand';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
-import CustomCursor from '../components/CustomCursor';
 import SEO from '../components/SEO';
 
 import { useSettings } from '../context/SettingsContext';
@@ -41,7 +40,6 @@ const Home = () => {
 
   return (
     <div className="App">
-      <CustomCursor />
       <SEO 
         title={seo.title} 
         description={seo.description} 

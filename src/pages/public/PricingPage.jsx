@@ -2,13 +2,11 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Pricing from '../../components/Pricing';
 import Footer from '../../components/Footer';
-import CustomCursor from '../../components/CustomCursor';
 import { motion } from 'framer-motion';
 
 const PricingPage = () => {
   return (
     <div className="pricing-page">
-      <CustomCursor />
       <Navbar />
       <div className="page-header dark-section">
         <motion.div 
