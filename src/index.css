@@ -1701,6 +1701,12 @@ h2.section-h .red { color: var(--red); }
 .ptab:hover:not(.active) { background: var(--gray-100); color: var(--black); }
 
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+@media (max-width: 1024px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
+@media (max-width: 768px) {
+  .pricing-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
 .price-card {
   background: var(--white);
   border: 1.5px solid var(--border);

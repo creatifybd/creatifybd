@@ -33,17 +33,24 @@ const Pricing = ({ highlight = false, fullPage = false, theme = 'light' }) => {
 
   const fallbackPricing = {
     social: [
-      { id: 's1', tier: 'Basic', tier_bn: 'বেসিক', price: '15,000', desc: 'Perfect for small businesses', desc_bn: 'ছোট ব্যবসার জন্য', features: ['15 Social Posts/mo', 'Basic Page Moderation', 'Monthly Report'], features_bn: ['১৫টি সোশ্যাল পোস্ট', 'বেসিক পেজ মডারেশন', 'মাসিক রিপোর্ট'] },
-      { id: 's2', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড', price: '25,000', desc: 'For growing brands', desc_bn: 'বর্ধিষ্ণু ব্র্যান্ডের জন্য', features: ['20 Social Posts/mo', 'Ad Campaign Setup', 'Monthly Report'], features_bn: ['২০টি সোশ্যাল পোস্ট', 'অ্যাড ক্যাম্পেইন সেটআপ', 'মাসিক রিপোর্ট'], featured: true }
+      { id: 's1', tier: 'Basic', tier_bn: 'বেসিক', price: '15,000', desc: 'Perfect for small businesses', desc_bn: 'ছোট ব্যবসার জন্য', features: ['12 Social Posts/mo', 'Basic Page Moderation', 'Monthly Report', 'Community Management'], features_bn: ['১২টি সোশ্যাল পোস্ট', 'বেসিক পেজ মডারেশন', 'মাসিক রিপোর্ট', 'কমিউনিটি ম্যানেজমেন্ট'] },
+      { id: 's2', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড', price: '25,000', desc: 'For growing brands', desc_bn: 'বর্ধিষ্ণু ব্র্যান্ডের জন্য', features: ['20 Social Posts/mo', 'Ad Campaign Setup', 'Monthly Report', 'Competitor Analysis'], features_bn: ['২০টি সোশ্যাল পোস্ট', 'অ্যাড ক্যাম্পেইন সেটআপ', 'মাসিক রিপোর্ট', 'কম্পিটিটর এনালাইসিস'], featured: true },
+      { id: 's3', tier: 'Premium', tier_bn: 'প্রিমিয়াম', price: '40,000', desc: 'Full-scale management', desc_bn: 'ফুল-স্কেল ম্যানেজমেন্ট', features: ['30 Social Posts/mo', 'Advanced Ad Campaigns', 'Weekly Reports', 'Content Strategy'], features_bn: ['৩০টি সোশ্যাল পোস্ট', 'অ্যাডভান্সড অ্যাড ক্যাম্পেইন', 'সাপ্তাহিক রিপোর্ট', 'কন্টেন্ট স্ট্র্যাটেজি'] }
     ],
     branding: [
-      { id: 'b1', tier: 'Startup', tier_bn: 'স্টার্টআপ', price: '20,000', desc: 'Essential branding', desc_bn: 'প্রাথমিক ব্র্যান্ডিং', features: ['Logo Design (2 Concepts)', 'Color Palette', 'Brand Guidelines'], features_bn: ['লোগো ডিজাইন', 'কালার প্যালেট', 'ব্র্যান্ড গাইডলাইন'] }
+      { id: 'b1', tier: 'Basic', tier_bn: 'বেসিক', price: '20,000', desc: 'Essential branding', desc_bn: 'প্রাথমিক ব্র্যান্ডিং', features: ['Logo Design (2 Concepts)', 'Color Palette', 'Brand Guidelines'], features_bn: ['লোগো ডিজাইন (২টি কনসেপ্ট)', 'কালার প্যালেট', 'ব্র্যান্ড গাইডলাইন'] },
+      { id: 'b2', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড', price: '35,000', desc: 'Professional identity', desc_bn: 'প্রফেশনাল আইডেন্টিটি', features: ['Logo Design (4 Concepts)', 'Stationery Design', 'Social Media Kit'], features_bn: ['লোগো ডিজাইন (৪টি কনসেপ্ট)', 'স্টেশনারি ডিজাইন', 'সোশ্যাল মিডিয়া কিট'], featured: true },
+      { id: 'b3', tier: 'Premium', tier_bn: 'প্রিমিয়াম', price: '60,000', desc: 'Complete brand overhaul', desc_bn: 'সম্পূর্ণ ব্র্যান্ডিং সলিউশন', features: ['Unlimited Logo Revisions', 'Full Brand Book', 'Packaging Design', '3D Mockups'], features_bn: ['আনলিমিটেড লোগো রিভিশন', 'ফুল ব্র্যান্ড বুক', 'প্যাকেজিং ডিজাইন', 'থ্রিডি মকআপ'] }
     ],
     web: [
-      { id: 'w1', tier: 'Landing Page', tier_bn: 'ল্যান্ডিং পেজ', price: '30,000', desc: 'Single page website', desc_bn: 'সিঙ্গেল পেজ ওয়েবসাইট', features: ['Custom Design', 'Mobile Responsive', 'Contact Form'], features_bn: ['কাস্টম ডিজাইন', 'মোবাইল রেসপন্সিভ', 'কন্টাক্ট ফর্ম'] }
+      { id: 'w1', tier: 'Basic', tier_bn: 'বেসিক', price: '30,000', desc: 'Single page website', desc_bn: 'সিঙ্গেল পেজ ওয়েবসাইট', features: ['Landing Page Design', 'Mobile Responsive', 'Contact Form', 'Basic SEO'], features_bn: ['ল্যান্ডিং পেজ ডিজাইন', 'মোবাইল রেসপন্সিভ', 'কন্টাক্ট ফর্ম', 'বেসিক এসইও'] },
+      { id: 'w2', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড', price: '60,000', desc: 'Corporate website', desc_bn: 'কর্পোরেট ওয়েবসাইট', features: ['Up to 10 Pages', 'Custom UI/UX', 'CMS Integration', 'Speed Optimization'], features_bn: ['১০টি পেজ পর্যন্ত', 'কাস্টম UI/UX', 'সিএমএস ইন্টিগ্রেশন', 'স্পিড অপ্টিমাইজেশন'], featured: true },
+      { id: 'w3', tier: 'Premium', tier_bn: 'প্রিমিয়াম', price: '100,000', desc: 'E-commerce / Web App', desc_bn: 'ই-কমার্স / ওয়েব অ্যাপ', features: ['Full E-commerce Setup', 'Payment Gateway', 'Custom Dashboard', 'Advanced Security'], features_bn: ['ফুল ই-কমার্স সেটআপ', 'পেমেন্ট গেটওয়ে', 'কাস্টম ড্যাশবোর্ড', 'অ্যাডভান্সড সিকিউরিটি'] }
     ],
     video: [
-      { id: 'v1', tier: 'Short Promo', tier_bn: 'শর্ট প্রোমো', price: '15,000', desc: 'Up to 30 seconds', desc_bn: '৩০ সেকেন্ড পর্যন্ত', features: ['Script Writing', 'Motion Graphics', 'Background Music'], features_bn: ['স্ক্রিপ্ট রাইটিং', 'মোশন গ্রাফিক্স', 'ব্যাকগ্রাউন্ড মিউজিক'] }
+      { id: 'v1', tier: 'Basic', tier_bn: 'বেসিক', price: '15,000', desc: 'Up to 30 seconds promo', desc_bn: '৩০ সেকেন্ড পর্যন্ত প্রোমো', features: ['Script Writing', 'Stock Footage', 'Background Music'], features_bn: ['স্ক্রিপ্ট রাইটিং', 'স্টক ফুটেজ', 'ব্যাকগ্রাউন্ড মিউজিক'] },
+      { id: 'v2', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড', price: '30,000', desc: 'Corporate video (1 min)', desc_bn: 'কর্পোরেট ভিডিও (১ মিনিট)', features: ['Professional Voiceover', 'Custom Motion Graphics', 'Color Grading'], features_bn: ['প্রফেশনাল ভয়েসওভার', 'কাস্টম মোশন গ্রাফিক্স', 'কালার গ্রেডিং'], featured: true },
+      { id: 'v3', tier: 'Premium', tier_bn: 'প্রিমিয়াম', price: '50,000', desc: 'Full production (2 mins+)', desc_bn: 'ফুল প্রোডাকশন (২ মিনিট+)', features: ['Live Action Shoot', 'VFX Integration', 'Multiple Formats', 'Sound Design'], features_bn: ['লাইভ অ্যাকশন শ্যুট', 'ভিএফএক্স ইন্টিগ্রেশন', 'মাল্টিপল ফরম্যাট', 'সাউন্ড ডিজাইন'] }
     ]
   };
 
@@ -95,7 +102,7 @@ const Pricing = ({ highlight = false, fullPage = false, theme = 'light' }) => {
         </FadeReveal>
 
         <div className="pricebox active">
-          <StaggerReveal delay={0.6}>
+          <StaggerReveal delay={0.6} className="pricing-grid active">
             {displayPlans.map((plan, index) => (
               <FadeReveal key={plan.id || index}>
                 <div className={`price-card ${plan.featured ? 'featured' : ''}`}>
