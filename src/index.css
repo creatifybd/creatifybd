@@ -354,14 +354,22 @@ nav {
   position: relative;
 }
 
-nav.theme-light:not(.scrolled) .nav-link-wrap span,
-nav.theme-light:not(.scrolled) .nav-logo-text,
-nav.theme-light:not(.scrolled) a {
-  color: var(--black);
+#navbar.theme-light:not(.scrolled) .nav-logo,
+#navbar.theme-light:not(.scrolled) .nav-link-wrap span,
+#navbar.theme-light:not(.scrolled) .nav-logo-text,
+#navbar.theme-light:not(.scrolled) .nav-logo span,
+#navbar.theme-light:not(.scrolled) .nav-center a,
+#navbar.theme-light:not(.scrolled) .nav-right a {
+  color: var(--black) !important;
 }
-nav.theme-light:not(.scrolled) .dropdown-chevron,
-nav.theme-light:not(.scrolled) .mobile-toggle {
-  color: var(--black);
+#navbar.theme-light:not(.scrolled) .dropdown-chevron,
+#navbar.theme-light:not(.scrolled) .mobile-toggle {
+  color: var(--black) !important;
+}
+
+/* Add SVG logo inversion reset for light theme */
+#navbar.theme-light:not(.scrolled) .nav-logo img.nav-logo-img {
+  filter: none !important;
 }
 
 nav.scrolled {
