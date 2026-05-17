@@ -358,13 +358,21 @@ nav {
 #navbar.theme-light:not(.scrolled) .nav-link-wrap span,
 #navbar.theme-light:not(.scrolled) .nav-logo-text,
 #navbar.theme-light:not(.scrolled) .nav-logo span,
-#navbar.theme-light:not(.scrolled) .nav-center a,
+#navbar.theme-light:not(.scrolled) .nav-center a:not(.minimal-dropdown-item),
 #navbar.theme-light:not(.scrolled) .nav-right a {
   color: var(--black) !important;
 }
 #navbar.theme-light:not(.scrolled) .dropdown-chevron,
 #navbar.theme-light:not(.scrolled) .mobile-toggle {
   color: var(--black) !important;
+}
+
+#navbar.theme-light:not(.scrolled) .minimal-dropdown-item {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+#navbar.theme-light:not(.scrolled) .minimal-dropdown-item:hover {
+  color: var(--white) !important;
 }
 
 /* Add SVG logo inversion reset for light theme */
