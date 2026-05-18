@@ -75,9 +75,14 @@ export const updateSettings = async (settingsData, docName = 'site') => {
 // --- General CRUD (For Portfolio, Services, Testimonials) ---
 export const getData = async (collectionName) => {
   try {
-    const q = query(collection(db, collectionName), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, collectionName));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return docs.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+      const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      return timeB - timeA;
+    });
   } catch (error) {
     handleServiceError(error, `Failed to fetch ${collectionName}.`);
   }

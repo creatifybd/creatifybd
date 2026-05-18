@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Loader2 } from 'lucide-react';
 import { TextReveal, FadeReveal } from './MotionReveal';
 import toast from 'react-hot-toast';
+import { useSettings } from '../context/SettingsContext';
 
 const Contact = () => {
   const { lang } = useLanguage();
+  const { content } = useSettings();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', service: '', budget: '', message: '' });
@@ -32,6 +34,8 @@ const Contact = () => {
     }
   };
 
+  const cContent = content?.contact || {};
+
   return (
     <section className="contact-premium-section" id="contact">
 
@@ -43,8 +47,17 @@ const Contact = () => {
               <div className="eyebrow" style={{ color: 'var(--red)', marginBottom: '1.5rem' }}>{lang === 'bn' ? 'যোগাযোগ করুন' : 'Get In Touch'}</div>
             </FadeReveal>
             <TextReveal className="contact-h1">
-              {lang === 'bn' ? 'আসুন নতুন কিছু তৈরি করি' : "Let's build something great."}
+              {cContent.heading ? (
+                <span dangerouslySetInnerHTML={{ __html: cContent.heading }} />
+              ) : (
+                lang === 'bn' ? 'আসুন নতুন কিছু তৈরি করি' : "Let's build something great."
+              )}
             </TextReveal>
+            {cContent.sub && (
+              <FadeReveal delay={0.2}>
+                <p style={{ color: 'var(--section-subtext)', marginTop: '1rem', marginBottom: '2rem' }}>{cContent.sub}</p>
+              </FadeReveal>
+            )}
             
             <FadeReveal delay={0.4}>
               <div className="contact-methods">
@@ -66,11 +79,28 @@ const Contact = () => {
                   <div className="method-icon"><MapPin size={24} /></div>
                   <div>
                     <div className="method-label">Location</div>
-                    <div className="method-val">Dhaka, Bangladesh</div>
+                    <div className="method-val">{cContent.address || 'Dhaka, Bangladesh'}</div>
                   </div>
                 </div>
+                {cContent.working_hours && (
+                  <div className="contact-method-item">
+                    <div className="method-icon"><CheckCircle2 size={24} /></div>
+                    <div>
+                      <div className="method-label">Working Hours</div>
+                      <div className="method-val">{cContent.working_hours}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </FadeReveal>
+            
+            {cContent.office_image && (
+              <FadeReveal delay={0.6}>
+                <div style={{ marginTop: '3rem' }}>
+                  <img src={cContent.office_image} alt="Office" style={{ width: '100%', maxWidth: '400px', borderRadius: '16px', objectFit: 'cover' }} />
+                </div>
+              </FadeReveal>
+            )}
           </div>
 
           <div className="contact-form-card">

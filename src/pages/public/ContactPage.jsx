@@ -9,8 +9,16 @@ const ContactPage = () => {
   return (
     <div className="contact-page">
       <SEO 
-        title="Contact Us | CreatifyBD"
-        description="Ready to start your next project? Get in touch with our team today and let's build something great."
+        title="Contact Creatify BD | Best Digital Marketing Agency in Dhaka"
+        description="Ready to start your next project? Get in touch with Creatify BD today and let's build something great. Best digital agency in Bangladesh."
+        keywords="Contact Creatify BD, hire creative agency dhaka, digital marketing consultation bangladesh, web design agency contact"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact Creatify BD",
+          "description": "Contact page for Creatify BD, a premier digital marketing agency in Dhaka.",
+          "url": "https://creatify-bd.web.app/contact"
+        }}
       />
       <Navbar />
       <div className="page-header dark-section">

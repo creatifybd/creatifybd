@@ -10,104 +10,7 @@ import OptimizedImage from '../../components/OptimizedImage';
 import '../../styles/CaseStudies.css';
 import SEO from '../../components/SEO';
 
-const caseStudies = [
-  {
-    id: "graphic-design-apex",
-    category: "Graphic Design",
-    client: "Apex Streetwear",
-    title: "Redefining Urban Visual Identity",
-    results: [
-      { val: "+120%", label: "Brand Recall" },
-      { val: "Top 10", label: "Global Trends" }
-    ],
-    imageKey: "apex_hero",
-    color: "#000000"
-  },
-  {
-    id: "marketing-luxe",
-    category: "Digital Marketing",
-    client: "Luxe Real Estate",
-    title: "400% Lead Growth via Targeted Funnels",
-    results: [
-      { val: "400%", label: "Lead Growth" },
-      { val: "3.5x", label: "ROAS" }
-    ],
-    imageKey: "luxe_hero",
-    color: "#D4AF37"
-  },
-  {
-    id: "web-design-finflow",
-    category: "Website Design",
-    client: "FinFlow SaaS",
-    title: "Crafting a High-Conversion SaaS Experience",
-    results: [
-      { val: "65%", label: "Conversion Lift" },
-      { val: "0.8s", label: "Load Time" }
-    ],
-    imageKey: "finflow_hero",
-    color: "#6366F1"
-  },
-  {
-    id: "video-editing-velocity",
-    category: "Video Editing",
-    client: "Velocity Sports",
-    title: "Cinematic Content: 2M+ Organic Views",
-    results: [
-      { val: "2.2M", label: "Organic Views" },
-      { val: "85%", label: "Watch Time" }
-    ],
-    imageKey: "velocity_hero",
-    color: "#E8192C"
-  },
-  {
-    id: "branding-ecosphere",
-    category: "Branding Design",
-    client: "EcoSphere Tech",
-    title: "Building a Sustainable Global Legacy",
-    results: [
-      { val: "Series B", label: "Funding Secured" },
-      { val: "Global", label: "Impact Award" }
-    ],
-    imageKey: "ecosphere_hero",
-    color: "#10B981"
-  },
-  {
-    id: "marketing-nexus",
-    category: "Digital Marketing",
-    client: "Nexus E-commerce",
-    title: "Scaling a Fashion Startup to $1M ARR",
-    results: [
-      { val: "$1M+", label: "Annual Revenue" },
-      { val: "250k", label: "Active Users" }
-    ],
-    imageKey: "nexus_hero",
-    color: "#EC4899"
-  },
-  {
-    id: "web-design-quantum",
-    category: "Website Design",
-    client: "Quantum Robotics",
-    title: "Futuristic Portal for Deep Tech Innovation",
-    results: [
-      { val: "92%", label: "Trust Index" },
-      { val: "14", label: "Industry Awards" }
-    ],
-    imageKey: "quantum_hero",
-    color: "#8B5CF6"
-  },
-  {
-    id: "graphic-design-vibe",
-    category: "Graphic Design",
-    client: "Vibe Beverage Co.",
-    title: "Minimalist Packaging for a Gen-Z Audience",
-    results: [
-      { val: "100%", label: "Retail Uptake" },
-      { val: "50k", label: "Social Shares" }
-    ],
-    imageKey: "vibe_hero",
-    color: "#F59E0B"
-  }
-];
+
 
 const categories = ["All", "Graphic Design", "Digital Marketing", "Website Design", "Video Editing", "Branding Design"];
 
@@ -140,30 +43,41 @@ const CaseStudyCard = ({ study, image }) => {
 
 const CaseStudiesPage = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [caseStudies, setCaseStudies] = useState([]);
   const [images, setImages] = useState({});
   const { lang } = useLanguage();
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'case_study_images'), (snap) => {
+    const unsubCases = onSnapshot(collection(db, 'case_studies'), (snap) => {
+      setCaseStudies(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0) - (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0)));
+    });
+    const unsubImages = onSnapshot(collection(db, 'case_study_images'), (snap) => {
       const imgMap = {};
       snap.docs.forEach(doc => { imgMap[doc.id] = doc.data(); });
       setImages(imgMap);
     });
-    return () => unsub();
+    return () => { unsubCases(); unsubImages(); };
   }, []);
 
   const filteredStudies = useMemo(() => {
     if (activeFilter === "All") return caseStudies;
     return caseStudies.filter(s => s.category === activeFilter);
-  }, [activeFilter]);
+  }, [activeFilter, caseStudies]);
 
   return (
     <div className="premium-cs-page">
       <SEO 
-        title={lang === 'bn' ? 'সাফল্যের আখ্যান — কেস স্টাডিজ' : 'Our Case Studies | Strategic Impact & Creative Excellence'} 
-        description="Discover how CreatifyBD delivers measurable growth for global brands through strategic design, performance marketing, and cutting-edge web experiences."
-        keywords="case studies, web design portfolio, digital marketing results, branding success stories"
+        title={lang === 'bn' ? 'সাফল্যের আখ্যান — কেস স্টাডিজ | Creatify BD' : 'Creatify BD Case Studies | Strategic Impact & Creative Excellence'} 
+        description="Discover how Creatify BD delivers measurable growth for global brands through strategic design, performance marketing, and cutting-edge web experiences."
+        keywords="Creatify BD case studies, digital marketing success stories, web design portfolio dhaka, SEO results bangladesh"
         url="https://creatify-bd.web.app/case-studies"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Creatify BD Case Studies",
+          "description": "Success stories and case studies of digital marketing and web design projects by Creatify BD.",
+          "url": "https://creatify-bd.web.app/case-studies"
+        }}
       />
       <Navbar />
 

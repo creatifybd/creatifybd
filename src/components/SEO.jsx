@@ -2,15 +2,16 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SEO = ({ 
-  title = "CreatifyBD | Digital Marketing & Creative Agency in Dhaka", 
-  description = "CreatifyBD is a top-class creative agency in Dhaka, specializing in digital marketing, branding, web development, and video production.",
-  keywords = "digital marketing agency dhaka, creative agency bangladesh, web design dhaka, branding bangladesh",
+  title = "CreatifyBD | Best Digital Marketing & Creative Agency in Dhaka", 
+  description = "CreatifyBD is the leading creative agency in Dhaka, offering top-class digital marketing, branding, web development, and video production services for global brands.",
+  keywords = "Creatify BD, CreatifyBD, digital marketing agency dhaka, best creative agency bangladesh, web design dhaka, branding bangladesh, SEO agency dhaka",
   image = "https://creatify-bd.web.app/og-image.jpg",
   url = "https://creatify-bd.web.app/",
-  type = "website"
+  type = "website",
+  schema = null
 }) => {
   const siteName = "CreatifyBD";
-  const fullTitle = `${title} | ${siteName}`;
+  const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
   return (
     <Helmet>
@@ -18,6 +19,9 @@ const SEO = ({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
+
+      {/* Advanced Bots Control */}
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -35,6 +39,13 @@ const SEO = ({
 
       {/* Canonical */}
       <link rel="canonical" href={url} />
+
+      {/* Dynamic JSON-LD Schema */}
+      {schema && (
+        <script type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      )}
     </Helmet>
   );
 };

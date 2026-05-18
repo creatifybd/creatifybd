@@ -33,9 +33,16 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: settings?.seo_title || "Best Creative Agency in Dhaka & Digital Marketing Bangladesh",
-    description: settings?.seo_description || "CreatifyBD is the premier digital marketing and creative agency in Dhaka.",
-    keywords: "digital marketing agency dhaka, best creative agency bangladesh, social media management dhaka, web design bangladesh, branding agency dhaka, creatifybd"
+    title: settings?.seo_title || "Creatify BD | Best Digital Marketing & Creative Agency in Dhaka",
+    description: settings?.seo_description || "Creatify BD is the premier digital marketing and creative agency in Dhaka, offering top-notch web design, branding, and video production.",
+    keywords: "Creatify BD, CreatifyBD, digital marketing agency dhaka, best creative agency bangladesh, social media management dhaka, web design bangladesh, branding agency dhaka",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Creatify BD | Best Digital Marketing & Creative Agency in Dhaka",
+      "description": "Creatify BD is the premier digital marketing and creative agency in Dhaka.",
+      "url": "https://creatify-bd.web.app/"
+    }
   };
 
   return (
@@ -44,25 +51,26 @@ const Home = () => {
         title={seo.title} 
         description={seo.description} 
         keywords={seo.keywords}
+        schema={seo.schema}
       />
 
       <Navbar />
-      <Hero />
+      {content?.visibility?.hero !== false && <Hero />}
       <IntroBand />
       
-      <CaseStudies highlight={true} theme={content?.hero?.theme} />
+      {content?.visibility?.case_studies !== false && <CaseStudies highlight={true} theme={content?.hero?.theme} />}
       
-      <Clients />
+      {content?.visibility?.clients !== false && <Clients />}
       
-      <Services highlight={true} theme={content?.services?.theme} />
-      <Features theme={content?.features?.theme} />
-      <Portfolio highlight={true} theme={content?.portfolio?.theme} />
-      <Process highlight={true} theme={content?.process?.theme} />
-      <Pricing highlight={true} theme={content?.pricing?.theme} />
+      {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
+      {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
+      {content?.visibility?.portfolio !== false && <Portfolio highlight={true} theme={content?.portfolio?.theme} />}
+      {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
+      {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
       
-      <Testimonials theme={content?.testimonials?.theme} />
-      <CTABand />
-      <Contact highlight={true} theme={content?.contact?.theme} />
+      {content?.visibility?.testimonials !== false && <Testimonials theme={content?.testimonials?.theme} />}
+      {content?.visibility?.cta_band !== false && <CTABand />}
+      {content?.visibility?.contact !== false && <Contact highlight={true} theme={content?.contact?.theme} />}
       <Footer />
     </div>
   );

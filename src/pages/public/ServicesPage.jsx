@@ -9,8 +9,18 @@ const ServicesPage = () => {
   return (
     <div className="services-page">
       <SEO 
-        title="Our Services | CreatifyBD"
-        description="Expert digital marketing, branding, web development, and video production services tailored to elevate your brand presence."
+        title="Creatify BD Services | Digital Marketing & Web Design in Dhaka"
+        description="Expert digital marketing, branding, web development, and video production services tailored to elevate your brand presence by Creatify BD."
+        keywords="Creatify BD services, digital marketing services dhaka, web development bangladesh, SEO services dhaka, branding services"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": "Digital Marketing & Web Development",
+          "provider": {
+            "@type": "LocalBusiness",
+            "name": "Creatify BD"
+          }
+        }}
       />
       <Navbar />
       <div className="page-header dark-section">

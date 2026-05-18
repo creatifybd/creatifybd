@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { detailedCaseStudies } from '../../data/caseStudiesData';
 import { db } from '../../firebase/config';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, collection, onSnapshot } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
@@ -15,8 +14,25 @@ const CaseStudyDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { lang } = useLanguage();
-  const [images, setImages] = useState({});
-  const study = detailedCaseStudies[id];
+  const [study, setStudy] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStudy = async () => {
+      try {
+        const docRef = doc(db, 'case_studies', id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setStudy({ id: docSnap.id, ...docSnap.data() });
+        }
+      } catch (err) {
+        console.error("Error fetching study:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudy();
+  }, [id]);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'case_study_images'), (snap) => {
@@ -26,6 +42,10 @@ const CaseStudyDetailPage = () => {
     });
     return () => unsub();
   }, []);
+
+  if (loading) {
+    return <div className="cs-error-page"><h2>Loading...</h2></div>;
+  }
 
   if (!study) {
     return (
@@ -41,8 +61,19 @@ const CaseStudyDetailPage = () => {
   return (
     <div className="premium-cs-detail-page">
       <SEO 
-        title={`${study.client} | ${study.title}`}
+        title={`${study.client} Case Study | Creatify BD`}
         description={study.about}
+        keywords={`Creatify BD ${study.category}, digital marketing case study, ${study.client} project`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": `${study.client} - ${study.title}`,
+          "description": study.about,
+          "author": {
+            "@type": "Organization",
+            "name": "Creatify BD"
+          }
+        }}
       />
       <Navbar />
 
@@ -90,18 +121,24 @@ const CaseStudyDetailPage = () => {
         <div className="container">
           <div className="cs-narrative-grid">
             <div className="cs-narrative-content">
-              <div className="cs-narrative-block">
-                <span className="cs-label">About the Project</span>
-                <p className="cs-text-large">{study.about}</p>
-              </div>
-              <div className="cs-narrative-block">
-                <span className="cs-label">The Challenge</span>
-                <p>{study.challenge}</p>
-              </div>
-              <div className="cs-narrative-block">
-                <span className="cs-label">Our Solution</span>
-                <p>{study.solution}</p>
-              </div>
+              {study.about && (
+                <div className="cs-narrative-block">
+                  <span className="cs-label">About the Project</span>
+                  <p className="cs-text-large">{study.about}</p>
+                </div>
+              )}
+              {study.challenge && (
+                <div className="cs-narrative-block">
+                  <span className="cs-label">The Challenge</span>
+                  <p>{study.challenge}</p>
+                </div>
+              )}
+              {study.solution && (
+                <div className="cs-narrative-block">
+                  <span className="cs-label">Our Solution</span>
+                  <p>{study.solution}</p>
+                </div>
+              )}
             </div>
             
             <div className="cs-detail-kpis">

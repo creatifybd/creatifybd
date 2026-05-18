@@ -9,8 +9,16 @@ const PortfolioPage = () => {
   return (
     <div className="portfolio-page">
       <SEO 
-        title="Our Work & Portfolio | CreatifyBD"
-        description="Explore our collection of premium graphic design, branding, and digital marketing projects delivered with excellence."
+        title="Creatify BD Portfolio | Best Creative Work & Projects"
+        description="Explore the portfolio of Creatify BD, featuring premium graphic design, branding, and digital marketing projects delivered with excellence."
+        keywords="Creatify BD portfolio, creative agency work dhaka, web design portfolio bangladesh, digital marketing case studies"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Creatify BD Portfolio",
+          "description": "Collection of premium digital marketing and design projects by Creatify BD.",
+          "url": "https://creatify-bd.web.app/work"
+        }}
       />
       <Navbar />
       <div className="page-header dark-section">

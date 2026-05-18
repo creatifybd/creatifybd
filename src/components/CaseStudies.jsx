@@ -8,10 +8,6 @@ import { ArrowRight } from 'lucide-react';
 import { TextReveal, ImageReveal, FadeReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
 
-import { detailedCaseStudies } from '../data/caseStudiesData';
-
-const masterpieces = Object.values(detailedCaseStudies).slice(0, 3);
-
 
 const ParallaxImage = ({ src, alt }) => {
   const ref = React.useRef(null);
@@ -37,15 +33,20 @@ const ParallaxImage = ({ src, alt }) => {
 
 const CaseStudies = ({ theme = 'light' }) => {
   const [images, setImages] = useState({});
+  const [masterpieces, setMasterpieces] = useState([]);
   const { lang } = useLanguage();
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'case_study_images'), (snap) => {
+    const unsubCases = onSnapshot(collection(db, 'case_studies'), (snap) => {
+      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0) - (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0));
+      setMasterpieces(data.slice(0, 3));
+    });
+    const unsubImages = onSnapshot(collection(db, 'case_study_images'), (snap) => {
       const imgMap = {};
       snap.docs.forEach(doc => { imgMap[doc.id] = doc.data(); });
       setImages(imgMap);
     });
-    return () => unsub();
+    return () => { unsubCases(); unsubImages(); };
   }, []);
 
   // Force light theme - dark theme disabled

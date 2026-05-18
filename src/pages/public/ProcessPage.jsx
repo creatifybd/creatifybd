@@ -9,8 +9,9 @@ const ProcessPage = () => {
   return (
     <div className="process-page">
       <SEO 
-        title="About Us & Our Process | CreatifyBD"
-        description="Learn about our systematic, 4-step approach to turning your vision into a digital masterpiece."
+        title="About Creatify BD | Our Process & Agency Culture"
+        description="Learn about Creatify BD's systematic, 4-step approach to turning your vision into a digital masterpiece. Best creative agency in Dhaka."
+        keywords="About Creatify BD, creative agency process, web design workflow, digital marketing strategy dhaka"
       />
       <Navbar />
       <div className="page-header dark-section">
