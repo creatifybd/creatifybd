@@ -31,6 +31,7 @@ import TestimonialsManager from './admin/Testimonials';
 import SettingsManager from './admin/Settings';
 import ContentManager from './admin/ContentManager';
 import PricingManager from './admin/PricingManager';
+import PaymentVerification from './admin/PaymentVerification';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -50,6 +51,7 @@ const AdminDashboard = () => {
     { path: '/admin/services', label: 'Services', icon: <Briefcase size={18} /> },
     { path: '/admin/portfolio', label: 'Portfolio', icon: <ImageIcon size={18} /> },
     { path: '/admin/pricing', label: 'Pricing Plans', icon: <CreditCard size={18} /> },
+    { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} /> },
     { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} /> },
     { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
     { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} /> },
@@ -199,6 +201,7 @@ const AdminDashboard = () => {
                 <Route path="services" element={<ServicesManager />} />
                 <Route path="portfolio" element={<PortfolioManager />} />
                 <Route path="pricing" element={<PricingManager />} />
+                <Route path="payments" element={<PaymentVerification />} />
                 <Route path="testimonials" element={<TestimonialsManager />} />
                 <Route path="messages" element={<MessagesList />} />
                 <Route path="settings" element={<SettingsManager />} />

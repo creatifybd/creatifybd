@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /login/
 
-Sitemap: https://creatify-bd.web.app/sitemap.xml
+Sitemap: https://creatifybd.com/sitemap.xml

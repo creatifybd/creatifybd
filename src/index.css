@@ -4338,3 +4338,89 @@ html, body {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   WHATSAPP FLOATING BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.whatsapp-float-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  animation: whatsapp-pulse 2s infinite;
+}
+
+.whatsapp-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.6);
+  }
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY - REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .whatsapp-float-btn {
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SERVICE CARD CTA STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.service-cta {
+  text-decoration: none;
+  color: inherit;
+}
+
+.service-cta .service-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--red);
+  transition: all 0.2s;
+}
+
+.service-card-premium:hover .service-cta .service-arrow {
+  transform: translateX(4px);
+}
+

@@ -1,63 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://creatify-bd.web.app/</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/services</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/services</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/work</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/work</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/case-studies</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/case-studies</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/process</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/process</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/pricing</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/pricing</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/contact</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/contact</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/privacy</loc>
-    <lastmod>2026-06-19</lastmod>
-    <priority>0.30</priority>
+    <loc>https://creatifybd.com/payment</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/terms</loc>
-    <lastmod>2026-06-19</lastmod>
-    <priority>0.30</priority>
-  </url>
-  <url>
-    <loc>https://creatify-bd.web.app/case-study/graphic-design-apex</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/about</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/case-study/marketing-luxe</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/privacy</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.30</priority>
+  </url>
+  <url>
+    <loc>https://creatifybd.com/terms</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.30</priority>
+  </url>
+  <url>
+    <loc>https://creatifybd.com/case-study/graphic-design-apex</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://creatify-bd.web.app/case-study/web-design-finflow</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://creatifybd.com/case-study/marketing-luxe</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://creatifybd.com/case-study/web-design-finflow</loc>
+    <lastmod>2026-06-28</lastmod>
     <priority>0.70</priority>
   </url>
 </urlset>

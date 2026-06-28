@@ -3,10 +3,11 @@ import DOMPurify from 'dompurify';
 import { useLanguage } from '../context/LanguageContext';
 import { sendMessage } from '../firebase/services';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Loader2 } from 'lucide-react';
+import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Loader2, Building2 } from 'lucide-react';
 import { TextReveal, FadeReveal } from './MotionReveal';
 import toast from 'react-hot-toast';
 import { useSettings } from '../context/SettingsContext';
+import { siteConfig } from '../config/siteConfig';
 
 const Contact = () => {
   const { lang } = useLanguage();
@@ -17,6 +18,7 @@ const Contact = () => {
     name: '',
     email: '',
     phone: '',
+    company: '',
     service: '',
     budget: '',
     message: ''
@@ -44,8 +46,8 @@ const Contact = () => {
     try {
       await sendMessage(formData);
       setSubmitted(true);
-      toast.success(lang === 'bn' ? 'ধন্যবাদ! আমরা শীঘ্রই যোগাযোগ করব।' : 'Success! We will contact you soon.', { id: toastId });
-      setFormData({ name: '', email: '', phone: '', service: '', budget: '', message: '' });
+      toast.success('Thank you for contacting CreatifyBD. We have received your project inquiry and will contact you shortly.', { id: toastId });
+      setFormData({ name: '', email: '', phone: '', company: '', service: '', budget: '', message: '' });
     } catch (err) {
       console.error(err);
       toast.error(lang === 'bn' ? 'পাঠানো যায়নি। আবার চেষ্টা করুন।' : 'Failed to send. Please try again.', { id: toastId });
@@ -87,21 +89,21 @@ const Contact = () => {
                   <div className="method-icon"><MessageSquare size={24} /></div>
                   <div>
                     <div className="method-label">Email Us</div>
-                    <div className="method-val">hello@creatifybd.com</div>
+                    <div className="method-val">{siteConfig.email}</div>
                   </div>
                 </div>
                 <div className="contact-method-item">
                   <div className="method-icon"><Phone size={24} /></div>
                   <div>
                     <div className="method-label">Call Us</div>
-                    <div className="method-val">+880 1951 676600</div>
+                    <div className="method-val">{siteConfig.phone}</div>
                   </div>
                 </div>
                 <div className="contact-method-item">
                   <div className="method-icon"><MapPin size={24} /></div>
                   <div>
                     <div className="method-label">Location</div>
-                    <div className="method-val">{cContent.address || 'Dhaka, Bangladesh'}</div>
+                    <div className="method-val">{cContent.address || siteConfig.address}</div>
                   </div>
                 </div>
                 {cContent.working_hours && (
@@ -144,7 +146,7 @@ const Contact = () => {
 
                   <div className="form-row-2">
                     <div className="form-group">
-                      <label className="luxury-label" htmlFor="contact-name">What's your name?</label>
+                      <label className="luxury-label" htmlFor="contact-name">Full Name *</label>
                       <input
                         id="contact-name"
                         type="text"
@@ -157,7 +159,7 @@ const Contact = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <label className="luxury-label" htmlFor="contact-email">Email Address</label>
+                      <label className="luxury-label" htmlFor="contact-email">Email Address *</label>
                       <input
                         id="contact-email"
                         type="email"
@@ -173,10 +175,11 @@ const Contact = () => {
 
                   <div className="form-row-2">
                     <div className="form-group">
-                      <label className="luxury-label" htmlFor="contact-phone">Phone / WhatsApp</label>
+                      <label className="luxury-label" htmlFor="contact-phone">WhatsApp / Phone *</label>
                       <input
                         id="contact-phone"
                         type="tel"
+                        required
                         className="luxury-input"
                         value={formData.phone}
                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -185,7 +188,22 @@ const Contact = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <label className="luxury-label" htmlFor="contact-service">Interested In</label>
+                      <label className="luxury-label" htmlFor="contact-company">Company Name</label>
+                      <input
+                        id="contact-company"
+                        type="text"
+                        className="luxury-input"
+                        value={formData.company}
+                        onChange={e => setFormData({ ...formData, company: e.target.value })}
+                        placeholder="Your Company Ltd."
+                        autoComplete="organization"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row-2">
+                    <div className="form-group">
+                      <label className="luxury-label" htmlFor="contact-service">Service Needed *</label>
                       <select
                         id="contact-service"
                         className="luxury-input"
@@ -194,17 +212,13 @@ const Contact = () => {
                         onChange={e => setFormData({ ...formData, service: e.target.value })}
                       >
                         <option value="">Select a service</option>
-                        <option value="web">Web Design & Dev</option>
-                        <option value="branding">Branding & Identity</option>
-                        <option value="marketing">Digital Marketing</option>
-                        <option value="video">Video Production</option>
+                        {siteConfig.services.map(service => (
+                          <option key={service} value={service}>{service}</option>
+                        ))}
                       </select>
                     </div>
-                  </div>
-
-                  <div className="form-row-2">
                     <div className="form-group">
-                      <label className="luxury-label" htmlFor="contact-budget">Monthly Budget</label>
+                      <label className="luxury-label" htmlFor="contact-budget">Budget Range *</label>
                       <select
                         id="contact-budget"
                         className="luxury-input"
@@ -213,10 +227,9 @@ const Contact = () => {
                         onChange={e => setFormData({ ...formData, budget: e.target.value })}
                       >
                         <option value="">Select budget range</option>
-                        <option value="5k-10k">৳5,000 - ৳10,000</option>
-                        <option value="10k-30k">৳10,000 - ৳30,000</option>
-                        <option value="30k-50k">৳30,000 - ৳50,000</option>
-                        <option value="50k+">৳50,000+</option>
+                        {siteConfig.budgetRanges.map(range => (
+                          <option key={range.value} value={range.value}>{range.label}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -250,8 +263,8 @@ const Contact = () => {
                   className="success-message"
                 >
                   <CheckCircle2 size={80} color="var(--red)" style={{ marginBottom: '2rem' }} />
-                  <h3 className="success-title">Inquiry Received.</h3>
-                  <p className="success-desc">Our strategy team will review your project and get back to you within 24 hours.</p>
+                  <h3 className="success-title">Inquiry Received</h3>
+                  <p className="success-desc">Thank you for contacting CreatifyBD. We have received your project inquiry and will contact you shortly.</p>
                   <button onClick={() => setSubmitted(false)} className="btn-red" style={{ marginTop: '2.5rem' }}>
                     Send Another Inquiry
                   </button>

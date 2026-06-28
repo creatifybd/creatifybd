@@ -11,6 +11,7 @@ import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import CustomCursor from './components/CustomCursor';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -22,6 +23,7 @@ const ContactPage = lazy(() => import('./pages/public/ContactPage'));
 const CaseStudiesPage = lazy(() => import('./pages/public/CaseStudiesPage'));
 const CaseStudyPage = lazy(() => import('./pages/public/CaseStudyPage'));
 const LegalPage = lazy(() => import('./pages/public/LegalPage'));
+const PaymentPage = lazy(() => import('./pages/public/PaymentPage'));
 const Login = lazy(() => import('./pages/Login'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -81,6 +83,7 @@ function AppContent() {
       }} />}
       <ScrollToTop />
       <CustomCursor />
+      <WhatsAppButton />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
@@ -94,6 +97,7 @@ function AppContent() {
           <Route path="/privacy" element={<PageWrapper><LegalPage type="privacy" /></PageWrapper>} />
           <Route path="/terms" element={<PageWrapper><LegalPage type="terms" /></PageWrapper>} />
           <Route path="/about" element={<PageWrapper><ProcessPage /></PageWrapper>} />
+          <Route path="/payment" element={<PageWrapper><PaymentPage /></PageWrapper>} />
           <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
           <Route 
             path="/admin/*" 

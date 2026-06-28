@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
+import { siteConfig } from '../config/siteConfig';
 
 const Services = ({ highlight = false, fullPage = false, theme = 'light' }) => {
   // Force light theme - dark theme disabled
@@ -63,10 +64,23 @@ const Services = ({ highlight = false, fullPage = false, theme = 'light' }) => {
                   <p>{s.desc}</p>
                   
                   <div className="service-card-footer">
-                    <span className="service-price">{s.price}</span>
-                    <motion.div className="service-arrow">
-                      <ArrowUpRight size={20} />
-                    </motion.div>
+                    <span className="service-price">{s.price || 'Custom Quote'}</span>
+                    <a 
+                      href={`/payment?service=${encodeURIComponent(s.title)}`}
+                      className="service-cta"
+                      onClick={(e) => {
+                        // If it's a custom quote, go to contact instead
+                        if (!s.price || s.price === 'Custom Quote') {
+                          e.preventDefault();
+                          window.location.href = '#contact';
+                        }
+                      }}
+                    >
+                      <motion.div className="service-arrow">
+                        {s.price && s.price !== 'Custom Quote' ? 'Start Project' : 'Get Quote'}
+                        <ArrowUpRight size={16} style={{ marginLeft: '0.5rem' }} />
+                      </motion.div>
+                    </a>
                   </div>
                 </motion.div>
               </FadeReveal>
@@ -79,7 +93,7 @@ const Services = ({ highlight = false, fullPage = false, theme = 'light' }) => {
           <FadeReveal delay={0.8}>
             <div style={{ marginTop: '5rem', textAlign: 'center' }}>
               <a href="/services" className="btn-huge-red">
-                {lang === 'bn' ? 'সব সার্ভিস দেখুন' : 'Explore All Services →'}
+                Explore All Services
               </a>
             </div>
           </FadeReveal>
