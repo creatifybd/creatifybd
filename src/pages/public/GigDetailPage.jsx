@@ -90,8 +90,41 @@ const GigDetailPage = () => {
     <div className="gig-detail-page">
       <SEO 
         title={`${gig.title} | CreatifyBD`}
-        description={gig.overview}
-        keywords={`${gig.tags.join(', ')}, creatifybd gigs`}
+        description={`${gig.overview} Premium ${gig.category} package starting at $${gig.startingPrice} USD. Served by CreatifyBD production team for USA, Canada, and Australia small businesses.`}
+        keywords={`${gig.tags.join(', ')}, ${gig.category.toLowerCase()} service, hire freelancer, creatifybd gigs, dynamic marketing package`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": gig.title,
+          "image": gig.galleryImages || [
+            "https://images.unsplash.com/photo-1547658719-da2b81169b7a?q=80&w=1280"
+          ],
+          "description": gig.description,
+          "brand": {
+            "@type": "Brand",
+            "name": "CreatifyBD"
+          },
+          "offers": {
+            "@type": "Offer",
+            "url": `https://creatifybd.com/gigs/${gig.slug}`,
+            "priceCurrency": "USD",
+            "price": gig.startingPrice,
+            "priceValidUntil": "2027-12-31",
+            "itemCondition": "https://schema.org/NewCondition",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+              "@type": "Organization",
+              "name": "CreatifyBD"
+            }
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": gig.rating.toFixed(1),
+            "bestRating": "5",
+            "worstRating": "1",
+            "reviewCount": gig.reviewCount
+          }
+        }}
       />
 
       <Navbar />

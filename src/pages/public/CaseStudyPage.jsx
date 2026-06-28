@@ -32,7 +32,7 @@ const CaseStudyPage = () => {
             "@type": "Organization",
             "name": "CreatifyBD"
           },
-          "mainEntityOfPage": `https://creatify-bd.web.app/case-study/${study.id}`
+          "mainEntityOfPage": `https://creatifybd.com/case-studies/${slug}`
         }}
       />
       <Navbar />

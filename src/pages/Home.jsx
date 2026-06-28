@@ -34,15 +34,45 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: settings?.seo_title || "Creatify BD | Best Digital Marketing & Creative Agency in Dhaka",
-    description: settings?.seo_description || "Creatify BD is the premier digital marketing and creative agency in Dhaka, offering top-notch web design, branding, and video production.",
-    keywords: "Creatify BD, CreatifyBD, digital marketing agency dhaka, best creative agency bangladesh, social media management dhaka, web design bangladesh, branding agency dhaka",
+    title: settings?.seo_title || "CreatifyBD | Premium Social Media Management & Creative Agency",
+    description: settings?.seo_description || "CreatifyBD is a premium creative agency & Fiverr-style service marketplace. Outsource Social Media Management, Graphic Design, Video Editing, and Website Design to our expert team. Serving small businesses in the USA, Canada, and Australia.",
+    keywords: "CreatifyBD, Creatify BD, social media management agency, hire social media manager USA, video editing service Canada, graphic design agency Australia, outsource creative design, small business web design React, digital marketing marketplace",
     schema: {
       "@context": "https://schema.org",
-      "@type": "WebPage",
-      "name": "Creatify BD | Best Digital Marketing & Creative Agency in Dhaka",
-      "description": "Creatify BD is the premier digital marketing and creative agency in Dhaka.",
-      "url": "https://creatify-bd.web.app/"
+      "@type": "LocalBusiness",
+      "name": "CreatifyBD",
+      "alternateName": "Creatify BD",
+      "image": "https://creatifybd.com/og-image.png",
+      "logo": "https://creatifybd.com/logo.png",
+      "url": "https://creatifybd.com",
+      "telephone": "+8801951676600",
+      "email": "hello@creatifybd.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Dhaka",
+        "addressLocality": "Dhaka",
+        "addressCountry": "BD"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "23.8103",
+        "longitude": "90.4125"
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "United States" },
+        { "@type": "Country", "name": "Canada" },
+        { "@type": "Country", "name": "Australia" }
+      ],
+      "priceRange": "$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "84"
+      },
+      "sameAs": [
+        "https://www.facebook.com/creatifybd",
+        "https://www.linkedin.com/company/creatifybd"
+      ]
     }
   };
 

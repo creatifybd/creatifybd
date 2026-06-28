@@ -15,7 +15,11 @@ const SEO = ({
   const location = useLocation();
   const siteName = "CreatifyBD";
   const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
-  const canonicalUrl = url || `https://creatifybd.com${location.pathname}`;
+  let path = location.pathname;
+  if (path.endsWith('/') && path.length > 1) {
+    path = path.slice(0, -1);
+  }
+  const canonicalUrl = url || `https://creatifybd.com${path}`;
 
   return (
     <Helmet>
