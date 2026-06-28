@@ -10,6 +10,11 @@ export const SettingsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set premium dark charcoal base by default immediately
+    document.body.setAttribute('data-theme', 'dark');
+    document.body.style.background = '#0f0f0f';
+    document.body.style.color = '#ffffff';
+
     // Listen to global site settings (Identity, Branding, Colors)
     const unsubSettings = onSnapshot(doc(db, 'settings', 'site'), (snap) => {
       if (snap.exists()) {
@@ -49,11 +54,6 @@ export const SettingsProvider = ({ children }) => {
       if (snap.exists()) {
         const data = snap.data();
         setContent(data);
-        
-        // Use premium dark charcoal base by default
-        document.body.setAttribute('data-theme', 'dark');
-        document.body.style.background = 'var(--black, #0f0f0f)';
-        document.body.style.color = 'var(--white, #ffffff)';
       }
       setLoading(false);
     }, (err) => {

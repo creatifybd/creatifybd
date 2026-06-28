@@ -99,18 +99,23 @@ service cloud.firestore {
     }
 
     // ─── Marketplace Orders ──────────────────────────────────────────────────
-    // Anyone can create an order (public checkout flow).
-    // Only the client (matched by their submitted email) or admin can read.
-    // Only admin can update status fields.
+    // Phase 7/11: clientAccessToken IS the doc ID (24-char random hex).
+    // Public can GET a single document by its exact ID — but cannot LIST orders.
+    // Only admin can list, update status, or delete.
     match /orders/{orderId} {
+      // Public: create a new order (setDoc with token as ID)
       allow create: if isValidOrder();
-      // Allow read if admin OR if the requester provides no auth (client portal uses email match, not Firebase auth)
-      allow read: if isAdmin() || true; // Client portal does server-side email verification
+      // Public: get-only by knowing the exact token (doc ID) — no list permitted
+      allow get: if true;
+      allow list: if isAdmin();
+      // Admin: update status & delivery fields only
       allow update: if isAdmin()
         && (request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly([
             'status', 'internalNotes', 'revisionNotes', 'deliveries',
-            'drafts', 'updatedAt', 'adminNote'
+            'drafts', 'updatedAt', 'adminNote',
+            'paymentVerifiedAt', 'paymentRejectedAt', 'paymentRejectionNote',
+            'paymentProofUrl', 'transactionId'
           ]));
       allow delete: if isAdmin();
     }

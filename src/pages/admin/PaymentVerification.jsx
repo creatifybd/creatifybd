@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
-import { collection, query, orderBy, onSnapshot, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, updateDoc, doc, getDoc, getDocs, where } from 'firebase/firestore';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -59,18 +59,57 @@ const PaymentVerification = () => {
       payment.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       payment.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       payment.transactionId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      payment.publicOrderId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       payment.selectedService?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
+  // Check for duplicate transaction IDs to alert admin
+  const duplicateTxIds = payments.reduce((acc, p) => {
+    if (p.transactionId) {
+      acc[p.transactionId] = (acc[p.transactionId] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  const isDuplicateTx = (txId) => txId && duplicateTxIds[txId] > 1;
+
   const handleStatusChange = async (paymentId, newStatus) => {
     setUpdating(true);
+    const payment = payments.find(p => p.id === paymentId);
     try {
+      // 1. Update the manualPayments record
       await updateDoc(doc(db, 'manualPayments', paymentId), {
         status: newStatus,
         adminNote: adminNote,
         updatedAt: new Date()
       });
+
+      // 2. Propagate status to linked order if linked
+      if (payment?.linkedOrderId) {
+        try {
+          const orderDocRef = doc(db, 'orders', payment.linkedOrderId);
+          const orderSnap = await getDoc(orderDocRef);
+          if (orderSnap.exists()) {
+            const orderUpdate = {
+              updatedAt: new Date()
+            };
+            if (newStatus === 'verified') {
+              orderUpdate.status = 'active';
+              orderUpdate.paymentVerifiedAt = new Date();
+              orderUpdate.paymentProofUrl = payment.proofFileUrl || '';
+              orderUpdate.transactionId = payment.transactionId || '';
+            } else if (newStatus === 'rejected') {
+              orderUpdate.status = 'payment_pending';
+              orderUpdate.paymentRejectedAt = new Date();
+              orderUpdate.paymentRejectionNote = adminNote || 'Payment rejected by admin';
+            }
+            await updateDoc(orderDocRef, orderUpdate);
+          }
+        } catch (orderErr) {
+          console.warn('Could not update linked order:', orderErr.message);
+        }
+      }
+
       toast.success(`Payment marked as ${newStatus}`);
       setSelectedPayment(null);
       setAdminNote('');
@@ -340,13 +379,34 @@ const PaymentVerification = () => {
                     <div className="detail-item">
                       <FileText size={16} />
                       <span className="detail-label">Transaction ID:</span>
-                      <span className="detail-value">{selectedPayment.transactionId}</span>
+                      <span className="detail-value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        {selectedPayment.transactionId}
+                        {isDuplicateTx(selectedPayment.transactionId) && (
+                          <span style={{ background: '#ef444420', color: '#ef4444', padding: '2px 8px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700 }}>
+                            ⚠ DUPLICATE TX ID
+                          </span>
+                        )}
+                      </span>
                     </div>
                     <div className="detail-item">
                       <Calendar size={16} />
                       <span className="detail-label">Payment Date:</span>
                       <span className="detail-value">{selectedPayment.paymentDate}</span>
                     </div>
+                    {selectedPayment.publicOrderId && (
+                      <div className="detail-item">
+                        <FileText size={16} />
+                        <span className="detail-label">Order ID:</span>
+                        <span className="detail-value" style={{ color: '#e8192c', fontWeight: 700 }}>{selectedPayment.publicOrderId}</span>
+                      </div>
+                    )}
+                    {selectedPayment.linkedOrderId && (
+                      <div className="detail-item">
+                        <FileText size={16} />
+                        <span className="detail-label">Token (Doc ID):</span>
+                        <span className="detail-value" style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: '#888' }}>{selectedPayment.linkedOrderId}</span>
+                      </div>
+                    )}
                     {selectedPayment.invoiceNumber && (
                       <div className="detail-item">
                         <FileText size={16} />

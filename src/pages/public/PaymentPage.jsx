@@ -16,26 +16,28 @@ import SEO from '../../components/SEO';
 import { siteConfig } from '../../config/siteConfig';
 import { storage, db } from '../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 
 const PaymentPage = () => {
   const [searchParams] = useSearchParams();
   const selectedService = searchParams.get('service') || '';
-  const linkedOrderId = searchParams.get('orderId') || '';
+  const linkedOrderId = searchParams.get('orderId') || '';          // clientAccessToken = doc ID
+  const publicOrderId = searchParams.get('publicOrderId') || '';
+  const prefillEmail = searchParams.get('email') || '';
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copied, setCopied] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
-    email: '',
+    email: prefillEmail,
     phone: '',
     companyName: '',
     selectedService: selectedService,
     paymentMethod: 'payoneer',
     paidAmount: '',
-    currency: 'BDT',
+    currency: 'USD',
     transactionId: '',
     paymentDate: '',
     proofFile: null,
@@ -97,7 +99,7 @@ const PaymentPage = () => {
       await uploadBytes(storageRef, formData.proofFile);
       const proofFileUrl = await getDownloadURL(storageRef);
 
-      // Save payment data to Firestore
+      // Save payment proof to manualPayments only — admin will verify before updating order
       await addDoc(collection(db, 'manualPayments'), {
         fullName: formData.fullName,
         email: formData.email,
@@ -112,26 +114,16 @@ const PaymentPage = () => {
         proofFileUrl: proofFileUrl,
         message: formData.message || '',
         invoiceNumber: formData.invoiceNumber || '',
-        linkedOrderId: linkedOrderId || '',
+        linkedOrderId: linkedOrderId || '',       // clientAccessToken = order doc ID
+        publicOrderId: publicOrderId || '',       // human-readable CBD-XXXXXXX
         status: 'pending',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         adminNote: ''
       });
 
-      // If a marketplace order ID was passed, update its status to payment_submitted
-      if (linkedOrderId) {
-        try {
-          await updateDoc(doc(db, 'orders', linkedOrderId), {
-            status: 'payment_submitted',
-            paymentProofUrl: proofFileUrl,
-            transactionId: formData.transactionId,
-            updatedAt: serverTimestamp()
-          });
-        } catch (orderUpdateErr) {
-          console.warn('Could not update order status (order may not exist):', orderUpdateErr.message);
-        }
-      }
+      // NOTE: Order status will ONLY be updated by admin via /admin/payments manual verification
+      // Do NOT update order document here — this prevents spoofing payment status from the frontend
 
       setSubmitted(true);
       toast.success('Payment proof submitted successfully', { id: toastId });

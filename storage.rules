@@ -43,9 +43,12 @@ service firebase.storage {
     }
 
     // ─── Delivery File Uploads ───────────────────────────────────────────────
-    // Admin team uploads finished deliverables that clients download.
+    // Admin team uploads finished deliverables.
+    // Phase 12: Raw path access restricted to admin only.
+    // Clients access files via getDownloadURL signed URLs stored in their order doc.
+    // (Firebase download tokens in the URL bypass storage read rules for direct links)
     match /deliveries/{allPaths=**} {
-      allow read: if true; // Clients access via direct URL stored in order doc
+      allow read: if isAdmin();
       allow write: if isAdmin()
         && request.resource.size < 100 * 1024 * 1024; // 100MB max per delivery file
     }
@@ -60,9 +63,9 @@ service firebase.storage {
     }
 
     // ─── Fallback deny ───────────────────────────────────────────────────────
+    // Phase 12: Default deny all — nothing falls through without explicit permit
     match /{allPaths=**} {
-      allow read: if true;
-      allow write: if false;
+      allow read, write: if false;
     }
   }
 }

@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import { getGigBySlug } from '../../data/gigs';
 import { db, storage } from '../../firebase/config';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { 
   ArrowRight, 
@@ -142,8 +142,21 @@ const OrderStartPage = () => {
         catSpecific = websiteRequirements;
       }
 
-      // Create Order Document
-      const orderDoc = await addDoc(collection(db, 'orders'), {
+      // --- Phase 7: Secure Token-Based Order Creation ---
+      // Generate a 24-char cryptographically random clientAccessToken (used as doc ID)
+      const tokenBytes = new Uint8Array(18);
+      crypto.getRandomValues(tokenBytes);
+      const clientAccessToken = Array.from(tokenBytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('')
+        .slice(0, 24);
+
+      // Generate a human-readable public order ID (e.g. CBD-1234567)
+      const publicOrderId = `CBD-${Math.floor(1000000 + Math.random() * 9000000)}`;
+
+      // Create Order Document using token as doc ID (get-only by token, not listable)
+      const orderRef = doc(collection(db, 'orders'), clientAccessToken);
+      await setDoc(orderRef, {
         gigId: gig.id,
         gigSlug: gig.slug,
         gigTitle: gig.title,
@@ -151,6 +164,8 @@ const OrderStartPage = () => {
         price: p.price,
         deliveryTime: p.deliveryTime,
         status: 'payment_pending',
+        publicOrderId,
+        clientAccessToken,
         clientInfo: {
           ...clientDetails,
           createdAt: new Date()
@@ -169,8 +184,8 @@ const OrderStartPage = () => {
       });
 
       toast.success('Order created! Please complete payment.', { id: toastId });
-      // Redirect to payment, passing the order ID and selected package parameters
-      navigate(`/payment?orderId=${orderDoc.id}&amount=${p.price}&service=${encodeURIComponent(gig.title)}`);
+      // Redirect to payment, passing token and public order ID
+      navigate(`/payment?orderId=${clientAccessToken}&publicOrderId=${publicOrderId}&amount=${p.price}&service=${encodeURIComponent(gig.title)}&email=${encodeURIComponent(clientDetails.email)}`);
     } catch (err) {
       console.error('Error creating order:', err);
       toast.error('Failed to start order. Please try again.', { id: toastId });

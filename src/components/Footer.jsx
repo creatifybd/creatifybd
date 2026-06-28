@@ -57,9 +57,10 @@ const Footer = () => {
             <FadeReveal delay={0.4}>
               <h4>{lang === 'bn' ? 'কোম্পানি' : 'Company'}</h4>
               <ul>
-                <li><Link to="/work">{lang === 'bn' ? 'আমাদের কাজ' : 'Our Work'}</Link></li>
-                <li><Link to="/case-studies">Case Studies</Link></li>
-                <li><Link to="/process">{lang === 'bn' ? 'পদ্ধতি' : 'Process'}</Link></li>
+                <li><Link to="/about">{lang === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us'}</Link></li>
+                <li><Link to="/portfolio">{lang === 'bn' ? 'পোর্টফোলিও' : 'Portfolio'}</Link></li>
+                <li><Link to="/gigs">{lang === 'bn' ? 'গিগস' : 'Gigs'}</Link></li>
+                <li><Link to="/reviews">{lang === 'bn' ? 'রিভিউ' : 'Reviews'}</Link></li>
                 <li><Link to="/pricing">{lang === 'bn' ? 'প্যাকেজসমূহ' : 'Pricing'}</Link></li>
                 <li><Link to="/contact">{lang === 'bn' ? 'যোগাযোগ' : 'Contact'}</Link></li>
               </ul>

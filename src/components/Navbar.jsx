@@ -51,7 +51,9 @@ const Navbar = ({ theme = 'dark' }) => {
 
   const closeMobile = () => setIsMobileOpen(false);
   const isActive = (path) => pathname === path || (path !== '/' && pathname.startsWith(path));
-  const workLabel = lang === 'bn' ? 'আমাদের কাজ' : 'Our Work';
+  const gigsLabel = lang === 'bn' ? 'গিগস' : 'Gigs';
+  const portfolioLabel = lang === 'bn' ? 'পোর্টফোলিও' : 'Portfolio';
+  const reviewsLabel = lang === 'bn' ? 'রিভিউ' : 'Reviews';
   const aboutLabel = lang === 'bn' ? 'আমাদের সম্পর্কে' : 'About';
 
   return (
@@ -67,10 +69,10 @@ const Navbar = ({ theme = 'dark' }) => {
 
           <ul className="nav-center">
             <li><MagneticLink to="/services" className={isActive('/services') ? 'active' : ''}>{t.services}{isActive('/services') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
-            <li><MagneticLink to="/work" className={isActive('/work') ? 'active' : ''}>{workLabel}{isActive('/work') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
-            <li><MagneticLink to="/case-studies" className={isActive('/case-studies') || isActive('/case-study') ? 'active' : ''}>Case Studies{(isActive('/case-studies') || isActive('/case-study')) && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
-            <li><MagneticLink to="/process" className={isActive('/process') ? 'active' : ''}>{t.process}{isActive('/process') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
-            <li><MagneticLink to="/pricing" className={isActive('/pricing') ? 'active' : ''}>{t.pricing}{isActive('/pricing') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
+            <li><MagneticLink to="/gigs" className={isActive('/gigs') ? 'active' : ''}>{gigsLabel}{isActive('/gigs') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
+            <li><MagneticLink to="/portfolio" className={isActive('/portfolio') ? 'active' : ''}>{portfolioLabel}{isActive('/portfolio') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
+            <li><MagneticLink to="/reviews" className={isActive('/reviews') ? 'active' : ''}>{reviewsLabel}{isActive('/reviews') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
+            <li><MagneticLink to="/about" className={isActive('/about') ? 'active' : ''}>{aboutLabel}{isActive('/about') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
             <li><MagneticLink to="/contact" className={isActive('/contact') ? 'active' : ''}>{t.contact}{isActive('/contact') && <motion.div layoutId="activePill" className="nav-active-pill" />}</MagneticLink></li>
           </ul>
 
@@ -103,10 +105,11 @@ const Navbar = ({ theme = 'dark' }) => {
             className="mobile-menu-overlay"
           >
             <div className="mobile-menu-inner">
+              <Link to="/" onClick={closeMobile}>Home</Link>
               <Link to="/services" onClick={closeMobile}>{t.services}</Link>
-              <Link to="/work" onClick={closeMobile}>{workLabel}</Link>
-              <Link to="/case-studies" onClick={closeMobile}>Case Studies</Link>
-              <Link to="/process" onClick={closeMobile}>{t.process}</Link>
+              <Link to="/gigs" onClick={closeMobile}>{gigsLabel}</Link>
+              <Link to="/portfolio" onClick={closeMobile}>{portfolioLabel}</Link>
+              <Link to="/reviews" onClick={closeMobile}>{reviewsLabel}</Link>
               <Link to="/about" onClick={closeMobile}>{aboutLabel}</Link>
               <Link to="/pricing" onClick={closeMobile}>{t.pricing}</Link>
               <Link to="/contact" onClick={closeMobile}>{t.contact}</Link>

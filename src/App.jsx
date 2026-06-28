@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
 import { LanguageProvider } from './context/LanguageContext';
@@ -46,6 +46,7 @@ const PrivacyPolicyPage = lazy(() => import('./pages/public/PrivacyPolicyPage'))
 const TermsPage = lazy(() => import('./pages/public/TermsPage'));
 const RefundPolicyPage = lazy(() => import('./pages/public/RefundPolicyPage'));
 const RevisionPolicyPage = lazy(() => import('./pages/public/RevisionPolicyPage'));
+const AboutPage = lazy(() => import('./pages/public/AboutPage'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -114,7 +115,9 @@ function AppContent() {
           <Route path="/order/success" element={<PageWrapper><OrderSuccessPage /></PageWrapper>} />
           <Route path="/client/orders" element={<PageWrapper><ClientOrdersPortal /></PageWrapper>} />
           <Route path="/client/orders/:orderId" element={<PageWrapper><ClientOrderDetail /></PageWrapper>} />
-          <Route path="/work" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+          <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+          <Route path="/work" element={<Navigate to="/portfolio" replace />} />
+          <Route path="/about" element={<PageWrapper><AboutPage /></PageWrapper>} />
           <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
           <Route path="/pricing" element={<PageWrapper><PricingPage /></PageWrapper>} />
           <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
@@ -127,7 +130,6 @@ function AppContent() {
           <Route path="/refund-policy" element={<PageWrapper><RefundPolicyPage /></PageWrapper>} />
           <Route path="/revision-policy" element={<PageWrapper><RevisionPolicyPage /></PageWrapper>} />
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
-          <Route path="/about" element={<PageWrapper><ProcessPage /></PageWrapper>} />
           <Route path="/payment" element={<PageWrapper><PaymentPage /></PageWrapper>} />
           <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
           <Route 
