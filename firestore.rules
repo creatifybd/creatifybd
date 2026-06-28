@@ -19,9 +19,6 @@ service cloud.firestore {
         && request.resource.data.message is string
         && request.resource.data.message.size() > 0
         && request.resource.data.message.size() <= 3000
-        && (!("service" in request.resource.data) || request.resource.data.service is string)
-        && (!("budget" in request.resource.data) || request.resource.data.budget is string)
-        && (!("phone" in request.resource.data) || request.resource.data.phone is string)
         && request.resource.data.status == "unread"
         && request.resource.data.read == false;
     }
