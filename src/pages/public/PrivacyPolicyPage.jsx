@@ -18,33 +18,33 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
     <style>{`
       .policy-page-shell {
         min-height: 100vh;
-        background: #fbfaf8;
-        color: #16181d;
+        background: var(--charcoal, #0d0e12);
+        color: var(--ink, #ffffff);
       }
 
       .policy-header {
         margin-bottom: 3rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(17, 19, 24, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
       .policy-header h1 {
         font-size: clamp(2rem, 4vw, 2.8rem);
         font-weight: 900;
-        color: #16181d;
+        color: #ffffff;
         margin-bottom: 0.5rem;
       }
       .last-updated {
         font-size: 0.85rem;
-        color: #6b707c;
+        color: #888d96;
       }
       .policy-body h2 {
         font-size: 1.3rem;
         font-weight: 800;
-        color: #16181d;
+        color: #ffffff;
         margin: 2.5rem 0 1rem;
       }
       .policy-body p, .policy-body li {
-        color: #4b5260;
+        color: #c8cacf;
         font-size: 0.95rem;
         line-height: 1.7;
         margin-bottom: 0.75rem;
@@ -58,7 +58,7 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
         text-decoration: underline;
       }
       .policy-body strong {
-        color: #16181d;
+        color: #ffffff;
         font-weight: 700;
       }
     `}</style>

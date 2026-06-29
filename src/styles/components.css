@@ -86,6 +86,75 @@
   box-shadow: 0 10px 30px rgba(232, 25, 44, 0.3);
 }
 
+.btn-outline-dark,
+.premium-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: var(--ink) !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline-dark:hover,
+.premium-btn-outline:hover {
+  border-color: var(--red);
+  color: var(--red) !important;
+  transform: translateY(-2px);
+}
+
+.premium-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+/* Section Typography Utilities */
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: var(--space-sm);
+}
+
+.section-h {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: var(--space-md);
+}
+
+.section-sub {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+.section {
+  padding: var(--space-xxl) 0;
+  background: var(--surface-soft);
+}
+
 /* Form Inputs */
 .luxury-input {
   background: rgba(255, 255, 255, 0.03);

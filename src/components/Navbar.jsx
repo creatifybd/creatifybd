@@ -25,7 +25,7 @@ const mobileLinks = [
 
 const mobileServices = ['Social Media', 'Graphic Design', 'Video Editing', 'Web Design'];
 
-const Navbar = ({ theme = 'light' }) => {
+const Navbar = ({ theme = 'dark' }) => {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -37,6 +37,16 @@ const Navbar = ({ theme = 'light' }) => {
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closeMobile();
+    };
+    if (isMobileOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileOpen]);
 
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? 'hidden' : '';
