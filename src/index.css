@@ -5279,3 +5279,74 @@ body::before, body::after {
 /* ─── Line 3734 dark admin bg ─── */
 /* Admin keeps its own dark theme — scoped to .admin-layout */
 
+
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     FINAL LIGHT ROSE THEME — INLINE OVERRIDES (highest cascade position)
+     Fixes all dark child elements inside sections that now have light backgrounds.
+     These live at the very end of index.css, no @import needed.
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── intro-band-v2 children ── */
+  .intro-title-v2 { color: var(--ink) !important; }
+  .pillar-v2 {
+    background: var(--surface-card) !important;
+    border: 1.5px solid var(--border-card) !important;
+    box-shadow: 0 4px 20px rgba(232,25,44,0.04) !important;
+  }
+  .pillar-v2:hover {
+    background: var(--surface-hover) !important;
+    border-color: rgba(232,25,44,0.2) !important;
+  }
+  .pillar-v2 h4 { color: var(--ink) !important; }
+  .pillar-v2 p  { color: var(--muted) !important; }
+
+  /* ── tm-section (Testimonials) children ── */
+  .tm-heading { color: var(--ink) !important; }
+  .tm-subtext { color: var(--muted) !important; }
+
+  .tm-featured {
+    background: var(--surface-card) !important;
+    border: 1.5px solid var(--border-card) !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 4px 24px rgba(232,25,44,0.06) !important;
+  }
+  .tm-featured-quote { color: var(--ink) !important; }
+  .tm-featured-name  { color: var(--ink) !important; }
+  .tm-featured-role  { color: var(--muted) !important; }
+
+  .tm-dot {
+    background: rgba(232,25,44,0.15) !important;
+  }
+  .tm-dot--active {
+    background: var(--red) !important;
+  }
+
+  .tm-card {
+    background: var(--surface-card) !important;
+    border: 1.5px solid var(--border-card) !important;
+  }
+  .tm-card--active {
+    background: rgba(232,25,44,0.06) !important;
+    border-color: rgba(232,25,44,0.3) !important;
+  }
+
+  .tm-avatar { border-color: rgba(232,25,44,0.25) !important; }
+
+  .tm-name  { color: var(--ink) !important; }
+  .tm-role  { color: var(--muted) !important; }
+  .tm-quote { color: var(--muted) !important; }
+
+  /* ── page-header children (title & subtitle) ── */
+  .page-header .page-title    { color: var(--ink) !important; }
+  .page-header .page-subtitle { color: var(--muted) !important; }
+  .page-header .red           { color: var(--red) !important; }
+
+  /* ── dark-section nav on public pages → ink (not white) ── */
+  body:not(.admin-body) .dark-section nav:not(.scrolled) .nav-logo,
+  body:not(.admin-body) .dark-section nav:not(.scrolled) .nav-logo-text,
+  body:not(.admin-body) .dark-section nav:not(.scrolled) .nav-link-wrap,
+  body:not(.admin-body) .dark-section nav:not(.scrolled) .nav-center a {
+    color: var(--ink) !important;
+  }
+  
