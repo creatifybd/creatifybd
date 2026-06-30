@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { SlideReveal, StaggerReveal, StaggerChild } from './MotionReveal';
 
 const FALLBACK = [
   {
@@ -61,13 +62,18 @@ const StarRating = ({ count = 5 }) => (
   </div>
 );
 
+const EASE_EXPO = [0.16, 1, 0.3, 1];
+
 const TestimonialCard = ({ item, isActive, onClick, lang }) => (
   <motion.div
     layout
     className={`tm-card ${isActive ? 'tm-card--active' : ''}`}
     onClick={onClick}
-    whileHover={{ y: -6 }}
-    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+    initial={{ opacity: 0, y: 32 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-40px' }}
+    transition={{ duration: 0.7, ease: EASE_EXPO }}
+    whileHover={{ y: -8, scale: 1.015, transition: { duration: 0.35, ease: EASE_EXPO } }}
   >
     <div className="tm-card-inner">
       <div className="tm-card-top">
@@ -109,14 +115,13 @@ const Testimonials = () => {
           setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         }
       },
-      (err) => console.error('Testimonials fetch error:', err)
+      () => {}
     );
     return () => unsub();
   }, []);
 
-  const display = items.length > 0 ? items : [];
+  const display = items.length > 0 ? items : FALLBACK;
 
-  // Auto-advance
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setActive(prev => (prev + 1) % display.length);
@@ -136,102 +141,105 @@ const Testimonials = () => {
 
   return (
     <section className="tm-section" id="testimonials">
-      {/* Background Accents */}
       <div className="tm-bg-glow" aria-hidden="true" />
 
       <div className="tm-inner">
         {/* ─── Left: Header + Featured Quote ─── */}
-        <div className="tm-left">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="tm-eyebrow">
-              <span className="tm-eyebrow-dot" />
-              {lang === 'bn' ? 'ক্লায়েন্ট রিভিউ' : 'Client Testimonials'}
-            </div>
-
-            <h2 className="tm-heading">
-              {lang === 'bn'
-                ? <>বিশ্বাস ও<br /><span className="tm-heading-accent">সাফল্য।</span></>
-                : <>Trusted by<br /><span className="tm-heading-accent">Visionaries.</span></>
-              }
-            </h2>
-
-            <p className="tm-subtext">
-              {lang === 'bn'
-                ? 'আমাদের ক্লায়েন্টরাই আমাদের সেরা পরিচয়। তাদের সাফল্যের গল্প আমাদের অনুপ্রেরণা।'
-                : "Our clients' success stories are our greatest achievement. Real results, real impact."
-              }
-            </p>
-          </motion.div>
-
-          {/* Featured Active Quote */}
-          <AnimatePresence mode="wait">
+        <SlideReveal from="left">
+          <div className="tm-left">
             <motion.div
-              key={activeItem?.id}
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 30 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="tm-featured"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: EASE_EXPO }}
             >
-              <div className="tm-featured-quote-icon">
-                <svg width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 36V22.5C0 9 8.1 2.1 24.3 0l1.8 3.6C17.1 5.7 12.6 10.2 11.7 18H21V36H0ZM27 36V22.5C27 9 35.1 2.1 51.3 0l1.8 3.6C44.1 5.7 39.6 10.2 38.7 18H48V36H27Z" fill="var(--red)" opacity="0.15"/>
-                </svg>
+              <div className="tm-eyebrow">
+                <span className="tm-eyebrow-dot" />
+                {lang === 'bn' ? 'ক্লায়েন্ট রিভিউ' : 'Client Testimonials'}
               </div>
 
-              <blockquote className="tm-featured-quote">
-                {lang === 'bn' && activeItem?.text_bn ? activeItem.text_bn : activeItem?.text}
-              </blockquote>
+              <h2 className="tm-heading">
+                {lang === 'bn'
+                  ? <>বিশ্বাস ও<br /><span className="tm-heading-accent">সাফল্য।</span></>
+                  : <>Trusted by<br /><span className="tm-heading-accent">Visionaries.</span></>
+                }
+              </h2>
 
-              <div className="tm-featured-author">
-                <img
-                  src={activeItem?.imageUrl || `https://ui-avatars.com/api/?name=${activeItem?.name}&background=E8192C&color=fff`}
-                  alt={activeItem?.name}
-                  className="tm-featured-avatar"
-                />
-                <div>
-                  <div className="tm-featured-name">{activeItem?.name}</div>
-                  <div className="tm-featured-role">
-                    {lang === 'bn' && activeItem?.role_bn ? activeItem.role_bn : activeItem?.role}
-                  </div>
-                  <StarRating count={activeItem?.stars || 5} />
-                </div>
-              </div>
+              <p className="tm-subtext">
+                {lang === 'bn'
+                  ? 'আমাদের ক্লায়েন্টরাই আমাদের সেরা পরিচয়। তাদের সাফল্যের গল্প আমাদের অনুপ্রেরণা।'
+                  : "Our clients' success stories are our greatest achievement. Real results, real impact."
+                }
+              </p>
             </motion.div>
-          </AnimatePresence>
 
-          {/* Progress Dots */}
-          <div className="tm-progress-dots">
-            {display.map((_, i) => (
-              <button
-                key={i}
-                className={`tm-dot ${active === i ? 'tm-dot--active' : ''}`}
-                onClick={() => handleSelect(i)}
-                aria-label={`View testimonial ${i + 1}`}
-              />
-            ))}
+            {/* Featured Active Quote */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeItem?.id}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 30 }}
+                transition={{ duration: 0.6, ease: EASE_EXPO }}
+                className="tm-featured"
+              >
+                <div className="tm-featured-quote-icon">
+                  <svg width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 36V22.5C0 9 8.1 2.1 24.3 0l1.8 3.6C17.1 5.7 12.6 10.2 11.7 18H21V36H0ZM27 36V22.5C27 9 35.1 2.1 51.3 0l1.8 3.6C44.1 5.7 39.6 10.2 38.7 18H48V36H27Z" fill="var(--red)" opacity="0.15"/>
+                  </svg>
+                </div>
+
+                <blockquote className="tm-featured-quote">
+                  {lang === 'bn' && activeItem?.text_bn ? activeItem.text_bn : activeItem?.text}
+                </blockquote>
+
+                <div className="tm-featured-author">
+                  <img
+                    src={activeItem?.imageUrl || `https://ui-avatars.com/api/?name=${activeItem?.name}&background=E8192C&color=fff`}
+                    alt={activeItem?.name}
+                    className="tm-featured-avatar"
+                  />
+                  <div>
+                    <div className="tm-featured-name">{activeItem?.name}</div>
+                    <div className="tm-featured-role">
+                      {lang === 'bn' && activeItem?.role_bn ? activeItem.role_bn : activeItem?.role}
+                    </div>
+                    <StarRating count={activeItem?.stars || 5} />
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Progress Dots */}
+            <div className="tm-progress-dots">
+              {display.map((_, i) => (
+                <button
+                  key={i}
+                  className={`tm-dot ${active === i ? 'tm-dot--active' : ''}`}
+                  onClick={() => handleSelect(i)}
+                  aria-label={`View testimonial ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </SlideReveal>
 
         {/* ─── Right: Card Grid ─── */}
-        <div className="tm-right">
-          <div className="tm-cards-grid">
-            {display.map((item, i) => (
-              <TestimonialCard
-                key={item.id}
-                item={item}
-                isActive={active === i}
-                onClick={() => handleSelect(i)}
-                lang={lang}
-              />
-            ))}
+        <SlideReveal from="right" delay={0.15}>
+          <div className="tm-right">
+            <div className="tm-cards-grid">
+              {display.map((item, i) => (
+                <TestimonialCard
+                  key={item.id}
+                  item={item}
+                  isActive={active === i}
+                  onClick={() => handleSelect(i)}
+                  lang={lang}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </SlideReveal>
       </div>
     </section>
   );
