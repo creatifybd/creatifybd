@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FileSearch, Lightbulb, PenTool, Rocket } from 'lucide-react';
-import { FadeReveal, SlideReveal, StaggerReveal, StaggerChild, HoverTilt } from './MotionReveal';
+import { FadeReveal, SlideReveal } from './MotionReveal';
+import { motion } from 'framer-motion';
+
+const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const steps = [
   {
@@ -48,22 +51,27 @@ const Process = ({ highlight = false, fullPage = false }) => {
           </div>
         )}
 
-        <StaggerReveal className="process-grid-light" staggerDelay={0.12} delay={0.15}>
-          {steps.map((step) => (
-            <StaggerChild key={step.num}>
-              <HoverTilt>
-                <article className="process-step-card">
-                  <div className="process-step-top">
-                    <span>{step.num}</span>
-                    <div>{step.icon}</div>
-                  </div>
-                  <h3>{step.title}</h3>
-                  <p>{step.desc}</p>
-                </article>
-              </HoverTilt>
-            </StaggerChild>
+        {/* Keep the native CSS grid — animate each article directly */}
+        <div className="process-grid-light">
+          {steps.map((step, index) => (
+            <motion.article
+              key={step.num}
+              className="process-step-card"
+              initial={{ opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.75, ease: EASE_EXPO, delay: index * 0.12 }}
+              whileHover={{ y: -6, transition: { duration: 0.28, ease: EASE_EXPO } }}
+            >
+              <div className="process-step-top">
+                <span>{step.num}</span>
+                <div>{step.icon}</div>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </motion.article>
           ))}
-        </StaggerReveal>
+        </div>
 
         {highlight && (
           <FadeReveal delay={0.3}>
