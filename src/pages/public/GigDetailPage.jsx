@@ -188,7 +188,7 @@ const GigDetailPage = () => {
                 <AlertCircle size={22} className="red" />
                 <h3 style={{ margin: 0 }}>Intake Requirements</h3>
               </div>
-              <p style={{ color: 'var(--gray-400)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+              <p style={{ color: 'var(--muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
                 To start your project, you will be required to provide the following details in the onboarding screen:
               </p>
               <ul className="reqs-checklist">
@@ -205,7 +205,7 @@ const GigDetailPage = () => {
             {deliveredWorks.length > 0 && (
               <div className="detail-card-text">
                 <h3>Delivered Works Showcase</h3>
-                <p style={{ color: 'var(--gray-500)', fontSize: '0.85rem', marginBottom: '2rem' }}>Check out sample works completed for clients under this service package:</p>
+                <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: '2rem' }}>Check out sample works completed for clients under this service package:</p>
                 <div className="delivered-grid">
                   {deliveredWorks.map((work) => (
                     <div key={work.id} className="delivered-work-card">
@@ -314,8 +314,8 @@ const GigDetailPage = () => {
 
         {/* Related Gigs */}
         {relatedGigs.length > 0 && (
-          <div className="related-gigs-outer" style={{ marginTop: '6rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'white', marginBottom: '2.5rem' }}>Related Services</h3>
+          <div className="related-gigs-outer" style={{ marginTop: '6rem', paddingTop: '4rem', borderTop: '1px solid var(--border-soft)' }}>
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2.5rem' }}>Related Services</h3>
             <div className="gigs-grid-related">
               {relatedGigs.map(g => (
                 <GigCard key={g.id} gig={g} />
