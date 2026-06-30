@@ -5350,3 +5350,590 @@ body::before, body::after {
     color: var(--ink) !important;
   }
   
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     PREMIUM ANIMATION SYSTEM — CreatifyBD
+     Duck Design-level micro-interactions, transitions & motion polish.
+     Everything here is purely CSS — no JS dependency.
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── 1. CSS Keyframes ─────────────────────────────────────────────────────── */
+
+  @keyframes shimmer-sweep {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+
+  @keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-ring {
+    0%   { transform: scale(1);    opacity: 0.6; }
+    100% { transform: scale(2.2);  opacity: 0; }
+  }
+
+  @keyframes arrow-right {
+    0%   { transform: translateX(0); }
+    50%  { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes border-spin {
+    to { --border-angle: 360deg; }
+  }
+
+  @keyframes fade-up-in {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(232, 25, 44, 0.15); }
+    50%       { box-shadow: 0 0 40px rgba(232, 25, 44, 0.35); }
+  }
+
+  @keyframes line-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @keyframes count-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.85); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes card-shimmer {
+    0%   { left: -100%; }
+    100% { left: 200%; }
+  }
+
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+
+
+  /* ── 2. Eyebrow / Badge shimmer ───────────────────────────────────────────── */
+
+  .eyebrow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fade-up-in 0.7s var(--ease-expo, cubic-bezier(0.16,1,0.3,1)) both;
+  }
+
+  .eyebrow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(105deg,
+      transparent 30%,
+      rgba(232,25,44,0.18) 50%,
+      transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-sweep 3s ease infinite 1s;
+    pointer-events: none;
+  }
+
+
+  /* ── 3. Button fill & magnetic animations ─────────────────────────────────── */
+
+  .btn-red,
+  .btn-huge-red,
+  .premium-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      transform 0.3s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.3s ease,
+      background 0.3s ease !important;
+  }
+
+  .btn-red::before,
+  .btn-huge-red::before,
+  .premium-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.12);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    z-index: 0;
+  }
+
+  .btn-red:hover::before,
+  .btn-huge-red:hover::before,
+  .premium-btn:hover::before {
+    transform: translateX(110%) skewX(-15deg);
+  }
+
+  .btn-red:hover,
+  .btn-huge-red:hover,
+  .premium-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(232, 25, 44, 0.35) !important;
+  }
+
+  .btn-red:active,
+  .btn-huge-red:active,
+  .premium-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Arrow icon inside buttons — bounce on hover */
+  .btn-red svg,
+  .btn-huge-red svg,
+  .premium-btn svg {
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .btn-red:hover svg,
+  .btn-huge-red:hover svg,
+  .premium-btn:hover svg {
+    transform: translateX(4px);
+    animation: arrow-right 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* Outline buttons */
+  .btn-outline-dark,
+  .btn-ghost,
+  .premium-btn-outline {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.3s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease !important;
+  }
+
+  .btn-outline-dark::before,
+  .btn-ghost::before,
+  .premium-btn-outline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--red);
+    transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    z-index: -1;
+  }
+
+  .btn-outline-dark:hover,
+  .btn-ghost:hover,
+  .premium-btn-outline:hover {
+    color: #fff !important;
+    border-color: var(--red) !important;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-dark:hover::before,
+  .btn-ghost:hover::before,
+  .premium-btn-outline:hover::before {
+    transform: translateY(0);
+  }
+
+
+  /* ── 4. Nav link reveal underline ─────────────────────────────────────────── */
+
+  .nav-center a,
+  .nav-link-wrap {
+    position: relative;
+  }
+
+  .nav-center a::after,
+  .nav-link-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--red);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .nav-center a:hover::after,
+  .nav-link-wrap:hover::after,
+  .nav-center a.active::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+
+  /* ── 5. Service card premium hover ────────────────────────────────────────── */
+
+  .service-card-premium {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.4s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease !important;
+    will-change: transform;
+  }
+
+  /* Shimmer sweep on hover */
+  .service-card-premium::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(232,25,44,0.07) 50%,
+      transparent 70%
+    );
+    transition: left 0.6s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+
+  .service-card-premium:hover::after {
+    left: 200%;
+  }
+
+  .service-card-premium:hover {
+    transform: translateY(-10px) !important;
+    box-shadow:
+      0 20px 60px rgba(232,25,44,0.12),
+      0 4px 16px rgba(0,0,0,0.06) !important;
+    border-color: rgba(232,25,44,0.25) !important;
+  }
+
+  /* Icon bounce on card hover */
+  .service-card-premium:hover .service-icon {
+    transform: rotate(-5deg) scale(1.15);
+    color: var(--red);
+  }
+
+  .service-icon {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.3s ease;
+  }
+
+  /* Service CTA arrow slide */
+  .service-cta .service-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: gap 0.3s cubic-bezier(0.16,1,0.3,1), color 0.3s ease;
+  }
+
+  .service-card-premium:hover .service-cta .service-arrow {
+    gap: 0.7rem;
+    color: var(--red);
+  }
+
+
+  /* ── 6. Process step cards ────────────────────────────────────────────────── */
+
+  .process-step-card {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.4s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease;
+  }
+
+  .process-step-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    border-radius: 0 0 2px 2px;
+  }
+
+  .process-step-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(232,25,44,0.1), 0 4px 12px rgba(0,0,0,0.05);
+    border-color: rgba(232,25,44,0.2) !important;
+  }
+
+  .process-step-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .process-step-top > div {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), color 0.3s ease;
+  }
+
+  .process-step-card:hover .process-step-top > div {
+    transform: rotate(-8deg) scale(1.2);
+    color: var(--red);
+  }
+
+
+  /* ── 7. Portfolio / Case Study cards ──────────────────────────────────────── */
+
+  .portfolio-item,
+  .cs-card,
+  .work-card {
+    overflow: hidden;
+  }
+
+  .portfolio-item img,
+  .cs-card img,
+  .work-card img,
+  .portfolio-item .port-thumb,
+  .cs-card .cs-thumb {
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .portfolio-item:hover img,
+  .cs-card:hover img,
+  .work-card:hover img,
+  .portfolio-item:hover .port-thumb,
+  .cs-card:hover .cs-thumb {
+    transform: scale(1.07);
+  }
+
+  /* Portfolio card overlay reveal */
+  .portfolio-item::before,
+  .cs-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,25,44,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .portfolio-item:hover::before,
+  .cs-card:hover::before {
+    opacity: 1;
+  }
+
+
+  /* ── 8. Testimonial cards ─────────────────────────────────────────────────── */
+
+  .tm-card {
+    transition:
+      transform 0.35s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease !important;
+  }
+
+  .tm-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 36px rgba(232,25,44,0.1), 0 2px 8px rgba(0,0,0,0.05) !important;
+  }
+
+  .tm-featured {
+    transition: box-shadow 0.4s ease !important;
+  }
+
+  .tm-featured:hover {
+    box-shadow: 0 20px 60px rgba(232,25,44,0.12), 0 4px 16px rgba(0,0,0,0.05) !important;
+  }
+
+
+  /* ── 9. CTA section hover ─────────────────────────────────────────────────── */
+
+  .cta-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(232,25,44,0.06) 0%, transparent 60%);
+    animation: spin-slow 20s linear infinite;
+    pointer-events: none;
+  }
+
+
+  /* ── 10. Hero floating & glow ─────────────────────────────────────────────── */
+
+  .hero-mockup-wrapper,
+  .hero-visual {
+    animation: float-y 6s ease-in-out infinite;
+  }
+
+  .hero-glow-1,
+  .hero-glow-2 {
+    transition: opacity 1s ease;
+  }
+
+  .hero-actions .btn-red {
+    animation: glow-pulse 3s ease-in-out infinite 1.5s;
+  }
+
+
+  /* ── 11. Gig / Pricing cards ──────────────────────────────────────────────── */
+
+  .gig-card,
+  .pricing-card,
+  .package-card {
+    position: relative;
+    transition:
+      transform 0.4s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease;
+    overflow: hidden;
+  }
+
+  .gig-card::after,
+  .pricing-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent 30%, rgba(232,25,44,0.06) 50%, transparent 70%);
+    transition: left 0.6s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+
+  .gig-card:hover::after,
+  .pricing-card:hover::after {
+    left: 200%;
+  }
+
+  .gig-card:hover,
+  .pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(232,25,44,0.10), 0 4px 14px rgba(0,0,0,0.06);
+    border-color: rgba(232,25,44,0.2) !important;
+  }
+
+
+  /* ── 12. Stat / trust numbers ─────────────────────────────────────────────── */
+
+  .trust-stat,
+  .stat-number,
+  .hero-stat {
+    animation: count-in 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .trust-stat:nth-child(1) { animation-delay: 0.1s; }
+  .trust-stat:nth-child(2) { animation-delay: 0.2s; }
+  .trust-stat:nth-child(3) { animation-delay: 0.3s; }
+
+
+  /* ── 13. Word & char reveal support CSS (pairs with MotionReveal.jsx) ─────── */
+
+  .word-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .word-inner {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+
+  .char-reveal-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+
+  /* ── 14. Section entrance line ────────────────────────────────────────────── */
+
+  .section-h::after,
+  h2.section-h::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--red);
+    border-radius: 3px;
+    margin-top: 1rem;
+    transform-origin: left;
+    animation: line-grow 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+  }
+
+
+  /* ── 15. Footer links ─────────────────────────────────────────────────────── */
+
+  .footer-links a,
+  .footer-v2 a {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .footer-links a::after,
+  .footer-v2 a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .footer-links a:hover::after,
+  .footer-v2 a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+
+  /* ── 16. WhatsApp button pulse ────────────────────────────────────────────── */
+
+  .whatsapp-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    z-index: -1;
+  }
+
+
+  /* ── 17. Smooth focus rings ───────────────────────────────────────────────── */
+
+  :focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 3px;
+    border-radius: 4px;
+    transition: outline-offset 0.2s ease;
+  }
+
+
+  /* ── 18. Reduced motion fallback ──────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .hero-mockup-wrapper,
+    .hero-visual {
+      animation: none !important;
+    }
+  }
+  
