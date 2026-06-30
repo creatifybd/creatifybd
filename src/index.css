@@ -2441,7 +2441,7 @@ footer {
 /* INTRO BAND V2 */
 .intro-band-v2 {
   padding: 6rem 0;
-  background: var(--ink);
+  background: var(--surface-soft);
   overflow: hidden;
 }
 
@@ -3292,23 +3292,23 @@ html, body {
   /* Keep transparent background but ensure text is visible */
 }
 
-.dark-section nav:not(.scrolled) .nav-logo {
-  color: var(--white) !important;
+.dark-section:not(.admin-layout) nav:not(.scrolled) .nav-logo {
+  color: var(--ink) !important;
 }
 
-.dark-section nav:not(.scrolled) .nav-logo span {
-  color: var(--white) !important;
+.dark-section:not(.admin-layout) nav:not(.scrolled) .nav-logo span {
+  color: var(--ink) !important;
 }
 
-.dark-section nav:not(.scrolled) .nav-center a {
-  color: rgba(255, 255, 255, 0.85) !important;
+.dark-section:not(.admin-layout) nav:not(.scrolled) .nav-center a {
+  color: var(--ink) !important;
 }
 
-.dark-section nav:not(.scrolled) .nav-center a:hover {
-  color: var(--white) !important;
+.dark-section:not(.admin-layout) nav:not(.scrolled) .nav-center a:hover {
+  color: var(--red) !important;
 }
 
-.dark-section nav:not(.scrolled) .nav-center a.active {
+.dark-section:not(.admin-layout) nav:not(.scrolled) .nav-center a.active {
   color: var(--red) !important;
 }
 
@@ -3639,61 +3639,52 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   UNIVERSAL DARK THEME PAGE FIXES
-   Ensure navbar and content are white on black background pages
-   ═══════════════════════════════════════════════════════════════════════════ */
+     INNER-PAGE NAV — LIGHT ROSE THEME
+     Page-header is now light rose, so nav text must be dark ink (not white).
+     ═══════════════════════════════════════════════════════════════════════════ */
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-logo-text {
-  color: var(--white) !important;
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-logo-text,
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-logo span {
+    color: var(--ink) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-logo img.nav-logo-img {
-  filter: url(#black-to-white);
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-logo img.nav-logo-img {
+    filter: none !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-center {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-center {
+    background: rgba(255, 251, 251, 0.82) !important;
+    border-color: rgba(232, 25, 44, 0.14) !important;
+    backdrop-filter: blur(18px);
+  }
 
-/* Ensure active text is ALWAYS RED and non-active is WHITE on dark header */
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-center :is(a, .nav-link-wrap) {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-center :is(a, .nav-link-wrap) {
+    color: var(--ink) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-center :is(a, .nav-link-wrap).active {
-  color: var(--red) !important;
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-center :is(a, .nav-link-wrap).active {
+    color: var(--red) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .btn-ghost {
-  color: var(--white) !important;
-  border-color: rgba(255, 255, 255, 0.2);
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .btn-ghost {
+    color: var(--ink) !important;
+    border-color: rgba(232, 25, 44, 0.2) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .hamburger-btn span {
-  background: var(--white);
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .hamburger-btn span {
+    background: var(--ink) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .nav-minimal-dropdown {
-  background: rgba(15, 15, 15, 0.98) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(25px) !important;
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .nav-minimal-dropdown {
+    background: rgba(255, 251, 251, 0.98) !important;
+    border-color: rgba(232, 25, 44, 0.1) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .minimal-dropdown-item {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
+  :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page, .gigs-catalog-page, .about-page, .team-page, .reviews-page, .gig-detail-page) nav:not(.scrolled) .dropdown-chevron {
+    color: var(--ink) !important;
+  }
 
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .minimal-dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: var(--white) !important;
-}
-
-:is(.services-page, .pricing-page, .process-page, .work-page, .contact-page, .case-studies-page, .portfolio-page, .premium-cs-page) nav:not(.scrolled) .dropdown-chevron {
-  color: var(--white) !important;
-}
-
-/* Page Header Text Fix - Inherit properly from dark-section */
+  /* Page Header Text Fix - Inherit properly from dark-section */
 .page-header.dark-section * {
   color: var(--white);
 }
@@ -3731,8 +3722,8 @@ html, body {
 
 .tm-section {
   position: relative;
-  background: #0a0a0a;
-  color: #fff;
+  background: var(--surface-soft);
+  color: var(--ink);
   padding: 8rem 0;
   overflow: hidden;
 }
