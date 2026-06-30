@@ -8,6 +8,7 @@ import { Star, Globe, Quote, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CLIENT_REVIEWS } from '../../data/clientReviews';
 
+const EASE_EXPO = [0.16, 1, 0.3, 1];
 const FALLBACK_REVIEWS = CLIENT_REVIEWS;
 
 const getAvatarUrl = (review) => {
@@ -34,23 +35,24 @@ const getAvatarUrl = (review) => {
 const StarDisplay = ({ rating }) => (
   <div style={{ display: 'flex', gap: '0.1rem' }}>
     {Array.from({ length: 5 }).map((_, i) => (
-      <Star 
-        key={i} 
-        size={15} 
-        fill={i < rating ? 'var(--red)' : 'none'} 
-        stroke={i < rating ? 'var(--red)' : 'var(--ink-soft)'} 
+      <Star
+        key={i}
+        size={15}
+        fill={i < rating ? 'var(--red)' : 'none'}
+        stroke={i < rating ? 'var(--red)' : 'var(--ink-soft)'}
       />
     ))}
   </div>
 );
 
 const ReviewCard = ({ review, idx }) => (
-  <motion.div 
+  <motion.div
     className="review-card-pub"
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.4, delay: idx * 0.06 }}
+    initial={{ opacity: 0, y: 24, filter: 'blur(4px)' }}
+    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+    viewport={{ once: true, margin: '-40px' }}
+    transition={{ duration: 0.55, ease: EASE_EXPO, delay: (idx % 9) * 0.055 }}
+    whileHover={{ y: -4, transition: { duration: 0.28, ease: EASE_EXPO } }}
   >
     <div className="rc-header">
       <div className="rc-avatar">
@@ -124,19 +126,21 @@ const ReviewsPage = () => {
     fetchReviews();
   }, []);
 
-  const filtered = filter === 'all' 
-    ? reviews 
-    : reviews.filter(r => r.country === filter);
-
+  const filtered = filter === 'all' ? reviews : reviews.filter(r => r.country === filter);
   const displayed = filtered.slice(0, displayCount);
 
-  // Aggregate stats
   const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
   const fiveStarCount = reviews.filter(r => r.rating === 5).length;
 
+  const stats = [
+    { num: avgRating.toFixed(1), label: 'Average Rating', extra: <StarDisplay rating={5} /> },
+    { num: `${reviews.length}+`, label: 'Total Reviews' },
+    { num: `${Math.round((fiveStarCount / reviews.length) * 100)}%`, label: 'Five-Star Ratings' },
+  ];
+
   return (
     <div className="reviews-page-pub">
-      <SEO 
+      <SEO
         title="Client Reviews & Verified Feedback | CreatifyBD"
         description="Read verified client reviews from completed CreatifyBD creative orders. See how our team delivers responsive communication, fast delivery, and high-quality creative work."
         keywords="creatifybd reviews, client testimonials, creative agency feedback"
@@ -144,31 +148,59 @@ const ReviewsPage = () => {
 
       <Navbar />
 
+      {/* ── Hero ── */}
       <section className="reviews-hero reviews-hero-light">
         <div className="container">
-          <h1 className="page-title">Verified Client <span className="red">Reviews</span></h1>
-          <p className="page-subtitle">Real client feedback from completed creative orders, reviewed through our delivery and approval workflow.</p>
+          <motion.div
+            className="eyebrow"
+            style={{ marginBottom: '1rem', justifyContent: 'center' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: EASE_EXPO, delay: 0 }}
+          >
+            Verified by Order History
+          </motion.div>
 
+          <motion.h1
+            className="page-title"
+            initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.85, ease: EASE_EXPO, delay: 0.08 }}
+          >
+            Verified Client <span className="red">Reviews</span>
+          </motion.h1>
+
+          <motion.p
+            className="page-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.2 }}
+          >
+            Real client feedback from completed creative orders, reviewed through our delivery and approval workflow.
+          </motion.p>
+
+          {/* Staggered aggregate stats */}
           <div className="reviews-aggregate-stats">
-            <div className="agg-stat">
-              <span className="agg-num">{avgRating.toFixed(1)}</span>
-              <StarDisplay rating={5} />
-              <span className="agg-lbl">Average Rating</span>
-            </div>
-            <div className="agg-divider" />
-            <div className="agg-stat">
-              <span className="agg-num">{reviews.length}+</span>
-              <span className="agg-lbl">Total Reviews</span>
-            </div>
-            <div className="agg-divider" />
-            <div className="agg-stat">
-              <span className="agg-num">{Math.round((fiveStarCount / reviews.length) * 100)}%</span>
-              <span className="agg-lbl">Five-Star Ratings</span>
-            </div>
+            {stats.map((stat, i) => (
+              <React.Fragment key={stat.label}>
+                {i > 0 && <div className="agg-divider" />}
+                <motion.div
+                  className="agg-stat"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.32 + i * 0.1 }}
+                >
+                  <span className="agg-num">{stat.num}</span>
+                  {stat.extra}
+                  <span className="agg-lbl">{stat.label}</span>
+                </motion.div>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* ── Workflow band ── */}
       <section className="review-workflow-band" aria-label="Verified review workflow">
         <div className="container">
           <div className="review-workflow-row">
@@ -187,34 +219,40 @@ const ReviewsPage = () => {
         </div>
       </section>
 
+      {/* ── Reviews grid ── */}
       <section className="reviews-content-section">
         <div className="container">
-          {/* Country Filter */}
           <div className="country-filter-tabs">
             {countries.map(c => (
-              <button 
-                key={c} 
+              <motion.button
+                key={c}
                 type="button"
                 data-country={c === 'all' ? 'All Countries' : c}
                 className={`filter-tab-btn ${filter === c ? 'active' : ''}`}
                 onClick={() => { setFilter(c); setDisplayCount(9); }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2 }}
               >
                 {c === 'all' ? 'All Countries' : `🌏 ${c}`}
-              </button>
+              </motion.button>
             ))}
           </div>
 
-          {/* Reviews Grid */}
           <div className="reviews-masonry-grid">
             {displayed.map((review, idx) => (
               <ReviewCard key={review.id} review={review} idx={idx} />
             ))}
           </div>
 
-          {/* Load More */}
           {filtered.length > displayCount && (
-            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <button 
+            <motion.div
+              style={{ textAlign: 'center', marginTop: '3rem' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <button
                 type="button"
                 className="btn-outline-dark"
                 onClick={() => setDisplayCount(prev => prev + 9)}
@@ -222,7 +260,7 @@ const ReviewsPage = () => {
                 <ChevronDown size={18} />
                 Load More Reviews
               </button>
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
@@ -233,7 +271,7 @@ const ReviewsPage = () => {
         .reviews-hero {
           padding: 8rem 1rem 5rem;
           text-align: center;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid var(--border);
         }
 
         .reviews-aggregate-stats {
@@ -373,7 +411,7 @@ const ReviewsPage = () => {
           gap: 1rem;
           position: relative;
           overflow: hidden;
-          transition: border-color 0.2s;
+          transition: border-color 0.25s;
           box-shadow: 0 14px 36px var(--border);
         }
 
@@ -434,7 +472,7 @@ const ReviewsPage = () => {
 
         .rc-sub .bullet {
           display: none;
-          color: var(--gray-400);
+          color: var(--muted);
         }
 
         .rc-stars {
