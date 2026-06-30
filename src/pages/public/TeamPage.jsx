@@ -62,30 +62,15 @@ const TeamPage = () => {
       </div>
 
       {/* Corporate trust intro */}
-      <section className="team-intro-section" style={{ padding: '6rem 1rem', background: '#111' }}>
+      <section className="team-intro-section" style={{ padding: '6rem 1rem', background: 'var(--surface-soft)' }}>
         <div className="container" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'white', marginBottom: '1.5rem' }}>Our Production Center in Dhaka</h2>
-          <p style={{ color: '#aaa', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '1.5rem' }}>Our Production Center in Dhaka</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '2rem' }}>
             By establishing our creative execution center in Dhaka, Bangladesh, we secure an exceptional cost-efficiency advantage. We pass these operational savings directly to small businesses in the USA, Canada, and Australia—delivering high-end international agency standards at competitive rates.
           </p>
-
-          <div className="trust-stats-grid">
-            <div className="t-stat-card">
-              <Users size={28} className="red" />
-              <h3>15+</h3>
-              <span>Creative specialists</span>
-            </div>
-            <div className="t-stat-card">
-              <Trophy size={28} className="red" />
-              <h3>150+</h3>
-              <span>Completed projects</span>
-            </div>
-            <div className="t-stat-card">
-              <Coffee size={28} className="red" />
-              <h3>24/7</h3>
-              <span>Timezone friendly updates</span>
-            </div>
-          </div>
+          <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: '1.5' }}>
+            Our collaborative workspace brings together specialized creative talent focused on delivering quality results for your brand.
+          </p>
         </div>
       </section>
 
@@ -131,7 +116,7 @@ const TeamPage = () => {
                   </div>
 
                   {member.email && (
-                    <div className="member-contact-row" style={{ marginTop: '1.25rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '0.75rem' }}>
+                    <div className="member-contact-row" style={{ marginTop: '1.25rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
                       <a href={`mailto:${member.email}`} className="member-mail-btn" aria-label={`Email ${member.name}`}>
                         <Mail size={14} />
                         <span>{member.email}</span>
@@ -148,38 +133,6 @@ const TeamPage = () => {
       <Footer />
 
       <style>{`
-        .trust-stats-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2rem;
-          margin-top: 1rem;
-        }
-
-        .t-stat-card {
-          background: #161616;
-          border: 1px solid rgba(255,255,255,0.05);
-          border-radius: 12px;
-          padding: 2rem 1.5rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .t-stat-card h3 {
-          font-size: 1.8rem;
-          font-weight: 800;
-          color: white;
-          margin: 0;
-        }
-
-        .t-stat-card span {
-          font-size: 0.8rem;
-          color: #777;
-          text-transform: uppercase;
-          font-weight: 600;
-        }
-
         .office-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -204,12 +157,12 @@ const TeamPage = () => {
           width: 100%;
           height: auto;
           border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid var(--border);
         }
 
         .office-image-box .caption {
           font-size: 0.8rem;
-          color: #666;
+          color: var(--muted);
           text-align: center;
           font-style: italic;
         }
@@ -223,22 +176,22 @@ const TeamPage = () => {
         }
 
         .team-member-card {
-          background: #161616;
-          border: 1px solid rgba(255,255,255,0.05);
+          background: var(--surface);
+          border: 1px solid var(--border);
           border-radius: 16px;
           overflow: hidden;
           transition: all 0.2s;
         }
 
         .team-member-card:hover {
-          border-color: rgba(232,25,44,0.25);
+          border-color: var(--brand-red);
         }
 
         .member-photo-wrap {
           width: 100%;
           padding-top: 100%; /* square ratio */
           position: relative;
-          background: #222;
+          background: var(--surface-muted);
         }
 
         .member-photo-wrap img {
@@ -258,14 +211,14 @@ const TeamPage = () => {
 
         .member-name {
           font-size: 1.1rem;
-          color: white;
+          color: var(--ink);
           font-weight: 800;
           margin-bottom: 0.15rem;
         }
 
         .member-role {
           font-size: 0.8rem;
-          color: var(--red);
+          color: var(--brand-red);
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -275,7 +228,7 @@ const TeamPage = () => {
 
         .member-bio {
           font-size: 0.825rem;
-          color: #888;
+          color: var(--muted);
           line-height: 1.5;
           margin-bottom: 1.25rem;
         }
@@ -288,9 +241,9 @@ const TeamPage = () => {
 
         .skill-tag {
           font-size: 0.65rem;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          color: #aaa;
+          background: var(--surface-soft);
+          border: 1px solid var(--border);
+          color: var(--muted);
           padding: 0.2rem 0.5rem;
           border-radius: 4px;
           font-weight: 600;
@@ -300,14 +253,14 @@ const TeamPage = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
-          color: #666;
+          color: var(--muted);
           text-decoration: none;
           font-size: 0.75rem;
           transition: color 0.2s;
         }
 
         .member-mail-btn:hover {
-          color: white;
+          color: var(--brand-red);
         }
       `}</style>
     </div>
