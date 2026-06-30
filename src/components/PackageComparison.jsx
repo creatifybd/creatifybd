@@ -67,80 +67,69 @@ const PackageComparison = ({ packages = {} }) => {
         </tbody>
       </table>
 
-      <style>{`
-        .package-comparison-table-wrapper {
-          width: 100%;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 12px;
-          overflow: hidden;
-          background: #161616;
-          margin: 2.5rem 0;
-        }
-
-        .comparison-table {
-          width: 100%;
-          border-collapse: collapse;
-          text-align: center;
-          font-size: 0.9rem;
-        }
-
-        .comparison-table th {
-          background: var(--surface-soft);
-          color: white;
-          font-weight: 700;
-          padding: 1.25rem 1rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .comparison-table td {
-          padding: 1rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-          color: #b0b0b0;
-          font-weight: 500;
-        }
-
-        .comparison-table tr:last-child td {
-          border-bottom: none;
-        }
-
-        .feature-col {
-          text-align: left;
-        }
-
-        .feature-label-cell {
-          text-align: left;
-          color: white;
-          font-weight: 600;
-          padding-left: 1.5rem !important;
-        }
-
-        .price-cell {
-          color: var(--red) !important;
-          font-weight: 700 !important;
-          font-size: 1.05rem;
-        }
-
-        .chk-icon-val {
-          color: #4caf50;
-          margin: 0 auto;
-        }
-
-        .dash-icon-val {
-          color: #444;
-          margin: 0 auto;
-        }
-
-        @media (max-width: 600px) {
-          .package-comparison-table-wrapper {
-            overflow-x: auto;
-          }
-          .comparison-table th, 
-          .comparison-table td {
-            padding: 0.75rem 0.5rem;
-            font-size: 0.8rem;
-          }
-        }
-      `}</style>
+      
+    <style>{`
+      .package-comparison-table-wrapper {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: auto;
+        background: var(--surface);
+        margin: 2.5rem 0;
+      }
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 0.9rem;
+        min-width: 600px;
+      }
+      .comparison-table th {
+        background: var(--surface-soft);
+        color: var(--ink);
+        font-weight: 700;
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-family: var(--font-display);
+      }
+      .comparison-table th:first-child {
+        text-align: left;
+      }
+      .comparison-table td {
+        padding: 1rem;
+        color: var(--ink);
+        border-bottom: 1px solid var(--border-soft);
+      }
+      .comparison-table tr:last-child td {
+        border-bottom: none;
+      }
+      .comparison-table tbody tr:hover td {
+        background: var(--surface-soft);
+      }
+      .feature-col {
+        text-align: left;
+        font-weight: 600;
+        color: var(--muted);
+        min-width: 180px;
+      }
+      .feature-label-cell {
+        text-align: left;
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .price-cell {
+        color: var(--brand-red);
+        font-weight: 700;
+        font-size: 1rem;
+      }
+      .chk-icon-val {
+        color: var(--success);
+      }
+      .dash-icon-val {
+        color: var(--gray-400);
+      }
+    `}</style>
     </div>
   );
 };
