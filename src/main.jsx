@@ -2,6 +2,7 @@ import React from 'react';
   import ReactDOM from 'react-dom/client';
   import App from './App';
   import './index.css';
+  import './styles/overrides.css';
 
   // Embed build identifier so each CI run produces unique bundle output.
   // Vite replaces import.meta.env.VITE_* at build time with the literal value.
@@ -14,4 +15,3 @@ import React from 'react';
       <App />
     </React.StrictMode>
   );
-  

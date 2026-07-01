@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { db } from '../firebase/config';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { TextReveal, ImageReveal, FadeReveal, StaggerReveal } from './MotionReveal';
+import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
+import { ArrowUpRight } from 'lucide-react';
 
 const CATS = [
   { key: 'all', label: 'All Work', label_bn: 'সব কাজ' },
@@ -23,6 +24,45 @@ const CAT_DISPLAY = {
   video: 'Video',
   ai: 'AI Art',
 };
+
+const FALLBACK_WORK = [
+  {
+    id: 'local-service-social-growth',
+    title: 'Local Service Brand Content System',
+    category: 'graphic',
+    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1400&auto=format&fit=crop'
+  },
+  {
+    id: 'restaurant-reel-campaign',
+    title: 'Restaurant Reels and Launch Creatives',
+    category: 'video',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1400&auto=format&fit=crop'
+  },
+  {
+    id: 'clinic-website-redesign',
+    title: 'Clinic Website Redesign',
+    category: 'web',
+    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1400&auto=format&fit=crop'
+  },
+  {
+    id: 'fitness-brand-identity',
+    title: 'Fitness Studio Brand Identity',
+    category: 'branding',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1400&auto=format&fit=crop'
+  },
+  {
+    id: 'home-service-ad-pack',
+    title: 'Home Service Ad Creative Pack',
+    category: 'graphic',
+    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1400&auto=format&fit=crop'
+  },
+  {
+    id: 'saas-landing-page',
+    title: 'SaaS Landing Page Visual Direction',
+    category: 'web',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1400&auto=format&fit=crop'
+  }
+];
 
 // ── Lightbox ─────────────────────────────────────────────────────────────────
 function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
@@ -47,7 +87,7 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
       exit={{ opacity: 0 }}
       className="pf-lightbox" 
       onClick={(e) => e.target === e.currentTarget && onClose()}
-      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(0,0,0,0.75)' }}
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(0,0,0,0.85)' }}
     >
       <button className="pf-lb-close" onClick={onClose} aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -110,11 +150,6 @@ function Counter({ target, duration = 1200 }) {
 }
 
 // ── Helper for Masonry Spans ────────────────────────────────────────────────
-const getSpanClass = (index) => {
-  const pattern = ['span-8', 'span-4', 'span-4', 'span-4', 'span-4', 'span-12', 'span-6', 'span-6'];
-  return pattern[index % pattern.length];
-};
-
 // ── Work Card ─────────────────────────────────────────────────────────────────
 const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
   return (
@@ -125,32 +160,26 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
       whileInView={{ opacity: 1, y: 0, skewY: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`wk-card wk-card--vis ${getSpanClass(priority)}`}
+      className="duck-work-tile"
       onClick={() => onClick(item)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onClick(item)}
       data-cursor="View"
     >
-      <div className="wk-card-img-wrap">
-        <ImageReveal>
-          <OptimizedImage 
-            src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'} 
-            alt={item.title} 
-            className="wk-card-img" 
-            priority={priority < 6}
-          />
-        </ImageReveal>
-        <div className="wk-card-overlay">
-          <div className="wk-card-overlay-inner">
-            <div>
-              <span className="wk-cat-tag">{CAT_DISPLAY[item.category] || item.category}</span>
-              <h3 className="wk-card-title">{item.title}</h3>
-            </div>
-            <div className="wk-view-btn">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
+      <div className="duck-work-media">
+        <OptimizedImage
+          src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'}
+          alt={item.title}
+          className="duck-work-image"
+          priority={priority < 6}
+        />
+        <div className="duck-work-overlay">
+          <div>
+            <span>{CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
+            <h3>{item.title}</h3>
           </div>
+          <span className="duck-work-arrow"><ArrowUpRight size={22} /></span>
         </div>
       </div>
     </motion.div>
@@ -179,15 +208,17 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     return () => unsub();
   }, []);
 
+  const portfolioItems = items.length > 0 ? items : FALLBACK_WORK;
+
   const filteredItems = activeFilter === 'all'
-    ? items
-    : items.filter(i => i.category === activeFilter);
+    ? portfolioItems
+    : portfolioItems.filter(i => i.category === activeFilter);
 
   const displayItems = highlight ? filteredItems.slice(0, 6) : filteredItems;
 
   const availableCats = CATS.filter(c => {
     if (c.key === 'all') return true;
-    return items.some(i => i.category === c.key);
+    return portfolioItems.some(i => i.category === c.key);
   });
 
   const handleFilterChange = (key) => setActiveFilter(key);
@@ -216,10 +247,34 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
 
   return (
     <>
-      <section className={`wk-section ${fullPage ? 'full-page-section' : ''}`} id="portfolio">
+      <section className={`wk-section agency-work-section ${fullPage ? 'full-page-section agency-work-page' : ''}`} id="portfolio">
 
         {!fullPage && <div className="wk-grain" aria-hidden="true" />}
         <div className="wk-inner">
+          {fullPage && (
+            <div className="agency-work-page-header">
+              <div>
+                <FadeReveal>
+                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />Selected work</div>
+                </FadeReveal>
+                <TextReveal className="wk-heading">
+                  Work made to be seen, remembered, and acted on.
+                </TextReveal>
+                <FadeReveal delay={0.2}>
+                  <p>
+                    Social content, campaigns, brand identities, videos, and websites created for ambitious small businesses.
+                  </p>
+                </FadeReveal>
+              </div>
+              <FadeReveal delay={0.35}>
+                <div className="agency-work-page-stats">
+                  <div><strong><Counter target={portfolioItems.length} />+</strong><span>Projects</span></div>
+                  <div><strong><Counter target={50} />+</strong><span>Clients</span></div>
+                  <div><strong><Counter target={5} /></strong><span>Years</span></div>
+                </div>
+              </FadeReveal>
+            </div>
+          )}
           {!fullPage && (
             <div className="wk-header">
               <FadeReveal>
@@ -228,9 +283,18 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
               <TextReveal className="wk-heading">
                 {lang === 'bn' ? 'সৃজনশীলতা যেখানে ফলাফল আনে' : 'Creativity that drives results'}
               </TextReveal>
+              <FadeReveal delay={0.2}>
+                <p className="wk-header-copy">
+                  Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.
+                </p>
+              </FadeReveal>
               <FadeReveal delay={0.4}>
                 <div className="wk-stats-row">
-                  <div className="wk-stat"><strong><Counter target={items.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
+                  <div className="wk-stat"><strong><Counter target={portfolioItems.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
+                  <div className="wk-stat-div" />
+                  <div className="wk-stat"><strong><Counter target={50} />+</strong><span>{lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</span></div>
+                  <div className="wk-stat-div" />
+                  <div className="wk-stat"><strong><Counter target={5} /></strong><span>{lang === 'bn' ? 'বছরের অভিজ্ঞতা' : 'Years Experience'}</span></div>
                 </div>
               </FadeReveal>
             </div>
@@ -250,7 +314,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                     {lang === 'bn' ? cat.label_bn : cat.label}
                     {activeFilter === cat.key && (
                       <motion.span layoutId="filter-count" className="wk-filter-count">
-                        {cat.key === 'all' ? items.length : items.filter(i => i.category === cat.key).length}
+                        {cat.key === 'all' ? portfolioItems.length : portfolioItems.filter(i => i.category === cat.key).length}
                       </motion.span>
                     )}
                   </button>
@@ -259,9 +323,9 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             </FadeReveal>
           )}
 
-          <div className="wk-grid-wrap">
+          <div className="duck-work-gallery-wrap">
             <StaggerReveal>
-              <motion.div layout className="wk-grid">
+              <motion.div layout className="duck-work-gallery">
                 <AnimatePresence mode="popLayout">
                   {displayItems.map((item, index) => (
                     <WorkCard key={item.id} item={item} onClick={openLightbox} priority={index} />
@@ -274,7 +338,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
           {highlight && (
             <FadeReveal delay={0.4}>
               <div className="wk-footer" style={{ marginTop: '4rem', textAlign: 'center' }}>
-                <Link to="/work" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'View Full Portfolio →'}</Link>
+                <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'View Full Portfolio →'}</Link>
               </div>
             </FadeReveal>
           )}

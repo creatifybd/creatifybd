@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ArrowUpRight, BarChart3, Clapperboard, Code2, Megaphone, Palette } from 'lucide-react';
-import { TextReveal, FadeReveal, StaggerReveal, HoverTilt } from './MotionReveal';
+import { TextReveal, FadeReveal } from './MotionReveal';
 
 const defaultServices = [
   {
@@ -45,6 +43,14 @@ const defaultServices = [
   }
 ];
 
+const serviceVisuals = [
+  'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=1000&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1000&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1000&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop'
+];
+
 const Services = ({ highlight = false, fullPage = false }) => {
   const [services, setServices] = useState([]);
 
@@ -69,59 +75,63 @@ const Services = ({ highlight = false, fullPage = false }) => {
   }, [highlight, services]);
 
   return (
-    <section className={`section services-section ${fullPage ? 'full-page-section' : ''}`} id="services">
+    <section className={`section services-section agency-services ${fullPage ? 'full-page-section' : ''}`} id="services">
       <div className="container">
-        {!fullPage && (
-          <div className="services-header text-center">
+        <div className="duck-services-layout">
+          <header className="duck-services-intro">
             <FadeReveal>
-              <div className="eyebrow">Our Expertise</div>
+              <div className="eyebrow">Our services</div>
             </FadeReveal>
             <TextReveal className="section-h">
-              Practical creative services for modern small businesses
+              {fullPage
+                ? 'Creative support without the hiring headache.'
+                : 'Everything your brand needs to show up better.'}
             </TextReveal>
             <FadeReveal delay={0.2}>
               <p className="section-sub">
-                We package the most requested creative and growth services for small businesses in the USA, Canada, Australia, and other international markets.
+                One reliable team for ongoing social media, design, video, marketing, and web work. Start with one project or build a monthly workflow.
               </p>
             </FadeReveal>
-          </div>
-        )}
+            <FadeReveal delay={0.3}>
+              <a href={fullPage ? '#contact' : '/services'} className="duck-services-link">
+                {fullPage ? 'Discuss your project' : 'Explore all services'}
+                <ArrowUpRight size={18} />
+              </a>
+            </FadeReveal>
+          </header>
 
-        <StaggerReveal delay={0.2}>
-          <div className="services-grid">
+          <div className="duck-service-index">
             {displayServices.map((service, idx) => (
-              <FadeReveal key={service.id || idx}>
-                <HoverTilt maxTilt={8} scale={1.01}><motion.article className={`service-card-premium ${idx === 0 ? 'is-signature' : ''}`}>
-                  <div className="service-icon">{service.icon}</div>
-                  {service.badge && <span className="service-badge">{service.badge}</span>}
-                  <h3>{service.title}</h3>
-                  <p>{service.desc || service.description}</p>
-
-                  <div className="service-card-footer">
-                    <span className="service-price">{service.price || 'Custom quote'}</span>
-                    <Link
-                      to="/contact"
-                      className="service-cta"
-                    >
-                      <span className="service-arrow">
-                        Get a Proposal
-                        <ArrowUpRight size={16} />
-                      </span>
-                    </Link>
+              <FadeReveal key={service.id || idx} delay={idx * 0.04}>
+                <article className={`duck-service-row ${idx === 0 ? 'is-featured' : ''}`}>
+                  <div className="duck-service-row-main">
+                    <span className="duck-service-number">{String(idx + 1).padStart(2, '0')}</span>
+                    <div className="duck-service-copy">
+                      <div className="duck-service-title-line">
+                        <h3>{service.title}</h3>
+                        {idx === 0 && <span>Most requested</span>}
+                      </div>
+                      <p>{service.desc || service.description}</p>
+                    </div>
+                    <div className="duck-service-action">
+                      <span>{service.price || 'Custom quote'}</span>
+                      <a
+                        href={service.price && service.price !== 'Custom quote' ? `/payment?service=${encodeURIComponent(service.title)}` : '#contact'}
+                        aria-label={`Start ${service.title}`}
+                      >
+                        <ArrowUpRight size={24} />
+                      </a>
+                    </div>
                   </div>
-                </motion.article></HoverTilt>
+                  <div className="duck-service-preview" aria-hidden="true">
+                    <img src={serviceVisuals[idx % serviceVisuals.length]} alt="" loading="lazy" />
+                    <div className="duck-service-icon">{service.icon}</div>
+                  </div>
+                </article>
               </FadeReveal>
             ))}
           </div>
-        </StaggerReveal>
-
-        {highlight && (
-          <FadeReveal delay={0.4}>
-            <div className="section-action">
-              <Link to="/services" className="btn-huge-red">Explore All Services</Link>
-            </div>
-          </FadeReveal>
-        )}
+        </div>
       </div>
     </section>
   );
