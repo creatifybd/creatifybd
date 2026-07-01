@@ -5927,7 +5927,10 @@ body::before, body::after {
   /* Duck-inspired editorial service index and image-led work gallery. */
   body:not(.admin-body) .agency-services {
     padding: clamp(5rem, 9vw, 9rem) 0 !important;
-    background: #f5dc32 !important;
+    background:
+      linear-gradient(135deg, rgba(232, 25, 44, 0.11), rgba(255, 247, 248, 0.96) 46%, #ffffff 100%) !important;
+    border-top: 1px solid rgba(232, 25, 44, 0.16) !important;
+    border-bottom: 1px solid rgba(232, 25, 44, 0.16) !important;
     color: #111318 !important;
   }
 
@@ -5945,6 +5948,8 @@ body::before, body::after {
   body:not(.admin-body) .duck-services-intro {
     position: sticky !important;
     top: 120px !important;
+    padding-left: clamp(1rem, 2vw, 1.5rem) !important;
+    border-left: 6px solid var(--brand-red) !important;
   }
 
   body:not(.admin-body) .duck-services-intro .eyebrow {
@@ -5972,18 +5977,18 @@ body::before, body::after {
     align-items: center !important;
     gap: 0.65rem !important;
     padding-bottom: 0.35rem !important;
-    border-bottom: 2px solid #111318 !important;
-    color: #111318 !important;
+    border-bottom: 2px solid var(--brand-red) !important;
+    color: var(--brand-red) !important;
     font-weight: 900 !important;
   }
 
   body:not(.admin-body) .duck-service-index {
-    border-top: 2px solid #111318 !important;
+    border-top: 2px solid rgba(232, 25, 44, 0.76) !important;
   }
 
   body:not(.admin-body) .duck-service-row {
     position: relative !important;
-    border-bottom: 2px solid #111318 !important;
+    border-bottom: 2px solid rgba(232, 25, 44, 0.76) !important;
   }
 
   body:not(.admin-body) .duck-service-row-main {
@@ -6018,8 +6023,9 @@ body::before, body::after {
   body:not(.admin-body) .duck-service-title-line > span {
     flex: 0 0 auto !important;
     padding: 0.35rem 0.55rem !important;
-    border: 1px solid #111318 !important;
-    color: #111318 !important;
+    border: 1px solid var(--brand-red) !important;
+    background: rgba(232, 25, 44, 0.08) !important;
+    color: var(--brand-red) !important;
     font-size: 0.62rem !important;
     font-weight: 900 !important;
     text-transform: uppercase !important;
@@ -6040,7 +6046,7 @@ body::before, body::after {
   }
 
   body:not(.admin-body) .duck-service-action > span {
-    color: #111318 !important;
+    color: var(--brand-red) !important;
     font-size: 0.78rem !important;
     font-weight: 900 !important;
   }
@@ -6050,14 +6056,14 @@ body::before, body::after {
     height: 50px !important;
     display: grid !important;
     place-items: center !important;
-    border: 1px solid #111318 !important;
+    border: 1px solid var(--brand-red) !important;
     border-radius: 50% !important;
-    color: #111318 !important;
+    color: var(--brand-red) !important;
     transition: background 180ms ease, color 180ms ease, transform 180ms ease !important;
   }
 
   body:not(.admin-body) .duck-service-row:hover .duck-service-action a {
-    background: #111318 !important;
+    background: var(--brand-red) !important;
     color: #ffffff !important;
     transform: rotate(45deg) !important;
   }
@@ -6085,8 +6091,8 @@ body::before, body::after {
   body:not(.admin-body) .duck-service-icon {
     display: grid !important;
     place-items: center !important;
-    background: #111318 !important;
-    color: #f5dc32 !important;
+    background: var(--brand-red) !important;
+    color: #ffffff !important;
   }
 
   body:not(.admin-body) .duck-work-gallery {
