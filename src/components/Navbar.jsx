@@ -111,6 +111,7 @@ const Navbar = ({ theme = 'light' }) => {
         <div className="nav-container-inner">
           {/* Logo */}
           <motion.div
+            className="nav-logo-wrap"
             whileHover={{ scale: 1.04 }}
             transition={{ duration: 0.3, ease: EASE_EXPO }}
             style={{ display: 'inline-block' }}
@@ -141,6 +142,7 @@ const Navbar = ({ theme = 'light' }) => {
           {/* Right actions */}
           <div className="nav-right">
             <motion.div
+              className="nav-call-wrap"
               whileHover={{ scale: 1.04 }}
               transition={{ duration: 0.28, ease: EASE_EXPO }}
               style={{ display: 'inline-block' }}
@@ -149,6 +151,7 @@ const Navbar = ({ theme = 'light' }) => {
             </motion.div>
 
             <motion.div
+              className="nav-cta-wrap"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.28, ease: EASE_EXPO }}
