@@ -57,6 +57,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Resource Hints for Performance -->
+    <link rel="preconnect" href="https://creatifybd.com" />
+    <link rel="dns-prefetch" href="https://creatifybd.com" />
+    <link rel="preconnect" href="https://firebase.googleapis.com" />
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
 
     <style>
       :root {
@@ -117,6 +124,12 @@
       }
       .skip-link:focus {
         top: 0;
+      }
+      
+      /* Performance optimizations */
+      img {
+        max-width: 100%;
+        height: auto;
       }
     </style>
 
