@@ -19,7 +19,7 @@ const AdminGigs = () => {
   const [savingGig, setSavingGig] = useState(null);
   const [gigOverrides, setGigOverrides] = useState({});
   const [editingGig, setEditingGig] = useState(null);
-  const [gigForm, setGigForm] = useState({ title: '', shortTitle: '', overview: '', startingPrice: '', coverImage: '' });
+  const [gigForm, setGigForm] = useState({ title: '', shortTitle: '', overview: '', startingPrice: '', galleryImages: ['', '', ''] });
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'gig_overrides'), (snap) => {
@@ -68,7 +68,7 @@ const AdminGigs = () => {
       shortTitle: resolved.shortTitle || '',
       overview: resolved.overview || '',
       startingPrice: resolved.startingPrice || '',
-      coverImage: resolved.galleryImages?.[0] || ''
+      galleryImages: [0, 1, 2].map(index => resolved.galleryImages?.[index] || '')
     });
   };
 
@@ -76,7 +76,12 @@ const AdminGigs = () => {
     event.preventDefault();
     if (!editingGig) return;
     setSavingGig(editingGig.id);
-    const galleryImages = [gigForm.coverImage, ...(editingGig.galleryImages || []).slice(1)].filter(Boolean);
+    const galleryImages = gigForm.galleryImages.map(item => item.trim()).filter(Boolean);
+    if (!gigForm.galleryImages[0]?.trim()) {
+      toast.error('A primary cover image is required');
+      setSavingGig(null);
+      return;
+    }
     try {
       await setDoc(doc(db, 'gig_overrides', editingGig.id), {
         title: gigForm.title.trim(),
@@ -235,7 +240,19 @@ const AdminGigs = () => {
               <label>Short Title<input className="admin-input" value={gigForm.shortTitle} onChange={event => setGigForm({ ...gigForm, shortTitle: event.target.value })} required /></label>
               <label>Overview<textarea className="admin-input" rows="4" value={gigForm.overview} onChange={event => setGigForm({ ...gigForm, overview: event.target.value })} required /></label>
               <label>Starting Price (USD)<input className="admin-input" type="number" min="1" value={gigForm.startingPrice} onChange={event => setGigForm({ ...gigForm, startingPrice: event.target.value })} required /></label>
-              <MediaUploader label="Cover Image" value={gigForm.coverImage} accept="image/*" folder="creatifybd/gigs" helperText="Drop a cover image or switch to Link." onChange={(url) => setGigForm(prev => ({ ...prev, coverImage: url }))} />
+              <div className="gig-gallery-editor">
+                {gigForm.galleryImages.map((image, index) => (
+                  <MediaUploader
+                    key={index}
+                    label={index === 0 ? 'Primary Cover' : `Gallery Image ${index + 1}`}
+                    value={image}
+                    accept="image/*"
+                    folder="creatifybd/gigs"
+                    helperText={index === 0 ? 'Required. Used as the gig cover.' : 'Optional supporting gallery image.'}
+                    onChange={(url) => setGigForm(prev => ({ ...prev, galleryImages: prev.galleryImages.map((item, itemIndex) => itemIndex === index ? url : item) }))}
+                  />
+                ))}
+              </div>
               <div className="gig-editor-actions">
                 <button type="button" className="adm-btn-secondary" onClick={() => setEditingGig(null)} disabled={savingGig === editingGig.id}>Cancel</button>
                 <button type="submit" className="adm-btn-primary" disabled={savingGig === editingGig.id}>{savingGig === editingGig.id ? 'Saving...' : 'Save Changes'}</button>
@@ -247,7 +264,7 @@ const AdminGigs = () => {
 
       <style>{`
         .gig-editor-overlay{position:fixed;inset:0;background:rgba(15,18,24,.58);display:grid;place-items:center;z-index:1200;padding:1rem}
-        .gig-editor-dialog{width:min(100%,680px);max-height:calc(100vh - 2rem);overflow:auto;background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:12px;padding:2rem;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+        .gig-editor-dialog{width:min(100%,820px);max-height:calc(100dvh - 2rem);overflow-y:auto;overscroll-behavior:contain;background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:12px;padding:2rem;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.2)}
         .gig-editor-dialog h2{font-size:1.35rem;color:var(--adm-text)}
         .gig-editor-dialog>p{color:var(--adm-dim);font-size:.82rem;margin:.35rem 0 1.5rem}
         .gig-editor-dialog form{display:grid;gap:1rem}
@@ -255,6 +272,8 @@ const AdminGigs = () => {
         .gig-editor-close{position:absolute;right:1.25rem;top:1.25rem;width:36px;height:36px;border-radius:8px;background:var(--adm-bg);border:1px solid var(--adm-border);color:var(--adm-text);display:grid;place-items:center;cursor:pointer}
         .gig-editor-grid{display:grid;grid-template-columns:180px 1fr;gap:1rem}
         .gig-editor-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:.5rem}
+        .gig-gallery-editor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;align-items:start}.gig-gallery-editor .media-dropzone{min-height:120px}.gig-editor-actions{position:sticky;bottom:-2rem;background:var(--adm-surface);padding:1rem 0 2rem;z-index:3}
+        @media(max-width:800px){.gig-gallery-editor{grid-template-columns:1fr}}
         @media(max-width:600px){.gig-editor-grid{grid-template-columns:1fr}.gig-editor-dialog{padding:1.25rem}.gig-editor-actions button{flex:1;justify-content:center}}
         .adm-page-header {
           display: flex;

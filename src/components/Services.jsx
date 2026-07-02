@@ -124,7 +124,7 @@ const Services = ({ highlight = false, fullPage = false }) => {
                     </div>
                   </div>
                   <div className="duck-service-preview" aria-hidden="true">
-                    <img src={serviceVisuals[idx % serviceVisuals.length]} alt="" loading="lazy" />
+                    <img src={service.imageUrl || serviceVisuals[idx % serviceVisuals.length]} alt="" loading="lazy" />
                     <div className="duck-service-icon">{service.icon}</div>
                   </div>
                 </article>

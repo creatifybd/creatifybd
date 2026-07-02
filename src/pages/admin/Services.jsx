@@ -3,8 +3,9 @@ import { db } from '../../firebase/config';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { Edit2, Eye, EyeOff, Plus, Trash2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import MediaUploader from '../../components/admin/MediaUploader';
 
-const emptyService = { title: '', desc: '', price: '', icon: '📱', bg: 's1', hidden: false };
+const emptyService = { title: '', desc: '', price: '', icon: '📱', imageUrl: '', bg: 's1', hidden: false };
 
 const ServicesManager = () => {
   const [services, setServices] = useState([]);
@@ -85,10 +86,10 @@ const ServicesManager = () => {
         {loading ? <p style={{ color: 'var(--adm-dim)' }}>Loading services...</p> : (
           <div style={{ overflowX: 'auto' }}>
             <table className="data-table">
-              <thead><tr><th>Icon</th><th>Service Title</th><th>Price Tag</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Visual</th><th>Service Title</th><th>Price Tag</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>{services.map(service => (
                 <tr key={service.id} style={{ opacity: service.hidden ? 0.55 : 1 }}>
-                  <td style={{ fontSize: '1.5rem' }}>{service.icon}</td>
+                  <td><div className="service-admin-visual">{service.imageUrl ? <img src={service.imageUrl} alt="" /> : <span>{service.icon}</span>}</div></td>
                   <td style={{ fontWeight: 700 }}>{service.title}</td>
                   <td style={{ color: 'var(--adm-red)', fontWeight: 700 }}>{service.price}</td>
                   <td><span className={`badge-status ${service.hidden ? 'badge-hidden' : 'badge-active'}`}>{service.hidden ? 'Hidden' : 'Visible'}</span></td>
@@ -116,6 +117,7 @@ const ServicesManager = () => {
               </div>
               <div style={{ marginTop: '1rem' }}><label>Title</label><input className="admin-input" value={formData.title} onChange={event => setFormData({ ...formData, title: event.target.value })} required /></div>
               <div style={{ marginTop: '1rem' }}><label>Description</label><textarea className="admin-input" rows="4" value={formData.desc} onChange={event => setFormData({ ...formData, desc: event.target.value })} required /></div>
+              <div style={{ marginTop: '1rem' }}><MediaUploader label="Service Image" value={formData.imageUrl} accept="image/*" folder="creatifybd/services" helperText="Drop a service visual, browse, or use a direct link." onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} /></div>
               <div className="admin-modal-actions">
                 <button type="button" className="admin-btn-secondary" onClick={closeModal} disabled={saving}>Cancel</button>
                 <button type="submit" className="admin-btn" disabled={saving}>{saving ? 'Saving...' : editingId ? 'Update Service' : 'Create Service'}</button>
@@ -130,6 +132,7 @@ const ServicesManager = () => {
         .admin-modal-close{position:absolute;right:1.25rem;top:1.25rem;width:36px;height:36px;border-radius:8px;background:var(--adm-bg);border:1px solid var(--adm-border);color:var(--adm-text);display:grid;place-items:center;cursor:pointer}
         .admin-modal-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem}
         .admin-modal-actions button{min-width:128px;justify-content:center}
+        .service-admin-visual{width:72px;height:52px;border-radius:8px;background:var(--adm-bg);display:grid;place-items:center;overflow:hidden;font-size:1.4rem}.service-admin-visual img{width:100%;height:100%;object-fit:cover}
       `}</style>
     </div>
   );

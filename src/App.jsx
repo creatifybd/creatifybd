@@ -82,6 +82,8 @@ function AppContent() {
   });
 
   useEffect(() => {
+    if (location.pathname.startsWith('/admin') || location.pathname === '/login') return undefined;
+
     const lenis = new Lenis({
       duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -93,14 +95,18 @@ function AppContent() {
       touchMultiplier: 2,
     });
 
+    let frameId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frameId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
-    return () => lenis.destroy();
-  }, []);
+    frameId = requestAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(frameId);
+      lenis.destroy();
+    };
+  }, [location.pathname]);
 
   return (
     <>
