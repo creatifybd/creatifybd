@@ -9,7 +9,7 @@ import PackageComparison from '../../components/PackageComparison';
 import GigCard from '../../components/GigCard';
 import { getGigBySlug, gigs, categories } from '../../data/gigs';
 import { db } from '../../firebase/config';
-import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { collection, query, where, getDocs, limit, doc, getDoc } from 'firebase/firestore';
 import { 
   Star, 
   ChevronRight, 
@@ -31,9 +31,29 @@ const GigDetailPage = () => {
   const [deliveredWorks, setDeliveredWorks] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loadingMedia, setLoadingMedia] = useState(true);
+  const [gigOverrideLoading, setGigOverrideLoading] = useState(true);
+  const [gigIsActive, setGigIsActive] = useState(true);
 
   useEffect(() => {
     if (!gig) return;
+
+    const fetchGigOverride = async () => {
+      setGigOverrideLoading(true);
+      try {
+        const snap = await getDoc(doc(db, 'gig_overrides', gig.id));
+        const active = snap.exists() && typeof snap.data().active === 'boolean'
+          ? snap.data().active
+          : gig.status === 'active';
+        setGigIsActive(active);
+      } catch (err) {
+        console.error('Error fetching gig override:', err);
+        setGigIsActive(gig.status === 'active');
+      } finally {
+        setGigOverrideLoading(false);
+      }
+    };
+
+    fetchGigOverride();
 
     const fetchRelatedMedia = async () => {
       try {
@@ -68,6 +88,10 @@ const GigDetailPage = () => {
   }, [gig]);
 
   if (!gig) {
+    return <Navigate to="/gigs" replace />;
+  }
+
+  if (!gigOverrideLoading && !gigIsActive) {
     return <Navigate to="/gigs" replace />;
   }
 

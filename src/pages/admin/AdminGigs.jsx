@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { gigs as gigDatabase, categories } from '../../data/gigs';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { db } from '../../firebase/config';
+import { collection, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { 
   ExternalLink, Star, Package, Eye, ToggleLeft, ToggleRight, 
   Search, Filter, ChevronDown
@@ -12,11 +15,39 @@ const AdminGigs = () => {
   const [gigStatuses, setGigStatuses] = useState(
     Object.fromEntries(gigDatabase.map(g => [g.id, g.status === 'active']))
   );
+  const [savingGig, setSavingGig] = useState(null);
 
-  const toggleGig = (id) => {
-    setGigStatuses(prev => ({ ...prev, [id]: !prev[id] }));
-    // NOTE: This currently updates local state only. 
-    // To persist: update a Firestore 'gig_overrides' collection.
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'gig_overrides'), (snap) => {
+      setGigStatuses(prev => {
+        const next = { ...prev };
+        snap.docs.forEach(item => {
+          const data = item.data();
+          if (typeof data.active === 'boolean') next[item.id] = data.active;
+        });
+        return next;
+      });
+    });
+    return () => unsub();
+  }, []);
+
+  const toggleGig = async (id) => {
+    const nextActive = !gigStatuses[id];
+    setGigStatuses(prev => ({ ...prev, [id]: nextActive }));
+    setSavingGig(id);
+    try {
+      await setDoc(doc(db, 'gig_overrides', id), {
+        active: nextActive,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast.success(nextActive ? 'Gig published' : 'Gig paused');
+    } catch (err) {
+      console.error(err);
+      setGigStatuses(prev => ({ ...prev, [id]: !nextActive }));
+      toast.error('Could not update gig status');
+    } finally {
+      setSavingGig(null);
+    }
   };
 
   const filtered = gigDatabase.filter(gig => {
@@ -123,6 +154,7 @@ const AdminGigs = () => {
                   <button
                     type="button"
                     onClick={() => toggleGig(gig.id)}
+                    disabled={savingGig === gig.id}
                     className={`status-toggle-btn ${gigStatuses[gig.id] ? 'active' : 'inactive'}`}
                     title={gigStatuses[gig.id] ? 'Click to deactivate' : 'Click to activate'}
                   >

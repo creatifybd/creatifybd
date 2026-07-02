@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight, CalendarCheck, CheckCircle, Clock, LineChart, MessageSquareText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FadeReveal, SlideReveal, StaggerReveal, StaggerChild, BlurReveal } from './MotionReveal';
+import { useSettings } from '../context/SettingsContext';
 
 const benefits = [
   {
@@ -31,6 +32,16 @@ const calendarDays = [
 ];
 
 const SmmHighlight = () => {
+  const { content } = useSettings();
+  const smmContent = content?.smm_highlight || {};
+  const editableBenefits = Array.isArray(smmContent.benefits) && smmContent.benefits.length
+    ? smmContent.benefits.map((item, index) => ({
+        ...benefits[index % benefits.length],
+        ...item
+      }))
+    : benefits;
+  const metrics = smmContent.metrics || {};
+
   return (
     <section className="smm-highlight-section">
       <div className="container">
@@ -38,19 +49,19 @@ const SmmHighlight = () => {
           <SlideReveal from="left">
             <div>
               <FadeReveal>
-                <span className="eyebrow">Managed Social Media</span>
+                <span className="eyebrow">{smmContent.eyebrow || 'Managed Social Media'}</span>
               </FadeReveal>
               <FadeReveal delay={0.1}>
-                <h2>Monthly social media management for international brands</h2>
+                <h2>{smmContent.title || 'Monthly social media management for international brands'}</h2>
               </FadeReveal>
               <FadeReveal delay={0.2}>
                 <p className="smm-lead">
-                  A dedicated creative workflow for founders who need consistent, polished social media without hiring a full in-house team. We plan, design, write, schedule, and report, so your business stays active and trustworthy every week.
+                  {smmContent.lead || 'A dedicated creative workflow for founders who need consistent, polished social media without hiring a full in-house team. We plan, design, write, schedule, and report, so your business stays active and trustworthy every week.'}
                 </p>
               </FadeReveal>
 
               <StaggerReveal delay={0.25} stagger={0.1} className="smm-benefits-list">
-                {benefits.map((item) => (
+                {editableBenefits.map((item) => (
                   <StaggerChild key={item.title}>
                     <div className="smm-benefit-item">
                       <div className="smm-benefit-icon">{item.icon}</div>
@@ -65,7 +76,7 @@ const SmmHighlight = () => {
 
               <FadeReveal delay={0.5}>
                 <Link to="/services" className="btn-red smm-cta">
-                  Explore SMM Packages <ArrowRight size={16} />
+                  {smmContent.cta_label || 'Explore SMM Packages'} <ArrowRight size={16} />
                 </Link>
               </FadeReveal>
             </div>
@@ -75,19 +86,19 @@ const SmmHighlight = () => {
             <BlurReveal delay={0.3}>
               <div className="smm-visuals" aria-label="Social media management deliverables">
                 <div className="smm-panel-header">
-                  <span>Monthly Growth Board</span>
-                  <strong className="smm-status-badge">Ready for Review</strong>
+                  <span>{smmContent.board_title || 'Monthly Growth Board'}</span>
+                  <strong className="smm-status-badge">{smmContent.status || 'Ready for Review'}</strong>
                 </div>
                 <div className="smm-metrics-grid">
                   <div className="smm-metric-item">
-                    <small>Content pieces</small>
-                    <strong>30</strong>
-                    <span>Posts, stories, reels</span>
+                    <small>{metrics.left_label || 'Content pieces'}</small>
+                    <strong>{metrics.left_value || '30'}</strong>
+                    <span>{metrics.left_note || 'Posts, stories, reels'}</span>
                   </div>
                   <div className="smm-metric-item">
-                    <small>Platforms</small>
-                    <strong>3</strong>
-                    <span>Instagram, Facebook, LinkedIn</span>
+                    <small>{metrics.right_label || 'Platforms'}</small>
+                    <strong>{metrics.right_value || '3'}</strong>
+                    <span>{metrics.right_note || 'Instagram, Facebook, LinkedIn'}</span>
                   </div>
                 </div>
                 <div className="smm-calendar-card">
@@ -102,7 +113,7 @@ const SmmHighlight = () => {
                   ))}
                 </div>
                 <div className="smm-note">
-                  <strong>Included:</strong> content calendar, branded templates, short-form video direction, caption writing, scheduling support, and analytics.
+                  <strong>Included:</strong> {smmContent.included || 'content calendar, branded templates, short-form video direction, caption writing, scheduling support, and analytics.'}
                 </div>
               </div>
             </BlurReveal>

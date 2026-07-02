@@ -15,14 +15,19 @@ const Hero = () => {
   const { content } = useSettings();
   const t = translations[lang].hero;
   const heroContent = content?.hero || {};
+  const heroTitle = heroContent.title || t.title;
+  const heroEyebrow = heroContent.eyebrow || t.eyebrow;
+  const heroDesc = heroContent.desc || t.desc;
+  const heroPrimaryCta = heroContent.cta1 || t.cta1;
+  const heroSecondaryCta = heroContent.cta2 || t.cta3;
 
   const sanitizedTitle = useMemo(() => {
-    const rawHtml = t.title;
+    const rawHtml = heroTitle;
     return DOMPurify.sanitize(rawHtml, {
       ALLOWED_TAGS: ['span', 'br', 'strong', 'em'],
       ALLOWED_ATTR: ['class']
     });
-  }, [t.title]);
+  }, [heroTitle]);
 
   return (
     <section className="hero">
@@ -39,7 +44,7 @@ const Hero = () => {
           >
             <div className="hero-eyebrow">
               <span className="pulse-dot" />
-              {t.eyebrow}
+              {heroEyebrow}
             </div>
           </motion.div>
 
@@ -53,7 +58,7 @@ const Hero = () => {
           />
 
           <FadeReveal delay={0.22}>
-            <p className="hero-sub">{t.desc}</p>
+            <p className="hero-sub">{heroDesc}</p>
           </FadeReveal>
 
           {/* CTAs with magnetic pull */}
@@ -61,13 +66,13 @@ const Hero = () => {
             <div className="hero-actions">
               <MagneticWrap strength={0.22}>
                 <Link to="/gigs" className="btn-red premium-btn">
-                  {t.cta1}
+                  {heroPrimaryCta}
                   <ArrowRight size={18} />
                 </Link>
               </MagneticWrap>
               <MagneticWrap strength={0.18}>
                 <Link to="/contact" className="btn-outline-dark premium-btn-outline">
-                  {t.cta3}
+                  {heroSecondaryCta}
                 </Link>
               </MagneticWrap>
             </div>

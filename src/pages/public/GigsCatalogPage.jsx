@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
@@ -6,6 +6,8 @@ import GigCard from '../../components/GigCard';
 import { gigs, categories } from '../../data/gigs';
 import { Search, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { db } from '../../firebase/config';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -16,10 +18,27 @@ const GigsCatalogPage = () => {
   const [budgetRange, setBudgetRange] = useState('any');
   const [frequency, setFrequency] = useState('all');
   const [sortBy, setSortBy] = useState('recommended');
+  const [gigOverrides, setGigOverrides] = useState({});
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'gig_overrides'), (snap) => {
+      const next = {};
+      snap.docs.forEach(item => {
+        const data = item.data();
+        if (typeof data.active === 'boolean') next[item.id] = data.active;
+      });
+      setGigOverrides(next);
+    }, (err) => {
+      console.error('Failed to load gig overrides:', err);
+    });
+    return () => unsub();
+  }, []);
 
   const filteredGigs = useMemo(() => {
     return gigs
       .filter((gig) => {
+        const isActive = gigOverrides[gig.id] ?? (gig.status === 'active');
+        if (!isActive) return false;
         const matchesSearch =
           gig.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           gig.overview.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -56,7 +75,7 @@ const GigsCatalogPage = () => {
         }
         return b.rating * b.reviewCount - a.rating * a.reviewCount;
       });
-  }, [searchQuery, selectedCat, maxDelivery, budgetRange, frequency, sortBy]);
+  }, [searchQuery, selectedCat, maxDelivery, budgetRange, frequency, sortBy, gigOverrides]);
 
   const resetFilters = () => {
     setSearchQuery('');

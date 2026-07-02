@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FileSearch, Lightbulb, PenTool, Rocket } from 'lucide-react';
 import { FadeReveal, SlideReveal } from './MotionReveal';
 import { motion } from 'framer-motion';
+import { useSettings } from '../context/SettingsContext';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -34,26 +35,32 @@ const steps = [
 ];
 
 const Process = ({ highlight = false, fullPage = false }) => {
+  const { content } = useSettings();
+  const processContent = content?.process || {};
+  const editableSteps = Array.isArray(processContent.steps) && processContent.steps.length
+    ? processContent.steps.map((step, index) => ({ ...steps[index % steps.length], ...step }))
+    : steps;
+
   return (
     <section className={`section process-section ${fullPage ? 'full-page-section' : ''}`} id="process">
       <div className="container">
         {!fullPage && (
           <div className="process-header">
             <FadeReveal>
-              <div className="eyebrow">Our Workflow</div>
+              <div className="eyebrow">{processContent.eyebrow || 'Our Workflow'}</div>
             </FadeReveal>
             <SlideReveal delay={0.1}>
-              <h2 className="section-h">A clear process from first brief to final delivery</h2>
+              <h2 className="section-h">{processContent.title || 'A clear process from first brief to final delivery'}</h2>
             </SlideReveal>
             <FadeReveal delay={0.2}>
-              <p className="section-sub">Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.</p>
+              <p className="section-sub">{processContent.subtitle || 'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.'}</p>
             </FadeReveal>
           </div>
         )}
 
         {/* Keep the native CSS grid — animate each article directly */}
         <div className="process-grid-light">
-          {steps.map((step, index) => (
+          {editableSteps.map((step, index) => (
             <motion.article
               key={step.num}
               className="process-step-card"

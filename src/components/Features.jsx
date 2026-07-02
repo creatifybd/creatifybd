@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart3, Clock3, Globe2, ShieldCheck } from 'lucide-react';
 import { FadeReveal, StaggerReveal, StaggerChild, ScaleReveal, CountUp, SlideReveal } from './MotionReveal';
+import { useSettings } from '../context/SettingsContext';
 
 const featureItems = [
   {
@@ -26,6 +27,22 @@ const featureItems = [
 ];
 
 const Features = () => {
+  const { content } = useSettings();
+  const featuresContent = content?.features || {};
+  const editableItems = Array.isArray(featuresContent.items) && featuresContent.items.length
+    ? featuresContent.items.map((item, index) => ({ ...featureItems[index % featureItems.length], ...item }))
+    : featureItems;
+  const visualStats = Array.isArray(featuresContent.stats) && featuresContent.stats.length
+    ? featuresContent.stats
+    : [
+        { value: '100+', label: 'Projects delivered' },
+        { value: '5.0*', label: 'Client rating target' },
+        { value: '24h', label: 'Typical response window' }
+      ];
+  const badges = Array.isArray(featuresContent.badges) && featuresContent.badges.length
+    ? featuresContent.badges
+    : ['Social Media Management', 'Graphic Design', 'Video Editing', 'Digital Marketing', 'Website Design'];
+
   return (
     <section className="section features-section" id="why">
       <div className="container">
@@ -33,19 +50,19 @@ const Features = () => {
           <SlideReveal from="left">
             <div>
               <FadeReveal>
-                <div className="eyebrow">Why CreatifyBD</div>
+                <div className="eyebrow">{featuresContent.eyebrow || 'Why CreatifyBD'}</div>
               </FadeReveal>
               <FadeReveal delay={0.1}>
-                <h2 className="section-h">A reliable creative team without agency overhead</h2>
+                <h2 className="section-h">{featuresContent.title || 'A reliable creative team without agency overhead'}</h2>
               </FadeReveal>
               <FadeReveal delay={0.2}>
                 <p className="section-sub">
-                  We combine structured creative operations with international service standards, giving brands dependable creative output at practical monthly pricing.
+                  {featuresContent.subtitle || 'We combine structured creative operations with international service standards, giving brands dependable creative output at practical monthly pricing.'}
                 </p>
               </FadeReveal>
 
               <StaggerReveal delay={0.3} stagger={0.1} className="feature-list">
-                {featureItems.map((item) => (
+                {editableItems.map((item) => (
                   <StaggerChild key={item.title}>
                     <div className="feature-item">
                       <div className="feature-icon-wrap">{item.icon}</div>
@@ -64,29 +81,27 @@ const Features = () => {
             <div className="features-visual">
               <ScaleReveal delay={0.25}>
                 <div className="feat-card-big">
-                  <h3>Creative operations built for recurring growth</h3>
+                  <h3>{featuresContent.visual_title || 'Creative operations built for recurring growth'}</h3>
                   <div className="feat-stats">
-                    <div className="feat-stat">
-                      <div className="feat-stat-val">
-                        <CountUp to={100} suffix="+" duration={2} />
+                    {visualStats.slice(0, 3).map((stat, index) => {
+                      const statValue = stat.value || stat.val || '';
+                      return (
+                      <div className="feat-stat" key={`${statValue}-${stat.label}`}>
+                        <div className="feat-stat-val">
+                          {index === 0 && /^\d+\+$/.test(statValue)
+                            ? <CountUp to={Number(statValue.replace('+', ''))} suffix="+" duration={2} />
+                            : statValue
+                          }
+                        </div>
+                        <div className="feat-stat-label">{stat.label}</div>
                       </div>
-                      <div className="feat-stat-label">Projects delivered</div>
-                    </div>
-                    <div className="feat-stat">
-                      <div className="feat-stat-val">5.0<em>*</em></div>
-                      <div className="feat-stat-label">Client rating target</div>
-                    </div>
-                    <div className="feat-stat">
-                      <div className="feat-stat-val">24<em>h</em></div>
-                      <div className="feat-stat-label">Typical response window</div>
-                    </div>
+                      );
+                    })}
                   </div>
                   <div className="badge-row">
-                    <span className="badge hot">Social Media Management</span>
-                    <span className="badge">Graphic Design</span>
-                    <span className="badge">Video Editing</span>
-                    <span className="badge">Digital Marketing</span>
-                    <span className="badge">Website Design</span>
+                    {badges.map((badge, index) => (
+                      <span className={`badge ${index === 0 ? 'hot' : ''}`} key={badge}>{badge}</span>
+                    ))}
                   </div>
                 </div>
               </ScaleReveal>

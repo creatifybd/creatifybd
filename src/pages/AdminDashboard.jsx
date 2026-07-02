@@ -71,6 +71,13 @@ const AdminDashboard = () => {
   const [cmdQuery, setCmdQuery] = React.useState('');
 
   React.useEffect(() => {
+    document.body.classList.add('admin-body');
+    return () => {
+      document.body.classList.remove('admin-body');
+    };
+  }, []);
+
+  React.useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
 

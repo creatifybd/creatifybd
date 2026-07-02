@@ -73,16 +73,16 @@ const Home = () => {
 
       <Navbar />
       {content?.visibility?.hero !== false && <Hero />}
-      <IntroBand />
+      {content?.visibility?.intro_band !== false && <IntroBand />}
       
       {content?.visibility?.clients !== false && <Clients />}
       
-      <SmmHighlight />
+      {content?.visibility?.smm_highlight !== false && <SmmHighlight />}
       {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
       {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
-      <AboutTrust />
+      {content?.visibility?.about_trust !== false && <AboutTrust />}
       {content?.visibility?.portfolio !== false && <Portfolio highlight={true} theme={content?.portfolio?.theme} />}
-      <CaseStudies />
+      {content?.visibility?.case_studies !== false && <CaseStudies />}
       {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
       {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
       
