@@ -1796,6 +1796,16 @@
     text-transform: uppercase !important;
   }
 
+  body:not(.admin-body) .about-ceo-portrait img,
+  body:not(.admin-body) .ceo-portrait-card img {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 112px !important;
+    display: block !important;
+    object-fit: cover !important;
+    border-radius: inherit !important;
+  }
+
   body:not(.admin-body) .ceo-quote-with-image blockquote {
     margin: 0 !important;
   }

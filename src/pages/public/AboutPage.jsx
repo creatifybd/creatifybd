@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import { Award, Building2, Globe, MonitorPlay, Quote, ShieldCheck, Sparkles, Users, Video } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 const teamMembers = [
   {
@@ -55,6 +56,41 @@ const agencyMoments = [
 ];
 
 const AboutPage = () => {
+  const { content } = useSettings();
+  const aboutContent = content?.about_trust || {};
+  const ceoName = aboutContent.ceo_name || 'B. I. N. Shad';
+  const ceoRole = aboutContent.ceo_role || 'Founder & CEO';
+  const ceoInitials = ceoName.split(' ').map(part => part[0]).join('').slice(0, 2) || 'BS';
+  const displayTeamMembers = teamMembers.map((member, index) => (
+    index === 0
+      ? {
+          ...member,
+          name: ceoName,
+          role: ceoRole,
+          image: aboutContent.ceo_image || member.image
+        }
+      : member
+  ));
+  const displayAgencyMoments = agencyMoments.map((moment, index) => {
+    const cmsImage = [
+      aboutContent.office_image,
+      aboutContent.team_image,
+      aboutContent.meeting_image,
+      aboutContent.office_image
+    ][index];
+    const cmsTitle = [
+      aboutContent.office_caption,
+      aboutContent.team_caption,
+      aboutContent.meeting_caption,
+      'Delivery quality review'
+    ][index];
+    return {
+      ...moment,
+      title: cmsTitle || moment.title,
+      image: cmsImage || moment.image
+    };
+  });
+
   return (
     <div className="about-page">
       <SEO
@@ -84,15 +120,21 @@ const AboutPage = () => {
               </p>
               <div className="ceo-quote about-ceo-feature">
                 <div className="about-ceo-portrait" aria-label="Founder profile visual">
-                  <span>BS</span>
-                  <Sparkles size={18} />
+                  {aboutContent.ceo_image ? (
+                    <img src={aboutContent.ceo_image} alt={`${ceoName}, ${ceoRole}`} loading="lazy" />
+                  ) : (
+                    <>
+                      <span>{ceoInitials}</span>
+                      <Sparkles size={18} />
+                    </>
+                  )}
                 </div>
                 <div>
                   <Quote size={22} />
                   <p>
-                    "Our goal is to make high-quality creative support accessible for brands that want to look trustworthy in front of customers in the USA, Canada, Australia, and beyond."
+                    "{aboutContent.ceo_quote || 'Our goal is to make high-quality creative support accessible for brands that want to look trustworthy in front of customers in the USA, Canada, Australia, and beyond.'}"
                   </p>
-                  <strong>B. I. N. Shad, Founder & CEO</strong>
+                  <strong>{ceoName}, {ceoRole}</strong>
                 </div>
               </div>
             </div>
@@ -116,7 +158,7 @@ const AboutPage = () => {
               </p>
             </div>
             <div className="office-gallery-grid agency-moments-grid">
-              {agencyMoments.map((moment, index) => (
+              {displayAgencyMoments.map((moment, index) => (
                 <figure key={moment.title} className={index === 0 ? 'moment-large' : ''}>
                   <img src={moment.image} alt={`CreatifyBD ${moment.title.toLowerCase()}`} />
                   <figcaption>{moment.icon} {moment.title}</figcaption>
@@ -133,7 +175,7 @@ const AboutPage = () => {
               <h2 className="section-h">The specialists behind each delivery</h2>
             </div>
             <div className="about-team-grid">
-              {teamMembers.map(member => (
+              {displayTeamMembers.map(member => (
                 <article key={member.name} className="about-team-card">
                   <div className="member-avatar member-photo">
                     {member.image ? (
