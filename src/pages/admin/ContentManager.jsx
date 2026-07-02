@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { db } from '../../firebase/config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { uploadImage } from '../../utils/imgbb';
+import { uploadImage } from '../../utils/cloudinary';
 import {
   Briefcase,
   Eye,

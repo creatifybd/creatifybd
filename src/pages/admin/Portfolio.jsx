@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getData, addData, updateData, deleteData } from '../../firebase/services';
-import { uploadImage } from '../../utils/imgbb';
+import { uploadImage } from '../../utils/cloudinary';
 import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, CloudCheck } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const PortfolioManager = () => {
   const [items, setItems] = useState([]);
@@ -10,6 +11,7 @@ const PortfolioManager = () => {
   const [progress, setProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({ title: '', category: '', imageUrl: '', hidden: false });
 
   const fetchItems = async () => {
@@ -53,17 +55,26 @@ const PortfolioManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.imageUrl) return alert('Please upload an image first');
+    setSaving(true);
     try {
+      const { id, createdAt, updatedAt, ...payload } = formData;
       if (editingId) {
-        await updateData('portfolio', editingId, formData);
+        await updateData('portfolio', editingId, payload);
       } else {
-        await addData('portfolio', formData);
+        await addData('portfolio', payload);
       }
-      setIsModalOpen(false);
-      setEditingId(null);
-      setFormData({ title: '', category: '', imageUrl: '', hidden: false });
+      setSaving(false);
+      closeModal();
       fetchItems(); // Refresh list
     } catch (err) { console.error(err); }
+    finally { setSaving(false); }
+  };
+
+  const closeModal = () => {
+    if (uploading || saving) return;
+    setIsModalOpen(false);
+    setEditingId(null);
+    setFormData({ title: '', category: '', imageUrl: '', hidden: false });
   };
 
   const handleDelete = async (id) => {
@@ -110,7 +121,7 @@ const PortfolioManager = () => {
       {isModalOpen && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div className="admin-card" style={{ width: '100%', maxWidth: '500px', position: 'relative' }}>
-            <button onClick={() => setIsModalOpen(false)} style={{ position: 'absolute', right: '1.5rem', top: '1.5rem', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}><X /></button>
+            <button type="button" onClick={closeModal} aria-label="Close dialog" style={{ position: 'absolute', right: '1.25rem', top: '1.25rem', width: '36px', height: '36px', borderRadius: '8px', background: 'var(--adm-bg)', border: '1px solid var(--adm-border)', color: 'var(--adm-text)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><X size={18} /></button>
             <h2 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Portfolio Item' : 'Add Portfolio Item'}</h2>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1.5rem' }}>
@@ -150,7 +161,10 @@ const PortfolioManager = () => {
               </div>
               <div style={{ marginBottom: '1rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Project Title</label><input className="admin-input" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="e.g. Fashion Brand Identity" required /></div>
               <div style={{ marginBottom: '1.5rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Category</label><input className="admin-input" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="e.g. Branding / Photography" required /></div>
-              <button type="submit" className="admin-btn" style={{ width: '100%', padding: '1rem', fontWeight: 800 }} disabled={uploading}>{editingId ? 'Update Item' : 'Publish to Portfolio'}</button>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button type="button" className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={closeModal} disabled={uploading || saving}>Cancel</button>
+                <button type="submit" className="admin-btn" style={{ flex: 2, padding: '1rem', fontWeight: 800 }} disabled={uploading || saving}>{saving ? 'Saving...' : editingId ? 'Update Item' : 'Publish to Portfolio'}</button>
+              </div>
             </form>
           </div>
         </div>

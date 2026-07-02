@@ -24,8 +24,7 @@ const GigsCatalogPage = () => {
     const unsub = onSnapshot(collection(db, 'gig_overrides'), (snap) => {
       const next = {};
       snap.docs.forEach(item => {
-        const data = item.data();
-        if (typeof data.active === 'boolean') next[item.id] = data.active;
+        next[item.id] = item.data();
       });
       setGigOverrides(next);
     }, (err) => {
@@ -36,8 +35,9 @@ const GigsCatalogPage = () => {
 
   const filteredGigs = useMemo(() => {
     return gigs
+      .map(gig => ({ ...gig, ...(gigOverrides[gig.id] || {}) }))
       .filter((gig) => {
-        const isActive = gigOverrides[gig.id] ?? (gig.status === 'active');
+        const isActive = typeof gig.active === 'boolean' ? gig.active : gig.status === 'active';
         if (!isActive) return false;
         const matchesSearch =
           gig.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

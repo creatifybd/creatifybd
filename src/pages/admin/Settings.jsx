@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { getSettings, updateSettings } from '../../firebase/services';
-import { uploadImage } from '../../utils/imgbb';
+import { uploadImage } from '../../utils/cloudinary';
 import { Globe, Phone, Mail, Share2, AtSign, Search, Save, RefreshCw, Upload, Palette, Image as ImageIcon } from 'lucide-react';
 
 const defaultSettings = {
@@ -21,6 +21,8 @@ const defaultSettings = {
   seo_description: 'CreatifyBD is a leading creative agency in Dhaka providing social media marketing, professional photography, web development, and branding services.',
   seo_keywords: 'creative agency dhaka, digital marketing bangladesh, social media management dhaka',
   lang: 'en',
+  cloudinary_cloud_name: '',
+  cloudinary_upload_preset: '',
 };
 
 const SettingsManager = () => {
@@ -55,8 +57,10 @@ const SettingsManager = () => {
 
     setUploading(fieldName);
     try {
-      // Use ImgBB for all uploads as requested. Smart compression is handled in the utility.
-      const downloadURL = await uploadImage(file);
+      const downloadURL = await uploadImage(file, undefined, {
+        cloudName: settings.cloudinary_cloud_name,
+        uploadPreset: settings.cloudinary_upload_preset
+      });
       
       const updatedSettings = { ...settings, [fieldName]: downloadURL };
       setSettings(updatedSettings);
@@ -105,7 +109,7 @@ const SettingsManager = () => {
       {/* Header */}
       <div className="admin-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'white', marginBottom: '0.25rem' }}>Global CMS & Settings</h1>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--adm-text)', marginBottom: '0.25rem' }}>Global CMS & Settings</h1>
           <p style={{ color: 'var(--adm-dim)', fontSize: '0.85rem' }}>Full control over branding, theme, and site identity.</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -120,7 +124,7 @@ const SettingsManager = () => {
       <div className="admin-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '2rem' }}>
           <ImageIcon size={18} color="var(--adm-red)" />
-          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'white' }}>Logo & Identity</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>Logo & Identity</h2>
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
@@ -155,7 +159,7 @@ const SettingsManager = () => {
       <div className="admin-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.5rem' }}>
           <Palette size={18} color="var(--adm-red)" />
-          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'white' }}>Theme Customization</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>Theme Customization</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
           <div>
@@ -179,7 +183,7 @@ const SettingsManager = () => {
       <div className="admin-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.5rem' }}>
           <Globe size={18} color="var(--adm-red)" />
-          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'white' }}>Site Details</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>Site Details</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
           <SettingField label="Site Name" name="site_name" value={settings.site_name} onChange={handleChange} />
@@ -193,11 +197,25 @@ const SettingsManager = () => {
       <div className="admin-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.5rem' }}>
           <Search size={18} color="var(--adm-red)" />
-          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'white' }}>SEO & Meta</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>SEO & Meta</h2>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           <SettingField label="SEO Title" name="seo_title" value={settings.seo_title} onChange={handleChange} />
           <SettingField label="SEO Description" name="seo_description" value={settings.seo_description} onChange={handleChange} isTextarea />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+          <ImageIcon size={18} color="var(--adm-red)" />
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>Cloudinary Media Delivery</h2>
+        </div>
+        <p style={{ color: 'var(--adm-dim)', fontSize: '0.82rem', marginBottom: '1.25rem' }}>
+          Enter an unsigned upload preset. Never enter a Cloudinary API secret in the dashboard.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+          <SettingField label="Cloud Name" name="cloudinary_cloud_name" value={settings.cloudinary_cloud_name} onChange={handleChange} placeholder="your-cloud-name" />
+          <SettingField label="Unsigned Upload Preset" name="cloudinary_upload_preset" value={settings.cloudinary_upload_preset} onChange={handleChange} placeholder="creatifybd_unsigned" />
         </div>
       </div>
 
@@ -233,7 +251,7 @@ const SettingField = ({ label, name, value, onChange, placeholder = '', isTextar
     {isTextarea ? (
       <textarea name={name} value={value} onChange={onChange} rows={3} className="admin-input" />
     ) : (
-      <input type="text" name={name} value={value} onChange={onChange} className="admin-input" />
+      <input type="text" name={name} value={value} onChange={onChange} placeholder={placeholder} className="admin-input" />
     )}
   </div>
 );

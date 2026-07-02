@@ -537,7 +537,7 @@ const PaymentVerification = () => {
         .admin-page-header h1 {
           font-size: 2rem;
           font-weight: 700;
-          color: white;
+          color: var(--adm-text);
           margin-bottom: 0.5rem;
         }
 
@@ -558,7 +558,7 @@ const PaymentVerification = () => {
         .search-group {
           display: flex;
           align-items: center;
-          background: rgba(255,255,255,0.05);
+          background: var(--adm-surface);
           border: 1px solid var(--adm-border);
           border-radius: 8px;
           padding: 0.5rem 1rem;
@@ -568,7 +568,7 @@ const PaymentVerification = () => {
         .search-input {
           background: transparent;
           border: none;
-          color: white;
+          color: var(--adm-text);
           font-size: 0.9rem;
           outline: none;
         }
@@ -588,7 +588,7 @@ const PaymentVerification = () => {
         }
 
         .stat-card {
-          background: rgba(255,255,255,0.05);
+          background: var(--adm-surface);
           border: 1px solid var(--adm-border);
           border-radius: 8px;
           padding: 0.75rem 1.25rem;
@@ -611,7 +611,7 @@ const PaymentVerification = () => {
         .stat-value {
           font-size: 1.5rem;
           font-weight: 700;
-          color: white;
+          color: var(--adm-text);
         }
 
         .stat-label {
@@ -637,7 +637,7 @@ const PaymentVerification = () => {
         }
 
         .payments-table-wrapper {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-surface);
           border: 1px solid var(--adm-border);
           border-radius: 12px;
           overflow-x: auto;
@@ -649,7 +649,7 @@ const PaymentVerification = () => {
         }
 
         .payments-table thead {
-          background: rgba(255,255,255,0.05);
+          background: var(--adm-bg);
         }
 
         .payments-table th {
@@ -665,12 +665,12 @@ const PaymentVerification = () => {
         .payments-table td {
           padding: 1rem;
           border-bottom: 1px solid var(--adm-border);
-          color: white;
+          color: var(--adm-text);
           font-size: 0.9rem;
         }
 
         .payments-table tr:hover {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
         }
 
         .client-cell {
@@ -694,9 +694,9 @@ const PaymentVerification = () => {
         }
 
         .action-btn {
-          background: rgba(255,255,255,0.05);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
-          color: white;
+          color: var(--adm-text);
           padding: 0.5rem;
           border-radius: 6px;
           cursor: pointer;
@@ -722,7 +722,7 @@ const PaymentVerification = () => {
         }
 
         .modal-content {
-          background: #1a1a1a;
+          background: var(--adm-surface);
           border: 1px solid var(--adm-border);
           border-radius: 16px;
           max-width: 800px;
@@ -742,7 +742,7 @@ const PaymentVerification = () => {
         .modal-header h2 {
           font-size: 1.5rem;
           font-weight: 700;
-          color: white;
+          color: var(--adm-text);
           margin: 0;
         }
 
@@ -757,8 +757,8 @@ const PaymentVerification = () => {
         }
 
         .close-btn:hover {
-          background: rgba(255,255,255,0.05);
-          color: white;
+          background: var(--adm-bg);
+          color: var(--adm-text);
         }
 
         .modal-body {
@@ -772,7 +772,7 @@ const PaymentVerification = () => {
         .detail-section h3 {
           font-size: 1.1rem;
           font-weight: 600;
-          color: white;
+          color: var(--adm-text);
           margin-bottom: 1rem;
         }
 
@@ -793,7 +793,7 @@ const PaymentVerification = () => {
           align-items: center;
           gap: 0.75rem;
           padding: 0.75rem;
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
           border-radius: 8px;
         }
 
@@ -803,7 +803,7 @@ const PaymentVerification = () => {
         }
 
         .detail-value {
-          color: white;
+          color: var(--adm-text);
           font-weight: 500;
         }
 
@@ -811,7 +811,7 @@ const PaymentVerification = () => {
           color: var(--adm-dim);
           line-height: 1.6;
           padding: 1rem;
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
           border-radius: 8px;
         }
 
@@ -840,11 +840,11 @@ const PaymentVerification = () => {
 
         .admin-note-input {
           width: 100%;
-          background: rgba(255,255,255,0.05);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
           border-radius: 8px;
           padding: 0.875rem;
-          color: white;
+          color: var(--adm-text);
           font-size: 0.9rem;
           resize: vertical;
           outline: none;
@@ -900,13 +900,13 @@ const PaymentVerification = () => {
         }
 
         .btn-pending {
-          background: rgba(255,255,255,0.1);
-          color: white;
+          background: var(--adm-bg);
+          color: var(--adm-text);
           border: 1px solid var(--adm-border);
         }
 
         .btn-pending:hover:not(:disabled) {
-          background: rgba(255,255,255,0.15);
+          background: var(--adm-border);
         }
 
         .btn-verify:disabled,

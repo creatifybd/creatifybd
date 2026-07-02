@@ -6,7 +6,7 @@ import { db } from '../../firebase/config';
 import { collection, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { 
   ExternalLink, Star, Package, Eye, ToggleLeft, ToggleRight, 
-  Search, Filter, ChevronDown
+  Search, Filter, Pencil, X
 } from 'lucide-react';
 
 const AdminGigs = () => {
@@ -16,17 +16,26 @@ const AdminGigs = () => {
     Object.fromEntries(gigDatabase.map(g => [g.id, g.status === 'active']))
   );
   const [savingGig, setSavingGig] = useState(null);
+  const [gigOverrides, setGigOverrides] = useState({});
+  const [editingGig, setEditingGig] = useState(null);
+  const [gigForm, setGigForm] = useState({ title: '', shortTitle: '', overview: '', startingPrice: '', coverImage: '' });
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'gig_overrides'), (snap) => {
+      const overrides = {};
       setGigStatuses(prev => {
         const next = { ...prev };
         snap.docs.forEach(item => {
           const data = item.data();
+          overrides[item.id] = data;
           if (typeof data.active === 'boolean') next[item.id] = data.active;
         });
         return next;
       });
+      setGigOverrides(overrides);
+    }, (error) => {
+      console.error(error);
+      toast.error('Could not load gig settings');
     });
     return () => unsub();
   }, []);
@@ -50,7 +59,43 @@ const AdminGigs = () => {
     }
   };
 
-  const filtered = gigDatabase.filter(gig => {
+  const openGigEditor = (gig) => {
+    const resolved = { ...gig, ...(gigOverrides[gig.id] || {}) };
+    setEditingGig(gig);
+    setGigForm({
+      title: resolved.title || '',
+      shortTitle: resolved.shortTitle || '',
+      overview: resolved.overview || '',
+      startingPrice: resolved.startingPrice || '',
+      coverImage: resolved.galleryImages?.[0] || ''
+    });
+  };
+
+  const saveGig = async (event) => {
+    event.preventDefault();
+    if (!editingGig) return;
+    setSavingGig(editingGig.id);
+    const galleryImages = [gigForm.coverImage, ...(editingGig.galleryImages || []).slice(1)].filter(Boolean);
+    try {
+      await setDoc(doc(db, 'gig_overrides', editingGig.id), {
+        title: gigForm.title.trim(),
+        shortTitle: gigForm.shortTitle.trim(),
+        overview: gigForm.overview.trim(),
+        startingPrice: Number(gigForm.startingPrice),
+        galleryImages,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      toast.success('Gig updated on the marketplace');
+      setEditingGig(null);
+    } catch (error) {
+      console.error(error);
+      toast.error('Could not update gig');
+    } finally {
+      setSavingGig(null);
+    }
+  };
+
+  const filtered = gigDatabase.map(gig => ({ ...gig, ...(gigOverrides[gig.id] || {}) })).filter(gig => {
     const matchesSearch = gig.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       gig.slug.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCat = selectedCat === 'all' || gig.category === selectedCat;
@@ -169,9 +214,7 @@ const AdminGigs = () => {
                     <Link to={`/gigs/${gig.slug}`} target="_blank" className="adm-icon-btn" title="View live gig page">
                       <Eye size={15} />
                     </Link>
-                    <div className="adm-icon-btn" title="View packages">
-                      <Package size={15} />
-                    </div>
+                    <button type="button" className="adm-icon-btn" title="Edit gig" onClick={() => openGigEditor(gig)}><Pencil size={15} /></button>
                   </div>
                 </td>
               </tr>
@@ -180,7 +223,40 @@ const AdminGigs = () => {
         </table>
       </div>
 
+      {editingGig && (
+        <div className="gig-editor-overlay" onMouseDown={event => event.target === event.currentTarget && setEditingGig(null)}>
+          <div className="gig-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="gig-editor-title">
+            <button type="button" className="gig-editor-close" onClick={() => setEditingGig(null)} aria-label="Close gig editor"><X size={18} /></button>
+            <h2 id="gig-editor-title">Edit Gig</h2>
+            <p>Changes publish to the catalog and gig detail page.</p>
+            <form onSubmit={saveGig}>
+              <label>Full Title<input className="admin-input" value={gigForm.title} onChange={event => setGigForm({ ...gigForm, title: event.target.value })} required /></label>
+              <label>Short Title<input className="admin-input" value={gigForm.shortTitle} onChange={event => setGigForm({ ...gigForm, shortTitle: event.target.value })} required /></label>
+              <label>Overview<textarea className="admin-input" rows="4" value={gigForm.overview} onChange={event => setGigForm({ ...gigForm, overview: event.target.value })} required /></label>
+              <div className="gig-editor-grid">
+                <label>Starting Price (USD)<input className="admin-input" type="number" min="1" value={gigForm.startingPrice} onChange={event => setGigForm({ ...gigForm, startingPrice: event.target.value })} required /></label>
+                <label>Cover Image URL<input className="admin-input" type="url" value={gigForm.coverImage} onChange={event => setGigForm({ ...gigForm, coverImage: event.target.value })} required /></label>
+              </div>
+              <div className="gig-editor-actions">
+                <button type="button" className="adm-btn-secondary" onClick={() => setEditingGig(null)} disabled={savingGig === editingGig.id}>Cancel</button>
+                <button type="submit" className="adm-btn-primary" disabled={savingGig === editingGig.id}>{savingGig === editingGig.id ? 'Saving...' : 'Save Changes'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <style>{`
+        .gig-editor-overlay{position:fixed;inset:0;background:rgba(15,18,24,.58);display:grid;place-items:center;z-index:1200;padding:1rem}
+        .gig-editor-dialog{width:min(100%,680px);max-height:calc(100vh - 2rem);overflow:auto;background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:12px;padding:2rem;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+        .gig-editor-dialog h2{font-size:1.35rem;color:var(--adm-text)}
+        .gig-editor-dialog>p{color:var(--adm-dim);font-size:.82rem;margin:.35rem 0 1.5rem}
+        .gig-editor-dialog form{display:grid;gap:1rem}
+        .gig-editor-dialog label{display:grid;gap:.45rem;color:var(--adm-text);font-size:.8rem;font-weight:700}
+        .gig-editor-close{position:absolute;right:1.25rem;top:1.25rem;width:36px;height:36px;border-radius:8px;background:var(--adm-bg);border:1px solid var(--adm-border);color:var(--adm-text);display:grid;place-items:center;cursor:pointer}
+        .gig-editor-grid{display:grid;grid-template-columns:180px 1fr;gap:1rem}
+        .gig-editor-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:.5rem}
+        @media(max-width:600px){.gig-editor-grid{grid-template-columns:1fr}.gig-editor-dialog{padding:1.25rem}.gig-editor-actions button{flex:1;justify-content:center}}
         .adm-page-header {
           display: flex;
           justify-content: space-between;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate, Navigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -25,7 +25,7 @@ import {
 const GigDetailPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const gig = getGigBySlug(slug);
+  const baseGig = getGigBySlug(slug);
 
   const [openFaq, setOpenFaq] = useState(null);
   const [deliveredWorks, setDeliveredWorks] = useState([]);
@@ -33,21 +33,25 @@ const GigDetailPage = () => {
   const [loadingMedia, setLoadingMedia] = useState(true);
   const [gigOverrideLoading, setGigOverrideLoading] = useState(true);
   const [gigIsActive, setGigIsActive] = useState(true);
+  const [gigOverride, setGigOverride] = useState({});
+  const gig = useMemo(() => baseGig ? { ...baseGig, ...gigOverride } : null, [baseGig, gigOverride]);
 
   useEffect(() => {
-    if (!gig) return;
+    if (!baseGig) return;
 
     const fetchGigOverride = async () => {
       setGigOverrideLoading(true);
       try {
-        const snap = await getDoc(doc(db, 'gig_overrides', gig.id));
+        const snap = await getDoc(doc(db, 'gig_overrides', baseGig.id));
+        const override = snap.exists() ? snap.data() : {};
+        setGigOverride(override);
         const active = snap.exists() && typeof snap.data().active === 'boolean'
           ? snap.data().active
-          : gig.status === 'active';
+          : baseGig.status === 'active';
         setGigIsActive(active);
       } catch (err) {
         console.error('Error fetching gig override:', err);
-        setGigIsActive(gig.status === 'active');
+        setGigIsActive(baseGig.status === 'active');
       } finally {
         setGigOverrideLoading(false);
       }
@@ -60,7 +64,7 @@ const GigDetailPage = () => {
         // Fetch delivered projects matching this gig slug
         const qProjects = query(
           collection(db, 'portfolio'),
-          where('gigSlug', '==', gig.slug),
+          where('gigSlug', '==', baseGig.slug),
           limit(6)
         );
         const snapProjects = await getDocs(qProjects);
@@ -70,7 +74,7 @@ const GigDetailPage = () => {
         // Fetch approved reviews matching this gig ID
         const qReviews = query(
           collection(db, 'reviews'),
-          where('gigId', '==', gig.id),
+          where('gigId', '==', baseGig.id),
           where('status', '==', 'approved'),
           limit(10)
         );
@@ -85,7 +89,7 @@ const GigDetailPage = () => {
     };
 
     fetchRelatedMedia();
-  }, [gig]);
+  }, [baseGig]);
 
   if (!gig) {
     return <Navigate to="/gigs" replace />;
