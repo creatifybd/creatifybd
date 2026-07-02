@@ -114,45 +114,89 @@ const GigDetailPage = () => {
 
   const categoryName = categories[gig.category]?.name || gig.category;
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": gig.title,
+    "alternateName": gig.shortTitle,
+    "image": gig.galleryImages || [
+      "https://images.unsplash.com/photo-1547658719-da2b81169b7a?q=80&w=1280"
+    ],
+    "description": gig.description,
+    "category": categoryName,
+    "brand": {
+      "@type": "Organization",
+      "name": "CreatifyBD",
+      "url": "https://creatifybd.com"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://creatifybd.com/gigs/${gig.slug}`,
+      "priceCurrency": "USD",
+      "price": gig.startingPrice,
+      "priceValidUntil": "2027-12-31",
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "CreatifyBD",
+        "url": "https://creatifybd.com"
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "United States" },
+        { "@type": "Country", "name": "Canada" },
+        { "@type": "Country", "name": "Australia" }
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": gig.rating.toFixed(1),
+      "bestRating": "5",
+      "worstRating": "1",
+      "reviewCount": gig.reviewCount
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://creatifybd.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Gigs",
+        "item": "https://creatifybd.com/gigs"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": categoryName,
+        "item": `https://creatifybd.com/services/${gig.category}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": gig.shortTitle || gig.title,
+        "item": `https://creatifybd.com/gigs/${gig.slug}`
+      }
+    ]
+  };
+
+  const combinedSchema = [productSchema, breadcrumbSchema];
+
   return (
     <div className="gig-detail-page">
-      <SEO 
-        title={`${gig.title} | CreatifyBD`}
-        description={`${gig.overview} Premium ${gig.category} package starting at $${gig.startingPrice} USD. Served by CreatifyBD production team for USA, Canada, and Australia brands.`}
-        keywords={`${gig.tags.join(', ')}, ${gig.category.toLowerCase()} service, hire freelancer, creatifybd gigs, dynamic marketing package`}
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "Product",
-          "name": gig.title,
-          "image": gig.galleryImages || [
-            "https://images.unsplash.com/photo-1547658719-da2b81169b7a?q=80&w=1280"
-          ],
-          "description": gig.description,
-          "brand": {
-            "@type": "Brand",
-            "name": "CreatifyBD"
-          },
-          "offers": {
-            "@type": "Offer",
-            "url": `https://creatifybd.com/gigs/${gig.slug}`,
-            "priceCurrency": "USD",
-            "price": gig.startingPrice,
-            "priceValidUntil": "2027-12-31",
-            "itemCondition": "https://schema.org/NewCondition",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-              "@type": "Organization",
-              "name": "CreatifyBD"
-            }
-          },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": gig.rating.toFixed(1),
-            "bestRating": "5",
-            "worstRating": "1",
-            "reviewCount": gig.reviewCount
-          }
-        }}
+      <SEO
+        title={`${gig.shortTitle || gig.title} | Best ${categoryName} Service | CreatifyBD`}
+        description={`${gig.overview} Hire the best ${categoryName.toLowerCase()} service at CreatifyBD. Premium ${gig.category} package starting at $${gig.startingPrice} USD for USA, Canada, and Australia brands.`}
+        keywords={`${gig.tags.join(', ')}, ${categoryName.toLowerCase()} service, best ${categoryName.toLowerCase()} service, ${gig.category.toLowerCase()} agency, hire ${categoryName.toLowerCase()} expert, ${gig.category.toLowerCase()} USA, ${gig.category.toLowerCase()} Canada, ${gig.category.toLowerCase()} Australia, creative agency services, digital marketing services, professional ${categoryName.toLowerCase()}, affordable ${categoryName.toLowerCase()}, ${gig.category.toLowerCase()} packages, ${gig.category.toLowerCase()} for business, ${gig.category.toLowerCase()} for startups`}
+        schema={combinedSchema}
       />
 
       <Navbar />

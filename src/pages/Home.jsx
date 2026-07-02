@@ -36,30 +36,95 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: "CreatifyBD | Social Media Management, Graphic Design, Video Editing & Websites",
-    description: "CreatifyBD helps brands in the USA, Canada, Australia, and global markets with social media management, graphic design, video editing, digital marketing, and website design.",
-    keywords: "CreatifyBD, Creatify BD, social media management agency, hire social media manager USA, video editing service Canada, graphic design agency Australia, outsource creative design, business web design React, digital marketing marketplace",
-    schema: {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "CreatifyBD",
-      "alternateName": "Creatify BD",
-      "image": "https://creatifybd.com/og-image.png",
-      "logo": "https://creatifybd.com/logo.png",
-      "url": "https://creatifybd.com",
-      "telephone": "+8801951676600",
-      "email": "hello@creatifybd.com",
-      "areaServed": [
-        { "@type": "Country", "name": "United States" },
-        { "@type": "Country", "name": "Canada" },
-        { "@type": "Country", "name": "Australia" }
-      ],
-      "priceRange": "$$",
-      "sameAs": [
-        "https://www.facebook.com/creatifybd",
-        "https://www.linkedin.com/company/creatifybd"
-      ]
-    }
+    title: "CreatifyBD | Best Digital Marketing Agency | Social Media Management, Graphic Design, Video Editing",
+    description: "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia. Hire the best marketing agency for your brand.",
+    keywords: "CreatifyBD, Creatify BD, creatify bd, creative agency, digital marketing agency, marketing agency, best marketing agency, social media management, social media manager, graphic design service, video editing service, digital marketing service, social media marketing agency, creative design agency, best graphic design service, professional video editing, social media management USA, digital marketing Canada, creative agency Australia, social media marketing company, graphic design agency, video production company, web design agency, content marketing agency, branding agency, online marketing agency",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "CreatifyBD",
+        "alternateName": ["Creatify BD", "creatify bd", "Creatify"],
+        "url": "https://creatifybd.com",
+        "logo": "https://creatifybd.com/logo.png",
+        "image": "https://creatifybd.com/og-image.png",
+        "description": "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia.",
+        "telephone": "+8801951676600",
+        "email": "hello@creatifybd.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "BD",
+          "addressRegion": "Dhaka"
+        },
+        "areaServed": [
+          { "@type": "Country", "name": "United States" },
+          { "@type": "Country", "name": "Canada" },
+          { "@type": "Country", "name": "Australia" },
+          { "@type": "Country", "name": "Bangladesh" }
+        ],
+        "priceRange": "$$",
+        "sameAs": [
+          "https://www.facebook.com/creatifybd",
+          "https://www.instagram.com/creatifybd",
+          "https://www.linkedin.com/company/creatifybd"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+8801951676600",
+          "contactType": "customer service",
+          "availableLanguage": ["English", "Bengali"]
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "CreatifyBD",
+        "description": "Best digital marketing agency and creative agency offering social media management, graphic design, video editing, and website design services.",
+        "url": "https://creatifybd.com",
+        "telephone": "+8801951676600",
+        "email": "hello@creatifybd.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "BD",
+          "addressRegion": "Dhaka"
+        },
+        "areaServed": [
+          { "@type": "Country", "name": "United States" },
+          { "@type": "Country", "name": "Canada" },
+          { "@type": "Country", "name": "Australia" }
+        ],
+        "priceRange": "$$",
+        "openingHours": "Mo-Su 00:00-23:59",
+        "sameAs": [
+          "https://www.facebook.com/creatifybd",
+          "https://www.instagram.com/creatifybd",
+          "https://www.linkedin.com/company/creatifybd"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "CreatifyBD Digital Marketing Services",
+        "description": "Comprehensive digital marketing and creative services including social media management, graphic design, video editing, and website design.",
+        "provider": {
+          "@type": "Organization",
+          "name": "CreatifyBD",
+          "url": "https://creatifybd.com"
+        },
+        "serviceType": [
+          "Social Media Management",
+          "Graphic Design",
+          "Video Editing",
+          "Website Design",
+          "Digital Marketing"
+        ],
+        "areaServed": [
+          { "@type": "Country", "name": "United States" },
+          { "@type": "Country", "name": "Canada" },
+          { "@type": "Country", "name": "Australia" }
+        ]
+      }
+    ]
   };
 
   return (

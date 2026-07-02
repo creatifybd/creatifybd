@@ -94,9 +94,9 @@ const AboutPage = () => {
   return (
     <div className="about-page">
       <SEO
-        title="About CreatifyBD | Social Media Management & Creative Team"
-        description="Meet CreatifyBD, a remote-ready creative production team serving brands in the USA, Canada, Australia, and global markets."
-        keywords="about creatifybd, social media manager, creative agency, graphic design, video editing, website design"
+        title="About Best Creative Agency | Social Media Management & Digital Marketing Team | CreatifyBD"
+        description="Learn about CreatifyBD, the best creative agency and digital marketing team offering social media management, graphic design, video editing, and website design services for USA, Canada, and Australia."
+        keywords="about creative agency, about digital marketing agency, about social media management company, about graphic design agency, about video editing company, about web design agency, creatifybd about, best creative agency team, digital marketing agency team, social media management team, graphic design team, video editing team, web development team, creative agency story, marketing agency about us, creative agency mission"
       />
       <Navbar />
 

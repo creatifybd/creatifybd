@@ -88,9 +88,9 @@ const GigsCatalogPage = () => {
   return (
     <div className="gigs-catalog-page">
       <SEO
-        title="Browse Creative Gigs & Packages | CreatifyBD"
-        description="Browse professional creative services. Order social media management, logo design, video edits, and custom websites with clear fixed price packages."
-        keywords="creatifybd gigs, buy logo design, order video editing, monthly social media manager"
+        title="Buy Creative Services Online | Social Media Management, Graphic Design, Video Editing | CreatifyBD"
+        description="Browse and buy creative services online at CreatifyBD. Order social media management, graphic design, video editing, and website design with transparent fixed-price packages for USA, Canada, and Australia."
+        keywords="buy creative services online, order social media management, buy graphic design service, order video editing, buy website design, creative services marketplace, digital marketing services for sale, social media management packages, graphic design packages, video editing packages, web design packages, hire creative services, best marketing agency gigs, creative agency services, affordable creative services, professional creative services"
       />
 
       <Navbar />

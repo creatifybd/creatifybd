@@ -21,6 +21,8 @@ const Hero = () => {
   const heroPrimaryCta = heroContent.cta1 || t.cta1;
   const heroSecondaryCta = heroContent.cta2 || t.cta3;
 
+  const heroAltText = heroContent.mockup_primary ? "CreatifyBD creative services dashboard showing social media management, graphic design, and video editing projects" : "CreatifyBD creative agency dashboard interface";
+
   const sanitizedTitle = useMemo(() => {
     const rawHtml = heroTitle;
     return DOMPurify.sanitize(rawHtml, {
@@ -101,7 +103,7 @@ const Hero = () => {
               {heroContent.mockup_primary ? (
                 <img
                   src={heroContent.mockup_primary}
-                  alt="CreatifyBD creative services showcase"
+                  alt={heroAltText}
                   className="hero-mockup-img"
                   loading="eager"
                   fetchpriority="high"

@@ -22,8 +22,8 @@ const ServiceCategoryPage = () => {
 
   const categoryDetails = {
     'social-media-management': {
-      headline: 'Monthly Social Media Management Built for Growing Brands',
-      subheadline: 'Struggling to post consistently? We handle your grid planning, post design, copywriting, Reels scripts, and hashtag strategies.',
+      headline: 'Best Social Media Management Agency | Monthly Content Strategy & Management',
+      subheadline: 'CreatifyBD is the best social media management agency offering comprehensive social media marketing services including content calendar, post design, copywriting, and hashtag strategy for USA, Canada, and Australia.',
       benefits: [
         'Content Calendar: Never guess what to post next; review drafts before publishing.',
         'High-converting designs: Visual grids designed to capture authority in your industry.',
@@ -34,11 +34,30 @@ const ServiceCategoryPage = () => {
         { title: 'Onboarding & Strategy', desc: 'We inspect your current social footprint, audit competitors, and build a monthly calendar roadmap.' },
         { title: 'Content Creative Phase', desc: 'Our team designs custom post layouts, writes engaging captions, and drafts Reels concepts.' },
         { title: 'Review & Publish', desc: 'You approve the content calendar, and we schedule posts at optimal times on your platforms.' }
-      ]
+      ],
+      faqs: [
+        {
+          question: 'Which platforms do you manage?',
+          answer: 'We primarily manage Facebook, Instagram, LinkedIn, and Pinterest. We can also handle Twitter/X or TikTok depending on your custom needs.'
+        },
+        {
+          question: 'How is the content approved?',
+          answer: 'We create a content calendar draft for the entire month. We do not publish anything without your direct review and approval.'
+        },
+        {
+          question: 'Do you run paid ads?',
+          answer: 'Yes, we design the ad creatives and copy. Advanced campaign setup is available as an extra add-on.'
+        }
+      ],
+      seo: {
+        title: 'Best Social Media Management Agency | Social Media Marketing Services | CreatifyBD',
+        description: 'Hire the best social media management agency at CreatifyBD. We offer professional social media marketing services, content strategy, post design, and management for USA, Canada, and Australia.',
+        keywords: 'social media management agency, social media marketing agency, social media manager, social media marketing services, social media management USA, social media marketing Canada, social media management Australia, social media marketing company, social media strategy, content calendar management, social media post design, social media content creation, Instagram management, Facebook page management, LinkedIn management, social media advertising agency'
+      }
     },
     'graphic-design': {
-      headline: 'Premium Graphic Design That Strengthens Corporate Trust',
-      subheadline: 'From corporate logo design and full brand guides to flyers and thumbnails, get custom assets drawn from scratch.',
+      headline: 'Best Graphic Design Service | Professional Logo Design & Brand Identity Agency',
+      subheadline: 'CreatifyBD is the best graphic design agency offering professional graphic design services including logo design, brand identity, social media graphics, and print design for businesses worldwide.',
       benefits: [
         'Corporate Brand Style Guides: Ensure 100% color and typographical consistency across media.',
         'memorable vector logos: Unique corporate logos that establish instant client trust.',
@@ -49,11 +68,30 @@ const ServiceCategoryPage = () => {
         { title: 'Visual Intake & Moodboard', desc: 'Specify colors, typography styles, and reference visuals in your client form.' },
         { title: 'Draft Concepts Creation', desc: 'Our designers generate multiple custom concepts for your review and layout scaling.' },
         { title: 'Revision & Asset Export', desc: 'Refine your choice and receive editable vector source files (AI/EPS/SVG/PDF).' }
-      ]
+      ],
+      faqs: [
+        {
+          question: 'What file formats do you deliver?',
+          answer: 'We deliver AI, EPS, SVG, PDF, high-res PNG, and JPEG formats for all graphic design projects.'
+        },
+        {
+          question: 'Do you use templates?',
+          answer: 'No. Every design is custom created from scratch using premium visual layout software to ensure uniqueness.'
+        },
+        {
+          question: 'How many revisions do I get?',
+          answer: 'Revision counts vary by package. Basic packages include 2-3 revisions, while premium packages include up to 10 revisions.'
+        }
+      ],
+      seo: {
+        title: 'Best Graphic Design Service | Professional Logo Design & Brand Identity | CreatifyBD',
+        description: 'CreatifyBD is the best graphic design agency offering professional graphic design services including logo design, brand identity, social media graphics, and print design for USA, Canada, and Australia.',
+        keywords: 'graphic design service, graphic design agency, best graphic design service, professional logo design, brand identity design, logo design service, creative design agency, graphic design company, logo design USA, graphic design Canada, graphic design Australia, brand identity agency, corporate logo design, social media graphic design, print design service, vector logo design, business card design, flyer design service'
+      }
     },
     'video-editing': {
-      headline: 'Cinematic Video Editing for Reels, Ads, and YouTube',
-      subheadline: 'High-engaging zoom cuts, custom motion subtitles, and audio mixing that double your viewer watch times.',
+      headline: 'Best Video Editing Service | Professional Video Production & Editing Agency',
+      subheadline: 'CreatifyBD is the best video editing service provider offering professional video editing services including Reels editing, YouTube editing, promotional videos, and video production for global brands.',
       benefits: [
         'Short-form Reels / TikTok: Captivating text styles, graphics overlays, and sound design.',
         'YouTube Landscape Editing: Dynamic cuts, B-rolls, title animations, and background tracks.',
@@ -64,11 +102,30 @@ const ServiceCategoryPage = () => {
         { title: 'Clip Intake & Script Sync', desc: 'Upload your raw talking-head files or product clips and specify video directions.' },
         { title: 'Creative Editing Phase', desc: 'We clean background noise, design subtitles, add transition overlays, and mix music tracks.' },
         { title: 'Draft Review & Adjustments', desc: 'Download your draft edit, request subtitle tweaks, and receive the finalized HD copy.' }
-      ]
+      ],
+      faqs: [
+        {
+          question: 'Do you provide the raw footage?',
+          answer: 'No, you must provide your raw video clips (talking head footage or screen recordings). We edit and enhance your footage.'
+        },
+        {
+          question: 'What is the format?',
+          answer: 'Delivered in standard 1280x720 JPEG or PNG under 2MB, optimized for YouTube upload guidelines or social media platforms.'
+        },
+        {
+          question: 'Can you add captions?',
+          answer: 'Yes, we include Alex Hormozi style text captions and subtitles in our video editing packages.'
+        }
+      ],
+      seo: {
+        title: 'Best Video Editing Service | Professional Video Production & Editing | CreatifyBD',
+        description: 'CreatifyBD is the best video editing service provider offering professional video editing services including Reels editing, YouTube editing, promotional videos, and video production for USA, Canada, and Australia.',
+        keywords: 'video editing service, video editing agency, best video editing service, professional video editing, video production company, video editing services USA, video editing Canada, video editing Australia, YouTube video editing, Reels editing service, TikTok video editing, promotional video editing, video post production, video editing company, video editing for social media, video editing for YouTube, video editing for business'
+      }
     },
     'website-design': {
-      headline: 'High-Converting Websites Engineered for Local Searches',
-      subheadline: 'Fast, responsive, and search-optimized React landing pages and multi-page business websites.',
+      headline: 'Best Web Design Agency | Professional Website Design & Development Services',
+      subheadline: 'CreatifyBD is the best web design agency offering professional website design services including landing pages, business websites, portfolio sites, and web development for global clients.',
       benefits: [
         'Fully Responsive Layouts: Flawless viewports across desktop, tablet, and mobile breakpoints.',
         'Speed Optimization: Fast page loads (LCP <= 1.5s) to reduce visitor bounce rates.',
@@ -79,18 +136,96 @@ const ServiceCategoryPage = () => {
         { title: 'Sitemap & Content Outline', desc: 'Define your required pages list, competitor URLs, and color scheme preferences.' },
         { title: 'Development & UI Preview', desc: 'We build your page templates, integrate forms, and test speeds.' },
         { title: 'SEO Tagging & Domain Launch', desc: 'We configure meta structures, deploy files to hosting, and index canonical URLs.' }
-      ]
+      ],
+      faqs: [
+        {
+          question: 'What technology do you use?',
+          answer: 'We build websites using React for modern, fast, and SEO-optimized web applications with excellent performance.'
+        },
+        {
+          question: 'Are websites mobile responsive?',
+          answer: 'Yes, all our websites are fully responsive and optimized for desktop, tablet, and mobile devices.'
+        },
+        {
+          question: 'Do you include SEO?',
+          answer: 'Yes, we include proper SEO configurations including meta tags, schema markup, and semantic HTML structure.'
+        }
+      ],
+      seo: {
+        title: 'Best Web Design Agency | Professional Website Design & Development | CreatifyBD',
+        description: 'CreatifyBD is the best web design agency offering professional website design services including landing pages, business websites, portfolio sites, and web development for USA, Canada, and Australia.',
+        keywords: 'web design agency, website design service, best web design agency, professional website design, web development services, web design company, website design USA, web design Canada, web design Australia, landing page design, business website design, portfolio website design, website development company, responsive web design, custom website design, website redesign service, React web development, SEO web design'
+      }
     }
   };
 
-  const details = categoryDetails[categorySlug] || { headline: category.name, subheadline: category.desc, benefits: [], process: [] };
+  const details = categoryDetails[categorySlug] || { headline: category.name, subheadline: category.desc, benefits: [], process: [], seo: {}, faqs: [] };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": category.name,
+    "name": details.headline,
+    "description": details.subheadline,
+    "provider": {
+      "@type": "Organization",
+      "name": "CreatifyBD",
+      "url": "https://creatifybd.com"
+    },
+    "areaServed": [
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "Canada" },
+      { "@type": "Country", "name": "Australia" }
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://creatifybd.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Services",
+        "item": "https://creatifybd.com/services"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": category.name,
+        "item": `https://creatifybd.com/services/${categorySlug}`
+      }
+    ]
+  };
+
+  const faqSchema = details.faqs && details.faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": details.faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null;
+
+  const combinedSchema = faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema] : [serviceSchema, breadcrumbSchema];
 
   return (
     <div className="category-landing-page">
       <SEO
-        title={`${category.name} Services | CreatifyBD`}
-        description={details.subheadline}
-        keywords={`${categorySlug}, creatifybd services, global creative agency, brand creative services`}
+        title={details.seo?.title || `${category.name} Services | CreatifyBD`}
+        description={details.seo?.description || details.subheadline}
+        keywords={details.seo?.keywords || `${categorySlug}, creatifybd services, global creative agency, brand creative services`}
+        schema={combinedSchema}
       />
 
       <Navbar />

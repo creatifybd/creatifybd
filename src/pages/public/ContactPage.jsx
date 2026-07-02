@@ -11,15 +11,22 @@ const ContactPage = () => {
   return (
     <div className="contact-page">
       <SEO
-        title="Contact CreatifyBD | Start Your Project"
-        description="Contact CreatifyBD to discuss branding, digital marketing, web development, content production and creative campaign needs."
-        keywords="contact creatifybd, hire creative agency, digital marketing consultation, web design agency contact"
+        title="Contact Best Digital Marketing Agency | Hire Creative Services | CreatifyBD"
+        description="Contact CreatifyBD, the best digital marketing agency, to hire creative services including social media management, graphic design, video editing, and website design for your brand."
+        keywords="contact digital marketing agency, hire creative agency, contact graphic design service, contact video editing service, contact social media management, hire marketing agency, best marketing agency contact, creative agency consultation, digital marketing consultation, web design agency contact, branding agency contact, social media marketing consultation, video production company contact, contact creatifybd, hire creatifybd"
         schema={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          "name": "Contact CreatifyBD",
-          "description": "Contact page for CreatifyBD, a global creative services team.",
-          "url": "https://creatifybd.com/contact"
+          "name": "Contact CreatifyBD - Best Digital Marketing Agency",
+          "description": "Contact CreatifyBD for professional creative services including social media management, graphic design, video editing, and website design.",
+          "url": "https://creatifybd.com/contact",
+          "provider": {
+            "@type": "Organization",
+            "name": "CreatifyBD",
+            "telephone": "+8801951676600",
+            "email": "hello@creatifybd.com",
+            "url": "https://creatifybd.com"
+          }
         }}
       />
       <Navbar />

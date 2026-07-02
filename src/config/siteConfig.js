@@ -58,9 +58,9 @@ export const siteConfig = {
   
   // SEO Configuration
   seo: {
-    defaultTitle: 'CreatifyBD | Social Media Management, Design, Video Editing & Websites',
-    defaultDescription: 'CreatifyBD helps brands in the USA, Canada, Australia, and global markets with social media management, graphic design, video editing, digital marketing, and website design.',
-    defaultKeywords: 'social media manager, social media management, graphic design service, video editing service, website design, digital marketing service',
+    defaultTitle: 'CreatifyBD | Best Digital Marketing Agency | Social Media Management, Graphic Design, Video Editing',
+    defaultDescription: 'CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia. Hire the best marketing agency for your brand.',
+    defaultKeywords: 'CreatifyBD, Creatify BD, creatify bd, creative agency, digital marketing agency, marketing agency, best marketing agency, social media management, social media manager, graphic design service, video editing service, digital marketing service, social media marketing agency, creative design agency, best graphic design service, professional video editing, social media management USA, digital marketing Canada, creative agency Australia, social media marketing company, graphic design agency, video production company, web design agency, content marketing agency, branding agency, online marketing agency',
     canonicalUrl: 'https://creatifybd.com'
   },
   

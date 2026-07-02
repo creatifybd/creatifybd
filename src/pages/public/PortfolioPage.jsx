@@ -8,15 +8,20 @@ const PortfolioPage = () => {
   return (
     <div className="portfolio-page">
       <SEO
-        title="Portfolio | CreatifyBD Creative Work"
-        description="Explore CreatifyBD portfolio featuring premium graphic design, branding, and digital marketing projects delivered with excellence."
-        keywords="creatifybd portfolio, global creative agency work, web design portfolio, digital marketing case studies"
+        title="Creative Agency Portfolio | Graphic Design, Video Editing & Digital Marketing Work | CreatifyBD"
+        description="Explore CreatifyBD creative agency portfolio featuring premium graphic design, video editing, social media management, and digital marketing projects delivered for USA, Canada, and Australia clients."
+        keywords="creative agency portfolio, graphic design portfolio, video editing portfolio, digital marketing portfolio, social media management portfolio, best graphic design work, creative design showcase, marketing agency portfolio, web design portfolio, branding portfolio, video production portfolio, creative work samples, design agency portfolio, digital marketing case studies, social media marketing portfolio, creative agency work samples"
         schema={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          "name": "CreatifyBD Portfolio",
-          "description": "Collection of premium digital marketing and design projects by CreatifyBD.",
-          "url": "https://creatifybd.com/work"
+          "name": "CreatifyBD Creative Portfolio",
+          "description": "Collection of premium graphic design, video editing, and digital marketing projects by CreatifyBD creative agency.",
+          "url": "https://creatifybd.com/portfolio",
+          "provider": {
+            "@type": "Organization",
+            "name": "CreatifyBD",
+            "url": "https://creatifybd.com"
+          }
         }}
       />
       <Navbar />
