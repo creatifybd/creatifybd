@@ -1383,17 +1383,44 @@ body.admin-body :is(.gig-editor-overlay,.admin-modal-overlay) {
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
   align-items: flex-start !important;
-  padding: max(1rem,3vh) 1rem !important;
+  padding: clamp(0.75rem,2vh,1.5rem) 1rem !important;
+  z-index: 30000 !important;
 }
 
-body.admin-body :is(.gig-editor-dialog,.admin-modal-panel) {
-  width: min(760px,100%) !important;
+body.admin-body .admin-modal-panel {
+  box-sizing: border-box !important;
+  width: min(620px,calc(100vw - 2rem)) !important;
+  max-width: calc(100vw - 2rem) !important;
   max-height: calc(100dvh - 2rem) !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
-  margin: auto !important;
-  border-radius: 12px !important;
+  margin: 0 auto !important;
+  border-radius: 14px !important;
   scrollbar-width: thin !important;
+}
+
+body.admin-body .gig-editor-dialog {
+  width: min(820px,calc(100vw - 2rem)) !important;
+  max-height: calc(100dvh - 2rem) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  margin: 0 auto !important;
+  border-radius: 14px !important;
+  scrollbar-width: thin !important;
+}
+
+body.admin-body .admin-modal-panel .media-dropzone {
+  min-height: 118px !important;
+  padding: 1rem !important;
+}
+
+body.admin-body .admin-modal-panel .media-uploader-head {
+  align-items: flex-start !important;
+  flex-wrap: wrap !important;
+}
+
+body.admin-body:has(.admin-modal-overlay, .gig-editor-overlay) .whatsapp-float-btn {
+  display: none !important;
 }
 
 body.admin-body .admin-content [style*="position: fixed"] {
@@ -1431,4 +1458,9 @@ body.admin-body .admin-content [style*="position: fixed"] > .admin-card {
   body.admin-body .review-adm-footer { align-items: stretch !important; }
   body.admin-body .review-adm-actions { width: 100% !important; flex-wrap: wrap !important; }
   body.admin-body .review-adm-actions button { flex: 1 1 110px !important; justify-content: center !important; }
+  body.admin-body .admin-modal-panel,
+  body.admin-body .gig-editor-dialog {
+    width: calc(100vw - 1rem) !important;
+    max-height: calc(100dvh - 1rem) !important;
+  }
 }

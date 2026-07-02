@@ -127,12 +127,15 @@ const ServicesManager = () => {
         </div>
       )}
       <style>{`
-        .admin-modal-overlay{position:fixed;inset:0;background:rgba(15,18,24,.58);display:grid;place-items:center;z-index:1000;padding:1rem}
-        .admin-modal-panel{width:min(100%,560px);position:relative;max-height:calc(100vh - 2rem);overflow:auto}
-        .admin-modal-close{position:absolute;right:1.25rem;top:1.25rem;width:36px;height:36px;border-radius:8px;background:var(--adm-bg);border:1px solid var(--adm-border);color:var(--adm-text);display:grid;place-items:center;cursor:pointer}
-        .admin-modal-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.5rem}
+        .admin-modal-overlay{position:fixed;inset:0;background:rgba(15,18,24,.62);display:flex;justify-content:center;align-items:flex-start;z-index:30000;padding:clamp(.75rem,2vh,1.5rem);overflow-y:auto;overscroll-behavior:contain}
+        .admin-modal-panel{width:min(620px,calc(100vw - 2rem));position:relative;max-height:calc(100dvh - 2rem);overflow-y:auto;margin:0 auto;border-radius:14px}
+        .admin-modal-close{position:sticky;top:0;margin-left:auto;transform:translate(.35rem,-.35rem);width:38px;height:38px;border-radius:8px;background:var(--adm-bg);border:1px solid var(--adm-border);color:var(--adm-text);display:grid;place-items:center;cursor:pointer;z-index:2}
+        .admin-modal-actions{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.78),#fff 28%);display:flex;justify-content:flex-end;gap:.75rem;margin:1rem -0.25rem 0;padding:1rem .25rem 0}
         .admin-modal-actions button{min-width:128px;justify-content:center}
+        .admin-modal-panel .media-dropzone{min-height:118px;padding:1rem}
+        .admin-modal-panel .media-uploader-head{align-items:flex-start}
         .service-admin-visual{width:72px;height:52px;border-radius:8px;background:var(--adm-bg);display:grid;place-items:center;overflow:hidden;font-size:1.4rem}.service-admin-visual img{width:100%;height:100%;object-fit:cover}
+        @media(max-width:680px){.admin-modal-actions{flex-direction:column}.admin-modal-actions button{width:100%}.admin-modal-panel{width:calc(100vw - 1rem);max-height:calc(100dvh - 1rem)}}
       `}</style>
     </div>
   );
