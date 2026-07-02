@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
 import { ArrowUpRight } from 'lucide-react';
+import { CURATED_PORTFOLIO } from '../data/portfolioItems';
 
 const CATS = [
   { key: 'all', label: 'All Work', label_bn: 'সব কাজ' },
@@ -22,6 +24,27 @@ const CAT_DISPLAY = {
   branding: 'Branding',
   web: 'Web Design',
   video: 'Video',
+  ai: 'AI Art',
+};
+
+const PORTFOLIO_CATS = [
+  { key: 'all', label: 'All Work', label_bn: 'All Work' },
+  { key: 'social', label: 'Social Media', label_bn: 'Social Media' },
+  { key: 'branding', label: 'Branding', label_bn: 'Branding' },
+  { key: 'marketing', label: 'Digital Marketing', label_bn: 'Digital Marketing' },
+  { key: 'web', label: 'Web Design', label_bn: 'Web Design' },
+  { key: 'video', label: 'Video Editing', label_bn: 'Video Editing' },
+  { key: 'graphic', label: 'Graphic Design', label_bn: 'Graphic Design' },
+  { key: 'ai', label: 'AI Art', label_bn: 'AI Art' },
+];
+
+const PORTFOLIO_CAT_DISPLAY = {
+  social: 'Social Media Management',
+  graphic: 'Graphic Design',
+  branding: 'Branding & Logo Design',
+  marketing: 'Digital Marketing',
+  web: 'Website Design',
+  video: 'Video Editing',
   ai: 'AI Art',
 };
 
@@ -80,7 +103,7 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
     };
   }, [hasPrev, hasNext, onClose, onPrev, onNext]);
 
-  return (
+  return createPortal((
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -112,13 +135,26 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
           alt={item.title} 
           className="pf-lb-img" 
           priority={true}
+          objectFit="contain"
         />
         <div className="pf-lb-meta">
           <h3 className="pf-lb-title" style={{ fontSize: '2rem', fontWeight: 800 }}>{item.title}</h3>
+          {item.description && <p className="pf-lb-desc">{item.description}</p>}
+          {(item.service || item.industry) && (
+            <div className="pf-lb-details">
+              {item.service && <span>{item.service}</span>}
+              {item.industry && <span>{item.industry}</span>}
+            </div>
+          )}
+          {Array.isArray(item.tags) && item.tags.length > 0 && (
+            <div className="pf-lb-tags">
+              {item.tags.slice(0, 4).map(tag => <span key={tag}>{tag}</span>)}
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
-  );
+  ), document.body);
 }
 
 // ── Animated Number Counter ───────────────────────────────────────────────────
@@ -179,8 +215,9 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
         />
         <div className="duck-work-overlay">
           <div>
-            <span>{CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
+            <span>{item.service || PORTFOLIO_CAT_DISPLAY[item.category] || CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
             <h3>{item.title}</h3>
+            {item.industry && <p>{item.industry}</p>}
           </div>
           <span className="duck-work-arrow"><ArrowUpRight size={22} /></span>
         </div>
@@ -201,17 +238,29 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   const { lang } = useLanguage();
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'portfolio'), (snap) => {
-      const allItems = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      // Sort in JS instead of Firestore query to avoid index requirements
-      const sorted = allItems.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-      setItems(sorted.filter(item => item.hidden !== true));
-      setLoading(false);
-    });
+    const unsub = onSnapshot(
+      collection(db, 'portfolio'),
+      (snap) => {
+        const allItems = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // Sort in JS instead of Firestore query to avoid index requirements
+        const sorted = allItems.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        setItems(sorted.filter(item => item.hidden !== true));
+        setLoading(false);
+      },
+      () => setLoading(false)
+    );
     return () => unsub();
   }, []);
 
-  const portfolioItems = items.length > 0 ? items : FALLBACK_WORK;
+  const curatedIds = new Set(CURATED_PORTFOLIO.map(item => item.id));
+  const adminItems = items.filter(item => !curatedIds.has(item.id));
+  const curatedGroups = ['social', 'branding', 'marketing', 'video', 'web']
+    .map(category => CURATED_PORTFOLIO.filter(item => item.category === category));
+  const longestGroup = Math.max(...curatedGroups.map(group => group.length));
+  const interleavedCuratedItems = Array.from({ length: longestGroup }, (_, index) =>
+    curatedGroups.map(group => group[index]).filter(Boolean)
+  ).flat();
+  const portfolioItems = [...interleavedCuratedItems, ...adminItems];
 
   const filteredItems = activeFilter === 'all'
     ? portfolioItems
@@ -219,7 +268,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
 
   const displayItems = highlight ? filteredItems.slice(0, 6) : filteredItems;
 
-  const availableCats = CATS.filter(c => {
+  const availableCats = PORTFOLIO_CATS.filter(c => {
     if (c.key === 'all') return true;
     return portfolioItems.some(i => i.category === c.key);
   });
@@ -240,7 +289,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     if (newIdx < displayItems.length) { setLightboxItem(displayItems[newIdx]); setLightboxIndex(newIdx); }
   }, [lightboxIndex, displayItems]);
 
-  if (loading && items.length === 0) {
+  if (loading && CURATED_PORTFOLIO.length === 0 && items.length === 0) {
     return (
       <section className="wk-section" id="portfolio">
         <div className="wk-loading"><div className="wk-loading-dots"><span/><span/><span/></div></div>
