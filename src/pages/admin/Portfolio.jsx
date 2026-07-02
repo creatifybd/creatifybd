@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getData, addData, updateData, deleteData } from '../../firebase/services';
-import { uploadImage } from '../../utils/cloudinary';
-import { Plus, Edit2, Trash2, X, Image as ImageIcon, Upload, Loader2, CloudCheck } from 'lucide-react';
+import { Plus, Trash2, X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import MediaUploader from '../../components/admin/MediaUploader';
 
 const PortfolioManager = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -29,29 +27,6 @@ const PortfolioManager = () => {
     fetchItems();
   }, []);
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    if (file.size > 20 * 1024 * 1024) {
-      alert("File is too large. Max size is 20MB.");
-      return;
-    }
-
-    setUploading(true);
-    setProgress(0);
-    try {
-      const url = await uploadImage(file, (p) => {
-        setProgress(p);
-      });
-      setFormData({ ...formData, imageUrl: url });
-    } catch (err) { 
-      alert('Upload failed: ' + (err.message || 'Unknown error')); 
-    }
-    setUploading(false);
-    setProgress(0);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.imageUrl) return alert('Please upload an image first');
@@ -71,7 +46,7 @@ const PortfolioManager = () => {
   };
 
   const closeModal = () => {
-    if (uploading || saving) return;
+    if (saving) return;
     setIsModalOpen(false);
     setEditingId(null);
     setFormData({ title: '', category: '', imageUrl: '', hidden: false });
@@ -125,45 +100,13 @@ const PortfolioManager = () => {
             <h2 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Portfolio Item' : 'Add Portfolio Item'}</h2>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>Portfolio Image</label>
-                <div style={{ width: '100%', height: '220px', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', background: 'rgba(255,255,255,0.02)' }}>
-                  {formData.imageUrl && !uploading ? (
-                    <>
-                      <img src={formData.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#111', padding: '0.5rem' }} />
-                      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: '0.2s' }} onMouseEnter={e => e.currentTarget.style.opacity=1} onMouseLeave={e => e.currentTarget.style.opacity=0}>
-                        <label style={{ cursor: 'pointer', background: '#fff', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.8rem', fontWeight: '700' }}>
-                          Change Image
-                          <input type="file" hidden onChange={handleFileChange} accept="image/*" />
-                        </label>
-                      </div>
-                    </>
-                  ) : (
-                    <label style={{ cursor: 'pointer', textAlign: 'center', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      {uploading ? (
-                        <div style={{ width: '100%', padding: '0 2rem' }}>
-                          <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', marginBottom: '1rem' }}>
-                            <div style={{ width: `${progress}%`, height: '100%', background: 'var(--red)', transition: 'width 0.3s ease' }} />
-                          </div>
-                          <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Uploading... {progress}%</div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
-                            <Upload size={24} style={{ color: 'rgba(255,255,255,0.3)' }} />
-                          </div>
-                          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', fontWeight: 500 }}>Click to upload high-res image</div>
-                          <input type="file" hidden onChange={handleFileChange} accept="image/*" />
-                        </>
-                      )}
-                    </label>
-                  )}
-                </div>
+                <MediaUploader label="Portfolio Image" value={formData.imageUrl} accept="image/*" folder="creatifybd/portfolio" helperText="Drop an image, browse your device, or switch to Link." onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} />
               </div>
               <div style={{ marginBottom: '1rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Project Title</label><input className="admin-input" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="e.g. Fashion Brand Identity" required /></div>
               <div style={{ marginBottom: '1.5rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Category</label><input className="admin-input" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="e.g. Branding / Photography" required /></div>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button type="button" className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={closeModal} disabled={uploading || saving}>Cancel</button>
-                <button type="submit" className="admin-btn" style={{ flex: 2, padding: '1rem', fontWeight: 800 }} disabled={uploading || saving}>{saving ? 'Saving...' : editingId ? 'Update Item' : 'Publish to Portfolio'}</button>
+                <button type="button" className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={closeModal} disabled={saving}>Cancel</button>
+                <button type="submit" className="admin-btn" style={{ flex: 2, padding: '1rem', fontWeight: 800 }} disabled={saving}>{saving ? 'Saving...' : editingId ? 'Update Item' : 'Publish to Portfolio'}</button>
               </div>
             </form>
           </div>

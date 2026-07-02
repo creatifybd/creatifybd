@@ -108,6 +108,9 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+    match /media_assets/{id} {
+      allow read, write: if isAdmin();
+    }
 
     // ─── Manual Payments (legacy) ────────────────────────────────────────────
     function isValidPayment() {

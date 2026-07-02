@@ -20,7 +20,8 @@ import {
   X,
   ShoppingBag,
   ClipboardList,
-  MessageCircle
+  MessageCircle,
+  FolderOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
@@ -39,6 +40,7 @@ import PaymentVerification from './admin/PaymentVerification';
 import AdminGigs from './admin/AdminGigs';
 import AdminOrders from './admin/AdminOrders';
 import AdminReviews from './admin/AdminReviews';
+import MediaLibrary from './admin/MediaLibrary';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -61,6 +63,7 @@ const AdminDashboard = () => {
     { path: '/admin/content', label: 'Page Content', icon: <Activity size={18} /> },
     { path: '/admin/services', label: 'Services', icon: <Briefcase size={18} /> },
     { path: '/admin/portfolio', label: 'Portfolio', icon: <ImageIcon size={18} /> },
+    { path: '/admin/media', label: 'Media Library', icon: <FolderOpen size={18} /> },
     { path: '/admin/pricing', label: 'Pricing Plans', icon: <CreditCard size={18} /> },
     { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} /> },
     { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
@@ -222,6 +225,7 @@ const AdminDashboard = () => {
                 <Route path="content" element={<ContentManager />} />
                 <Route path="services" element={<ServicesManager />} />
                 <Route path="portfolio" element={<PortfolioManager />} />
+                <Route path="media" element={<MediaLibrary />} />
                 <Route path="pricing" element={<PricingManager />} />
                 <Route path="payments" element={<PaymentVerification />} />
                 <Route path="testimonials" element={<TestimonialsManager />} />

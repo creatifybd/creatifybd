@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { db } from '../../firebase/config';
 import { collection, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
+import MediaUploader from '../../components/admin/MediaUploader';
 import { 
   ExternalLink, Star, Package, Eye, ToggleLeft, ToggleRight, 
   Search, Filter, Pencil, X
@@ -233,10 +234,8 @@ const AdminGigs = () => {
               <label>Full Title<input className="admin-input" value={gigForm.title} onChange={event => setGigForm({ ...gigForm, title: event.target.value })} required /></label>
               <label>Short Title<input className="admin-input" value={gigForm.shortTitle} onChange={event => setGigForm({ ...gigForm, shortTitle: event.target.value })} required /></label>
               <label>Overview<textarea className="admin-input" rows="4" value={gigForm.overview} onChange={event => setGigForm({ ...gigForm, overview: event.target.value })} required /></label>
-              <div className="gig-editor-grid">
-                <label>Starting Price (USD)<input className="admin-input" type="number" min="1" value={gigForm.startingPrice} onChange={event => setGigForm({ ...gigForm, startingPrice: event.target.value })} required /></label>
-                <label>Cover Image URL<input className="admin-input" type="url" value={gigForm.coverImage} onChange={event => setGigForm({ ...gigForm, coverImage: event.target.value })} required /></label>
-              </div>
+              <label>Starting Price (USD)<input className="admin-input" type="number" min="1" value={gigForm.startingPrice} onChange={event => setGigForm({ ...gigForm, startingPrice: event.target.value })} required /></label>
+              <MediaUploader label="Cover Image" value={gigForm.coverImage} accept="image/*" folder="creatifybd/gigs" helperText="Drop a cover image or switch to Link." onChange={(url) => setGigForm(prev => ({ ...prev, coverImage: url }))} />
               <div className="gig-editor-actions">
                 <button type="button" className="adm-btn-secondary" onClick={() => setEditingGig(null)} disabled={savingGig === editingGig.id}>Cancel</button>
                 <button type="submit" className="adm-btn-primary" disabled={savingGig === editingGig.id}>{savingGig === editingGig.id ? 'Saving...' : 'Save Changes'}</button>

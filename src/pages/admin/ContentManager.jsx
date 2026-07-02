@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { db } from '../../firebase/config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { uploadImage } from '../../utils/cloudinary';
+import MediaUploader from '../../components/admin/MediaUploader';
 import {
   Briefcase,
   Eye,
@@ -149,6 +149,7 @@ const managerLinks = [
   { to: '/admin/gigs', label: 'Gig catalogue and marketplace services' },
   { to: '/admin/services', label: 'Homepage services list' },
   { to: '/admin/portfolio', label: 'Portfolio gallery' },
+  { to: '/admin/media', label: 'Cloudinary media and document library' },
   { to: '/admin/pricing', label: 'Pricing plans' },
   { to: '/admin/reviews', label: 'Client reviews' },
   { to: '/admin/payments', label: 'Payment proof verification' },
@@ -267,24 +268,7 @@ const ContentManager = () => {
     updateSection(section, field, value.split(',').map(item => item.trim()).filter(Boolean));
   };
 
-  const handleImageUpload = async (event, section, field) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const key = `${section}.${field}`;
-    setUploading(key);
-    try {
-      const url = await uploadImage(file);
-      updateSection(section, field, url);
-      toast.success('Image uploaded. Save changes to publish.');
-    } catch (err) {
-      console.error(err);
-      toast.error('Upload failed.');
-    } finally {
-      setUploading('');
-      event.target.value = '';
-    }
-  };
+  const handleImageUpload = (url, section, field) => updateSection(section, field, url);
 
   const handleSave = async () => {
     setSaving(true);
@@ -553,28 +537,8 @@ const ArrayEditor = ({ section, field, items = [], fields, updateArrayItem, addA
   </div>
 );
 
-const ImageUploadField = ({ label, value, section, field, uploading, onUpload }) => {
-  const key = `${section}.${field}`;
-  const isUploading = uploading === key;
-  return (
-    <div className="admin-image-upload">
-      <span>{label}</span>
-      <div className="admin-image-preview">
-        {isUploading ? (
-          <Loader2 size={22} className="animate-spin" />
-        ) : value ? (
-          <img src={value} alt={`${label} preview`} loading="lazy" />
-        ) : (
-          <ImageIcon size={24} />
-        )}
-      </div>
-      <label className="admin-upload-button">
-        <Upload size={14} />
-        {isUploading ? 'Uploading...' : 'Upload Image'}
-        <input type="file" accept="image/*" disabled={isUploading} onChange={(e) => onUpload(e, section, field)} />
-      </label>
-    </div>
-  );
-};
+const ImageUploadField = ({ label, value, section, field, onUpload }) => (
+  <MediaUploader label={label} value={value} accept="image/*" folder={`creatifybd/content/${section}`} helperText="Drag and drop, browse, or paste an image link." onChange={(url) => onUpload(url, section, field)} />
+);
 
 export default ContentManager;

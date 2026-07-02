@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { getSettings, updateSettings } from '../../firebase/services';
-import { uploadImage } from '../../utils/cloudinary';
+import { DEFAULT_CLOUDINARY_CLOUD_NAME, DEFAULT_CLOUDINARY_UPLOAD_PRESET } from '../../utils/cloudinary';
+import MediaUploader from '../../components/admin/MediaUploader';
 import { Globe, Phone, Mail, Share2, AtSign, Search, Save, RefreshCw, Upload, Palette, Image as ImageIcon } from 'lucide-react';
 
 const defaultSettings = {
@@ -21,15 +22,14 @@ const defaultSettings = {
   seo_description: 'CreatifyBD is a leading creative agency in Dhaka providing social media marketing, professional photography, web development, and branding services.',
   seo_keywords: 'creative agency dhaka, digital marketing bangladesh, social media management dhaka',
   lang: 'en',
-  cloudinary_cloud_name: '',
-  cloudinary_upload_preset: '',
+  cloudinary_cloud_name: DEFAULT_CLOUDINARY_CLOUD_NAME,
+  cloudinary_upload_preset: DEFAULT_CLOUDINARY_UPLOAD_PRESET,
 };
 
 const SettingsManager = () => {
   const [settings, setSettings] = useState(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -51,28 +51,16 @@ const SettingsManager = () => {
     setSettings({ ...settings, [e.target.name]: e.target.value });
   };
 
-  const handleFileUpload = async (e, fieldName) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setUploading(fieldName);
+  const handleMediaChange = async (fieldName, url) => {
     try {
-      const downloadURL = await uploadImage(file, undefined, {
-        cloudName: settings.cloudinary_cloud_name,
-        uploadPreset: settings.cloudinary_upload_preset
-      });
-      
-      const updatedSettings = { ...settings, [fieldName]: downloadURL };
+      const updatedSettings = { ...settings, [fieldName]: url };
       setSettings(updatedSettings);
-      
-      await updateSettings({ [fieldName]: downloadURL }, 'site');
+      await updateSettings({ [fieldName]: url }, 'site');
       toast.success(`${fieldName.replace('_', ' ')} updated!`);
     } catch (err) {
       console.error(err);
       toast.error('Upload failed. Please try again.');
-    } finally {
-      setUploading(null);
-    }
+    } finally { /* state is handled by MediaUploader */ }
   };
 
 
@@ -132,24 +120,21 @@ const SettingsManager = () => {
             label="Navbar Logo" 
             fieldName="logo_url" 
             value={settings.logo_url} 
-            onUpload={handleFileUpload} 
-            isUploading={uploading === 'logo_url'}
+            onChange={(url) => handleMediaChange('logo_url', url)}
             sizeNote="Recommended: 250x80px (PNG/SVG)"
           />
           <LogoUploadField 
             label="Favicon / Tab Icon" 
             fieldName="favicon_url" 
             value={settings.favicon_url} 
-            onUpload={handleFileUpload} 
-            isUploading={uploading === 'favicon_url'}
+            onChange={(url) => handleMediaChange('favicon_url', url)}
             sizeNote="Recommended: 64x64px (Square PNG)"
           />
           <LogoUploadField 
             label="Loading Logo" 
             fieldName="loading_logo_url" 
             value={settings.loading_logo_url} 
-            onUpload={handleFileUpload} 
-            isUploading={uploading === 'loading_logo_url'}
+            onChange={(url) => handleMediaChange('loading_logo_url', url)}
             sizeNote="Recommended: 200x200px (Centered Icon)"
           />
         </div>
@@ -229,19 +214,9 @@ const SettingsManager = () => {
   );
 };
 
-const LogoUploadField = ({ label, fieldName, value, onUpload, isUploading, sizeNote }) => (
+const LogoUploadField = ({ label, fieldName, value, onChange, sizeNote }) => (
   <div style={{ background: 'var(--adm-bg)', border: '1px solid var(--adm-border)', borderRadius: '12px', padding: '1.5rem' }}>
-    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '600', color: 'var(--adm-dim)', marginBottom: '1rem', textTransform: 'uppercase' }}>{label}</label>
-    <div style={{ height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', borderRadius: '8px', marginBottom: '1rem', border: '1px dashed #333', overflow: 'hidden' }}>
-      {value ? <img src={value} alt={label} style={{ maxHeight: '80%', maxWidth: '80%', objectFit: 'contain' }} /> : <span style={{ color: '#333' }}>No Image</span>}
-    </div>
-    <div style={{ position: 'relative' }}>
-      <input type="file" onChange={(e) => onUpload(e, fieldName)} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} accept="image/*" />
-      <button className="admin-btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
-        <Upload size={14} /> {isUploading ? 'Uploading...' : 'Upload New'}
-      </button>
-    </div>
-    <p style={{ fontSize: '0.65rem', color: 'var(--adm-dim)', marginTop: '0.75rem', textAlign: 'center' }}>{sizeNote}</p>
+    <MediaUploader label={label} value={value} accept="image/*" folder="creatifybd/branding" helperText={`${sizeNote}. Drag and drop or use a direct link.`} onChange={onChange} />
   </div>
 );
 
