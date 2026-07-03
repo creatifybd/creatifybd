@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, Menu, Phone, Search, X } from 'lucide-react';
+import { ChevronRight, Menu, Phone, X } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
@@ -83,7 +83,11 @@ const Navbar = ({ theme = 'light' }) => {
 
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.classList.toggle('mobile-menu-open', isMobileOpen);
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('mobile-menu-open');
+    };
   }, [isMobileOpen]);
 
   const closeMobile = () => setIsMobileOpen(false);
@@ -227,18 +231,6 @@ const Navbar = ({ theme = 'light' }) => {
                   </motion.div>
                 ))}
               </motion.nav>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35, duration: 0.4, ease: EASE_EXPO }}
-              >
-                <Link to="/gigs" className="mobile-search-link" onClick={closeMobile}>
-                  <Search size={18} />
-                  <span>Browse fixed-scope creative gigs</span>
-                  <ChevronRight size={17} aria-hidden="true" />
-                </Link>
-              </motion.div>
 
               <motion.div
                 className="mobile-menu-footer"
