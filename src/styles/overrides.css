@@ -767,6 +767,225 @@
     50% { opacity: 0.5; transform: scale(0.75); }
   }
 
+  /* Two-way homepage work reel and no-crop portfolio presentation */
+  body:not(.admin-body) .portfolio-marquee {
+    width: 100vw !important;
+    margin-top: 2.5rem !important;
+    margin-left: calc(50% - 50vw) !important;
+    display: grid !important;
+    gap: 0.9rem !important;
+    overflow: hidden !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row {
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-track {
+    width: max-content !important;
+    display: flex !important;
+    will-change: transform !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row--left .portfolio-marquee-track {
+    animation: portfolio-reel-left 62s linear infinite !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row--right .portfolio-marquee-track {
+    animation: portfolio-reel-right 68s linear infinite !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row:hover .portfolio-marquee-track,
+  body:not(.admin-body) .portfolio-marquee-row:focus-within .portfolio-marquee-track {
+    animation-play-state: paused !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-group {
+    display: flex !important;
+    gap: 0.9rem !important;
+    padding-right: 0.9rem !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card {
+    width: clamp(290px, 25vw, 430px) !important;
+    min-width: clamp(290px, 25vw, 430px) !important;
+    padding: 0 !important;
+    border: 1px solid rgba(20, 21, 24, 0.1) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    color: #111216 !important;
+    text-align: left !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease, box-shadow 320ms ease !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card:hover,
+  body:not(.admin-body) .portfolio-marquee-card:focus-visible {
+    transform: translateY(-5px) !important;
+    border-color: rgba(232, 25, 44, 0.45) !important;
+    box-shadow: 0 18px 42px rgba(20, 21, 24, 0.12) !important;
+    outline: none !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-media {
+    height: clamp(220px, 19vw, 310px) !important;
+    display: block !important;
+    padding: 0.9rem !important;
+    overflow: hidden !important;
+    background: #f4f4f2 !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card:nth-child(4n + 2) .portfolio-marquee-media {
+    background: #fff0f2 !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card:nth-child(4n + 3) .portfolio-marquee-media {
+    background: #eef4f8 !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card:nth-child(4n + 4) .portfolio-marquee-media {
+    background: #edf5f1 !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-image,
+  body:not(.admin-body) .portfolio-marquee-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-meta {
+    min-height: 86px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1rem !important;
+    padding: 1rem 1.1rem !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-meta > span:first-child {
+    min-width: 0 !important;
+    display: grid !important;
+    gap: 0.32rem !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-meta small {
+    color: #e8192c !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-meta strong {
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    color: #111216 !important;
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-arrow {
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 1px solid rgba(20, 21, 24, 0.18) !important;
+    border-radius: 50% !important;
+    color: #111216 !important;
+    transition: background 220ms ease, color 220ms ease, transform 220ms ease !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card:hover .portfolio-marquee-arrow,
+  body:not(.admin-body) .portfolio-marquee-card:focus-visible .portfolio-marquee-arrow {
+    background: #111216 !important;
+    color: #ffffff !important;
+    transform: rotate(45deg) !important;
+  }
+
+  body:not(.admin-body) .duck-work-media {
+    padding: clamp(0.65rem, 1.2vw, 1.15rem) !important;
+    background: #f3f3f1 !important;
+  }
+
+  body:not(.admin-body) .duck-work-image,
+  body:not(.admin-body) .duck-work-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  @keyframes portfolio-reel-left {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @keyframes portfolio-reel-right {
+    from { transform: translate3d(-50%, 0, 0); }
+    to { transform: translate3d(0, 0, 0); }
+  }
+
+  @media (max-width: 760px) {
+    body:not(.admin-body) .portfolio-marquee {
+      margin-top: 1.8rem !important;
+      gap: 0.65rem !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-group {
+      gap: 0.65rem !important;
+      padding-right: 0.65rem !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-card {
+      width: min(78vw, 315px) !important;
+      min-width: min(78vw, 315px) !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-media {
+      height: 220px !important;
+      padding: 0.65rem !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-meta {
+      min-height: 78px !important;
+      padding: 0.85rem 0.9rem !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-row--left .portfolio-marquee-track {
+      animation-duration: 48s !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-row--right .portfolio-marquee-track {
+      animation-duration: 52s !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body:not(.admin-body) .portfolio-marquee-row {
+      overflow-x: auto !important;
+      scrollbar-width: none !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-row::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-track {
+      animation: none !important;
+      transform: none !important;
+    }
+
+    body:not(.admin-body) .portfolio-marquee-group[aria-hidden='true'] {
+      display: none !important;
+    }
+  }
+
   /* Brand-red section rhythm fixes for the public homepage. */
   body:not(.admin-body) .App > section + section {
     margin-top: clamp(1.5rem, 2.4vw, 2.75rem) !important;
@@ -2626,3 +2845,471 @@
       padding: 1rem !important;
     }
   }
+
+/* Final portfolio composition: framed artwork, visible in full at every size. */
+body:not(.admin-body) .agency-work-page .duck-work-gallery {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: clamp(0.75rem, 1.1vw, 1.1rem) !important;
+  border: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-tile {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  min-height: 0 !important;
+  border: 1px solid rgba(20, 21, 24, 0.1) !important;
+  border-radius: 7px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(20, 21, 24, 0.05) !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-media,
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(6n + 2) .duck-work-media,
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(6n + 5) .duck-work-media {
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 / 3 !important;
+  padding: clamp(0.7rem, 1.2vw, 1.15rem) !important;
+}
+
+body:not(.admin-body) .duck-work-mobile-meta {
+  display: none !important;
+}
+
+@media (max-width: 960px) {
+  body:not(.admin-body) .agency-work-page .duck-work-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.admin-body) .agency-work-page .duck-work-gallery {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.8rem !important;
+  }
+
+  body:not(.admin-body) .agency-work-page .duck-work-overlay {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .agency-work-page .duck-work-mobile-meta {
+    min-height: 82px !important;
+    display: grid !important;
+    gap: 0.35rem !important;
+    padding: 0.9rem 1rem 1rem !important;
+    background: #ffffff !important;
+  }
+
+  body:not(.admin-body) .duck-work-mobile-meta > span {
+    color: #e8192c !important;
+    font-size: 0.67rem !important;
+    font-weight: 850 !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+  }
+
+  body:not(.admin-body) .duck-work-mobile-meta > div {
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.8rem !important;
+  }
+
+  body:not(.admin-body) .duck-work-mobile-meta h3 {
+    margin: 0 !important;
+    color: #111216 !important;
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+  }
+
+  body:not(.admin-body) .duck-work-mobile-arrow {
+    width: 36px !important;
+    height: 36px !important;
+    flex: 0 0 36px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 1px solid rgba(20, 21, 24, 0.2) !important;
+    border-radius: 50% !important;
+    color: #111216 !important;
+  }
+}
+
+/* Duck-inspired final portfolio presentation: image-first reels and full-image grid. */
+body:not(.admin-body) .agency-work-section {
+  background: #fffaf8 !important;
+  overflow: hidden !important;
+}
+
+body:not(.admin-body) .agency-work-section .wk-inner {
+  max-width: min(1520px, calc(100% - 2rem)) !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) {
+  padding-block: clamp(4.2rem, 7vw, 7rem) !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-header {
+  max-width: 820px !important;
+  margin: 0 auto clamp(2rem, 4vw, 3.5rem) !important;
+  text-align: center !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-eyebrow {
+  justify-content: center !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-heading {
+  margin: 0 !important;
+  font-size: clamp(2.8rem, 7vw, 5.5rem) !important;
+  line-height: 0.98 !important;
+  letter-spacing: 0 !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-header-copy,
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-stats-row {
+  display: none !important;
+}
+
+body:not(.admin-body) .portfolio-marquee {
+  width: 100vw !important;
+  margin: 0 0 0 calc(50% - 50vw) !important;
+  display: grid !important;
+  gap: clamp(0.85rem, 1.5vw, 1.35rem) !important;
+  overflow: hidden !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-row {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-track {
+  width: max-content !important;
+  display: flex !important;
+  will-change: transform !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-group {
+  display: flex !important;
+  gap: clamp(0.85rem, 1.5vw, 1.35rem) !important;
+  padding-right: clamp(0.85rem, 1.5vw, 1.35rem) !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-row--left .portfolio-marquee-track {
+  animation: portfolio-reel-left 58s linear infinite !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-row--right .portfolio-marquee-track {
+  animation: portfolio-reel-right 64s linear infinite !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-row:hover .portfolio-marquee-track,
+body:not(.admin-body) .portfolio-marquee-row:focus-within .portfolio-marquee-track {
+  animation-play-state: paused !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-card {
+  width: clamp(330px, 36vw, 520px) !important;
+  min-width: clamp(330px, 36vw, 520px) !important;
+  height: clamp(226px, 25vw, 366px) !important;
+  display: block !important;
+  padding: clamp(0.85rem, 1.55vw, 1.35rem) !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #f6f1ee !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 360ms ease !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 1) { background: #fff0f2 !important; }
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 2) { background: #eef4f8 !important; }
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 3) { background: #f1f6f2 !important; }
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 4) { background: #f5f1fb !important; }
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 5) { background: #fff6f6 !important; }
+body:not(.admin-body) .portfolio-marquee-card:nth-child(6n + 6) { background: #eff3f7 !important; }
+
+body:not(.admin-body) .portfolio-marquee-card:hover,
+body:not(.admin-body) .portfolio-marquee-card:focus-visible {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 22px 54px rgba(20, 21, 24, 0.13) !important;
+  outline: none !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-media {
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-image,
+body:not(.admin-body) .portfolio-marquee-image :is(img, picture),
+body:not(.admin-body) .portfolio-marquee-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+body:not(.admin-body) .portfolio-marquee-meta,
+body:not(.admin-body) .portfolio-marquee-arrow {
+  display: none !important;
+}
+
+body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-footer {
+  margin-top: clamp(2rem, 3.5vw, 3rem) !important;
+}
+
+body:not(.admin-body) .agency-work-page {
+  background: #fffaf8 !important;
+  padding-block: clamp(7rem, 10vw, 10rem) clamp(4rem, 7vw, 7rem) !important;
+}
+
+body:not(.admin-body) .agency-work-page-header {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: clamp(1.5rem, 3vw, 3rem) !important;
+  align-items: end !important;
+  margin-bottom: clamp(2.2rem, 4vw, 3.5rem) !important;
+}
+
+body:not(.admin-body) .agency-work-page-header .wk-heading {
+  max-width: 980px !important;
+  font-size: clamp(3.2rem, 7.4vw, 7.2rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: 0 !important;
+}
+
+body:not(.admin-body) .agency-work-page-header p {
+  max-width: 760px !important;
+  margin-top: 1.35rem !important;
+  color: #596273 !important;
+}
+
+body:not(.admin-body) .wk-filter-bar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.75rem !important;
+  margin: 0 auto clamp(2rem, 4vw, 3.5rem) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+
+body:not(.admin-body) .wk-filter-btn {
+  border: 1px solid rgba(17, 18, 22, 0.22) !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: #15161a !important;
+  padding: 0.85rem 1.25rem !important;
+  font-weight: 750 !important;
+}
+
+body:not(.admin-body) .wk-filter-btn--active {
+  border-color: #e8192c !important;
+  background: #e8192c !important;
+  color: #ffffff !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-gallery-wrap {
+  overflow: visible !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-auto-flow: row !important;
+  gap: clamp(1rem, 2vw, 1.75rem) !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-tile,
+body:not(.admin-body) .agency-work-page .duck-work-tile--hero,
+body:not(.admin-body) .agency-work-page .duck-work-tile--wide,
+body:not(.admin-body) .agency-work-page .duck-work-tile--tall,
+body:not(.admin-body) .agency-work-page .duck-work-tile--square {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 1.5 / 1 !important;
+  height: clamp(260px, 20vw, 392px) !important;
+  display: block !important;
+  padding: clamp(0.85rem, 1.6vw, 1.5rem) !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #f5f1ee !important;
+  box-shadow: none !important;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 360ms ease !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 1) { background: #fff0f2 !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 2) { background: #eef4f8 !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 3) { background: #f2f6ed !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 4) { background: #f5f1fb !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 5) { background: #fff6f6 !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 6) { background: #eff3f7 !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 7) { background: #f7eeee !important; }
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(8n + 8) { background: #eef7f4 !important; }
+
+body:not(.admin-body) .agency-work-page .duck-work-tile:hover,
+body:not(.admin-body) .agency-work-page .duck-work-tile:focus-visible {
+  transform: translateY(-7px) !important;
+  box-shadow: 0 24px 58px rgba(20, 21, 24, 0.12) !important;
+  outline: none !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-media,
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(6n + 2) .duck-work-media,
+body:not(.admin-body) .agency-work-page .duck-work-tile:nth-child(6n + 5) .duck-work-media {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-image,
+body:not(.admin-body) .agency-work-page .duck-work-image :is(img, picture),
+body:not(.admin-body) .agency-work-page .duck-work-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  transform: none !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-tile:hover .duck-work-image {
+  transform: none !important;
+}
+
+body:not(.admin-body) .agency-work-page .duck-work-overlay,
+body:not(.admin-body) .agency-work-page .duck-work-mobile-meta {
+  display: none !important;
+}
+
+@media (max-width: 1024px) {
+  body:not(.admin-body) .agency-work-page .duck-work-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  body:not(.admin-body) .agency-work-section .wk-inner {
+    max-width: 100% !important;
+    padding-inline: 16px !important;
+  }
+
+  body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-heading {
+    font-size: clamp(2.35rem, 13vw, 4rem) !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-card {
+    width: min(82vw, 340px) !important;
+    min-width: min(82vw, 340px) !important;
+    height: min(58vw, 238px) !important;
+    padding: 0.7rem !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row--left .portfolio-marquee-track {
+    animation-duration: 44s !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row--right .portfolio-marquee-track {
+    animation-duration: 50s !important;
+  }
+
+  body:not(.admin-body) .agency-work-page {
+    padding-block: 6.2rem 4rem !important;
+  }
+
+  body:not(.admin-body) .agency-work-page-header {
+    grid-template-columns: minmax(0, 1fr) !important;
+    text-align: left !important;
+  }
+
+  body:not(.admin-body) .agency-work-page-header .wk-heading {
+    font-size: clamp(2.65rem, 12vw, 4.1rem) !important;
+    line-height: 1 !important;
+  }
+
+  body:not(.admin-body) .agency-work-page-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.7rem !important;
+  }
+
+  body:not(.admin-body) .wk-filter-bar {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    width: calc(100% + 16px) !important;
+    margin-right: -16px !important;
+    padding: 0 16px 1rem 0 !important;
+    scrollbar-width: none !important;
+  }
+
+  body:not(.admin-body) .wk-filter-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .wk-filter-btn {
+    flex: 0 0 auto !important;
+  }
+
+  body:not(.admin-body) .agency-work-page .duck-work-gallery {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  body:not(.admin-body) .agency-work-page .duck-work-tile,
+  body:not(.admin-body) .agency-work-page .duck-work-tile--hero,
+  body:not(.admin-body) .agency-work-page .duck-work-tile--wide,
+  body:not(.admin-body) .agency-work-page .duck-work-tile--tall,
+  body:not(.admin-body) .agency-work-page .duck-work-tile--square {
+    aspect-ratio: 1.38 / 1 !important;
+    height: min(72vw, 300px) !important;
+    padding: 0.75rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.admin-body) .portfolio-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row {
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-row::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .portfolio-marquee-group[aria-hidden='true'] {
+    display: none !important;
+  }
+}

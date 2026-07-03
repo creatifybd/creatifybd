@@ -189,14 +189,16 @@ function Counter({ target, duration = 1200 }) {
 // ── Work Card ─────────────────────────────────────────────────────────────────
 const WORK_TILE_PATTERNS = ['hero', 'tall', 'wide', 'square', 'wide', 'tall', 'square', 'hero'];
 
+const getWorkImage = (item) => item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
+
 const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
   const pattern = WORK_TILE_PATTERNS[priority % WORK_TILE_PATTERNS.length];
   return (
     <motion.div
       ref={ref}
       layout
-      initial={{ opacity: 0, y: 40, skewY: 2 }}
-      whileInView={{ opacity: 1, y: 0, skewY: 0 }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`duck-work-tile duck-work-tile--${pattern}`}
@@ -208,10 +210,11 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
     >
       <div className="duck-work-media">
         <OptimizedImage
-          src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'}
+          src={getWorkImage(item)}
           alt={item.title}
           className="duck-work-image"
           priority={priority < 6}
+          objectFit="contain"
         />
         <div className="duck-work-overlay">
           <div>
@@ -222,11 +225,72 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
           <span className="duck-work-arrow"><ArrowUpRight size={22} /></span>
         </div>
       </div>
+      <div className="duck-work-mobile-meta">
+        <span>{item.service || PORTFOLIO_CAT_DISPLAY[item.category] || CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
+        <div>
+          <h3>{item.title}</h3>
+          <span className="duck-work-mobile-arrow" aria-hidden="true"><ArrowUpRight size={19} /></span>
+        </div>
+      </div>
     </motion.div>
   );
 });
 
 WorkCard.displayName = 'WorkCard';
+
+const MarqueeWorkCard = ({ item, onClick, priority = false, duplicate = false }) => (
+  <button
+    type="button"
+    className="portfolio-marquee-card"
+    onClick={() => onClick(item)}
+    aria-label={duplicate ? undefined : `View ${item.title}`}
+    aria-hidden={duplicate ? 'true' : undefined}
+    tabIndex={duplicate ? -1 : 0}
+  >
+    <span className="portfolio-marquee-media">
+      <OptimizedImage
+        src={getWorkImage(item)}
+        alt={duplicate ? '' : item.title}
+        className="portfolio-marquee-image"
+        priority={priority}
+        objectFit="contain"
+      />
+    </span>
+  </button>
+);
+
+const PortfolioMarquee = ({ items, onOpen }) => {
+  const rowOne = items.filter((_, index) => index % 2 === 0);
+  const rowTwo = items.filter((_, index) => index % 2 === 1);
+
+  return (
+    <div className="portfolio-marquee" aria-label="Featured creative work">
+      {[rowOne, rowTwo].map((row, rowIndex) => (
+        <div className={`portfolio-marquee-row portfolio-marquee-row--${rowIndex === 0 ? 'left' : 'right'}`} key={rowIndex}>
+          <div className="portfolio-marquee-track">
+            {[false, true].map(duplicate => (
+              <div
+                className="portfolio-marquee-group"
+                key={duplicate ? 'duplicate' : 'primary'}
+                aria-hidden={duplicate ? 'true' : undefined}
+              >
+                {row.map((item, itemIndex) => (
+                  <MarqueeWorkCard
+                    key={`${duplicate ? 'duplicate' : 'primary'}-${item.id}`}
+                    item={item}
+                    onClick={onOpen}
+                    priority={!duplicate && rowIndex === 0 && itemIndex < 3}
+                    duplicate={duplicate}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 // ── Main Component ────────────────────────────────────────────────────────────
 const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => {
@@ -266,7 +330,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     ? portfolioItems
     : portfolioItems.filter(i => i.category === activeFilter);
 
-  const displayItems = highlight ? filteredItems.slice(0, 6) : filteredItems;
+  const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems;
 
   const availableCats = PORTFOLIO_CATS.filter(c => {
     if (c.key === 'all') return true;
@@ -310,11 +374,11 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                   <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />Selected work</div>
                 </FadeReveal>
                 <TextReveal className="wk-heading">
-                  Work made to be seen, remembered, and acted on.
+                  CreatifyBD Portfolio
                 </TextReveal>
                 <FadeReveal delay={0.2}>
                   <p>
-                    Social content, campaigns, brand identities, videos, and websites created for ambitious brands.
+                    Visual work, brand systems, campaigns, videos, and web experiences built for ambitious brands.
                   </p>
                 </FadeReveal>
               </div>
@@ -330,10 +394,10 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
           {!fullPage && (
             <div className="wk-header">
               <FadeReveal>
-                <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'আমাদের কাজ' : 'Our Work'}</div>
+                <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'আমাদের কাজ' : 'Our Works'}</div>
               </FadeReveal>
               <TextReveal className="wk-heading">
-                {lang === 'bn' ? 'সৃজনশীলতা যেখানে ফলাফল আনে' : 'Creativity that drives results'}
+                {lang === 'bn' ? 'আমাদের কাজ' : 'Our Works'}
               </TextReveal>
               <FadeReveal delay={0.2}>
                 <p className="wk-header-copy">
@@ -375,22 +439,26 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             </FadeReveal>
           )}
 
-          <div className="duck-work-gallery-wrap">
-            <StaggerReveal>
-              <motion.div layout className="duck-work-gallery">
-                <AnimatePresence mode="popLayout">
-                  {displayItems.map((item, index) => (
-                    <WorkCard key={item.id} item={item} onClick={openLightbox} priority={index} />
-                  ))}
-                </AnimatePresence>
-              </motion.div>
-            </StaggerReveal>
-          </div>
+          {highlight ? (
+            <PortfolioMarquee items={displayItems} onOpen={openLightbox} />
+          ) : (
+            <div className="duck-work-gallery-wrap">
+              <StaggerReveal>
+                <motion.div layout className="duck-work-gallery">
+                  <AnimatePresence mode="popLayout">
+                    {displayItems.map((item, index) => (
+                      <WorkCard key={item.id} item={item} onClick={openLightbox} priority={index} />
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </StaggerReveal>
+            </div>
+          )}
 
           {highlight && (
             <FadeReveal delay={0.4}>
               <div className="wk-footer" style={{ marginTop: '4rem', textAlign: 'center' }}>
-                <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'View Full Portfolio →'}</Link>
+                <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'See All Our Works →'}</Link>
               </div>
             </FadeReveal>
           )}
