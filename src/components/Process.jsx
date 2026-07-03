@@ -4,6 +4,7 @@ import { FileSearch, Lightbulb, PenTool, Rocket } from 'lucide-react';
 import { FadeReveal, SlideReveal } from './MotionReveal';
 import { motion } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
+import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -40,6 +41,11 @@ const Process = ({ highlight = false, fullPage = false }) => {
   const editableSteps = Array.isArray(processContent.steps) && processContent.steps.length
     ? processContent.steps.map((step, index) => ({ ...steps[index % steps.length], ...step }))
     : steps;
+  const title = globalizeCopy(processContent.title, 'A clear process from first brief to final delivery');
+  const subtitle = globalizeCopy(
+    processContent.subtitle,
+    'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.'
+  );
 
   return (
     <section className={`section process-section ${fullPage ? 'full-page-section' : ''}`} id="process">
@@ -50,10 +56,10 @@ const Process = ({ highlight = false, fullPage = false }) => {
               <div className="eyebrow">{processContent.eyebrow || 'Our Workflow'}</div>
             </FadeReveal>
             <SlideReveal delay={0.1}>
-              <h2 className="section-h">{processContent.title || 'A clear process from first brief to final delivery'}</h2>
+              <h2 className="section-h">{renderRichTitle(title)}</h2>
             </SlideReveal>
             <FadeReveal delay={0.2}>
-              <p className="section-sub">{processContent.subtitle || 'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.'}</p>
+              <p className="section-sub">{subtitle}</p>
             </FadeReveal>
           </div>
         )}

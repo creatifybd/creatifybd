@@ -3,6 +3,7 @@ import { ArrowRight, CalendarCheck, CheckCircle, Clock, LineChart, MessageSquare
 import { Link } from 'react-router-dom';
 import { FadeReveal, SlideReveal, StaggerReveal, StaggerChild, BlurReveal } from './MotionReveal';
 import { useSettings } from '../context/SettingsContext';
+import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
 const benefits = [
   {
@@ -41,6 +42,11 @@ const SmmHighlight = () => {
       }))
     : benefits;
   const metrics = smmContent.metrics || {};
+  const title = globalizeCopy(smmContent.title, 'Monthly social media management for international brands');
+  const lead = globalizeCopy(
+    smmContent.lead,
+    'A dedicated creative workflow for brands that need consistent, polished social media without hiring a full in-house team.'
+  );
 
   return (
     <section className="smm-highlight-section">
@@ -52,12 +58,10 @@ const SmmHighlight = () => {
                 <span className="eyebrow">{smmContent.eyebrow || 'Managed Social Media'}</span>
               </FadeReveal>
               <FadeReveal delay={0.1}>
-                <h2>{smmContent.title || 'Monthly social media management for international brands'}</h2>
+                <h2>{renderRichTitle(title)}</h2>
               </FadeReveal>
               <FadeReveal delay={0.2}>
-                <p className="smm-lead">
-                  {smmContent.lead || 'A dedicated creative workflow for founders who need consistent, polished social media without hiring a full in-house team. We plan, design, write, schedule, and report, so your business stays active and trustworthy every week.'}
-                </p>
+                <p className="smm-lead">{lead}</p>
               </FadeReveal>
 
               <StaggerReveal delay={0.25} stagger={0.1} className="smm-benefits-list">

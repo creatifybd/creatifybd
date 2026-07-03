@@ -1433,9 +1433,11 @@ body.admin-body .admin-content [style*="position: fixed"] {
 body.admin-body .admin-content [style*="position: fixed"] > .admin-card {
   width: min(680px,100%) !important;
   max-width: 100% !important;
-  max-height: none !important;
-  overflow: visible !important;
-  margin: auto !important;
+  max-height: calc(100dvh - 2rem) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  margin: 0 auto !important;
+  scrollbar-width: thin !important;
 }
 
 @media (max-width: 1100px) {

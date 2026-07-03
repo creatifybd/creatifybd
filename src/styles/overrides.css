@@ -3313,3 +3313,462 @@ body:not(.admin-body) .agency-work-page .duck-work-mobile-meta {
     display: none !important;
   }
 }
+
+/* Final public UI audit: navigation, motion, services, portfolio, and checkout */
+body:not(.admin-body) :is(.btn-red, .btn-huge-red, .nav-cta-wrap .btn-red),
+body:not(.admin-body) :is(.btn-red, .btn-huge-red, .nav-cta-wrap .btn-red) * {
+  color: #ffffff !important;
+}
+
+body:not(.admin-body) :is(.btn-red, .btn-huge-red, .btn-outline-red, .duck-services-link) {
+  transition:
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 360ms ease,
+    background-color 240ms ease,
+    color 240ms ease !important;
+}
+
+body:not(.admin-body) :is(.btn-red, .btn-huge-red):hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 18px 42px rgba(232, 25, 44, 0.24) !important;
+}
+
+body:not(.admin-body) .whatsapp-float-btn {
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  line-height: 1 !important;
+  transform-origin: center !important;
+  animation: whatsappFloat 3.4s ease-in-out infinite !important;
+}
+
+body:not(.admin-body) .whatsapp-float-btn svg {
+  width: 31px !important;
+  height: 31px !important;
+  display: block !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+@keyframes whatsappFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); box-shadow: 0 14px 34px rgba(18, 208, 99, 0.28); }
+  50% { transform: translate3d(0, -7px, 0); box-shadow: 0 22px 44px rgba(18, 208, 99, 0.38); }
+}
+
+body:not(.admin-body) .marquee-wrap {
+  width: 100% !important;
+  overflow: hidden !important;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent) !important;
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent) !important;
+}
+
+body:not(.admin-body) .marquee-row {
+  display: flex !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  will-change: transform !important;
+}
+
+body:not(.admin-body) .marquee-group {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body:not(.admin-body) .duck-service-row-main {
+  grid-template-columns: 54px minmax(0, 1fr) minmax(170px, auto) !important;
+  gap: clamp(1rem, 2vw, 2rem) !important;
+  align-items: start !important;
+}
+
+body:not(.admin-body) .duck-service-title-line {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.65rem 1rem !important;
+  min-width: 0 !important;
+}
+
+body:not(.admin-body) .duck-service-title-line h3 {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+}
+
+body:not(.admin-body) .duck-service-badge {
+  position: static !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  padding: 0.62rem 0.78rem !important;
+  border: 1px solid rgba(232, 25, 44, 0.48) !important;
+  background: #fff6f7 !important;
+  color: #d91325 !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+body:not(.admin-body) .duck-service-action {
+  min-width: 170px !important;
+  justify-self: end !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 1rem !important;
+}
+
+body:not(.admin-body) .duck-service-price {
+  white-space: nowrap !important;
+  text-align: right !important;
+}
+
+body:not(.admin-body) .pf-lightbox {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 50000 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: clamp(1rem, 3vw, 2.5rem) !important;
+  overflow: auto !important;
+  background: rgba(27, 24, 25, 0.62) !important;
+  backdrop-filter: blur(24px) saturate(1.12) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.12) !important;
+}
+
+body:not(.admin-body) .pf-lb-content {
+  width: min(1120px, calc(100vw - 48px)) !important;
+  max-height: calc(100dvh - 48px) !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  overflow: auto !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 40px 110px rgba(10, 8, 9, 0.38) !important;
+}
+
+body:not(.admin-body) .pf-lb-visual {
+  min-height: min(60vh, 680px) !important;
+  max-height: 68vh !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: clamp(0.75rem, 2vw, 1.5rem) !important;
+  overflow: hidden !important;
+  background: linear-gradient(145deg, #fff8f8, #f4f5f8) !important;
+}
+
+body:not(.admin-body) .pf-lb-img,
+body:not(.admin-body) .pf-lb-img :is(img, picture),
+body:not(.admin-body) .pf-lb-img img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 64vh !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+body:not(.admin-body) .pf-lb-meta {
+  padding: clamp(1.25rem, 2.4vw, 2rem) !important;
+  color: #15161a !important;
+  background: #ffffff !important;
+  border-top: 1px solid #eceef2 !important;
+}
+
+body:not(.admin-body) .pf-lb-kicker {
+  display: block !important;
+  margin-bottom: 0.55rem !important;
+  color: #e8192c !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  text-transform: uppercase !important;
+}
+
+body:not(.admin-body) .pf-lb-title {
+  margin: 0 !important;
+  color: #111216 !important;
+  font-size: clamp(1.45rem, 3vw, 2.25rem) !important;
+  font-weight: 850 !important;
+  line-height: 1.08 !important;
+}
+
+body:not(.admin-body) .pf-lb-desc {
+  color: #596273 !important;
+}
+
+body:not(.admin-body) :is(.pf-lb-close, .pf-lb-nav) {
+  z-index: 2 !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #111216 !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(17, 18, 22, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(16, 17, 20, 0.16) !important;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), background-color 220ms ease !important;
+}
+
+body:not(.admin-body) :is(.pf-lb-close, .pf-lb-nav):hover {
+  transform: scale(1.08) !important;
+  background: #ffffff !important;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar) {
+  background: #ffffff !important;
+  color: #15161a !important;
+  border: 1px solid #eadfe1 !important;
+  box-shadow: 0 24px 64px rgba(31, 20, 23, 0.08) !important;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar)
+  :is(.form-title, .section-title-label, .sidebar-h, .service-meta-mini h5, .price-row-item strong) {
+  color: #15161a !important;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar) :is(.form-sub-intro, label, p, span) {
+  color: #667085;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar) .red,
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar) .cat-lbl {
+  color: #e8192c !important;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar) :is(.luxury-input, textarea, select) {
+  background: #fff7f8 !important;
+  color: #15161a !important;
+  border: 1px solid #efcfd4 !important;
+}
+
+body:not(.admin-body) :is(.order-form-card, .order-summary-sidebar)
+  :is(.form-section-block, .summary-service-box, .price-row-item) {
+  border-color: #eee4e6 !important;
+}
+
+body:not(.admin-body) .payment-page :is(.payment-method-card, .payment-faq, .payment-form-wrapper) {
+  background: #ffffff !important;
+  color: #15161a !important;
+  border: 1px solid #eadfe1 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 54px rgba(31, 20, 23, 0.07) !important;
+}
+
+body:not(.admin-body) .payment-page .payment-method-card {
+  padding: clamp(1.25rem, 2.4vw, 2rem) !important;
+}
+
+body:not(.admin-body) .payment-page :is(.payment-method-header, .payment-detail-row, .faq-item) {
+  border-color: #eee4e6 !important;
+}
+
+body:not(.admin-body) .payment-page :is(.payment-method-header h3, .payment-value, .faq-question, .payment-form h2) {
+  color: #15161a !important;
+}
+
+body:not(.admin-body) .payment-page :is(.payment-label, .faq-answer, .luxury-label, .payment-note) {
+  color: #667085 !important;
+}
+
+body:not(.admin-body) .payment-page :is(.luxury-input, textarea, select) {
+  background: #fff7f8 !important;
+  color: #15161a !important;
+  border: 1px solid #efcfd4 !important;
+}
+
+body:not(.admin-body) .payment-page .payment-placeholder-warning {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  gap: 0.85rem 1rem !important;
+  align-items: start !important;
+  padding: 1.15rem !important;
+  background: #fff7f8 !important;
+  border: 1px solid #efcfd4 !important;
+  border-radius: 10px !important;
+}
+
+body:not(.admin-body) .payment-page .payment-placeholder-warning .btn-red {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  margin-top: 0 !important;
+  text-align: center !important;
+}
+
+@media (max-width: 900px) {
+  body:not(.admin-body) #navbar .nav-logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+  }
+
+  body:not(.admin-body) #navbar .nav-logo-img {
+    display: block !important;
+    width: 34px !important;
+    height: 34px !important;
+    object-fit: contain !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  body:not(.admin-body) .hamburger-btn .hamburger-icon {
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    place-items: center !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  body:not(.admin-body) .hamburger-btn .hamburger-icon::before,
+  body:not(.admin-body) .hamburger-btn .hamburger-icon::after {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .hamburger-btn .hamburger-label {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .mobile-menu-list a {
+    min-height: 50px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 20px !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    line-height: 1.1 !important;
+  }
+
+  body:not(.admin-body) .mobile-menu-list a > span {
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body:not(.admin-body) .mobile-service-strip {
+    display: none !important;
+  }
+
+  body:not(.admin-body) .duck-service-row-main {
+    grid-template-columns: 38px minmax(0, 1fr) !important;
+  }
+
+  body:not(.admin-body) .duck-service-action {
+    grid-column: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-self: stretch !important;
+    justify-content: space-between !important;
+  }
+
+  body:not(.admin-body) .pf-lb-content {
+    width: calc(100vw - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    border-radius: 12px !important;
+  }
+
+  body:not(.admin-body) .pf-lb-visual {
+    min-height: 44vh !important;
+    max-height: 58vh !important;
+  }
+
+  body:not(.admin-body) .pf-lb-nav {
+    top: auto !important;
+    bottom: 20px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.admin-body) .whatsapp-float-btn {
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    min-height: 54px !important;
+  }
+
+  body:not(.admin-body) .whatsapp-float-btn svg {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
+  body:not(.admin-body) .duck-service-title-line {
+    align-items: flex-start !important;
+  }
+
+  body:not(.admin-body) .duck-service-badge {
+    font-size: 0.62rem !important;
+    padding: 0.5rem 0.6rem !important;
+  }
+}
+
+/* Final checkout polish: override legacy inline dark checkout styles. */
+body:not(.admin-body) :is(.order-start-page, .payment-page) {
+  background: #fff7f8 !important;
+  color: #111216 !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.order-form-card, .order-summary-sidebar, .payment-method-card,
+      .payment-faq, .payment-form-wrapper, .payment-success) {
+  background: #ffffff !important;
+  color: #111216 !important;
+  border: 1px solid rgba(232, 25, 44, 0.14) !important;
+  box-shadow: 0 26px 70px rgba(28, 18, 20, 0.08) !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.form-title, .section-title-label, .sidebar-h, .service-meta-mini h5,
+      .price-row-item.total .lbl, .payment-method-header h3, .payment-value,
+      .faq-question, .success-title, .payment-form h2) {
+  color: #111216 !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.form-sub-intro, .form-group label, .price-row-item .lbl, .g-item,
+      .payment-label, .faq-answer, .success-desc, .luxury-label,
+      .file-upload-label, .payment-note, .onboarding-notice) {
+  color: #667085 !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.luxury-input, select.luxury-input, textarea.luxury-input) {
+  background: #fff7f8 !important;
+  color: #111216 !important;
+  border: 1px solid rgba(232, 25, 44, 0.18) !important;
+  box-shadow: none !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.luxury-input, select.luxury-input, textarea.luxury-input):focus {
+  background: #ffffff !important;
+  border-color: #e8192c !important;
+  box-shadow: 0 0 0 4px rgba(232, 25, 44, 0.10) !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.summary-service-box, .form-section-block, .payment-method-header,
+      .payment-detail-row, .faq-item, .price-total-divider,
+      .guarantees-list) {
+  border-color: rgba(232, 25, 44, 0.12) !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page) .service-thumb-mini {
+  background: #fff1f3 !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.file-upload-label, .payment-placeholder-warning, .payment-note) {
+  background: #fff7f8 !important;
+  border-color: rgba(232, 25, 44, 0.18) !important;
+}
+
+body:not(.admin-body) :is(.order-start-page, .payment-page)
+  :is(.btn-red, .btn-huge-red, .payment-placeholder-warning .btn-red) {
+  color: #ffffff !important;
+  background: #e8192c !important;
+  border-color: #e8192c !important;
+}

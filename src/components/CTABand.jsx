@@ -4,10 +4,16 @@ import React from 'react';
   import { siteConfig } from '../config/siteConfig';
   import { FadeReveal, MagneticWrap } from './MotionReveal';
   import { useSettings } from '../context/SettingsContext';
+  import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
   const CTABand = () => {
     const { content } = useSettings();
     const cta = content?.cta_band || {};
+    const title = globalizeCopy(cta.title, 'Ready to Grow Your Business?');
+    const subtitle = globalizeCopy(
+      cta.subtitle,
+      'Tell us about your goals and we will recommend the right package, timeline, and first deliverables.'
+    );
 
     return (
       <section className="cta-section">
@@ -16,10 +22,10 @@ import React from 'react';
             <span className="eyebrow">{cta.eyebrow || 'Ready when you are'}</span>
           </FadeReveal>
           <FadeReveal delay={0.12}>
-            <h2>{cta.title || 'Need a reliable creative team for your next month of content?'}</h2>
+            <h2>{renderRichTitle(title, 'Ready to Grow Your Business?')}</h2>
           </FadeReveal>
           <FadeReveal delay={0.22}>
-            <p>{cta.subtitle || 'Tell us about your business and we will recommend the right package, timeline, and first deliverables.'}</p>
+            <p>{subtitle}</p>
           </FadeReveal>
           <FadeReveal delay={0.32}>
             <div className="cta-actions">

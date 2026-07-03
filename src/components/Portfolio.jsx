@@ -110,7 +110,6 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
       exit={{ opacity: 0 }}
       className="pf-lightbox" 
       onClick={(e) => e.target === e.currentTarget && onClose()}
-      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(0,0,0,0.85)' }}
     >
       <button className="pf-lb-close" onClick={onClose} aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -126,19 +125,24 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
         </button>
       )}
       <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0.94, opacity: 0, y: 28 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.97, opacity: 0, y: 16 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="pf-lb-content"
       >
-        <OptimizedImage 
-          src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'} 
-          alt={item.title} 
-          className="pf-lb-img" 
-          priority={true}
-          objectFit="contain"
-        />
+        <div className="pf-lb-visual">
+          <OptimizedImage
+            src={item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'}
+            alt={item.title}
+            className="pf-lb-img"
+            priority={true}
+            objectFit="contain"
+          />
+        </div>
         <div className="pf-lb-meta">
-          <h3 className="pf-lb-title" style={{ fontSize: '2rem', fontWeight: 800 }}>{item.title}</h3>
+          <span className="pf-lb-kicker">{item.service || PORTFOLIO_CAT_DISPLAY[item.category] || 'Selected work'}</span>
+          <h3 className="pf-lb-title">{item.title}</h3>
           {item.description && <p className="pf-lb-desc">{item.description}</p>}
           {(item.service || item.industry) && (
             <div className="pf-lb-details">
@@ -308,7 +312,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
         const allItems = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         // Sort in JS instead of Firestore query to avoid index requirements
         const sorted = allItems.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        setItems(sorted.filter(item => item.hidden !== true));
+        setItems(sorted);
         setLoading(false);
       },
       () => setLoading(false)
@@ -317,9 +321,20 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   }, []);
 
   const curatedIds = new Set(CURATED_PORTFOLIO.map(item => item.id));
-  const adminItems = items.filter(item => !curatedIds.has(item.id));
+  const adminById = new Map(items.map(item => [item.id, item]));
+  const syncedCuratedItems = CURATED_PORTFOLIO
+    .map(item => {
+      const override = adminById.get(item.id);
+      return {
+        ...item,
+        ...override,
+        image: override?.imageUrl || override?.image || item.image
+      };
+    })
+    .filter(item => item.hidden !== true);
+  const adminItems = items.filter(item => !curatedIds.has(item.id) && item.hidden !== true);
   const curatedGroups = ['social', 'branding', 'marketing', 'video', 'web']
-    .map(category => CURATED_PORTFOLIO.filter(item => item.category === category));
+    .map(category => syncedCuratedItems.filter(item => item.category === category));
   const longestGroup = Math.max(...curatedGroups.map(group => group.length));
   const interleavedCuratedItems = Array.from({ length: longestGroup }, (_, index) =>
     curatedGroups.map(group => group[index]).filter(Boolean)

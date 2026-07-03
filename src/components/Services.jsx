@@ -109,12 +109,12 @@ const Services = ({ highlight = false, fullPage = false }) => {
                     <div className="duck-service-copy">
                       <div className="duck-service-title-line">
                         <h3>{service.title}</h3>
-                        {idx === 0 && <span>Most requested</span>}
+                        {idx === 0 && <span className="duck-service-badge">Most requested</span>}
                       </div>
                       <p>{service.desc || service.description}</p>
                     </div>
                     <div className="duck-service-action">
-                      <span>{service.price || 'Custom quote'}</span>
+                      <span className="duck-service-price">{service.price || 'Custom quote'}</span>
                       <a
                         href={service.price && service.price !== 'Custom quote' ? `/payment?service=${encodeURIComponent(service.title)}` : '#contact'}
                         aria-label={`Start ${service.title}`}

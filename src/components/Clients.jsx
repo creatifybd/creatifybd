@@ -18,6 +18,9 @@ const Clients = () => {
     .map(s => s.trim())
     .filter(s => s && !/(bangladesh|dhaka|\bbd\b)/i.test(s));
   const marqueeItems = logos.length ? logos : clientsContent.list.split(',').map(s => s.trim()).filter(Boolean);
+  const seamlessItems = marqueeItems.length < 16
+    ? Array.from({ length: Math.ceil(16 / Math.max(marqueeItems.length, 1)) }, () => marqueeItems).flat()
+    : marqueeItems;
 
   return (
     <FadeReveal>
@@ -31,7 +34,7 @@ const Clients = () => {
           <div className="marquee-row">
             {[0, 1].map(group => (
               <div className="marquee-group" key={group} aria-hidden={group === 1}>
-                {marqueeItems.map((logo, index) => (
+                {seamlessItems.map((logo, index) => (
                   <div key={`${group}-${logo}-${index}`} className="client-logo">{logo}</div>
                 ))}
               </div>

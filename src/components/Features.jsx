@@ -2,6 +2,7 @@ import React from 'react';
 import { BarChart3, Clock3, Globe2, ShieldCheck } from 'lucide-react';
 import { FadeReveal, StaggerReveal, StaggerChild, ScaleReveal, CountUp, SlideReveal } from './MotionReveal';
 import { useSettings } from '../context/SettingsContext';
+import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
 const featureItems = [
   {
@@ -30,7 +31,15 @@ const Features = () => {
   const { content } = useSettings();
   const featuresContent = content?.features || {};
   const editableItems = Array.isArray(featuresContent.items) && featuresContent.items.length
-    ? featuresContent.items.map((item, index) => ({ ...featureItems[index % featureItems.length], ...item }))
+    ? featuresContent.items.map((item, index) => {
+        const fallback = featureItems[index % featureItems.length];
+        return {
+          ...fallback,
+          ...item,
+          title: globalizeCopy(item.title, fallback.title),
+          desc: globalizeCopy(item.desc || item.description, fallback.desc)
+        };
+      })
     : featureItems;
   const visualStats = Array.isArray(featuresContent.stats) && featuresContent.stats.length
     ? featuresContent.stats
@@ -42,6 +51,11 @@ const Features = () => {
   const badges = Array.isArray(featuresContent.badges) && featuresContent.badges.length
     ? featuresContent.badges
     : ['Social Media Management', 'Graphic Design', 'Video Editing', 'Digital Marketing', 'Website Design'];
+  const title = globalizeCopy(featuresContent.title, 'Built for dependable growth.');
+  const subtitle = globalizeCopy(
+    featuresContent.subtitle,
+    'Structured creative operations, international service standards, and dependable output for ambitious brands.'
+  );
 
   return (
     <section className="section features-section" id="why">
@@ -53,12 +67,10 @@ const Features = () => {
                 <div className="eyebrow">{featuresContent.eyebrow || 'Why CreatifyBD'}</div>
               </FadeReveal>
               <FadeReveal delay={0.1}>
-                <h2 className="section-h">{featuresContent.title || 'A reliable creative team without agency overhead'}</h2>
+                <h2 className="section-h">{renderRichTitle(title)}</h2>
               </FadeReveal>
               <FadeReveal delay={0.2}>
-                <p className="section-sub">
-                  {featuresContent.subtitle || 'We combine structured creative operations with international service standards, giving brands dependable creative output at practical monthly pricing.'}
-                </p>
+                <p className="section-sub">{subtitle}</p>
               </FadeReveal>
 
               <StaggerReveal delay={0.3} stagger={0.1} className="feature-list">

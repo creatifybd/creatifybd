@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { getData, addData, updateData, deleteData } from '../../firebase/services';
+import { getData, addData, deleteData } from '../../firebase/services';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 import { Plus, Trash2, X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
+import { CURATED_PORTFOLIO } from '../../data/portfolioItems';
+
+const curatedIds = new Set(CURATED_PORTFOLIO.map(item => item.id));
+const emptyForm = {
+  title: '',
+  category: '',
+  imageUrl: '',
+  description: '',
+  service: '',
+  industry: '',
+  hidden: false
+};
 
 const PortfolioManager = () => {
   const [items, setItems] = useState([]);
@@ -10,14 +24,28 @@ const PortfolioManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({ title: '', category: '', imageUrl: '', hidden: false });
+  const [formData, setFormData] = useState(emptyForm);
 
   const fetchItems = async () => {
     try {
       const data = await getData('portfolio');
-      setItems(data || []);
+      const storedItems = data || [];
+      const storedById = new Map(storedItems.map(item => [item.id, item]));
+      const syncedCurated = CURATED_PORTFOLIO.map(item => {
+        const override = storedById.get(item.id);
+        return {
+          ...item,
+          ...override,
+          imageUrl: override?.imageUrl || override?.image || item.image,
+          isCurated: true
+        };
+      });
+      const customItems = storedItems
+        .filter(item => !curatedIds.has(item.id))
+        .map(item => ({ ...item, imageUrl: item.imageUrl || item.image }));
+      setItems([...syncedCurated, ...customItems]);
     } catch (err) {
-      // Error handled by service
+      setItems(CURATED_PORTFOLIO.map(item => ({ ...item, imageUrl: item.image, isCurated: true })));
     } finally {
       setLoading(false);
     }
@@ -34,7 +62,11 @@ const PortfolioManager = () => {
     try {
       const { id, createdAt, updatedAt, ...payload } = formData;
       if (editingId) {
-        await updateData('portfolio', editingId, payload);
+        await setDoc(doc(db, 'portfolio', editingId), {
+          ...payload,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        toast.success('Portfolio item updated.');
       } else {
         await addData('portfolio', payload);
       }
@@ -49,12 +81,21 @@ const PortfolioManager = () => {
     if (saving) return;
     setIsModalOpen(false);
     setEditingId(null);
-    setFormData({ title: '', category: '', imageUrl: '', hidden: false });
+    setFormData(emptyForm);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Delete this portfolio item?')) {
-      await deleteData('portfolio', id);
+  const handleDelete = async (item) => {
+    const action = item.isCurated ? 'hide this built-in portfolio item' : 'delete this portfolio item';
+    if (window.confirm(`Are you sure you want to ${action}?`)) {
+      if (item.isCurated) {
+        await setDoc(doc(db, 'portfolio', item.id), {
+          hidden: true,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        toast.success('Portfolio item hidden from the website.');
+      } else {
+        await deleteData('portfolio', item.id);
+      }
       fetchItems(); // Refresh list
     }
   };
@@ -65,9 +106,9 @@ const PortfolioManager = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '0.5rem' }}>Manage Portfolio</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)' }}>Showcase your best work with high-res images.</p>
+          <p style={{ color: 'var(--adm-dim)' }}>Manage every portfolio item shown on the public website.</p>
         </div>
-        <button className="admin-btn" onClick={() => { setEditingId(null); setFormData({ title: '', category: '', imageUrl: '', hidden: false }); setIsModalOpen(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <button className="admin-btn" onClick={() => { setEditingId(null); setFormData(emptyForm); setIsModalOpen(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Plus size={20} /> Add New Item
         </button>
       </div>
@@ -78,13 +119,13 @@ const PortfolioManager = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
           {items.map((item) => (
             <div key={item.id} className="admin-card" style={{ padding: '0', overflow: 'hidden', position: 'relative' }}>
-              <img src={item.imageUrl} alt={item.title} style={{ width: '100%', height: '200px', objectFit: 'contain', background: '#111', padding: '0.5rem' }} />
+              <img src={item.imageUrl || item.image} alt={item.title} style={{ width: '100%', height: '200px', objectFit: 'contain', background: '#f8f9fb', padding: '0.5rem' }} />
               <div style={{ padding: '1.25rem' }}>
                 <div style={{ fontSize: '0.7rem', color: '#E8192C', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{item.category}</div>
                 <h4 style={{ fontWeight: '700', marginBottom: '1rem' }}>{item.title}</h4>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  <button onClick={() => { setEditingId(item.id); setFormData({ ...item }); setIsModalOpen(true); }} className="admin-btn" style={{ flex: 1, background: 'rgba(255,255,255,0.05)', color: '#fff' }}>Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="admin-btn" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}><Trash2 size={16} /></button>
+                  <button onClick={() => { setEditingId(item.id); setFormData({ ...emptyForm, ...item, imageUrl: item.imageUrl || item.image }); setIsModalOpen(true); }} className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }}>Edit</button>
+                  <button onClick={() => handleDelete(item)} className="admin-btn-secondary" style={{ color: '#ef4444' }}><Trash2 size={16} /></button>
                 </div>
               </div>
               {item.hidden && <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.6rem' }}>HIDDEN</div>}
@@ -104,6 +145,9 @@ const PortfolioManager = () => {
               </div>
               <div style={{ marginBottom: '1rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Project Title</label><input className="admin-input" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="e.g. Fashion Brand Identity" required /></div>
               <div style={{ marginBottom: '1.5rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Category</label><input className="admin-input" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="e.g. Branding / Photography" required /></div>
+              <div style={{ marginBottom: '1rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Service</label><input className="admin-input" value={formData.service || ''} onChange={(e) => setFormData({...formData, service: e.target.value})} placeholder="e.g. Social Media Management" /></div>
+              <div style={{ marginBottom: '1rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Industry</label><input className="admin-input" value={formData.industry || ''} onChange={(e) => setFormData({...formData, industry: e.target.value})} placeholder="e.g. SaaS, Retail, Hospitality" /></div>
+              <div style={{ marginBottom: '1.5rem' }}><label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Description</label><textarea className="admin-input" rows="4" value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Explain the project scope, deliverables, and outcome." /></div>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <button type="button" className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={closeModal} disabled={saving}>Cancel</button>
                 <button type="submit" className="admin-btn" style={{ flex: 2, padding: '1rem', fontWeight: 800 }} disabled={saving}>{saving ? 'Saving...' : editingId ? 'Update Item' : 'Publish to Portfolio'}</button>

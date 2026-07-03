@@ -7,6 +7,7 @@ import { translations } from '../utils/translations';
 import { FadeReveal, MagneticWrap } from './MotionReveal';
 import { useSettings } from '../context/SettingsContext';
 import { motion } from 'framer-motion';
+import { globalizeCopy } from '../utils/contentText';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -16,8 +17,11 @@ const Hero = () => {
   const t = translations[lang].hero;
   const heroContent = content?.hero || {};
   const heroTitle = heroContent.title || t.title;
-  const heroEyebrow = heroContent.eyebrow || t.eyebrow;
-  const heroDesc = heroContent.desc || t.desc;
+  const heroEyebrow = globalizeCopy(heroContent.eyebrow, 'Creative services for ambitious global brands');
+  const heroDesc = globalizeCopy(
+    heroContent.desc,
+    'Premium social media management, design, video editing, digital marketing, and website experiences delivered through one reliable creative team.'
+  );
   const heroPrimaryCta = heroContent.cta1 || t.cta1;
   const heroSecondaryCta = heroContent.cta2 || t.cta3;
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Building2, MonitorCheck, Quote, UsersRound, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
 const defaultRoles = [
   'Social strategist',
@@ -30,6 +31,11 @@ const AboutTrust = () => {
   const stats = Array.isArray(aboutContent.stats) && aboutContent.stats.length
     ? aboutContent.stats
     : defaultStats;
+  const title = globalizeCopy(aboutContent.title, 'A specialist creative team serving global brands');
+  const subtitle = globalizeCopy(
+    aboutContent.subtitle,
+    'CreatifyBD gives founders and marketing teams dependable creative execution without the cost or complexity of a full in-house department.'
+  );
 
   return (
     <section className="about-trust-section" id="about">
@@ -37,10 +43,8 @@ const AboutTrust = () => {
         <div className="about-trust-grid">
           <div>
             <span className="eyebrow">{aboutContent.eyebrow || 'About CreatifyBD'}</span>
-            <h2 className="section-h">{aboutContent.title || 'A specialist creative team serving global brands'}</h2>
-            <p className="section-sub">
-              {aboutContent.subtitle || 'CreatifyBD is built for founders and lean marketing teams who need dependable creative execution without the cost or complexity of a full in-house department.'}
-            </p>
+            <h2 className="section-h">{renderRichTitle(title)}</h2>
+            <p className="section-sub">{subtitle}</p>
 
             <div className="ceo-quote ceo-quote-with-image">
               <div className="ceo-portrait-card">

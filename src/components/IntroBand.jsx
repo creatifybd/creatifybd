@@ -3,6 +3,7 @@ import { BarChart3, Palette, Video } from 'lucide-react';
 import { TextReveal } from './MotionReveal';
 import { motion } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
+import { globalizeCopy, stripLegacyMarkup } from '../utils/contentText';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -30,7 +31,10 @@ const pillars = [
 const IntroBand = () => {
   const { content } = useSettings();
   const introContent = content?.intro_band || {};
-  const introTitle = introContent.title || 'The creative services ambitious brands ask for most, packaged for reliable monthly execution';
+  const introTitle = stripLegacyMarkup(globalizeCopy(
+    introContent.title,
+    'The creative services ambitious brands ask for most, packaged for reliable monthly execution'
+  ));
   const editablePillars = Array.isArray(introContent.pillars) && introContent.pillars.length
     ? introContent.pillars.map((item, index) => ({
         ...pillars[index % pillars.length],

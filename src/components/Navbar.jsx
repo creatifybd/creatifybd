@@ -25,8 +25,6 @@ const mobileLinks = [
   { to: '/contact', label: 'Contact' }
 ];
 
-const mobileServices = ['Social Media', 'Graphic Design', 'Video Editing', 'Web Design'];
-
 /* ── Magnetic nav link ────────────────────────────────────────── */
 const MagneticLink = ({ to, isActive, children, 'data-cursor': dataCursor }) => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -173,8 +171,8 @@ const Navbar = ({ theme = 'light' }) => {
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isMobileOpen
-                  ? <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.22 }}><X size={22} /></motion.span>
-                  : <motion.span key="open"  initial={{ rotate: 90,  opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.22 }}><Menu size={22} /></motion.span>
+                  ? <motion.span className="hamburger-icon" key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.22 }}><X size={22} /></motion.span>
+                  : <motion.span className="hamburger-icon" key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.22 }}><Menu size={22} /></motion.span>
                 }
               </AnimatePresence>
               <span className="hamburger-label">Menu</span>
@@ -240,21 +238,6 @@ const Navbar = ({ theme = 'light' }) => {
                   <span>Browse fixed-scope creative gigs</span>
                   <ChevronRight size={17} aria-hidden="true" />
                 </Link>
-              </motion.div>
-
-              <motion.div
-                className="mobile-service-strip"
-                aria-label="Popular services"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.42, duration: 0.4 }}
-              >
-                {mobileServices.map(service => (
-                  <Link key={service} to="/services" onClick={closeMobile}>
-                    <span>{service}</span>
-                    <ChevronRight size={16} aria-hidden="true" />
-                  </Link>
-                ))}
               </motion.div>
 
               <motion.div
