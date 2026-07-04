@@ -23,10 +23,13 @@ const GigMarquee = () => {
         <h2 className="gig-marquee-title">Our Services</h2>
         <p className="gig-marquee-subtitle">Premium creative services for your brand growth</p>
       </div>
-      
+
       <div className="gig-marquee">
         {[rowOne, rowTwo].map((row, rowIndex) => (
-          <div className={`gig-marquee-row gig-marquee-row--${rowIndex === 0 ? 'left' : 'right'}`} key={rowIndex}>
+          <div
+            className={`gig-marquee-row gig-marquee-row--${rowIndex === 0 ? 'left' : 'right'}`}
+            key={rowIndex}
+          >
             <div className="gig-marquee-track">
               {[false, true].map(duplicate => (
                 <div
@@ -34,7 +37,7 @@ const GigMarquee = () => {
                   key={duplicate ? 'duplicate' : 'primary'}
                   aria-hidden={duplicate ? 'true' : undefined}
                 >
-                  {row.map((gig, itemIndex) => (
+                  {row.map((gig) => (
                     <GigMarqueeCard
                       key={`${duplicate ? 'duplicate' : 'primary'}-${gig.id}`}
                       gig={gig}
@@ -91,10 +94,10 @@ const GigMarquee = () => {
         .gig-marquee-track {
           display: flex;
           width: max-content;
-          animation: scroll 40s linear infinite;
+          animation: gig-scroll 40s linear infinite;
         }
         .gig-marquee-row--right .gig-marquee-track {
-          animation: scroll-reverse 40s linear infinite;
+          animation: gig-scroll-rev 40s linear infinite;
         }
 
         /* ── Pause animation when hovering any card in the row ── */
@@ -111,19 +114,19 @@ const GigMarquee = () => {
           flex-shrink: 0;
           width: 320px;
         }
+
+        /* Allow ALL cards (primary + duplicate) to be clicked */
         .gig-marquee-card .gig-card {
           pointer-events: auto;
         }
-        .gig-marquee-card[aria-hidden="true"] .gig-card {
-          pointer-events: none;
+
+        @keyframes gig-scroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes scroll-reverse {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0); }
+        @keyframes gig-scroll-rev {
+          from { transform: translateX(-50%); }
+          to   { transform: translateX(0); }
         }
         .gig-marquee-footer {
           text-align: center;
@@ -143,7 +146,7 @@ const GigMarquee = () => {
         .gig-marquee-footer .btn-red:hover {
           background: var(--red-dark);
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+          box-shadow: 0 8px 20px rgba(220,38,38,.3);
         }
         @media (max-width: 768px) {
           .gig-marquee-title { font-size: 2rem; }

@@ -400,20 +400,23 @@ const GigDetailPage = () => {
       <Footer />
 
       <style>{`
+        /* ── Push page content below fixed 90px navbar ── */
+        .gig-detail-page {
+          padding-top: 90px;
+        }
+        @media (max-width: 1024px) {
+          .gig-detail-page { padding-top: 80px; }
+        }
+        @media (max-width: 900px) {
+          .gig-detail-page { padding-top: 64px; }
+        }
+
+
         .breadcrumb-bar {
           background: var(--surface);
           border-bottom: 1px solid var(--border);
           padding: 1rem 0;
           font-size: 0.85rem;
-          margin-top: 90px;
-        }
-
-        @media (max-width: 1024px) {
-          .breadcrumb-bar { margin-top: 80px; }
-        }
-
-        @media (max-width: 900px) {
-          .breadcrumb-bar { margin-top: 64px; }
         }
 
         .breadcrumb-inner {
