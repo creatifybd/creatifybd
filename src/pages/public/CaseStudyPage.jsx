@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { db } from '../../firebase/config';
+import { doc, onSnapshot } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
@@ -7,9 +9,21 @@ import { detailedCaseStudies } from '../../data/caseStudiesData';
 
 const CaseStudyPage = () => {
   const { slug } = useParams();
-  const study = detailedCaseStudies[slug];
+  const [override, setOverride] = useState(null);
+  const [checked, setChecked] = useState(false);
 
-  if (!study) {
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'case_studies', slug), (snap) => {
+      setOverride(snap.exists() ? snap.data() : null);
+      setChecked(true);
+    }, () => setChecked(true));
+    return () => unsub();
+  }, [slug]);
+
+  const base = detailedCaseStudies[slug];
+  const study = override ? { ...base, ...override, id: slug } : base;
+
+  if (!study || study.hidden) {
     return <Navigate to="/case-studies" replace />;
   }
 
