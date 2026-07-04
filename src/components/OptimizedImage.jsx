@@ -66,7 +66,7 @@ const OptimizedImage = ({
         onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
         loading={loadingStrategy}
-        fetchpriority={priority ? 'high' : 'auto'}
+        fetchPriority={priority ? 'high' : 'auto'}
         initial={{ opacity: 0, scale: 1.05 }}
         animate={{ 
           opacity: isLoaded ? 1 : 0, 
