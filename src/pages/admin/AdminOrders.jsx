@@ -480,7 +480,7 @@ const AdminOrders = () => {
         }
 
         .order-id-display {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
           border-radius: 6px;
           padding: 0.75rem;
@@ -541,13 +541,13 @@ const AdminOrders = () => {
 
         .req-text-display {
           font-size: 0.82rem;
-          color: #aaa;
+          color: var(--adm-dim);
           line-height: 1.5;
         }
 
         .adm-full-select {
           width: 100%;
-          background: rgba(255,255,255,0.03);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
           border-radius: 6px;
           padding: 0.6rem 0.75rem;
@@ -562,7 +562,7 @@ const AdminOrders = () => {
           align-items: center;
           gap: 0.4rem;
           padding: 0.55rem 1rem;
-          background: rgba(255,255,255,0.04);
+          background: var(--adm-soft);
           border: 1px solid var(--adm-border);
           border-radius: 8px;
           color: var(--adm-text);
@@ -575,7 +575,7 @@ const AdminOrders = () => {
         }
 
         .adm-btn-secondary:hover {
-          background: rgba(255,255,255,0.08);
+          background: var(--adm-bg);
         }
 
         .adm-loading-center {
@@ -617,7 +617,7 @@ const AdminOrders = () => {
         }
 
         .deliveries-list-admin {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
           border-radius: 6px;
           overflow: hidden;
@@ -630,7 +630,7 @@ const AdminOrders = () => {
           letter-spacing: 0.5px;
           color: var(--adm-dim);
           font-weight: 700;
-          background: rgba(255,255,255,0.01);
+          background: var(--adm-bg);
           border-bottom: 1px solid var(--adm-border);
         }
 
@@ -639,7 +639,7 @@ const AdminOrders = () => {
           align-items: center;
           gap: 0.5rem;
           padding: 0.5rem 0.75rem;
-          border-bottom: 1px solid rgba(255,255,255,0.02);
+          border-bottom: 1px solid var(--adm-border);
         }
 
         .del-item-row:last-child {

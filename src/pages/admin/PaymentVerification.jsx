@@ -266,7 +266,7 @@ const PaymentVerification = () => {
                     <span style={{ 
                       textTransform: 'capitalize',
                       padding: '0.25rem 0.5rem',
-                      background: 'rgba(255,255,255,0.05)',
+                      background: 'var(--adm-soft)',
                       borderRadius: '4px',
                       fontSize: '0.85rem'
                     }}>
@@ -275,7 +275,7 @@ const PaymentVerification = () => {
                   </td>
                   <td>
                     <code style={{ 
-                      background: 'rgba(255,255,255,0.05)',
+                      background: 'var(--adm-soft)',
                       padding: '0.25rem 0.5rem',
                       borderRadius: '4px',
                       fontSize: '0.85rem',
@@ -704,7 +704,7 @@ const PaymentVerification = () => {
         }
 
         .action-btn:hover {
-          background: rgba(255,255,255,0.1);
+          background: var(--adm-soft);
         }
 
         .modal-overlay {

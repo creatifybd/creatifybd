@@ -264,7 +264,7 @@ const AdminGigs = () => {
 
       <style>{`
         .gig-editor-overlay{position:fixed;inset:0;background:rgba(15,18,24,.58);display:grid;place-items:center;z-index:1200;padding:1rem}
-        .gig-editor-dialog{width:min(100%,820px);max-height:calc(100dvh - 2rem);overflow-y:auto;overscroll-behavior:contain;background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:12px;padding:2rem;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+        .gig-editor-dialog{width:min(100%,820px);max-height:calc(100dvh - 2rem);overflow-y:auto;overscroll-behavior:contain;background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:12px;padding:2rem;position:relative;box-shadow:var(--adm-shadow-lg)}
         .gig-editor-dialog h2{font-size:1.35rem;color:var(--adm-text)}
         .gig-editor-dialog>p{color:var(--adm-dim);font-size:.82rem;margin:.35rem 0 1.5rem}
         .gig-editor-dialog form{display:grid;gap:1rem}
@@ -414,7 +414,7 @@ const AdminGigs = () => {
         }
 
         .adm-table th {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-bg);
           padding: 1rem 1.25rem;
           text-align: left;
           font-size: 0.75rem;
@@ -427,7 +427,7 @@ const AdminGigs = () => {
 
         .adm-table td {
           padding: 1rem 1.25rem;
-          border-bottom: 1px solid rgba(255,255,255,0.03);
+          border-bottom: 1px solid var(--adm-border);
           color: var(--adm-text);
           vertical-align: middle;
         }
@@ -437,7 +437,7 @@ const AdminGigs = () => {
         }
 
         .adm-table tbody tr:hover td {
-          background: rgba(255,255,255,0.02);
+          background: var(--adm-soft);
         }
 
         .gig-table-title-cell {
@@ -451,7 +451,7 @@ const AdminGigs = () => {
           height: 44px;
           border-radius: 6px;
           overflow: hidden;
-          background: #222;
+          background: var(--adm-bg);
           flex-shrink: 0;
         }
 
@@ -475,13 +475,13 @@ const AdminGigs = () => {
         }
 
         .cat-chip {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: var(--adm-soft);
+          border: 1px solid var(--adm-border);
           padding: 0.2rem 0.6rem;
           border-radius: 4px;
           font-size: 0.72rem;
           font-weight: 600;
-          color: #aaa;
+          color: var(--adm-dim);
           white-space: nowrap;
         }
 
@@ -521,7 +521,7 @@ const AdminGigs = () => {
         }
 
         .status-toggle-btn.inactive {
-          background: rgba(255,255,255,0.03);
+          background: var(--adm-soft);
           color: var(--adm-dim);
           border: 1px solid var(--adm-border);
         }
@@ -535,7 +535,7 @@ const AdminGigs = () => {
           width: 32px;
           height: 32px;
           border-radius: 6px;
-          background: rgba(255,255,255,0.03);
+          background: var(--adm-bg);
           border: 1px solid var(--adm-border);
           color: var(--adm-dim);
           display: flex;
@@ -547,8 +547,8 @@ const AdminGigs = () => {
         }
 
         .adm-icon-btn:hover {
-          background: rgba(255,255,255,0.07);
-          color: white;
+          background: var(--adm-soft);
+          color: var(--adm-text);
         }
       `}</style>
     </div>

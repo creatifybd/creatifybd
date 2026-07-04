@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
-import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
-import { Star, Check, X, Trash2, Eye, Loader2, RefreshCcw, MessageSquare } from 'lucide-react';
+import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { Star, Check, X, Trash2, Loader2, RefreshCcw, MessageSquare, CheckSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../../context/ConfirmContext';
 
 const StarDisplay = ({ rating }) => (
   <div style={{ display: 'flex', gap: '0.1rem' }}>
     {Array.from({ length: 5 }).map((_, i) => (
-      <Star key={i} size={12} fill={i < rating ? 'var(--adm-red)' : 'none'} stroke={i < rating ? 'var(--adm-red)' : '#444'} />
+      <Star key={i} size={12} fill={i < rating ? 'var(--adm-red)' : 'none'} stroke={i < rating ? 'var(--adm-red)' : 'var(--adm-border-strong)'} />
     ))}
   </div>
 );
@@ -20,6 +20,8 @@ const AdminReviews = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQ, setSearchQ] = useState('');
   const [actioning, setActioning] = useState(null);
+  const [selected, setSelected] = useState(new Set());
+  const [bulkWorking, setBulkWorking] = useState(false);
 
   const fetchReviews = async () => {
     setLoading(true);
@@ -111,6 +113,73 @@ const AdminReviews = () => {
 
   const pendingCount = reviews.filter(r => r.status === 'pending').length;
 
+  // ── Bulk select ────────────────────────────────────────────────
+  const allFilteredIds = filtered.map(r => r.id);
+  const allSelected = allFilteredIds.length > 0 && allFilteredIds.every(id => selected.has(id));
+
+  const toggleSelect = (id) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => setSelected(allSelected ? new Set() : new Set(allFilteredIds));
+
+  const bulkApprove = async () => {
+    const targets = [...selected].filter(id => reviews.find(r => r.id === id)?.status !== 'approved');
+    if (!targets.length) { toast('All selected are already approved'); return; }
+    setBulkWorking(true);
+    const tid = toast.loading(`Approving ${targets.length}…`);
+    try {
+      const batch = writeBatch(db);
+      targets.forEach(id => batch.update(doc(db, 'reviews', id), { status: 'approved', approvedAt: serverTimestamp() }));
+      await batch.commit();
+      setReviews(prev => prev.map(r => targets.includes(r.id) ? { ...r, status: 'approved' } : r));
+      toast.success(`${targets.length} review${targets.length > 1 ? 's' : ''} approved`, { id: tid });
+      setSelected(new Set());
+    } catch { toast.error('Failed to approve', { id: tid }); }
+    finally { setBulkWorking(false); }
+  };
+
+  const bulkReject = async () => {
+    const targets = [...selected].filter(id => reviews.find(r => r.id === id)?.status !== 'rejected');
+    if (!targets.length) { toast('All selected are already rejected'); return; }
+    setBulkWorking(true);
+    const tid = toast.loading(`Rejecting ${targets.length}…`);
+    try {
+      const batch = writeBatch(db);
+      targets.forEach(id => batch.update(doc(db, 'reviews', id), { status: 'rejected', rejectedAt: serverTimestamp() }));
+      await batch.commit();
+      setReviews(prev => prev.map(r => targets.includes(r.id) ? { ...r, status: 'rejected' } : r));
+      toast.success(`${targets.length} review${targets.length > 1 ? 's' : ''} rejected`, { id: tid });
+      setSelected(new Set());
+    } catch { toast.error('Failed to reject', { id: tid }); }
+    finally { setBulkWorking(false); }
+  };
+
+  const bulkDeleteReviews = async () => {
+    const ok = await confirm({
+      title: `Delete ${selected.size} review${selected.size > 1 ? 's' : ''}?`,
+      description: 'These reviews will be permanently removed.',
+      confirmLabel: 'Delete All',
+      tone: 'danger'
+    });
+    if (!ok) return;
+    setBulkWorking(true);
+    const tid = toast.loading('Deleting…');
+    try {
+      const batch = writeBatch(db);
+      [...selected].forEach(id => batch.delete(doc(db, 'reviews', id)));
+      await batch.commit();
+      setReviews(prev => prev.filter(r => !selected.has(r.id)));
+      toast.success(`${selected.size} review${selected.size > 1 ? 's' : ''} deleted`, { id: tid });
+      setSelected(new Set());
+    } catch { toast.error('Failed to delete', { id: tid }); }
+    finally { setBulkWorking(false); }
+  };
+
   return (
     <div className="admin-section-page">
       <div className="adm-page-header">
@@ -144,12 +213,12 @@ const AdminReviews = () => {
       </div>
 
       {/* Filter row */}
-      <div className="adm-filter-bar" style={{ marginBottom: '1.5rem' }}>
+      <div className="adm-filter-bar" style={{ marginBottom: '1rem' }}>
         <div className="adm-search-box" style={{ flex: 1 }}>
           <MessageSquare size={15} />
-          <input 
+          <input
             type="text"
-            placeholder="Search by client name or review text..."
+            placeholder="Search by client name or review text…"
             value={searchQ}
             onChange={e => setSearchQ(e.target.value)}
           />
@@ -163,6 +232,25 @@ const AdminReviews = () => {
           </select>
         </div>
       </div>
+
+      {/* Bulk action bar */}
+      {selected.size > 0 && (
+        <div className="bulk-action-bar" style={{ marginBottom: '1rem' }}>
+          <span>{selected.size} selected</span>
+          <button onClick={bulkApprove} disabled={bulkWorking}>
+            <Check size={14} /> Approve
+          </button>
+          <button onClick={bulkReject} disabled={bulkWorking}>
+            <X size={14} /> Reject
+          </button>
+          <button className="danger" onClick={bulkDeleteReviews} disabled={bulkWorking}>
+            <Trash2 size={14} /> Delete Selected
+          </button>
+          <button onClick={() => setSelected(new Set())} style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.25)' }}>
+            Deselect All
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <div className="adm-loading-center">
@@ -178,15 +266,24 @@ const AdminReviews = () => {
             </div>
           ) : (
             filtered.map(review => (
-              <div key={review.id} className={`review-admin-card ${review.status}`}>
+              <div key={review.id} className={`review-admin-card ${review.status}`} style={{ outline: selected.has(review.id) ? '2px solid var(--adm-red)' : undefined }}>
                 <div className="review-adm-header">
-                  <div className="rev-adm-meta">
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={selected.has(review.id)}
+                      onChange={() => toggleSelect(review.id)}
+                      style={{ cursor: 'pointer', accentColor: 'var(--adm-red)', width: '16px', height: '16px', marginTop: '4px', flexShrink: 0 }}
+                      aria-label={`Select review from ${review.clientName}`}
+                    />
+                    <div className="rev-adm-meta">
                     <div className="rev-adm-name">{review.clientName}</div>
                     <div className="rev-adm-sub">
                       {review.country && <span>🌏 {review.country}</span>}
                       {review.businessType && <span>· {review.businessType}</span>}
                       {review.gigTitle && <span>· <em>{review.gigTitle}</em></span>}
                     </div>
+                  </div>
                   </div>
                   <div className="rev-adm-right">
                     <StarDisplay rating={review.rating} />
@@ -358,11 +455,11 @@ const AdminReviews = () => {
 
         .review-adm-text {
           font-size: 0.875rem;
-          color: #aaa;
+          color: var(--adm-dim);
           line-height: 1.6;
           font-style: italic;
           margin-bottom: 1rem;
-          border-left: 2px solid rgba(255,255,255,0.06);
+          border-left: 2px solid var(--adm-border);
           padding-left: 1rem;
         }
 

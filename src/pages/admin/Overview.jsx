@@ -13,7 +13,8 @@ const Overview = () => {
     messages: 0,
     services: 0,
     portfolio: 0,
-    testimonials: 0
+    testimonials: 0,
+    avgRating: '—'
   });
   const [recentMessages, setRecentMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -172,12 +173,18 @@ const Overview = () => {
         const sSnap = await getDocs(collection(db, 'services'));
         const pSnap = await getDocs(collection(db, 'portfolio'));
         const tSnap = await getDocs(collection(db, 'testimonials'));
+        const rSnap = await getDocs(collection(db, 'reviews'));
+        const approvedReviews = rSnap.docs.map(d => d.data()).filter(r => r.status === 'approved');
+        const avgRating = approvedReviews.length
+          ? (approvedReviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / approvedReviews.length).toFixed(1)
+          : '—';
 
         setStats({
           messages: mSnap.size,
           services: sSnap.size,
           portfolio: pSnap.size,
-          testimonials: tSnap.size
+          testimonials: tSnap.size,
+          avgRating
         });
 
         const qSnap = await getDocs(collection(db, 'messages'));
@@ -207,12 +214,13 @@ const Overview = () => {
 
   const statCards = [
     { label: 'Total Inquiries', value: stats.messages, icon: <MessageSquare />, color: '#E8192C' },
-    { label: 'Active Services', value: stats.services, icon: <Briefcase />, color: '#3b82f6' },
     { label: 'Portfolio Items', value: stats.portfolio, icon: <ImageIcon />, color: '#8b5cf6' },
     { label: 'Client Reviews', value: stats.testimonials, icon: <Star />, color: '#f59e0b' },
+    { label: 'Avg. Review Rating', value: stats.avgRating, icon: <TrendingUp />, color: '#22c55e' },
+    { label: 'Active Services', value: stats.services, icon: <Briefcase />, color: '#3b82f6' },
   ];
 
-  if (loading) return <div style={{ padding: '2rem', color: 'white' }}>Loading statistics...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: 'var(--adm-text)' }}>Loading statistics...</div>;
 
   return (
     <div>
@@ -256,7 +264,7 @@ const Overview = () => {
               BN
             </button>
           </div>
-          <button className="admin-btn" onClick={seedDemoData} style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid var(--adm-border)' }}>
+          <button className="admin-btn" onClick={seedDemoData} style={{ background: 'var(--adm-soft)', color: 'var(--adm-txt)', border: '1px solid var(--adm-border)' }}>
             Seed Demo Data
           </button>
         </div>
@@ -305,7 +313,7 @@ const Overview = () => {
               {recentMessages.map((msg) => (
                 <tr key={msg.id}>
                   <td style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', color: 'var(--adm-dim)' }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--adm-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', color: 'var(--adm-dim)' }}>
                       {msg.name?.charAt(0).toUpperCase()}
                     </div>
                     {msg.name}
@@ -330,7 +338,7 @@ const Overview = () => {
           transition={{ delay: 0.4 }}
         >
           <Sparkles size={40} style={{ marginBottom: '1.5rem', color: 'var(--adm-red)' }} />
-          <h3 style={{ fontWeight: '800', fontSize: '1.4rem', marginBottom: '1rem', color: 'white' }}>Quick Actions</h3>
+          <h3 style={{ fontWeight: '800', fontSize: '1.4rem', marginBottom: '1rem', color: 'var(--adm-text)' }}>Quick Actions</h3>
           <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: 'var(--adm-dim)', marginBottom: '2rem' }}>
             Keep your agency profile active to rank higher on Google. Consider adding your latest successful project.
           </p>
