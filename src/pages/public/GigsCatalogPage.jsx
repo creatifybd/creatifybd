@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import GigCard from '../../components/GigCard';
 import { gigs, categories } from '../../data/gigs';
 import { Search, Info } from 'lucide-react';
@@ -85,11 +86,16 @@ const GigsCatalogPage = () => {
     setFrequency('all');
   };
 
+  const seo = usePageSEO('gigs', {
+    title: "Buy Creative Services Online | Social Media Management, Graphic Design, Video Editing | CreatifyBD",
+    description: "Browse and buy creative services online at CreatifyBD. Order social media management, graphic design, video editing, and website design with transparent fixed-price packages for USA, Canada, and Australia."
+  });
+
   return (
     <div className="gigs-catalog-page">
       <SEO
-        title="Buy Creative Services Online | Social Media Management, Graphic Design, Video Editing | CreatifyBD"
-        description="Browse and buy creative services online at CreatifyBD. Order social media management, graphic design, video editing, and website design with transparent fixed-price packages for USA, Canada, and Australia."
+        title={seo.title}
+        description={seo.description}
         keywords="buy creative services online, order social media management, buy graphic design service, order video editing, buy website design, creative services marketplace, digital marketing services for sale, social media management packages, graphic design packages, video editing packages, web design packages, hire creative services, best marketing agency gigs, creative agency services, affordable creative services, professional creative services"
       />
 
