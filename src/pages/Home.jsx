@@ -22,6 +22,7 @@ import SEO from '../components/SEO';
 
 import SmmHighlight from '../components/SmmHighlight';
 import AboutTrust from '../components/AboutTrust';
+import GigMarquee from '../components/GigMarquee';
 import { useSettings } from '../context/SettingsContext';
 
 const Home = () => {
@@ -138,6 +139,8 @@ const Home = () => {
 
       <Navbar />
       {content?.visibility?.hero !== false && <Hero />}
+      {content?.visibility?.portfolio !== false && <Portfolio highlight={true} theme={content?.portfolio?.theme} />}
+      <GigMarquee />
       {content?.visibility?.intro_band !== false && <IntroBand />}
       
       {content?.visibility?.clients !== false && <Clients />}
@@ -146,7 +149,6 @@ const Home = () => {
       {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
       {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
       {content?.visibility?.about_trust !== false && <AboutTrust />}
-      {content?.visibility?.portfolio !== false && <Portfolio highlight={true} theme={content?.portfolio?.theme} />}
       {content?.visibility?.case_studies !== false && <CaseStudies />}
       {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
       {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
