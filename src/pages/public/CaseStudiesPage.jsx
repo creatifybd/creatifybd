@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { db } from '../../firebase/config';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import { detailedCaseStudies } from '../../data/caseStudiesData';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
+const curatedIds = new Set(Object.keys(detailedCaseStudies));
 
 const CaseStudiesPage = () => {
-  const studies = Object.values(detailedCaseStudies);
+  const [overrides, setOverrides] = useState({});
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'case_studies'), (snap) => {
+      const map = {};
+      snap.docs.forEach(d => { map[d.id] = { id: d.id, ...d.data() }; });
+      setOverrides(map);
+    }, () => setOverrides({}));
+    return () => unsub();
+  }, []);
+
+  const studies = [
+    ...Object.keys(detailedCaseStudies).map(id => ({ ...detailedCaseStudies[id], ...overrides[id], id })),
+    ...Object.values(overrides).filter(o => !curatedIds.has(o.id))
+  ].filter(s => !s.hidden);
 
   return (
     <div className="case-studies-page">
