@@ -4,8 +4,11 @@ import { db } from '../../firebase/config';
 import { collection, getDocs, addDoc, doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { MessageSquare, Briefcase, Image as ImageIcon, Star, TrendingUp, Sparkles, Zap, Globe, Clock, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const Overview = () => {
+  const confirm = useConfirm();
   const [stats, setStats] = useState({
     messages: 0,
     services: 0,
@@ -23,12 +26,17 @@ const Overview = () => {
       setLang(newLang);
     } catch (err) { 
       console.error(err);
-      alert('Failed to update language'); 
+      toast.error('Failed to update language'); 
     }
   };
 
   const seedDemoData = async () => {
-    if (!window.confirm('This will add demo data to your website. Continue?')) return;
+    const ok = await confirm({
+      title: 'Seed demo data?',
+      description: 'This will add sample services, portfolio items, reviews, and pricing plans to your website.',
+      confirmLabel: 'Seed Data'
+    });
+    if (!ok) return;
     
     try {
       // Seed Services
@@ -149,11 +157,11 @@ const Overview = () => {
         contact: { theme: 'light' }
       }, { merge: true });
 
-      alert('Demo data seeded successfully! All sections and settings are now live.');
+      toast.success('Demo data seeded successfully! All sections and settings are now live.');
       window.location.reload();
     } catch (err) { 
       console.error(err);
-      alert('Seeding failed: ' + err.message); 
+      toast.error('Seeding failed: ' + err.message); 
     }
   };
 
