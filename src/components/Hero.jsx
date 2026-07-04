@@ -110,7 +110,7 @@ const Hero = () => {
                   alt={heroAltText}
                   className="hero-mockup-img"
                   loading="eager"
-                  fetchpriority="high"
+                  fetchPriority="high"
                 />
               ) : (
                 <div className="hero-mockup-wrap">
