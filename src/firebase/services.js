@@ -10,9 +10,10 @@ import {
   query, 
   where, 
   orderBy, 
+  limit,
   serverTimestamp 
 } from 'firebase/firestore';
-import { db } from './config';
+import { db, auth } from './config';
 import { toast } from 'react-hot-toast';
 
 // Helper for error handling
@@ -140,5 +141,34 @@ export const deleteData = async (collectionName, id) => {
     toast.success('Deleted successfully!');
   } catch (error) {
     handleServiceError(error, 'Deletion failed.');
+  }
+};
+
+// --- Activity Log ---
+// Lightweight audit trail: records who did what, on which resource, and when.
+// Never blocks the calling action if writing the log entry fails.
+export const logActivity = async ({ action, resource, resourceId, details }) => {
+  try {
+    const actorEmail = auth.currentUser?.email || 'unknown';
+    await addDoc(collection(db, 'activity_log'), {
+      action,
+      resource,
+      resourceId: resourceId ?? null,
+      details: details ?? '',
+      actorEmail,
+      createdAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Failed to record activity log entry:', error);
+  }
+};
+
+export const getActivityLog = async (rowLimit = 200) => {
+  try {
+    const q = query(collection(db, 'activity_log'), orderBy('createdAt', 'desc'), limit(rowLimit));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    handleServiceError(error, 'Failed to fetch activity log.');
   }
 };
