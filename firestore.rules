@@ -3,13 +3,47 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ─── Helper Functions ───────────────────────────────────────────────────
-    function isAdmin() {
+    // Bootstrap owners — kept only so the original two accounts can never be
+    // locked out while the `admins/{email}` collection is being populated.
+    // Prefer granting access via the `admins` collection (see AdminUsers.jsx).
+    function isLegacyOwner() {
       return request.auth != null
         && (
           request.auth.token.admin == true
           || request.auth.token.email == "binashad7@gmail.com"
           || request.auth.token.email == "creatifybd@gmail.com"
         );
+    }
+
+    function isRegisteredAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+
+    function adminRole() {
+      return isRegisteredAdmin()
+        ? get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.role
+        : (isLegacyOwner() ? 'owner' : null);
+    }
+
+    function isAdmin() {
+      return isLegacyOwner() || isRegisteredAdmin();
+    }
+
+    function isOwner() {
+      return isAdmin() && adminRole() == 'owner';
+    }
+
+    function isEditorOrAbove() {
+      return isAdmin() && adminRole() != 'viewer';
+    }
+
+    // ─── RBAC: Admin Users Directory ─────────────────────────────────────────
+    // Doc ID is the admin's lowercase email. Only owners can manage this list;
+    // any admin may read it to know who else has access.
+    match /admins/{email} {
+      allow read: if isAdmin();
+      allow write: if isOwner();
     }
 
     function isValidMessage() {
