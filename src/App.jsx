@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { LanguageProvider } from './context/LanguageContext';
 import { SettingsProvider } from './context/SettingsContext';
 import { AuthProvider } from './context/AuthContext';
+import { ConfirmProvider } from './context/ConfirmContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import Preloader from './components/Preloader';
@@ -190,6 +191,7 @@ function App() {
     <ErrorBoundary>
       <HelmetProvider>
         <AuthProvider>
+          <ConfirmProvider>
           <SettingsProvider>
             <LanguageProvider>
               <Router>
@@ -200,26 +202,29 @@ function App() {
                   position="top-right"
                   toastOptions={{
                     duration: 4000,
+                    className: 'adm-toast',
                     style: {
-                      background: '#1a1a1a',
-                      color: '#fff',
+                      background: '#ffffff',
+                      color: '#0F0F12',
                       borderRadius: '12px',
-                      border: '1px solid #333',
+                      border: '1px solid rgba(15,15,18,0.08)',
+                      boxShadow: '0 12px 32px rgba(15,15,18,0.10)',
                       padding: '12px 16px',
                       fontSize: '0.875rem',
-                      fontFamily: 'DM Sans, sans-serif',
+                      fontFamily: 'Inter, sans-serif',
                     },
                     success: {
                       iconTheme: { primary: '#E8192C', secondary: '#fff' },
                     },
                     error: {
-                      iconTheme: { primary: '#ff4444', secondary: '#fff' },
+                      iconTheme: { primary: '#ef4444', secondary: '#fff' },
                     },
                   }}
                 />
               </Router>
             </LanguageProvider>
           </SettingsProvider>
+          </ConfirmProvider>
         </AuthProvider>
       </HelmetProvider>
     </ErrorBoundary>
