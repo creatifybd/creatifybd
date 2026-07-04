@@ -223,6 +223,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ─── Activity Log / Audit Trail ──────────────────────────────────────────
+    // Any admin can write an entry (recording their own actions). Entries are
+    // immutable — no update or delete — and only owners can view the trail.
+    match /activity_log/{id} {
+      allow create: if isAdmin()
+        && request.resource.data.actorEmail == request.auth.token.email;
+      allow read: if isOwner();
+      allow update, delete: if false;
+    }
+
     // ─── Fallback: deny everything else ─────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;
