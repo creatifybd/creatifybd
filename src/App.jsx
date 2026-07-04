@@ -57,13 +57,13 @@ function ScrollToTop() {
 }
 
 const pageVariants = {
-  initial: { opacity: 0, y: 36, filter: 'blur(6px)' },
+  initial: { opacity: 0, y: 36, filter: 'blur(3px)' },
   animate: {
     opacity: 1, y: 0, filter: 'blur(0px)',
     transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] },
   },
   exit: {
-    opacity: 0, y: -18, filter: 'blur(3px)',
+    opacity: 0, y: -18, filter: 'blur(1px)',
     transition: { duration: 0.35, ease: [0.76, 0, 0.24, 1] },
   },
 };
