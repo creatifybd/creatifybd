@@ -4,10 +4,12 @@ import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from 'fireb
 import { Edit2, Eye, EyeOff, Plus, Trash2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const emptyService = { title: '', desc: '', price: '', icon: '📱', imageUrl: '', bg: 's1', hidden: false };
 
 const ServicesManager = () => {
+  const confirm = useConfirm();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +64,13 @@ const ServicesManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this service?')) return;
+    const ok = await confirm({
+      title: 'Delete this service?',
+      description: 'This will remove it from the public services list.',
+      confirmLabel: 'Delete',
+      tone: 'danger'
+    });
+    if (!ok) return;
     try { await deleteDoc(doc(db, 'services', id)); toast.success('Service deleted'); }
     catch (error) { console.error(error); toast.error('Service could not be deleted.'); }
   };
