@@ -25,6 +25,14 @@ const MailIcon = () => (
   </svg>
 );
 
+const LinkedInIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/>
+    <circle cx="4" cy="4" r="2"/>
+  </svg>
+);
+
 const Footer = () => {
   const { settings } = useSettings();
 
@@ -49,6 +57,11 @@ const Footer = () => {
                   <a href={siteConfig.socialLinks.instagram} aria-label="CreatifyBD on Instagram" className="f-social-btn" target="_blank" rel="noreferrer">
                     <InstagramIcon />
                   </a>
+                  {siteConfig.socialLinks.linkedin && (
+                    <a href={siteConfig.socialLinks.linkedin} aria-label="CreatifyBD on LinkedIn" className="f-social-btn" target="_blank" rel="noreferrer">
+                      <LinkedInIcon />
+                    </a>
+                  )}
                   <a href={`mailto:${siteConfig.email}`} aria-label="Email CreatifyBD" className="f-social-btn">
                     <MailIcon />
                   </a>
@@ -65,7 +78,7 @@ const Footer = () => {
                   <StaggerChild><li><Link to="/services/social-media-management">Social Media Management</Link></li></StaggerChild>
                   <StaggerChild><li><Link to="/services/graphic-design">Graphic Design</Link></li></StaggerChild>
                   <StaggerChild><li><Link to="/services/video-editing">Video Editing</Link></li></StaggerChild>
-                  <StaggerChild><li><Link to="/services/digital-marketing">Digital Marketing</Link></li></StaggerChild>
+                  <StaggerChild><li><Link to="/gigs">Digital Marketing</Link></li></StaggerChild>
                   <StaggerChild><li><Link to="/services/website-design">Website Design</Link></li></StaggerChild>
                 </ul>
               </StaggerReveal>
