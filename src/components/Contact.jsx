@@ -43,7 +43,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.phone || !formData.service || !formData.budget || !formData.message) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.country || !formData.service || !formData.budget || !formData.message) {
       toast.error(lang === 'bn' ? 'সব প্রয়োজনীয় ঘর পূরণ করুন' : 'Please fill in all required fields');
       return;
     }
