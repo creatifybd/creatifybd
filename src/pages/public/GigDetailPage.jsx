@@ -405,6 +405,15 @@ const GigDetailPage = () => {
           border-bottom: 1px solid var(--border);
           padding: 1rem 0;
           font-size: 0.85rem;
+          margin-top: 90px;
+        }
+
+        @media (max-width: 1024px) {
+          .breadcrumb-bar { margin-top: 80px; }
+        }
+
+        @media (max-width: 900px) {
+          .breadcrumb-bar { margin-top: 64px; }
         }
 
         .breadcrumb-inner {

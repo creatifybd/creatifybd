@@ -58,13 +58,11 @@ const GigMarquee = () => {
           background: var(--surface);
           overflow: hidden;
         }
-
         .gig-marquee-header {
           text-align: center;
           margin-bottom: 3rem;
           padding: 0 2rem;
         }
-
         .gig-marquee-title {
           font-size: 2.5rem;
           font-weight: 800;
@@ -72,7 +70,6 @@ const GigMarquee = () => {
           margin-bottom: 0.75rem;
           letter-spacing: -0.02em;
         }
-
         .gig-marquee-subtitle {
           font-size: 1.1rem;
           color: var(--muted);
@@ -80,28 +77,29 @@ const GigMarquee = () => {
           margin: 0 auto;
           line-height: 1.6;
         }
-
         .gig-marquee {
           display: flex;
           flex-direction: column;
           gap: 2rem;
           margin-bottom: 3rem;
         }
-
         .gig-marquee-row {
           display: flex;
           overflow: hidden;
           width: 100%;
         }
-
         .gig-marquee-track {
           display: flex;
           width: max-content;
           animation: scroll 40s linear infinite;
         }
-
         .gig-marquee-row--right .gig-marquee-track {
           animation: scroll-reverse 40s linear infinite;
+        }
+
+        /* ── Pause animation when hovering any card in the row ── */
+        .gig-marquee-row:hover .gig-marquee-track {
+          animation-play-state: paused;
         }
 
         .gig-marquee-group {
@@ -109,43 +107,28 @@ const GigMarquee = () => {
           gap: 1.5rem;
           padding: 0 0.75rem;
         }
-
         .gig-marquee-card {
           flex-shrink: 0;
           width: 320px;
         }
-
         .gig-marquee-card .gig-card {
           pointer-events: auto;
         }
-
         .gig-marquee-card[aria-hidden="true"] .gig-card {
           pointer-events: none;
         }
-
         @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-
         @keyframes scroll-reverse {
-          0% {
-            transform: translateX(-50%);
-          }
-          100% {
-            transform: translateX(0);
-          }
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
         }
-
         .gig-marquee-footer {
           text-align: center;
           padding: 0 2rem;
         }
-
         .gig-marquee-footer .btn-red {
           display: inline-block;
           padding: 1rem 2.5rem;
@@ -157,29 +140,16 @@ const GigMarquee = () => {
           font-size: 1rem;
           transition: all 0.3s ease;
         }
-
         .gig-marquee-footer .btn-red:hover {
           background: var(--red-dark);
           transform: translateY(-2px);
           box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
         }
-
         @media (max-width: 768px) {
-          .gig-marquee-title {
-            font-size: 2rem;
-          }
-
-          .gig-marquee-subtitle {
-            font-size: 1rem;
-          }
-
-          .gig-marquee-card {
-            width: 280px;
-          }
-
-          .gig-marquee-group {
-            gap: 1rem;
-          }
+          .gig-marquee-title { font-size: 2rem; }
+          .gig-marquee-subtitle { font-size: 1rem; }
+          .gig-marquee-card { width: 280px; }
+          .gig-marquee-group { gap: 1rem; }
         }
       `}</style>
     </section>
