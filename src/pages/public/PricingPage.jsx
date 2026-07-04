@@ -3,14 +3,20 @@ import Navbar from '../../components/Navbar';
 import Pricing from '../../components/Pricing';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { motion } from 'framer-motion';
 
 const PricingPage = () => {
+  const seo = usePageSEO('pricing', {
+    title: "Pricing | CreatifyBD Service Packages",
+    description: "Affordable and transparent pricing for digital marketing, web development, branding, and video production services for global brands by CreatifyBD."
+  });
+
   return (
     <div className="pricing-page">
       <SEO
-        title="Pricing | CreatifyBD Service Packages"
-        description="Affordable and transparent pricing for digital marketing, web development, branding, and video production services for global brands by CreatifyBD."
+        title={seo.title}
+        description={seo.description}
         keywords="creatifybd pricing, digital marketing pricing, web design price, social media management packages"
       />
       <Navbar theme="light" />
