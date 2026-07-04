@@ -8,6 +8,7 @@ import PackageTabs from '../../components/PackageTabs';
 import PackageComparison from '../../components/PackageComparison';
 import GigCard from '../../components/GigCard';
 import { getGigBySlug, gigs, categories } from '../../data/gigs';
+import { CLIENT_REVIEWS } from '../../data/clientReviews';
 import { db } from '../../firebase/config';
 import { collection, query, where, getDocs, limit, doc, getDoc } from 'firebase/firestore';
 import { 
@@ -21,6 +22,27 @@ import {
   Globe, 
   AlertCircle 
 } from 'lucide-react';
+
+const COUNTRY_FLAGS = {
+  usa: '🇺🇸', 'united states': '🇺🇸', canada: '🇨🇦', australia: '🇦🇺',
+  uk: '🇬🇧', 'united kingdom': '🇬🇧', germany: '🇩🇪', international: '🌍',
+};
+
+const getCountryFlag = (country) => COUNTRY_FLAGS[String(country || '').toLowerCase()] || '🌍';
+
+const getRelativeDate = (createdAt) => {
+  if (!createdAt || typeof createdAt.seconds !== 'number') return '';
+  const diffMs = Date.now() - createdAt.seconds * 1000;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return 'Today';
+  if (diffDays === 1) return '1 day ago';
+  if (diffDays < 30) return `${diffDays} days ago`;
+  const diffMonths = Math.floor(diffDays / 30);
+  if (diffMonths === 1) return '1 month ago';
+  if (diffMonths < 12) return `${diffMonths} months ago`;
+  const diffYears = Math.floor(diffMonths / 12);
+  return diffYears === 1 ? '1 year ago' : `${diffYears} years ago`;
+};
 
 const GigDetailPage = () => {
   const { slug } = useParams();
@@ -349,6 +371,34 @@ const GigDetailPage = () => {
                           <img src={rev.deliveredImageUrl} alt="Delivered sample work preview" />
                         </div>
                       )}
+                    </div>
+                  ))}
+                </div>
+              ) : CLIENT_REVIEWS && CLIENT_REVIEWS.length > 0 ? (
+                <div className="reviews-list-block">
+                  {CLIENT_REVIEWS.slice(0, 6).map((rev) => (
+                    <div key={rev.id} className="review-item-card">
+                      <div className="rev-header">
+                        <div className="rev-avatar">
+                          <User size={18} />
+                        </div>
+                        <div className="rev-meta">
+                          <h5 className="rev-name">{rev.clientName}</h5>
+                          <div className="rev-sub-meta">
+                            <span className="rev-country">{getCountryFlag(rev.country)} {rev.country}</span>
+                            <span className="bullet-sep">•</span>
+                            <span className="rev-industry">{rev.gigTitle}</span>
+                            <span className="bullet-sep">•</span>
+                            <span className="rev-date">{getRelativeDate(rev.createdAt) || rev.reviewDate}</span>
+                          </div>
+                        </div>
+                        <div className="rev-stars-box">
+                          {Array.from({ length: Math.round(rev.rating) }).map((_, i) => (
+                            <Star key={i} size={14} fill="var(--red)" stroke="var(--red)" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="rev-content">{rev.reviewText}</p>
                     </div>
                   ))}
                 </div>
