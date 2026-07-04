@@ -3,16 +3,22 @@ import Navbar from '../../components/Navbar';
 import Process from '../../components/Process';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { motion } from 'framer-motion';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const ProcessPage = () => {
+  const seo = usePageSEO('process', {
+    title: "How We Work | CreatifyBD Creative Agency",
+    description: "Learn how CreatifyBD helps global brands grow through branding, digital marketing, content production, and web solutions."
+  });
+
   return (
     <div className="process-page">
       <SEO
-        title="How We Work | CreatifyBD Creative Agency"
-        description="Learn how CreatifyBD helps global brands grow through branding, digital marketing, content production, and web solutions."
+        title={seo.title}
+        description={seo.description}
         keywords="about creatifybd, creative agency process, web design workflow, digital marketing strategy"
       />
       <Navbar />
