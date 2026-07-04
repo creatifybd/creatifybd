@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import {
@@ -21,10 +21,14 @@ import {
   ShoppingBag,
   ClipboardList,
   MessageCircle,
-  FolderOpen
+  FolderOpen,
+  BookOpen,
+  UserCog
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
+import { useConfirm } from '../context/ConfirmContext';
 import '../admin.css';
 
 // Admin Sub-pages
@@ -41,14 +45,24 @@ import AdminGigs from './admin/AdminGigs';
 import AdminOrders from './admin/AdminOrders';
 import AdminReviews from './admin/AdminReviews';
 import MediaLibrary from './admin/MediaLibrary';
+import CaseStudiesManager from './admin/CaseStudiesManager';
+import AdminUsers from './admin/AdminUsers';
 
 const AdminDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, role, isOwner } = useAuth();
+  const confirmDialog = useConfirm();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const handleLogout = async () => {
-    if(window.confirm("Sign out of admin panel?")) {
+    const ok = await confirmDialog({
+      title: 'Sign out?',
+      description: 'You will need to log in again to access the admin panel.',
+      confirmLabel: 'Sign Out',
+      tone: 'warning'
+    });
+    if (ok) {
       await signOut(auth);
       navigate('/login');
     }
@@ -61,6 +75,7 @@ const AdminDashboard = () => {
     { path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} /> },
     { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} /> },
     { path: '/admin/content', label: 'Page Content', icon: <Activity size={18} /> },
+    { path: '/admin/case-studies', label: 'Case Studies', icon: <BookOpen size={18} /> },
     { path: '/admin/services', label: 'Services', icon: <Briefcase size={18} /> },
     { path: '/admin/portfolio', label: 'Portfolio', icon: <ImageIcon size={18} /> },
     { path: '/admin/media', label: 'Media Library', icon: <FolderOpen size={18} /> },
@@ -68,7 +83,10 @@ const AdminDashboard = () => {
     { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} /> },
     { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
     { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} /> },
+    { path: '/admin/users', label: 'Admin Users', icon: <UserCog size={18} />, ownerOnly: true },
   ];
+
+  const visibleNavItems = navItems.filter(item => !item.ownerOnly || isOwner);
 
   const [cmdOpen, setCmdOpen] = React.useState(false);
   const [cmdQuery, setCmdQuery] = React.useState('');
@@ -103,7 +121,7 @@ const AdminDashboard = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const filteredNavItems = navItems.filter(item => item.label.toLowerCase().includes(cmdQuery.toLowerCase()));
+  const filteredNavItems = visibleNavItems.filter(item => item.label.toLowerCase().includes(cmdQuery.toLowerCase()));
 
   const handleCmdNavigate = (path) => {
     navigate(path);
@@ -112,7 +130,8 @@ const AdminDashboard = () => {
   };
 
   const currentNavItem = navItems.find(item => item.path === location.pathname) || { label: 'Overview' };
-  const adminEmail = auth.currentUser?.email || 'binashad7@gmail.com';
+  const adminEmail = user?.email || auth.currentUser?.email || '';
+  const avatarLetter = (adminEmail || 'A').charAt(0).toUpperCase();
 
   return (
     <>
@@ -120,7 +139,7 @@ const AdminDashboard = () => {
       <div className="admin-layout">
       <button
         type="button"
-        className="admin-sidebar-backdrop"
+        className={`admin-sidebar-backdrop ${sidebarOpen ? 'is-open' : ''}`}
         aria-label="Close admin navigation"
         onClick={() => setSidebarOpen(false)}
       />
@@ -131,8 +150,8 @@ const AdminDashboard = () => {
           <div style={{ width: '32px', height: '32px', background: 'var(--adm-red)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Activity size={16} color="white" />
           </div>
-          <span className="logo-text" style={{ fontWeight: '800', fontSize: '1.2rem', color: 'white', whiteSpace: 'nowrap' }}>
-            Creatify<span style={{ color: 'var(--adm-red)' }}>Admin</span>
+          <span className="sidebar-brand-name">
+            Creatify<span>Admin</span>
           </span>
           <button
             type="button"
@@ -145,7 +164,7 @@ const AdminDashboard = () => {
         </div>
 
         <div className="sidebar-nav">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <Link 
               key={item.path} 
               to={item.path} 
@@ -158,10 +177,17 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--adm-border)', paddingTop: '1.5rem' }}>
-          <button onClick={handleLogout} className="nav-item" style={{ color: '#ff4444', width: '100%', background: 'none', border: 'none', cursor: 'pointer' }}>
+        <div className="sidebar-footer">
+          <div className="sidebar-user">
+            <div className="sidebar-user-avatar">{avatarLetter}</div>
+            <div className="sidebar-user-info">
+              <div className="sidebar-user-email">{adminEmail}</div>
+              <div className="sidebar-user-role">{role || 'admin'}</div>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="logout-btn">
             <span style={{ display: 'flex', alignItems: 'center' }}><LogOut size={18} /></span>
-            <span className="nav-text">Sign Out</span>
+            <span>Sign Out</span>
           </button>
         </div>
       </aside>
@@ -181,7 +207,7 @@ const AdminDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--adm-dim)', fontSize: '0.9rem', fontWeight: '500' }}>
             <span>Admin</span>
             <ChevronRight size={14} />
-            <span style={{ color: 'white' }}>{currentNavItem.label}</span>
+            <span style={{ color: 'var(--adm-txt)' }}>{currentNavItem.label}</span>
           </div>
 
           <div className="search-trigger" onClick={() => setCmdOpen(true)}>
@@ -196,11 +222,11 @@ const AdminDashboard = () => {
             </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingLeft: '1.5rem', borderLeft: '1px solid var(--adm-border)' }}>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'white' }}>Admin User</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--adm-txt)' }}>Admin User</div>
                 <div style={{ fontSize: '0.65rem', color: 'var(--adm-dim)' }}>{adminEmail}</div>
               </div>
-              <div style={{ width: '36px', height: '36px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <User size={18} color="var(--adm-dim)" />
+              <div style={{ width: '36px', height: '36px', background: 'var(--adm-red-soft)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <User size={18} color="var(--adm-red)" />
               </div>
             </div>
           </div>
@@ -223,6 +249,7 @@ const AdminDashboard = () => {
                 <Route path="gigs" element={<AdminGigs />} />
                 <Route path="reviews" element={<AdminReviews />} />
                 <Route path="content" element={<ContentManager />} />
+                <Route path="case-studies" element={<CaseStudiesManager />} />
                 <Route path="services" element={<ServicesManager />} />
                 <Route path="portfolio" element={<PortfolioManager />} />
                 <Route path="media" element={<MediaLibrary />} />
@@ -231,6 +258,7 @@ const AdminDashboard = () => {
                 <Route path="testimonials" element={<TestimonialsManager />} />
                 <Route path="messages" element={<MessagesList />} />
                 <Route path="settings" element={<SettingsManager />} />
+                <Route path="users" element={isOwner ? <AdminUsers /> : <Navigate to="/admin" />} />
               </Routes>
             </motion.div>
           </AnimatePresence>
