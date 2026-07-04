@@ -32,7 +32,14 @@ const defaultSettings = {
     pricing: { title: '', description: '' },
     about: { title: '', description: '' },
     contact: { title: '', description: '' },
-    reviews: { title: '', description: '' }
+    reviews: { title: '', description: '' },
+    team: { title: '', description: '' },
+    process: { title: '', description: '' },
+    gigs: { title: '', description: '' },
+    privacy: { title: '', description: '' },
+    terms: { title: '', description: '' },
+    refund_policy: { title: '', description: '' },
+    revision_policy: { title: '', description: '' }
   }
 };
 
@@ -43,7 +50,14 @@ const PAGE_SEO_LABELS = {
   pricing: 'Pricing',
   about: 'About',
   contact: 'Contact',
-  reviews: 'Reviews'
+  reviews: 'Reviews',
+  team: 'Team',
+  process: 'Process / How We Work',
+  gigs: 'Gigs Catalog',
+  privacy: 'Privacy Policy',
+  terms: 'Terms of Service',
+  refund_policy: 'Refund Policy',
+  revision_policy: 'Revision Policy'
 };
 
 const SettingsManager = () => {
