@@ -12,6 +12,19 @@ import React, { useEffect, useState } from 'react';
       const start = Date.now();
       let hideTimeout;
       let completeTimeout;
+      let finished = false;
+
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        clearInterval(interval);
+        clearTimeout(failsafeTimeout);
+        setCount(100);
+        hideTimeout = setTimeout(() => {
+          setIsVisible(false);
+          completeTimeout = setTimeout(onComplete, 300);
+        }, 80);
+      };
 
       const interval = setInterval(() => {
         const elapsed = Date.now() - start;
@@ -19,16 +32,18 @@ import React, { useEffect, useState } from 'react';
         setCount(Math.floor(progress * 100));
 
         if (progress >= 1) {
-          clearInterval(interval);
-          hideTimeout = setTimeout(() => {
-            setIsVisible(false);
-            completeTimeout = setTimeout(onComplete, 300);
-          }, 80);
+          finish();
         }
       }, 16);
 
+      // Failsafe: never let the preloader get stuck (e.g. throttled background
+      // tabs or slow first paint). Force it to complete after 3s regardless.
+      const failsafeTimeout = setTimeout(finish, 3000);
+
       return () => {
+        finished = true;
         clearInterval(interval);
+        clearTimeout(failsafeTimeout);
         clearTimeout(hideTimeout);
         clearTimeout(completeTimeout);
       };
