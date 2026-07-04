@@ -32,15 +32,14 @@ export const siteConfig = {
   },
 
   // Payment Information - DBBL Bank Transfer
-  // IMPORTANT: Replace with real payment details before production
   dbbl: {
-    bankName: 'Dutch-Bangla Bank Limited',
-    accountName: 'Account Name',
-    accountNumber: 'Account Number',
-    branch: 'Branch Name',
-    routingNumber: 'Routing Number',
+    bankName: 'Dutch Bangla Bank Limited',
+    accountName: 'MD ALAMIN ALI',
+    accountNumber: '1241580001138',
+    branch: 'Netaiganj Branch',
+    routingNumber: '090274996',
     paymentReference: 'Client Name / Project Name',
-    placeholder: true // Remove this when real info is added
+    placeholder: false
   },
   
   // Payment Instructions
