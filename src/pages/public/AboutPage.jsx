@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { Award, Building2, Globe, MonitorPlay, Quote, ShieldCheck, Sparkles, Users, Video } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 
@@ -91,11 +92,16 @@ const AboutPage = () => {
     };
   });
 
+  const seo = usePageSEO('about', {
+    title: "About Best Creative Agency | Social Media Management & Digital Marketing Team | CreatifyBD",
+    description: "Learn about CreatifyBD, the best creative agency and digital marketing team offering social media management, graphic design, video editing, and website design services for USA, Canada, and Australia."
+  });
+
   return (
     <div className="about-page">
       <SEO
-        title="About Best Creative Agency | Social Media Management & Digital Marketing Team | CreatifyBD"
-        description="Learn about CreatifyBD, the best creative agency and digital marketing team offering social media management, graphic design, video editing, and website design services for USA, Canada, and Australia."
+        title={seo.title}
+        description={seo.description}
         keywords="about creative agency, about digital marketing agency, about social media management company, about graphic design agency, about video editing company, about web design agency, creatifybd about, best creative agency team, digital marketing agency team, social media management team, graphic design team, video editing team, web development team, creative agency story, marketing agency about us, creative agency mission"
       />
       <Navbar />
