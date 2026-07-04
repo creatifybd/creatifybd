@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { Trash2, Mail, Phone, Calendar, CheckCircle2, Circle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const MessagesList = () => {
+  const confirm = useConfirm();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,8 +26,19 @@ const MessagesList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm('Delete this message permanently?')) {
+    const ok = await confirm({
+      title: 'Delete this message?',
+      description: 'This message will be permanently removed.',
+      confirmLabel: 'Delete',
+      tone: 'danger'
+    });
+    if (!ok) return;
+    try {
       await deleteDoc(doc(db, 'messages', id));
+      toast.success('Message deleted');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to delete message');
     }
   };
 
