@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getData, addData, deleteData } from '../../firebase/services';
+import { getData, addData, deleteData, logActivity } from '../../firebase/services';
 import { doc, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Plus, Trash2, X, Loader2, Search, Eye, EyeOff } from 'lucide-react';
@@ -120,9 +120,11 @@ const PortfolioManager = () => {
           updatedAt: serverTimestamp()
         }, { merge: true });
         toast.success('Portfolio item hidden from the website.');
+        logActivity({ action: 'portfolio.hide', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
       } else {
         await deleteData('portfolio', item.id);
         toast.success('Portfolio item deleted.');
+        logActivity({ action: 'portfolio.delete', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
       }
       fetchItems();
     } catch (err) {
@@ -239,7 +241,7 @@ const PortfolioManager = () => {
                   <button className="admin-icon-btn" onClick={() => toggleHidden(item)} title={item.hidden ? 'Show' : 'Hide'}>
                     {item.hidden ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
-                  <button onClick={() => handleDelete(item)} className="admin-icon-btn"><Trash2 size={16} color="var(--adm-danger)" /></button>
+                  <button onClick={() => handleDelete(item)} aria-label="Delete portfolio item" className="admin-icon-btn"><Trash2 size={16} color="var(--adm-danger)" /></button>
                 </div>
               </div>
               {item.hidden && <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.6rem' }}>HIDDEN</div>}
