@@ -4,10 +4,12 @@ import { Copy, ExternalLink, File, FileText, Film, Image as ImageIcon, Trash2 } 
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
 import { db } from '../../firebase/config';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const iconFor = (type) => type === 'image' ? <ImageIcon size={22} /> : type === 'video' ? <Film size={22} /> : type === 'pdf' ? <FileText size={22} /> : <File size={22} />;
 
 const MediaLibrary = () => {
+  const confirm = useConfirm();
   const [assets, setAssets] = useState([]);
 
   useEffect(() => onSnapshot(query(collection(db, 'media_assets'), orderBy('createdAt', 'desc')), snapshot => {
@@ -31,7 +33,13 @@ const MediaLibrary = () => {
   };
 
   const removeAsset = async (id) => {
-    if (!window.confirm('Remove this item from the media library?')) return;
+    const ok = await confirm({
+      title: 'Remove this item?',
+      description: 'This will remove it from the media library. Files already used elsewhere on the site will keep working from their existing URL.',
+      confirmLabel: 'Remove',
+      tone: 'danger'
+    });
+    if (!ok) return;
     await deleteDoc(doc(db, 'media_assets', id));
     toast.success('Removed from library');
   };
