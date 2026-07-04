@@ -9,6 +9,7 @@ import Portfolio from '../components/Portfolio';
 import SEO from '../components/SEO';
 
 import { useSettings } from '../context/SettingsContext';
+import usePageSEO from '../hooks/usePageSEO';
 
 const Clients = lazy(() => import('../components/Clients'));
 const IntroBand = lazy(() => import('../components/IntroBand'));
@@ -128,11 +129,13 @@ const Home = () => {
     ]
   };
 
+  const pageSeo = usePageSEO('home', seo);
+
   return (
     <div className="App">
       <SEO 
-        title={seo.title} 
-        description={seo.description} 
+        title={pageSeo.title} 
+        description={pageSeo.description} 
         keywords={seo.keywords}
         schema={seo.schema}
       />
