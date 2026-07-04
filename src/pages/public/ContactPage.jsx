@@ -3,16 +3,22 @@ import Navbar from '../../components/Navbar';
 import Contact from '../../components/Contact';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { motion } from 'framer-motion';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const ContactPage = () => {
+  const seo = usePageSEO('contact', {
+    title: "Contact Best Digital Marketing Agency | Hire Creative Services | CreatifyBD",
+    description: "Contact CreatifyBD, the best digital marketing agency, to hire creative services including social media management, graphic design, video editing, and website design for your brand."
+  });
+
   return (
     <div className="contact-page">
       <SEO
-        title="Contact Best Digital Marketing Agency | Hire Creative Services | CreatifyBD"
-        description="Contact CreatifyBD, the best digital marketing agency, to hire creative services including social media management, graphic design, video editing, and website design for your brand."
+        title={seo.title}
+        description={seo.description}
         keywords="contact digital marketing agency, hire creative agency, contact graphic design service, contact video editing service, contact social media management, hire marketing agency, best marketing agency contact, creative agency consultation, digital marketing consultation, web design agency contact, branding agency contact, social media marketing consultation, video production company contact, contact creatifybd, hire creatifybd"
         schema={{
           "@context": "https://schema.org",
