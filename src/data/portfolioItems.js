@@ -5,7 +5,9 @@ const descriptions = {
   branding: 'A polished brand identity system covering logo direction, typography, color palette, collateral, product mockups, and launch-ready visual assets.',
   marketing: 'A digital marketing campaign board showing channel strategy, funnel planning, performance metrics, landing visuals, and conversion-focused creative direction.',
   video: 'A video production and editing concept with campaign frames, thumbnail direction, motion storyboards, platform formats, and polished launch presentation.',
-  web: 'A responsive website design concept with desktop and mobile layouts, conversion sections, content hierarchy, and premium visual design.'
+  web: 'A responsive website design concept with desktop and mobile layouts, conversion sections, content hierarchy, and premium visual design.',
+  packaging: 'A production-ready packaging concept combining shelf impact, clear hierarchy, premium mockups, and a cohesive visual system across every product touchpoint.',
+  apparel: 'A complete apparel graphic concept with original artwork, garment mockups, print placement, supporting brand details, and retail-ready presentation.'
 };
 
 const serviceLabels = {
@@ -13,7 +15,9 @@ const serviceLabels = {
   branding: 'Branding & Logo Design',
   marketing: 'Digital Marketing',
   video: 'Video Editing',
-  web: 'Website Design'
+  web: 'Website Design',
+  packaging: 'Product Packaging Design',
+  apparel: 'T-Shirt Design'
 };
 
 const folderByCategory = {
@@ -21,7 +25,9 @@ const folderByCategory = {
   branding: 'logo-design-branding',
   marketing: 'digital-marketing',
   video: 'video-editing',
-  web: 'website-design'
+  web: 'website-design',
+  packaging: 'product-packaging-design',
+  apparel: 't-shirt-design'
 };
 
 const tagsByCategory = {
@@ -29,7 +35,9 @@ const tagsByCategory = {
   branding: ['logo design', 'brand identity', 'visual identity', 'brand guidelines'],
   marketing: ['digital marketing', 'performance marketing', 'lead generation', 'campaign strategy'],
   video: ['video editing', 'promo video', 'short-form video', 'motion creative'],
-  web: ['website design', 'landing page', 'responsive UI', 'conversion design']
+  web: ['website design', 'landing page', 'responsive UI', 'conversion design'],
+  packaging: ['packaging design', 'product branding', 'label design', 'retail packaging'],
+  apparel: ['t-shirt design', 'apparel graphics', 'merchandise design', 'print design']
 };
 
 const makeItems = (category, titles, industries = []) => {
@@ -107,8 +115,65 @@ export const CURATED_PORTFOLIO = [
     'Hartwell Hotel Experience Branding',
     'TalentBridge Hiring Platform Branding',
     'HelioCore Energy Brand System',
-    'Verdora Estate Retreat Branding'
-  ], ['Skincare', 'Fintech', 'Restaurant', 'Hospitality', 'Pet care', 'Sustainable retail', 'Interior design', 'Fitness', 'Floral retail', 'SaaS', 'Fashion', 'Natural products', 'Cybersecurity', 'Bakery', 'Education', 'Real estate', 'Wellness', 'Travel', 'Coffee', 'Lifestyle retail', 'Spa', 'Technology', 'Property', 'Luxury retreat', 'Beauty', 'Education technology', 'Architecture', 'Dental care', 'Solar energy', 'Hotel', 'Restaurant', 'Finance', 'Dental wellness', 'Real estate', 'Beauty packaging', 'Property', 'Hospitality', 'Recruitment', 'Energy', 'Luxury estate']),
+    'Verdora Estate Retreat Branding',
+    'Premium Logo Identity Collection'
+  ], ['Skincare', 'Fintech', 'Restaurant', 'Hospitality', 'Pet care', 'Sustainable retail', 'Interior design', 'Fitness', 'Floral retail', 'SaaS', 'Fashion', 'Natural products', 'Cybersecurity', 'Bakery', 'Education', 'Real estate', 'Wellness', 'Travel', 'Coffee', 'Lifestyle retail', 'Spa', 'Technology', 'Property', 'Luxury retreat', 'Beauty', 'Education technology', 'Architecture', 'Dental care', 'Solar energy', 'Hotel', 'Restaurant', 'Finance', 'Dental wellness', 'Real estate', 'Beauty packaging', 'Property', 'Hospitality', 'Recruitment', 'Energy', 'Luxury estate', 'Multi-industry brand identity']),
+
+  ...makeItems('packaging', [
+    'Monterra Premium Coffee Packaging',
+    'Lumiere Skincare Packaging System',
+    'Avelena Herbal Tea Packaging',
+    'Voltix Energy Drink Packaging',
+    'Nourish Granola Packaging System',
+    'Pureva Laundry Care Packaging',
+    'Velora Luxury Chocolate Packaging',
+    'Aromica Artisan Spice Collection',
+    'Northpaw Premium Pet Food Packaging',
+    'Vitalis Omega-3 Supplement Packaging',
+    'Elan Botanique Skincare Packaging',
+    'Roast Vale Coffee Packaging System',
+    'Verdelune Tea House Packaging',
+    'Golden Hive Honey Packaging',
+    'PureNest Laundry Care Packaging',
+    'VoltRush Energy Drink Packaging',
+    'Little Bloom Baby Care Packaging',
+    'Pawshire Select Pet Food Packaging',
+    'Spice Atelier Culinary Packaging',
+    'Noir Solace Home Fragrance Packaging',
+    'Golden Vale Artisan Honey Packaging',
+    'Noir Reserve Grooming Packaging',
+    'SoftNest Baby Care Packaging',
+    'Casa Verde Artisan Pasta Packaging',
+    'Elan Noir Luxury Fragrance Packaging',
+    'BioSip Probiotic Drink Packaging',
+    'EcoDrop Sustainable Home Care Packaging',
+    'CraveCraft Gourmet Snack Packaging',
+    'Frostella Artisan Ice Cream Packaging',
+    'HerbaCore Botanical Supplement Packaging'
+  ], ['Coffee', 'Skincare', 'Herbal tea', 'Energy drinks', 'Healthy food', 'Laundry care', 'Confectionery', 'Spices', 'Pet care', 'Supplements', 'Botanical skincare', 'Coffee', 'Tea', 'Honey', 'Laundry care', 'Energy drinks', 'Baby care', 'Pet care', 'Culinary spices', 'Home fragrance', 'Honey', 'Men grooming', 'Baby care', 'Pasta', 'Fragrance', 'Functional beverages', 'Home care', 'Snacks', 'Ice cream', 'Supplements']),
+
+  ...makeItems('apparel', [
+    'Urban Echo Streetwear T-Shirt Design',
+    'Iron Pulse Performance Apparel Design',
+    'Azure Coast Resort T-Shirt Design',
+    'Bright Cub Kids T-Shirt Design',
+    'Terra Thread Sustainable Apparel Design',
+    'Roast Ritual Cafe Merchandise Design',
+    'Neon Valley Festival T-Shirt Design',
+    'Mono Line Minimal Apparel Design',
+    'Summit Trail Adventure T-Shirt Design',
+    'Northbridge Club Collegiate Apparel',
+    'Chase the Night Streetwear Design',
+    'Infinite Vision Minimal T-Shirt Design',
+    'Open Road Adventure Apparel Design',
+    'Push Beyond Athletic T-Shirt Design',
+    'Bloom Botanical T-Shirt Design',
+    'Iron Ashes Band Merchandise Design',
+    'Rooted in Nature Outdoor Apparel',
+    'Altura Coffee Club Merchandise Design',
+    'Relentless Esports T-Shirt Design',
+    'Build Next Corporate T-Shirt Design'
+  ], ['Streetwear', 'Fitness', 'Resort merchandise', 'Kids apparel', 'Sustainable fashion', 'Cafe merchandise', 'Festival merchandise', 'Minimal fashion', 'Outdoor lifestyle', 'Collegiate apparel', 'Streetwear', 'Minimal fashion', 'Travel lifestyle', 'Athletic wear', 'Lifestyle fashion', 'Music merchandise', 'Outdoor lifestyle', 'Cafe merchandise', 'Esports', 'Corporate apparel']),
 
   ...makeItems('social', [
     'Atlas Ascent Travel Social Media System',

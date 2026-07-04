@@ -31,6 +31,8 @@ const PORTFOLIO_CATS = [
   { key: 'all', label: 'All Work', label_bn: 'All Work' },
   { key: 'social', label: 'Social Media', label_bn: 'Social Media' },
   { key: 'branding', label: 'Branding', label_bn: 'Branding' },
+  { key: 'packaging', label: 'Packaging', label_bn: 'Packaging' },
+  { key: 'apparel', label: 'T-Shirt Design', label_bn: 'T-Shirt Design' },
   { key: 'marketing', label: 'Digital Marketing', label_bn: 'Digital Marketing' },
   { key: 'web', label: 'Web Design', label_bn: 'Web Design' },
   { key: 'video', label: 'Video Editing', label_bn: 'Video Editing' },
@@ -42,6 +44,8 @@ const PORTFOLIO_CAT_DISPLAY = {
   social: 'Social Media Management',
   graphic: 'Graphic Design',
   branding: 'Branding & Logo Design',
+  packaging: 'Product Packaging Design',
+  apparel: 'T-Shirt Design',
   marketing: 'Digital Marketing',
   web: 'Website Design',
   video: 'Video Editing',
@@ -333,7 +337,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     })
     .filter(item => item.hidden !== true);
   const adminItems = items.filter(item => !curatedIds.has(item.id) && item.hidden !== true);
-  const curatedGroups = ['social', 'branding', 'marketing', 'video', 'web']
+  const curatedGroups = ['social', 'branding', 'packaging', 'apparel', 'marketing', 'video', 'web']
     .map(category => syncedCuratedItems.filter(item => item.category === category));
   const longestGroup = Math.max(...curatedGroups.map(group => group.length));
   const interleavedCuratedItems = Array.from({ length: longestGroup }, (_, index) =>
