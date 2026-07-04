@@ -4,6 +4,7 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy,
 import { Plus, Edit2, Trash2, X, Star, Search, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useConfirm } from '../../context/ConfirmContext';
+import { logActivity } from '../../firebase/services';
 
 const emptyForm = { name: '', role: '', text: '', stars: 5, hidden: false };
 
@@ -73,6 +74,7 @@ const TestimonialsManager = () => {
     try {
       await deleteDoc(doc(db, 'testimonials', id));
       toast.success('Review deleted');
+      logActivity({ action: 'testimonial.delete', resource: 'testimonials', resourceId: id });
       setSelectedIds(prev => prev.filter(i => i !== id));
       fetchItems();
     } catch (err) {
@@ -184,8 +186,8 @@ const TestimonialsManager = () => {
               <button className="admin-icon-btn" onClick={() => toggleHidden(t)} title={t.hidden ? 'Show' : 'Hide'}>
                 {t.hidden ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
-              <button className="admin-icon-btn" onClick={() => { setEditingId(t.id); setFormData({ ...emptyForm, ...t }); setIsModalOpen(true); }}><Edit2 size={15} /></button>
-              <button className="admin-icon-btn" onClick={() => handleDelete(t.id)}><Trash2 size={15} color="var(--adm-danger)" /></button>
+              <button className="admin-icon-btn" aria-label="Edit testimonial" onClick={() => { setEditingId(t.id); setFormData({ ...emptyForm, ...t }); setIsModalOpen(true); }}><Edit2 size={15} /></button>
+              <button className="admin-icon-btn" aria-label="Delete testimonial" onClick={() => handleDelete(t.id)}><Trash2 size={15} color="var(--adm-danger)" /></button>
             </div>
             <p style={{ fontSize: '0.9rem', fontStyle: 'italic', color: 'var(--adm-txt)', marginBottom: '1.5rem', lineHeight: '1.6' }}>"{t.text}"</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -205,7 +207,7 @@ const TestimonialsManager = () => {
       {isModalOpen && (
         <div className="adm-modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="admin-card" style={{ width: '100%', maxWidth: '500px', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setIsModalOpen(false)} className="admin-icon-btn" style={{ position: 'absolute', right: '1.5rem', top: '1.5rem' }}><X /></button>
+            <button onClick={() => setIsModalOpen(false)} aria-label="Close dialog" className="admin-icon-btn" style={{ position: 'absolute', right: '1.5rem', top: '1.5rem' }}><X /></button>
             <h2 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Testimonial' : 'Add Testimonial'}</h2>
             <form onSubmit={handleSubmit}>
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
