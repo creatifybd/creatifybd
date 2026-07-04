@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { motion } from 'framer-motion';
 import { Mail } from 'lucide-react';
 
@@ -47,11 +48,16 @@ const TeamPage = () => {
     }
   ];
 
+  const seo = usePageSEO('team', {
+    title: "Meet Our Creative Team & Workspace | CreatifyBD",
+    description: "Meet the creative agency specialists building premium social content, design assets, videos, and websites for global brands."
+  });
+
   return (
     <div className="team-page">
       <SEO
-        title="Meet Our Creative Team & Workspace | CreatifyBD"
-        description="Meet the creative agency specialists building premium social content, design assets, videos, and websites for global brands."
+        title={seo.title}
+        description={seo.description}
       />
 
       <Navbar />
