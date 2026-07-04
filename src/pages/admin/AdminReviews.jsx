@@ -4,6 +4,7 @@ import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, serverT
 import { Star, Check, X, Trash2, Loader2, RefreshCcw, MessageSquare, CheckSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../../context/ConfirmContext';
+import { logActivity } from '../../firebase/services';
 
 const StarDisplay = ({ rating }) => (
   <div style={{ display: 'flex', gap: '0.1rem' }}>
@@ -51,6 +52,7 @@ const AdminReviews = () => {
         approvedAt: serverTimestamp()
       });
       setReviews(prev => prev.map(r => r.id === reviewId ? { ...r, status: 'approved' } : r));
+      logActivity({ action: 'review.approve', resource: 'reviews', resourceId: reviewId });
       toast.success('Review approved and published', { id: toastId });
     } catch (err) {
       toast.error('Failed to approve review', { id: toastId });
@@ -68,6 +70,7 @@ const AdminReviews = () => {
         rejectedAt: serverTimestamp()
       });
       setReviews(prev => prev.map(r => r.id === reviewId ? { ...r, status: 'rejected' } : r));
+      logActivity({ action: 'review.reject', resource: 'reviews', resourceId: reviewId });
       toast.success('Review rejected', { id: toastId });
     } catch (err) {
       toast.error('Failed to reject review', { id: toastId });
@@ -89,6 +92,7 @@ const AdminReviews = () => {
     try {
       await deleteDoc(doc(db, 'reviews', reviewId));
       setReviews(prev => prev.filter(r => r.id !== reviewId));
+      logActivity({ action: 'review.delete', resource: 'reviews', resourceId: reviewId });
       toast.success('Review deleted', { id: toastId });
     } catch (err) {
       toast.error('Failed to delete review', { id: toastId });
