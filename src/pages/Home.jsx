@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import useReveal from '../utils/useReveal';
 
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import Clients from '../components/Clients';
-import IntroBand from '../components/IntroBand';
-
-import Services from '../components/Services';
 import Portfolio from '../components/Portfolio';
-import CaseStudies from '../components/CaseStudies';
-import Process from '../components/Process';
-import Features from '../components/Features';
-import Pricing from '../components/Pricing';
-import Testimonials from '../components/Testimonials';
-import CTABand from '../components/CTABand';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 
-import SmmHighlight from '../components/SmmHighlight';
-import AboutTrust from '../components/AboutTrust';
-import GigMarquee from '../components/GigMarquee';
 import { useSettings } from '../context/SettingsContext';
+
+const Clients = lazy(() => import('../components/Clients'));
+const IntroBand = lazy(() => import('../components/IntroBand'));
+const Services = lazy(() => import('../components/Services'));
+const CaseStudies = lazy(() => import('../components/CaseStudies'));
+const Process = lazy(() => import('../components/Process'));
+const Features = lazy(() => import('../components/Features'));
+const Pricing = lazy(() => import('../components/Pricing'));
+const Testimonials = lazy(() => import('../components/Testimonials'));
+const CTABand = lazy(() => import('../components/CTABand'));
+const Contact = lazy(() => import('../components/Contact'));
+const Footer = lazy(() => import('../components/Footer'));
+const SmmHighlight = lazy(() => import('../components/SmmHighlight'));
+const AboutTrust = lazy(() => import('../components/AboutTrust'));
+const GigMarquee = lazy(() => import('../components/GigMarquee'));
 
 const Home = () => {
   const { content, loading } = useSettings();
@@ -140,23 +140,26 @@ const Home = () => {
       <Navbar />
       {content?.visibility?.hero !== false && <Hero />}
       {content?.visibility?.portfolio !== false && <Portfolio highlight={true} theme={content?.portfolio?.theme} />}
-      <GigMarquee />
-      {content?.visibility?.intro_band !== false && <IntroBand />}
-      
-      {content?.visibility?.clients !== false && <Clients />}
-      
-      {content?.visibility?.smm_highlight !== false && <SmmHighlight />}
-      {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
-      {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
-      {content?.visibility?.about_trust !== false && <AboutTrust />}
-      {content?.visibility?.case_studies !== false && <CaseStudies />}
-      {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
-      {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
-      
-      {content?.visibility?.testimonials !== false && <Testimonials theme={content?.testimonials?.theme} />}
-      {content?.visibility?.cta_band !== false && <CTABand />}
-      {content?.visibility?.contact !== false && <Contact highlight={true} theme={content?.contact?.theme} />}
-      <Footer />
+
+      <Suspense fallback={null}>
+        <GigMarquee />
+        {content?.visibility?.intro_band !== false && <IntroBand />}
+
+        {content?.visibility?.clients !== false && <Clients />}
+
+        {content?.visibility?.smm_highlight !== false && <SmmHighlight />}
+        {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
+        {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
+        {content?.visibility?.about_trust !== false && <AboutTrust />}
+        {content?.visibility?.case_studies !== false && <CaseStudies />}
+        {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
+        {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
+
+        {content?.visibility?.testimonials !== false && <Testimonials theme={content?.testimonials?.theme} />}
+        {content?.visibility?.cta_band !== false && <CTABand />}
+        {content?.visibility?.contact !== false && <Contact highlight={true} theme={content?.contact?.theme} />}
+        <Footer />
+      </Suspense>
     </div>
   );
 };
