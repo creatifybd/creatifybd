@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
 import { detailedCaseStudies } from '../../data/caseStudiesData';
 import { useConfirm } from '../../context/ConfirmContext';
+import { logActivity } from '../../firebase/services';
 
 const curatedIds = new Set(Object.keys(detailedCaseStudies));
 
@@ -155,8 +156,10 @@ const CaseStudiesManager = () => {
     try {
       if (item.isCurated) {
         await setDoc(doc(db, 'case_studies', item.id), { hidden: true, updatedAt: serverTimestamp() }, { merge: true });
+        logActivity({ action: 'case_study.hide', resource: 'case_studies', resourceId: item.id, details: item.title || '' });
       } else {
         await deleteDoc(doc(db, 'case_studies', item.id));
+        logActivity({ action: 'case_study.delete', resource: 'case_studies', resourceId: item.id, details: item.title || '' });
       }
       toast.success('Updated');
       fetchItems();
@@ -202,7 +205,7 @@ const CaseStudiesManager = () => {
       {isModalOpen && (
         <div className="adm-modal-overlay" onClick={closeModal}>
           <div className="admin-card" style={{ width: '100%', maxWidth: '760px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button type="button" onClick={closeModal} className="admin-icon-btn" style={{ position: 'absolute', right: '1.25rem', top: '1.25rem' }}><X size={18} /></button>
+            <button type="button" onClick={closeModal} aria-label="Close dialog" className="admin-icon-btn" style={{ position: 'absolute', right: '1.25rem', top: '1.25rem' }}><X size={18} /></button>
             <h2 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Case Study' : 'New Case Study'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -234,7 +237,7 @@ const CaseStudiesManager = () => {
                   <div key={idx} style={{ display: 'flex', gap: '0.6rem', marginBottom: '0.6rem' }}>
                     <input className="admin-input" placeholder="Value e.g. 3x" value={r.val} onChange={e => updateResult(idx, 'val', e.target.value)} />
                     <input className="admin-input" placeholder="Label e.g. Engagement" value={r.label} onChange={e => updateResult(idx, 'label', e.target.value)} />
-                    <button type="button" className="admin-icon-btn" onClick={() => removeResultRow(idx)}><X size={15} /></button>
+                    <button type="button" className="admin-icon-btn" aria-label="Remove result row" onClick={() => removeResultRow(idx)}><X size={15} /></button>
                   </div>
                 ))}
                 <button type="button" className="admin-btn-secondary" onClick={addResultRow}><Plus size={14} /> Add Result</button>
