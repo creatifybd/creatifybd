@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 
 const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
   <div className="policy-page-shell">
@@ -65,10 +66,15 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
   </div>
 );
 
-export const PrivacyPolicyPage = () => (
+export const PrivacyPolicyPage = () => {
+  const seo = usePageSEO('privacy', {
+    title: "Privacy Policy",
+    description: "CreatifyBD's privacy policy — how we collect, use, and protect your personal data."
+  });
+  return (
   <PolicyLayout
-    title="Privacy Policy"
-    seoDescription="CreatifyBD's privacy policy — how we collect, use, and protect your personal data."
+    title={seo.title}
+    seoDescription={seo.description}
     lastUpdated="June 2025"
   >
     <p>CreatifyBD ("we", "us", or "our") operates <strong>creatifybd.com</strong>. This Privacy Policy explains how we collect, use, and safeguard your personal information when you use our website or engage our services.</p>
@@ -105,12 +111,18 @@ export const PrivacyPolicyPage = () => (
     <h2>7. Contact</h2>
     <p>For any privacy concerns, contact us at <a href="mailto:hello@creatifybd.com">hello@creatifybd.com</a> or via our <a href="/contact">contact page</a>.</p>
   </PolicyLayout>
-);
+  );
+};
 
-export const TermsPage = () => (
+export const TermsPage = () => {
+  const seo = usePageSEO('terms', {
+    title: "Terms of Service",
+    description: "Read CreatifyBD's terms of service — usage rules, payment obligations, and intellectual property rights."
+  });
+  return (
   <PolicyLayout
-    title="Terms of Service"
-    seoDescription="Read CreatifyBD's terms of service — usage rules, payment obligations, and intellectual property rights."
+    title={seo.title}
+    seoDescription={seo.description}
     lastUpdated="June 2025"
   >
     <p>By accessing CreatifyBD's website or placing an order, you agree to these Terms of Service. Please read them carefully.</p>
@@ -145,12 +157,18 @@ export const TermsPage = () => (
     <h2>7. Governing Law</h2>
     <p>Any disputes will be handled through good-faith negotiation first, with the goal of reaching a fair resolution for both the client and CreatifyBD.</p>
   </PolicyLayout>
-);
+  );
+};
 
-export const RefundPolicyPage = () => (
+export const RefundPolicyPage = () => {
+  const seo = usePageSEO('refund_policy', {
+    title: "Refund Policy",
+    description: "CreatifyBD refund policy — when refunds apply, how they're processed, and project cancellation terms."
+  });
+  return (
   <PolicyLayout
-    title="Refund Policy"
-    seoDescription="CreatifyBD refund policy — when refunds apply, how they're processed, and project cancellation terms."
+    title={seo.title}
+    seoDescription={seo.description}
     lastUpdated="June 2025"
   >
     <p>We are committed to delivering exceptional creative work. This Refund Policy outlines when and how refunds are issued.</p>
@@ -179,12 +197,18 @@ export const RefundPolicyPage = () => (
     <h2>5. Chargebacks</h2>
     <p>Initiating a chargeback via your bank without first contacting CreatifyBD support is considered a breach of these terms. We reserve the right to dispute illegitimate chargebacks with full evidence of delivery.</p>
   </PolicyLayout>
-);
+  );
+};
 
-export const RevisionPolicyPage = () => (
+export const RevisionPolicyPage = () => {
+  const seo = usePageSEO('revision_policy', {
+    title: "Revision Policy",
+    description: "CreatifyBD revision policy — what's included, how to request changes, and fair use guidelines."
+  });
+  return (
   <PolicyLayout
-    title="Revision Policy"
-    seoDescription="CreatifyBD revision policy — what's included, how to request changes, and fair use guidelines."
+    title={seo.title}
+    seoDescription={seo.description}
     lastUpdated="June 2025"
   >
     <p>We believe great creative work is built through collaboration. Our revision policy ensures you get results you're proud to publish.</p>
@@ -217,6 +241,7 @@ export const RevisionPolicyPage = () => (
     <h2>6. Revision Turnaround Time</h2>
     <p>Standard revision rounds are completed within 2–4 business days. Complex design overhauls may take longer and will be communicated directly.</p>
   </PolicyLayout>
-);
+  );
+};
 
 export default PrivacyPolicyPage;
