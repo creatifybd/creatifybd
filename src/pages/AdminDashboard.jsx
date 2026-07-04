@@ -23,7 +23,8 @@ import {
   MessageCircle,
   FolderOpen,
   BookOpen,
-  UserCog
+  UserCog,
+  History
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
@@ -47,6 +48,7 @@ import AdminReviews from './admin/AdminReviews';
 import MediaLibrary from './admin/MediaLibrary';
 import CaseStudiesManager from './admin/CaseStudiesManager';
 import AdminUsers from './admin/AdminUsers';
+import ActivityLog from './admin/ActivityLog';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -84,6 +86,7 @@ const AdminDashboard = () => {
     { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
     { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} /> },
     { path: '/admin/users', label: 'Admin Users', icon: <UserCog size={18} />, ownerOnly: true },
+    { path: '/admin/activity-log', label: 'Activity Log', icon: <History size={18} />, ownerOnly: true },
   ];
 
   const visibleNavItems = navItems.filter(item => !item.ownerOnly || isOwner);
@@ -259,6 +262,7 @@ const AdminDashboard = () => {
                 <Route path="messages" element={<MessagesList />} />
                 <Route path="settings" element={<SettingsManager />} />
                 <Route path="users" element={isOwner ? <AdminUsers /> : <Navigate to="/admin" />} />
+                <Route path="activity-log" element={isOwner ? <ActivityLog /> : <Navigate to="/admin" />} />
               </Routes>
             </motion.div>
           </AnimatePresence>
