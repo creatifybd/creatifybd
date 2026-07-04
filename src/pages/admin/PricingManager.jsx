@@ -85,7 +85,7 @@ const PricingFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
       <div className="admin-card" style={{ width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: '1.3rem', fontWeight: 800 }}>{initialData ? 'Edit' : 'New'} Pricing Plan</h2>
-          <button onClick={onClose} className="admin-icon-btn"><X /></button>
+          <button onClick={onClose} aria-label="Close dialog" className="admin-icon-btn"><X /></button>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -138,7 +138,7 @@ const PricingFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               <div key={i} style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
                 <input type="text" value={formData.features[i] || ''} onChange={e => updateFeature(i, e.target.value, false)} className="admin-input" placeholder="Feature (EN)" style={{ flex: 1 }} />
                 <input type="text" value={formData.features_bn[i] || ''} onChange={e => updateFeature(i, e.target.value, true)} className="admin-input" placeholder="Feature (BN)" style={{ flex: 1 }} />
-                <button type="button" onClick={() => removeFeatureRow(i)} className="admin-icon-btn"><Trash2 size={16} color="var(--adm-danger)" /></button>
+                <button type="button" onClick={() => removeFeatureRow(i)} aria-label="Remove feature row" className="admin-icon-btn"><Trash2 size={16} color="var(--adm-danger)" /></button>
               </div>
             ))}
             <button type="button" onClick={addFeatureRow} className="admin-btn-secondary">
@@ -284,8 +284,8 @@ const PricingManager = () => {
               {plan.hidden && <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', color: 'var(--adm-danger)', fontSize: '0.75rem', fontWeight: 700 }}><AlertCircle size={14} style={{ display: 'inline', verticalAlign: 'text-bottom' }} /> Hidden</div>}
 
               <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => { setEditingData(plan); setIsModalOpen(true); }} className="admin-icon-btn"><Edit2 size={14} /></button>
-                <button onClick={() => handleDelete(plan.id)} className="admin-icon-btn"><Trash2 size={14} color="var(--adm-danger)" /></button>
+                <button onClick={() => { setEditingData(plan); setIsModalOpen(true); }} aria-label="Edit plan" className="admin-icon-btn"><Edit2 size={14} /></button>
+                <button onClick={() => handleDelete(plan.id)} aria-label="Delete plan" className="admin-icon-btn"><Trash2 size={14} color="var(--adm-danger)" /></button>
               </div>
 
               <div style={{ marginTop: plan.featured || plan.hidden ? '1rem' : '0' }}>
