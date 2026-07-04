@@ -3,6 +3,7 @@ import { db } from '../../firebase/config';
 import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { Star, Check, X, Trash2, Eye, Loader2, RefreshCcw, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const StarDisplay = ({ rating }) => (
   <div style={{ display: 'flex', gap: '0.1rem' }}>
@@ -13,6 +14,7 @@ const StarDisplay = ({ rating }) => (
 );
 
 const AdminReviews = () => {
+  const confirm = useConfirm();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('all');
@@ -73,7 +75,13 @@ const AdminReviews = () => {
   };
 
   const handleDelete = async (reviewId) => {
-    if (!window.confirm('Permanently delete this review? This cannot be undone.')) return;
+    const ok = await confirm({
+      title: 'Permanently delete this review?',
+      description: 'This cannot be undone.',
+      confirmLabel: 'Delete',
+      tone: 'danger'
+    });
+    if (!ok) return;
     setActioning(reviewId);
     const toastId = toast.loading('Deleting...');
     try {
