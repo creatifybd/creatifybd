@@ -4,6 +4,7 @@ import { getSettings, updateSettings } from '../../firebase/services';
 import { DEFAULT_CLOUDINARY_CLOUD_NAME, DEFAULT_CLOUDINARY_UPLOAD_PRESET } from '../../utils/cloudinary';
 import MediaUploader from '../../components/admin/MediaUploader';
 import { Globe, Phone, Mail, Share2, AtSign, Search, Save, RefreshCw, Upload, Palette, Image as ImageIcon } from 'lucide-react';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const defaultSettings = {
   site_name: 'CreatifyBD',
@@ -24,9 +25,29 @@ const defaultSettings = {
   lang: 'en',
   cloudinary_cloud_name: DEFAULT_CLOUDINARY_CLOUD_NAME,
   cloudinary_upload_preset: DEFAULT_CLOUDINARY_UPLOAD_PRESET,
+  page_seo: {
+    home: { title: '', description: '' },
+    services: { title: '', description: '' },
+    portfolio: { title: '', description: '' },
+    pricing: { title: '', description: '' },
+    about: { title: '', description: '' },
+    contact: { title: '', description: '' },
+    reviews: { title: '', description: '' }
+  }
+};
+
+const PAGE_SEO_LABELS = {
+  home: 'Home',
+  services: 'Services',
+  portfolio: 'Portfolio',
+  pricing: 'Pricing',
+  about: 'About',
+  contact: 'Contact',
+  reviews: 'Reviews'
 };
 
 const SettingsManager = () => {
+  const confirm = useConfirm();
   const [settings, setSettings] = useState(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -49,6 +70,19 @@ const SettingsManager = () => {
 
   const handleChange = (e) => {
     setSettings({ ...settings, [e.target.name]: e.target.value });
+  };
+
+  const handlePageSeoChange = (pageKey, field, value) => {
+    setSettings((prev) => ({
+      ...prev,
+      page_seo: {
+        ...prev.page_seo,
+        [pageKey]: {
+          ...prev.page_seo?.[pageKey],
+          [field]: value
+        }
+      }
+    }));
   };
 
   const handleMediaChange = async (fieldName, url) => {
@@ -76,11 +110,16 @@ const SettingsManager = () => {
     }
   };
 
-  const handleReset = () => {
-    if (window.confirm('Reset all settings to default values?')) {
-      setSettings(defaultSettings);
-      toast('Settings reset. Click Save to apply.', { icon: '⚠️' });
-    }
+  const handleReset = async () => {
+    const ok = await confirm({
+      title: 'Reset all settings?',
+      description: 'This will restore all fields to their default values. Click Save afterward to apply the change.',
+      confirmLabel: 'Reset',
+      tone: 'danger'
+    });
+    if (!ok) return;
+    setSettings(defaultSettings);
+    toast('Settings reset. Click Save to apply.', { icon: '⚠️' });
   };
 
   if (loading) {
@@ -187,6 +226,46 @@ const SettingsManager = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           <SettingField label="SEO Title" name="seo_title" value={settings.seo_title} onChange={handleChange} />
           <SettingField label="SEO Description" name="seo_description" value={settings.seo_description} onChange={handleChange} isTextarea />
+        </div>
+      </div>
+
+      {/* Page-level SEO overrides */}
+      <div className="admin-card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+          <Search size={18} color="var(--adm-red)" />
+          <h2 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--adm-text)' }}>Page SEO Overrides</h2>
+        </div>
+        <p style={{ color: 'var(--adm-dim)', fontSize: '0.82rem', marginBottom: '1.5rem' }}>
+          Leave a field blank to keep that page's default title/description. Fill it in to override it for search engines.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {Object.keys(PAGE_SEO_LABELS).map((pageKey) => (
+            <div key={pageKey} style={{ background: 'var(--adm-bg)', border: '1px solid var(--adm-border)', borderRadius: '12px', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--adm-text)', marginBottom: '1rem' }}>{PAGE_SEO_LABELS[pageKey]} Page</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label className="setting-label">Meta Title Override</label>
+                  <input
+                    type="text"
+                    className="admin-input"
+                    placeholder="Leave blank to use default"
+                    value={settings.page_seo?.[pageKey]?.title || ''}
+                    onChange={(e) => handlePageSeoChange(pageKey, 'title', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="setting-label">Meta Description Override</label>
+                  <input
+                    type="text"
+                    className="admin-input"
+                    placeholder="Leave blank to use default"
+                    value={settings.page_seo?.[pageKey]?.description || ''}
+                    onChange={(e) => handlePageSeoChange(pageKey, 'description', e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
