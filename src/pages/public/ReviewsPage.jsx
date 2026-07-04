@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
 import { db } from '../../firebase/config';
 import { collection, query, where, orderBy, getDocs, limit } from 'firebase/firestore';
 import { Star, Globe, Quote, ChevronDown } from 'lucide-react';
@@ -138,11 +139,16 @@ const ReviewsPage = () => {
     { num: `${Math.round((fiveStarCount / reviews.length) * 100)}%`, label: 'Five-Star Ratings' },
   ];
 
+  const seo = usePageSEO('reviews', {
+    title: "Client Reviews & Verified Feedback | CreatifyBD",
+    description: "Read verified client reviews from completed CreatifyBD creative orders. See how our team delivers responsive communication, fast delivery, and high-quality creative work."
+  });
+
   return (
     <div className="reviews-page-pub">
       <SEO
-        title="Client Reviews & Verified Feedback | CreatifyBD"
-        description="Read verified client reviews from completed CreatifyBD creative orders. See how our team delivers responsive communication, fast delivery, and high-quality creative work."
+        title={seo.title}
+        description={seo.description}
         keywords="creatifybd reviews, client testimonials, creative agency feedback"
       />
 
