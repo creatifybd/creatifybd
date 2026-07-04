@@ -5,6 +5,7 @@ import { Plus, ShieldCheck, Trash2, UserCog, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { useConfirm } from '../../context/ConfirmContext';
+import { logActivity } from '../../firebase/services';
 
 const ROLES = [
   { value: 'owner', label: 'Owner', desc: 'Full control, including managing other admins.' },
@@ -52,6 +53,7 @@ const AdminUsers = () => {
         addedAt: serverTimestamp()
       });
       toast.success(`${email} added as ${form.role}`);
+      logActivity({ action: 'admin.add', resource: 'admins', resourceId: email, details: `Granted ${form.role} access` });
       setForm({ email: '', role: 'editor' });
       fetchAdmins();
     } catch (err) {
@@ -77,6 +79,7 @@ const AdminUsers = () => {
     try {
       await deleteDoc(doc(db, 'admins', email));
       toast.success('Admin access removed');
+      logActivity({ action: 'admin.remove', resource: 'admins', resourceId: email, details: 'Revoked admin access' });
       fetchAdmins();
     } catch (err) {
       console.error(err);
