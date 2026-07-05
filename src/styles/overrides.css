@@ -105,17 +105,21 @@
   .features-section,
   .process-section,
   .pricing-section,
-  .clients-section {
+  .clients-section,
+  .clients-section-v2 {
     background: var(--surface-soft) !important;
   }
   .services-section,
   .portfolio-section,
-  .testimonials-section,
   .contact-section,
-  .cta-section,
   .case-studies-section {
     background: var(--surface) !important;
   }
+  /* New component classes */
+  .cs-section { background: var(--surface-soft) !important; }
+  .tm-section  { background: var(--surface-card) !important; }
+  /* CTABand is dark — don't override its background */
+  .ctab-section { background: #0a0a0f !important; }
 
   /* ─── FOOTER COMPLETE OVERRIDE ─── */
   footer, footer.footer-v2                   { background: var(--surface-soft) !important; border-top: 1px solid var(--border-soft) !important; }

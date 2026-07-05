@@ -1,43 +1,279 @@
 import React from 'react';
-  import { Link } from 'react-router-dom';
-  import { PhoneCall } from 'lucide-react';
-  import { siteConfig } from '../config/siteConfig';
-  import { FadeReveal, MagneticWrap } from './MotionReveal';
-  import { useSettings } from '../context/SettingsContext';
-  import { globalizeCopy, renderRichTitle } from '../utils/contentText';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Calendar, Mail } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useSettings } from '../context/SettingsContext';
 
-  const CTABand = () => {
-    const { content } = useSettings();
-    const cta = content?.cta_band || {};
-    const title = globalizeCopy(cta.title, 'Ready to Grow Your Business?');
-    const subtitle = globalizeCopy(
-      cta.subtitle,
-      'Tell us about your goals and we will recommend the right package, timeline, and first deliverables.'
-    );
+const EASE_EXPO = [0.16, 1, 0.3, 1];
 
-    return (
-      <section className="cta-section">
-        <div>
-          <FadeReveal>
-            <span className="eyebrow">{cta.eyebrow || 'Ready when you are'}</span>
-          </FadeReveal>
-          <FadeReveal delay={0.12}>
-            <h2>{renderRichTitle(title, 'Ready to Grow Your Business?')}</h2>
-          </FadeReveal>
-          <FadeReveal delay={0.22}>
-            <p>{subtitle}</p>
-          </FadeReveal>
-          <FadeReveal delay={0.32}>
-            <div className="cta-actions">
-              <MagneticWrap strength={0.28}>
-                <Link to={cta.primary_link || '/contact'} className="btn-red">{cta.primary_btn || 'Start a Project'}</Link>
-              </MagneticWrap>
-              <a href={cta.secondary_link || `tel:${siteConfig.whatsappNumber}`} className="btn-outline-red"><PhoneCall size={16} /> {cta.secondary_btn || siteConfig.phone}</a>
+const STATS = [
+  { value: '100+', label: 'Brands served' },
+  { value: '48h',  label: 'First delivery' },
+  { value: '4.9★', label: 'Average rating' },
+];
+
+const CTABand = () => {
+  const { content } = useSettings();
+  const cta = content?.cta_band || {};
+
+  return (
+    <section className="ctab-section" aria-labelledby="ctab-heading">
+      {/* Background layers */}
+      <div className="ctab-bg" aria-hidden="true">
+        <div className="ctab-glow-a" />
+        <div className="ctab-glow-b" />
+        <div className="ctab-grid" />
+      </div>
+
+      <div className="container">
+        <div className="ctab-inner">
+          {/* Stats strip */}
+          <motion.div
+            className="ctab-stats"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE_EXPO }}
+          >
+            {STATS.map((s, i) => (
+              <div className="ctab-stat" key={i}>
+                <strong>{s.value}</strong>
+                <span>{s.label}</span>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Heading */}
+          <motion.div
+            className="ctab-copy"
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: EASE_EXPO, delay: 0.08 }}
+          >
+            <div className="eyebrow ctab-eyebrow">
+              {cta.eyebrow || 'Ready when you are'}
             </div>
-          </FadeReveal>
-        </div>
-      </section>
-    );
-  };
+            <h2 id="ctab-heading" className="ctab-heading">
+              {cta.title || (
+                <>
+                  Stop patching freelancers.<br />
+                  Get a <span className="ctab-heading-red">dedicated creative team.</span>
+                </>
+              )}
+            </h2>
+            <p className="ctab-sub">
+              {cta.subtitle || 'Tell us your goals — we\'ll recommend the right package, timeline, and first deliverables. No sales calls, no lock-in.'}
+            </p>
+          </motion.div>
 
-  export default CTABand;
+          {/* Actions */}
+          <motion.div
+            className="ctab-actions"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.18 }}
+          >
+            <Link to={cta.primary_link || '/contact'} className="ctab-btn-primary">
+              {cta.primary_btn || 'Start a Project'}
+              <ArrowRight size={18} />
+            </Link>
+            <a
+              href={`mailto:${cta.email || 'hello@creatifybd.com'}`}
+              className="ctab-btn-outline"
+            >
+              <Mail size={16} />
+              {cta.secondary_btn || 'Email Us Directly'}
+            </a>
+          </motion.div>
+
+          {/* Trust note */}
+          <motion.p
+            className="ctab-trust"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.28 }}
+          >
+            No contracts. 7-day money-back guarantee. We respond within 24 hours.
+          </motion.p>
+        </div>
+      </div>
+
+      <style>{`
+        .ctab-section {
+          position: relative;
+          background: #0a0a0f;
+          padding: 7rem 0;
+          overflow: hidden;
+        }
+        .ctab-bg {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+        .ctab-glow-a {
+          position: absolute;
+          width: 800px; height: 800px;
+          border-radius: 50%;
+          top: -200px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
+        }
+        .ctab-glow-b {
+          position: absolute;
+          width: 400px; height: 400px;
+          border-radius: 50%;
+          bottom: -100px; right: 10%;
+          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
+        }
+        .ctab-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+          background-size: 48px 48px;
+          mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+        }
+
+        .ctab-inner {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          max-width: 720px;
+          margin: 0 auto;
+          gap: 2rem;
+        }
+
+        /* Stats */
+        .ctab-stats {
+          display: flex;
+          gap: 2.5rem;
+          align-items: center;
+        }
+        .ctab-stat {
+          display: flex;
+          flex-direction: column;
+          gap: 0.15rem;
+          text-align: center;
+        }
+        .ctab-stat strong {
+          font-size: 1.75rem;
+          font-weight: 900;
+          color: #fff;
+          letter-spacing: -0.04em;
+          line-height: 1;
+        }
+        .ctab-stat span {
+          font-size: 0.72rem;
+          color: rgba(255,255,255,0.45);
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        }
+
+        /* Divider between stats */
+        .ctab-stats .ctab-stat:not(:last-child) {
+          border-right: 1px solid rgba(255,255,255,0.1);
+          padding-right: 2.5rem;
+        }
+
+        /* Copy */
+        .ctab-copy { display: flex; flex-direction: column; gap: 1rem; }
+        .ctab-eyebrow {
+          color: rgba(232,25,44,0.85) !important;
+          border-color: rgba(232,25,44,0.25) !important;
+          background: rgba(232,25,44,0.08) !important;
+        }
+        .ctab-heading {
+          font-size: clamp(2rem, 4.5vw, 3.2rem);
+          font-weight: 900;
+          color: #fff;
+          line-height: 1.1;
+          letter-spacing: -0.03em;
+          margin: 0;
+        }
+        .ctab-heading-red { color: var(--brand-red, #e8192c); }
+        .ctab-sub {
+          font-size: 1rem;
+          color: rgba(255,255,255,0.55);
+          line-height: 1.75;
+          max-width: 540px;
+          margin: 0 auto;
+        }
+
+        /* Actions */
+        .ctab-actions {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .ctab-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.95rem 2.25rem;
+          background: var(--brand-red, #e8192c);
+          color: #fff;
+          font-weight: 700;
+          font-size: 0.95rem;
+          border-radius: 100px;
+          text-decoration: none;
+          transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
+          box-shadow: 0 8px 28px rgba(232,25,44,0.40);
+          letter-spacing: -0.01em;
+        }
+        .ctab-btn-primary:hover {
+          background: #c41024;
+          transform: translateY(-3px);
+          box-shadow: 0 16px 40px rgba(232,25,44,0.55);
+        }
+        .ctab-btn-outline {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.95rem 2.25rem;
+          background: rgba(255,255,255,0.06);
+          color: rgba(255,255,255,0.85);
+          font-weight: 700;
+          font-size: 0.95rem;
+          border-radius: 100px;
+          border: 1.5px solid rgba(255,255,255,0.15);
+          text-decoration: none;
+          transition: background 0.2s, border-color 0.2s, transform 0.2s;
+          letter-spacing: -0.01em;
+        }
+        .ctab-btn-outline:hover {
+          background: rgba(255,255,255,0.10);
+          border-color: rgba(255,255,255,0.35);
+          transform: translateY(-3px);
+        }
+
+        /* Trust */
+        .ctab-trust {
+          font-size: 0.78rem;
+          color: rgba(255,255,255,0.30);
+          margin: 0;
+          letter-spacing: 0.01em;
+        }
+
+        @media (max-width: 600px) {
+          .ctab-section { padding: 5rem 0; }
+          .ctab-stats { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+          .ctab-stats .ctab-stat:not(:last-child) { border-right: none; padding-right: 0; }
+          .ctab-heading { font-size: clamp(1.75rem, 8vw, 2.4rem); }
+          .ctab-actions { flex-direction: column; align-items: center; }
+          .ctab-btn-primary, .ctab-btn-outline { width: 100%; justify-content: center; }
+        }
+      `}</style>
+    </section>
+  );
+};
+
+export default CTABand;

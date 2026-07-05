@@ -105,16 +105,16 @@ const Footer = () => {
               <h4>Contact</h4>
               <div className="footer-contact-info">
                 <div className="f-contact-item">
-                  <small>WhatsApp</small>
-                  <a href={`https://wa.me/${siteConfig.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noreferrer">{siteConfig.phone}</a>
-                </div>
-                <div className="f-contact-item">
                   <small>Email</small>
                   <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
                 </div>
                 <div className="f-contact-item">
-                  <small>Location</small>
-                  <span>{siteConfig.address}</span>
+                  <small>WhatsApp</small>
+                  <a href={`https://wa.me/${siteConfig.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noreferrer">Chat with us →</a>
+                </div>
+                <div className="f-contact-item">
+                  <small>Response time</small>
+                  <span>Within 24 hours</span>
                 </div>
               </div>
             </div>
