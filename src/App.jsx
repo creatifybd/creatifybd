@@ -11,7 +11,6 @@ import Lenis from 'lenis';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
-import CustomCursor from './components/CustomCursor';
 import WhatsAppButton from './components/WhatsAppButton';
 
 // Lazy load pages for better performance
@@ -116,7 +115,6 @@ function AppContent() {
         setLoading(false);
       }} />}
       <ScrollToTop />
-      <CustomCursor />
       <WhatsAppButton />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>

@@ -3,6 +3,17 @@
      Overrides any hardcoded values from earlier CSS blocks.
      ═══════════════════════════════════════════════════════════════ */
 
+  /* ─── GLOBAL CURSOR OVERRIDES — Disables cursor hiding and restores native pointer states ─── */
+  *, *::before, *::after {
+    cursor: auto !important;
+  }
+  a, button, select, [role="button"], input[type="submit"], input[type="button"], .ptab, .filter-tab-btn, .btn-red, .btn-outline-dark, .premium-btn, .service-card, .gig-card-link, .slick-arrow, .social-icon {
+    cursor: pointer !important;
+  }
+  input, textarea {
+    cursor: text !important;
+  }
+
   /* ─── IMAGE SKELETON — rose-tinted shimmer ─── */
   .opt-img-skeleton {
     background: linear-gradient(
@@ -1900,8 +1911,8 @@
 
   body:not(.admin-body) .ceo-quote-with-image {
     display: grid !important;
-    grid-template-columns: 112px minmax(0, 1fr) !important;
-    gap: 1.1rem !important;
+    grid-template-columns: 160px minmax(0, 1fr) !important;
+    gap: 1.5rem !important;
     align-items: stretch !important;
   }
 
