@@ -21,6 +21,16 @@ const ACTION_LABELS = {
   'case_study.delete': 'Deleted case study'
 };
 
+// Fallback for actions not yet mapped above: turn "order.update" into
+// "Order update" instead of showing the raw dotted/underscored string.
+const humanizeAction = (action) => {
+  if (!action) return '—';
+  const label = ACTION_LABELS[action];
+  if (label) return label;
+  const cleaned = action.replace(/[._]/g, ' ');
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+};
+
 const ActivityLog = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +98,7 @@ const ActivityLog = () => {
                   <td style={{ color: 'var(--adm-dim)', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{formatDate(entry.createdAt)}</td>
                   <td style={{ fontWeight: 600 }}>{entry.actorEmail}</td>
                   <td>
-                    <span className="badge-status badge-info">{ACTION_LABELS[entry.action] || entry.action}</span>
+                    <span className="badge-status badge-info">{humanizeAction(entry.action)}</span>
                   </td>
                   <td style={{ color: 'var(--adm-dim)', fontSize: '0.82rem' }}>{entry.resource}{entry.resourceId ? ` / ${entry.resourceId}` : ''}</td>
                   <td style={{ color: 'var(--adm-dim)', fontSize: '0.82rem' }}>{entry.details || '—'}</td>

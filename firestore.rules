@@ -94,56 +94,60 @@ service cloud.firestore {
     // ─── Contact Messages ────────────────────────────────────────────────────
     match /messages/{message} {
       allow create: if isValidMessage();
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin();
+      allow update, delete: if isEditorOrAbove();
     }
 
     // ─── Existing CMS Collections ────────────────────────────────────────────
+    // Note: write access requires Editor or Owner role — Viewers are read-only
+    // even via direct API calls (see AdminUsers.jsx role descriptions).
     match /services/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /portfolio/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /testimonials/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /pricing/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     // ─── Settings Collection (Split for Security) ────────────────────────────────
     // Public settings (safe for public read)
     match /settings/public/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     // Private settings (admin only - payment info, sensitive data)
     match /settings/private/{id} {
       allow read: if isAdmin();
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     // Legacy settings (for backward compatibility)
     match /settings/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /case_study_images/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /case_studies/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /gig_overrides/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
     match /media_assets/{id} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
 
     // ─── Manual Payments (legacy) ────────────────────────────────────────────
@@ -165,10 +169,10 @@ service cloud.firestore {
     match /manualPayments/{paymentId} {
       allow create: if isValidPayment();
       allow read: if isAdmin();
-      allow update: if isAdmin()
+      allow update: if isEditorOrAbove()
         && (request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['status', 'adminNote', 'verifiedBy', 'verifiedAt', 'rejectedBy', 'rejectedAt', 'updatedAt']));
-      allow delete: if isAdmin();
+      allow delete: if isEditorOrAbove();
     }
 
     // ─── Marketplace Orders ──────────────────────────────────────────────────
@@ -185,7 +189,7 @@ service cloud.firestore {
       // Admin: full control over all fields
       // Client: only safe status transitions (revision_requested, completed)
       allow update: if (
-        isAdmin()
+        isEditorOrAbove()
         && (request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly([
             'status', 'paymentStatus', 'internalNotes', 'revisionNotes', 'deliveries',
@@ -194,7 +198,7 @@ service cloud.firestore {
             'paymentProofUrl', 'transactionId'
           ]))
       ) || isClientCompletionUpdate() || isClientRevisionUpdate();
-      allow delete: if isAdmin();
+      allow delete: if isEditorOrAbove();
     }
 
     // ─── Client Reviews ──────────────────────────────────────────────────────
@@ -217,10 +221,10 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'completed'
         && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.reviewSubmitted == true;
       allow read: if resource.data.status == "approved" || isAdmin();
-      allow update: if isAdmin()
+      allow update: if isEditorOrAbove()
         && (request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['status', 'approvedAt', 'rejectedAt']));
-      allow delete: if isAdmin();
+      allow delete: if isEditorOrAbove();
     }
 
     // ─── Portfolio / Delivered Works Showcase ────────────────────────────────
@@ -228,7 +232,7 @@ service cloud.firestore {
     // Public read for showcase display.
     match /portfolio_delivered/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if isEditorOrAbove();
     }
 
     // ─── Activity Log / Audit Trail ──────────────────────────────────────────

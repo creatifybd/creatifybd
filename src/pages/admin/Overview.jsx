@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../../firebase/config';
-import { collection, getDocs, addDoc, doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { collection, getDocs, getCountFromServer, addDoc, doc, setDoc, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
 import { MessageSquare, Briefcase, Image as ImageIcon, Star, TrendingUp, Sparkles, Zap, Globe, Clock, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -169,10 +169,14 @@ const Overview = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const mSnap = await getDocs(collection(db, 'messages'));
-        const sSnap = await getDocs(collection(db, 'services'));
-        const pSnap = await getDocs(collection(db, 'portfolio'));
-        const tSnap = await getDocs(collection(db, 'testimonials'));
+        // Use server-side count aggregation instead of downloading every
+        // document just to display a number — much cheaper as collections grow.
+        const [mCount, sCount, pCount, tCount] = await Promise.all([
+          getCountFromServer(collection(db, 'messages')),
+          getCountFromServer(collection(db, 'services')),
+          getCountFromServer(collection(db, 'portfolio')),
+          getCountFromServer(collection(db, 'testimonials'))
+        ]);
         const rSnap = await getDocs(collection(db, 'reviews'));
         const approvedReviews = rSnap.docs.map(d => d.data()).filter(r => r.status === 'approved');
         const avgRating = approvedReviews.length
@@ -180,22 +184,15 @@ const Overview = () => {
           : '—';
 
         setStats({
-          messages: mSnap.size,
-          services: sSnap.size,
-          portfolio: pSnap.size,
-          testimonials: tSnap.size,
+          messages: mCount.data().count,
+          services: sCount.data().count,
+          portfolio: pCount.data().count,
+          testimonials: tCount.data().count,
           avgRating
         });
 
-        const qSnap = await getDocs(collection(db, 'messages'));
-        const latestMessages = qSnap.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .sort((a, b) => {
-            const timeA = a.createdAt?.toMillis?.() || a.timestamp?.toMillis?.() || 0;
-            const timeB = b.createdAt?.toMillis?.() || b.timestamp?.toMillis?.() || 0;
-            return timeB - timeA;
-          })
-          .slice(0, 5);
+        const qSnap = await getDocs(query(collection(db, 'messages'), orderBy('createdAt', 'desc'), limit(5)));
+        const latestMessages = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRecentMessages(latestMessages);
         
         setLoading(false);

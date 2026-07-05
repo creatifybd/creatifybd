@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { gigs as gigDatabase, categories } from '../../data/gigs';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -101,12 +101,12 @@ const AdminGigs = () => {
     }
   };
 
-  const filtered = gigDatabase.map(gig => ({ ...gig, ...(gigOverrides[gig.id] || {}) })).filter(gig => {
+  const filtered = useMemo(() => gigDatabase.map(gig => ({ ...gig, ...(gigOverrides[gig.id] || {}) })).filter(gig => {
     const matchesSearch = gig.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       gig.slug.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCat = selectedCat === 'all' || gig.category === selectedCat;
     return matchesSearch && matchesCat;
-  });
+  }), [gigOverrides, searchQuery, selectedCat]);
 
   return (
     <div className="admin-section-page">

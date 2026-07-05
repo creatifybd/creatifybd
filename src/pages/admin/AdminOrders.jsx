@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { db } from '../../firebase/config';
 import { storage } from '../../firebase/config';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -119,7 +119,7 @@ const AdminOrders = () => {
     }
   };
 
-  const filtered = orders.filter(o => {
+  const filtered = useMemo(() => orders.filter(o => {
     const matchesSearch = 
       o.id.toLowerCase().includes(searchQ.toLowerCase()) ||
       o.clientInfo?.fullName?.toLowerCase().includes(searchQ.toLowerCase()) ||
@@ -127,7 +127,7 @@ const AdminOrders = () => {
       o.gigTitle?.toLowerCase().includes(searchQ.toLowerCase());
     const matchesStatus = filterStatus === 'all' || o.status === filterStatus;
     return matchesSearch && matchesStatus;
-  });
+  }), [orders, searchQ, filterStatus]);
 
   const formatDate = (ts) => {
     if (!ts?.seconds) return '—';

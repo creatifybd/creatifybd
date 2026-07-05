@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
-import { collection, query, orderBy, onSnapshot, updateDoc, doc, getDoc, getDocs, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, updateDoc, doc, getDoc, getDocs, where, writeBatch } from 'firebase/firestore';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -77,41 +77,42 @@ const PaymentVerification = () => {
     setUpdating(true);
     const payment = payments.find(p => p.id === paymentId);
     try {
-      // 1. Update the manualPayments record
-      await updateDoc(doc(db, 'manualPayments', paymentId), {
+      // Update the manualPayments record and its linked order atomically —
+      // a batch either commits both writes or neither, so the payment and
+      // order status can never desync if one write were to fail.
+      const batch = writeBatch(db);
+
+      batch.update(doc(db, 'manualPayments', paymentId), {
         status: newStatus,
         adminNote: adminNote,
         updatedAt: new Date()
       });
 
-      // 2. Propagate status to linked order if linked
       if (payment?.linkedOrderId) {
-        try {
-          const orderDocRef = doc(db, 'orders', payment.linkedOrderId);
-          const orderSnap = await getDoc(orderDocRef);
-          if (orderSnap.exists()) {
-            const orderUpdate = {
-              updatedAt: new Date()
-            };
-            if (newStatus === 'verified') {
-              orderUpdate.status = 'in_progress';
-              orderUpdate.paymentStatus = 'verified';
-              orderUpdate.paymentVerifiedAt = new Date();
-              orderUpdate.paymentProofUrl = payment.proofFileUrl || '';
-              orderUpdate.transactionId = payment.transactionId || '';
-              // verifiedBy is set server-side in admin context; store email from auth if available
-            } else if (newStatus === 'rejected') {
-              orderUpdate.status = 'payment_rejected';
-              orderUpdate.paymentStatus = 'rejected';
-              orderUpdate.paymentRejectedAt = new Date();
-              orderUpdate.paymentRejectionNote = adminNote || 'Payment rejected by admin';
-            }
-            await updateDoc(orderDocRef, orderUpdate);
+        const orderDocRef = doc(db, 'orders', payment.linkedOrderId);
+        const orderSnap = await getDoc(orderDocRef);
+        if (orderSnap.exists()) {
+          const orderUpdate = {
+            updatedAt: new Date()
+          };
+          if (newStatus === 'verified') {
+            orderUpdate.status = 'in_progress';
+            orderUpdate.paymentStatus = 'verified';
+            orderUpdate.paymentVerifiedAt = new Date();
+            orderUpdate.paymentProofUrl = payment.proofFileUrl || '';
+            orderUpdate.transactionId = payment.transactionId || '';
+            // verifiedBy is set server-side in admin context; store email from auth if available
+          } else if (newStatus === 'rejected') {
+            orderUpdate.status = 'payment_rejected';
+            orderUpdate.paymentStatus = 'rejected';
+            orderUpdate.paymentRejectedAt = new Date();
+            orderUpdate.paymentRejectionNote = adminNote || 'Payment rejected by admin';
           }
-        } catch (orderErr) {
-          console.warn('Could not update linked order:', orderErr.message);
+          batch.update(orderDocRef, orderUpdate);
         }
       }
+
+      await batch.commit();
 
       toast.success(`Payment marked as ${newStatus}`);
       setSelectedPayment(null);
