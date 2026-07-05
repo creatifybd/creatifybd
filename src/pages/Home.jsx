@@ -25,6 +25,7 @@ const Footer = lazy(() => import('../components/Footer'));
 const SmmHighlight = lazy(() => import('../components/SmmHighlight'));
 const AboutTrust = lazy(() => import('../components/AboutTrust'));
 const GigMarquee = lazy(() => import('../components/GigMarquee'));
+const WhyUsSection = lazy(() => import('../components/WhyUsSection'));
 
 const Home = () => {
   const { content, loading } = useSettings();
@@ -153,6 +154,7 @@ const Home = () => {
         {content?.visibility?.smm_highlight !== false && <SmmHighlight />}
         {content?.visibility?.services !== false && <Services highlight={true} theme={content?.services?.theme} />}
         {content?.visibility?.features !== false && <Features theme={content?.features?.theme} />}
+        <WhyUsSection />
         {content?.visibility?.about_trust !== false && <AboutTrust />}
         {content?.visibility?.case_studies !== false && <CaseStudies />}
         {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}

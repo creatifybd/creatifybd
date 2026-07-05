@@ -58,14 +58,14 @@ function ScrollToTop() {
 }
 
 const pageVariants = {
-  initial: { opacity: 0, y: 36, filter: 'blur(3px)' },
+  initial: { opacity: 0, y: 24 },
   animate: {
-    opacity: 1, y: 0, filter: 'blur(0px)',
-    transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] },
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   },
   exit: {
-    opacity: 0, y: -18, filter: 'blur(1px)',
-    transition: { duration: 0.35, ease: [0.76, 0, 0.24, 1] },
+    opacity: 0, y: -12,
+    transition: { duration: 0.28, ease: [0.76, 0, 0.24, 1] },
   },
 };
 
@@ -86,12 +86,12 @@ function AppContent() {
     if (location.pathname.startsWith('/admin') || location.pathname === '/login') return undefined;
 
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 0.9,
       smoothTouch: false,
       touchMultiplier: 2,
     });

@@ -253,9 +253,9 @@ const PortfolioManager = () => {
 
       {isModalOpen && (
         <div className="adm-modal-overlay" onClick={closeModal}>
-          <div className="admin-card" style={{ width: '100%', maxWidth: '500px', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button type="button" onClick={closeModal} aria-label="Close dialog" className="admin-icon-btn" style={{ position: 'absolute', right: '1.25rem', top: '1.25rem' }}><X size={18} /></button>
-            <h2 style={{ marginBottom: '1.5rem' }}>{editingId ? 'Edit Portfolio Item' : 'Add Portfolio Item'}</h2>
+          <div className="admin-card" style={{ width: '100%', maxWidth: '520px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button type="button" onClick={closeModal} aria-label="Close dialog" className="admin-icon-btn" style={{ position: 'absolute', right: '1.25rem', top: '1.25rem', zIndex: 2 }}><X size={18} /></button>
+            <h2 style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}>{editingId ? 'Edit Portfolio Item' : 'Add Portfolio Item'}</h2>
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '1.5rem' }}>
                 <MediaUploader label="Portfolio Image" value={formData.imageUrl} accept="image/*" folder="creatifybd/portfolio" helperText="Drop an image, browse your device, or switch to Link." onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} />

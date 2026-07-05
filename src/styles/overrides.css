@@ -910,15 +910,15 @@
   }
 
   body:not(.admin-body) .duck-work-media {
-    padding: clamp(0.65rem, 1.2vw, 1.15rem) !important;
-    background: #f3f3f1 !important;
+    padding: 0 !important;
+    background: transparent !important;
   }
 
   body:not(.admin-body) .duck-work-image,
   body:not(.admin-body) .duck-work-image img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
   }
 
   @keyframes portfolio-reel-left {
@@ -3196,7 +3196,7 @@ body:not(.admin-body) .agency-work-page .duck-work-image img {
   max-width: 100% !important;
   max-height: 100% !important;
   display: block !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   transform: none !important;
 }
 

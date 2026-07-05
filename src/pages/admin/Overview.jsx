@@ -226,45 +226,9 @@ const Overview = () => {
           <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>Dashboard Overview</h1>
           <p style={{ color: 'var(--adm-dim)', fontSize: '0.95rem' }}>Welcome back, Admin! Control your agency's presence from here.</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ background: 'var(--adm-card)', padding: '0.4rem', borderRadius: '12px', display: 'flex', border: '1px solid var(--adm-border)' }}>
-            <button 
-              onClick={() => toggleLanguage('en')}
-              style={{ 
-                padding: '0.5rem 1.25rem', 
-                borderRadius: '8px', 
-                border: 'none', 
-                background: lang === 'en' ? 'var(--adm-red)' : 'transparent', 
-                color: '#fff', 
-                cursor: 'pointer', 
-                fontSize: '0.75rem', 
-                fontWeight: '800',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              EN
-            </button>
-            <button 
-              onClick={() => toggleLanguage('bn')}
-              style={{ 
-                padding: '0.5rem 1.25rem', 
-                borderRadius: '8px', 
-                border: 'none', 
-                background: lang === 'bn' ? 'var(--adm-red)' : 'transparent', 
-                color: '#fff', 
-                cursor: 'pointer', 
-                fontSize: '0.75rem', 
-                fontWeight: '800',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              BN
-            </button>
-          </div>
-          <button className="admin-btn" onClick={seedDemoData} style={{ background: 'var(--adm-soft)', color: 'var(--adm-txt)', border: '1px solid var(--adm-border)' }}>
-            Seed Demo Data
-          </button>
-        </div>
+        <button className="admin-btn" onClick={seedDemoData} style={{ background: 'var(--adm-soft)', color: 'var(--adm-txt)', border: '1px solid var(--adm-border)' }}>
+          Seed Demo Data
+        </button>
       </div>
 
       <div className="stat-grid">

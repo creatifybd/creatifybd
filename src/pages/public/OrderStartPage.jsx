@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, Navigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import { getGigBySlug, categories } from '../../data/gigs';
 import { db, storage } from '../../firebase/config';
-import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { 
   ArrowRight, 
@@ -17,21 +17,52 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-
 const OrderStartPage = () => {
   const { gigSlug } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const gig = getGigBySlug(gigSlug);
+  const baseGig = getGigBySlug(gigSlug);
+  const [gigOverride, setGigOverride] = useState({});
+  const [overrideLoading, setOverrideLoading] = useState(true);
+
+  useEffect(() => {
+    if (!baseGig) return;
+    const fetchOverride = async () => {
+      try {
+        const snap = await getDoc(doc(db, 'gig_overrides', baseGig.id));
+        if (snap.exists()) {
+          setGigOverride(snap.data());
+        }
+      } catch (err) {
+        console.error('Error fetching gig override in order page:', err);
+      } finally {
+        setOverrideLoading(false);
+      }
+    };
+    fetchOverride();
+  }, [baseGig]);
+
+  const gig = useMemo(() => {
+    if (!baseGig) return null;
+    const merged = { ...baseGig, ...gigOverride };
+    if (merged.startingPrice && merged.packages?.basic) {
+      merged.packages.basic = {
+        ...merged.packages.basic,
+        price: Number(merged.startingPrice)
+      };
+    }
+    return merged;
+  }, [baseGig, gigOverride]);
+
   const selectedPackage = searchParams.get('package') || 'basic';
 
-  if (!gig) {
+  if (!baseGig) {
     return <Navigate to="/gigs" replace />;
   }
 
-  const p = gig.packages[selectedPackage] || gig.packages.basic;
-  const categoryName = categories[gig.category]?.name || gig.category;
+  const p = gig?.packages?.[selectedPackage] || gig?.packages?.basic || {};
+  const categoryName = categories[gig?.category]?.name || gig?.category;
 
   const [loading, setLoading] = useState(false);
   const [fileUploading, setFileUploading] = useState(false);
