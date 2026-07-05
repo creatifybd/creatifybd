@@ -1,18 +1,25 @@
 import React, { useMemo } from 'react';
 import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Clock, RefreshCw, Shield } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, RefreshCw, Shield, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
+const EASE_OUT = [0.25, 0.46, 0.45, 0.94];
 
-// Trust bar items — mirrors duck.design's value proposition approach
 const TRUST_PILLS = [
-  { icon: <RefreshCw size={13} />, label: 'Unlimited Revisions' },
-  { icon: <Clock size={13} />, label: '48h First Delivery' },
-  { icon: <Shield size={13} />, label: '7-Day Money-Back' },
-  { icon: <CheckCircle2 size={13} />, label: '100+ Projects Delivered' },
+  { icon: <RefreshCw size={14} />, label: 'Unlimited Revisions' },
+  { icon: <Clock size={14} />, label: '48h First Delivery' },
+  { icon: <Shield size={14} />, label: '7-Day Money-Back' },
+  { icon: <CheckCircle2 size={14} />, label: '100+ Projects Delivered' },
+];
+
+const STATS = [
+  { value: '100+', label: 'Happy Clients' },
+  { value: '500+', label: 'Projects Done' },
+  { value: '48h', label: 'First Delivery' },
+  { value: '4.9★', label: 'Avg. Rating' },
 ];
 
 const Hero = () => {
@@ -20,13 +27,13 @@ const Hero = () => {
   const heroContent = content?.hero || {};
 
   const heroTitle = heroContent.title ||
-    'Your Dedicated Creative Team — Delivered Reliably, Every Month.';
+    'Creative Agency That <span class="hero-highlight">Delivers</span> Every Month';
 
   const heroEyebrow = heroContent.eyebrow ||
-    'Social media, design & video for international brands';
+    'Trusted by brands across USA · Canada · Australia';
 
   const heroDesc = heroContent.desc ||
-    'Stop losing clients to brands that look more professional than you. CreatifyBD gives growing brands in the US, Canada, and Australia a dedicated creative team — without the agency overhead or freelancer unreliability.';
+    'Premium social media management, graphic design, video editing, and web development — with structured packages, no agency overhead, and consistent execution.';
 
   const heroPrimaryCta = heroContent.cta1 || 'Browse Services';
   const heroSecondaryCta = heroContent.cta2 || 'Get a Free Proposal';
@@ -39,241 +46,642 @@ const Hero = () => {
   }, [heroTitle]);
 
   return (
-    <section className="hero">
-      {/* Ambient glow orbs */}
-      <div className="hero-glow hero-glow-1" aria-hidden="true" />
-      <div className="hero-glow hero-glow-2" aria-hidden="true" />
+    <section className="hero-v2">
+      {/* Subtle background noise/grain layer */}
+      <div className="hero-v2-bg" aria-hidden="true">
+        <div className="hero-v2-glow-a" />
+        <div className="hero-v2-glow-b" />
+        <div className="hero-v2-glow-c" />
+      </div>
 
-      <div className="hero-container">
-        {/* ─── LEFT: Content ─── */}
-        <div className="hero-content">
-
-          {/* Eyebrow badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0 }}
-          >
-            <div className="hero-eyebrow">
-              <span className="pulse-dot" />
-              {heroEyebrow}
-            </div>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            className="hero-main-title"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, ease: EASE_EXPO, delay: 0.1 }}
-            dangerouslySetInnerHTML={{ __html: sanitizedTitle }}
-          />
-
-          {/* Description */}
-          <motion.p
-            className="hero-sub"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.22 }}
-          >
-            {heroDesc}
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            className="hero-actions"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.34 }}
-          >
-            <Link to="/gigs" className="btn-red premium-btn">
-              {heroPrimaryCta}
-              <ArrowRight size={18} />
-            </Link>
-            <Link to="/contact" className="btn-outline-dark premium-btn-outline">
-              {heroSecondaryCta}
-            </Link>
-          </motion.div>
-
-          {/* Market flags */}
-          <motion.div
-            className="hero-trust"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.44 }}
-          >
-            <div className="hero-market-flags" aria-label="Serving clients in USA, Canada, and Australia">
-              <span className="market-served-label">Serving</span>
-              <span className="market-tag"><span className="market-dot us" />USA</span>
-              <span className="market-tag"><span className="market-dot ca" />Canada</span>
-              <span className="market-tag"><span className="market-dot au" />Australia</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ─── RIGHT: Visual ─── */}
+      <div className="hero-v2-inner">
+        {/* ── Eyebrow ── */}
         <motion.div
-          className="hero-visual"
-          initial={{ opacity: 0, y: 32, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1.1, ease: EASE_EXPO, delay: 0.48 }}
+          className="hero-v2-eyebrow-wrap"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0 }}
         >
-          <div className="hero-mockup-wrapper">
-            {heroContent.mockup_primary ? (
-              <img
-                src={heroContent.mockup_primary}
-                alt="CreatifyBD creative services dashboard"
-                className="hero-mockup-img"
-                loading="eager"
-                fetchPriority="high"
-                width="620"
-                height="480"
-              />
-            ) : (
-              <div className="hero-mockup-wrap">
-                <div className="dashboard-mockup-grid">
-                  <div className="mock-sidebar">
-                    <div className="mock-sb-item mock-sb-item-active">Campaigns</div>
-                    <div className="mock-sb-item">Deliveries</div>
-                    <div className="mock-sb-item">Intake Brief</div>
-                    <div className="mock-sb-item">Revisions</div>
-                  </div>
-                  <div className="mock-content-panel">
-                    <div className="mock-card">
-                      <h3 className="mock-card-title">Campaign Performance</h3>
-                      <div className="mock-stats-grid">
-                        <div className="mock-stat-item">
-                          <small className="mock-stat-label">Content Calendar</small>
-                          <strong className="mock-stat-value mock-stat-value-red">Active</strong>
-                        </div>
-                        <div className="mock-stat-item">
-                          <small className="mock-stat-label">Posts Ready</small>
-                          <strong className="mock-stat-value">12</strong>
-                        </div>
-                        <div className="mock-stat-item">
-                          <small className="mock-stat-label">Scheduled</small>
-                          <strong className="mock-stat-value">8</strong>
-                        </div>
+          <div className="hero-v2-eyebrow">
+            <span className="hero-v2-pulse" />
+            {heroEyebrow}
+          </div>
+        </motion.div>
+
+        {/* ── Main Headline ── */}
+        <motion.h1
+          className="hero-v2-title"
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE_EXPO, delay: 0.1 }}
+          dangerouslySetInnerHTML={{ __html: sanitizedTitle }}
+        />
+
+        {/* ── Description ── */}
+        <motion.p
+          className="hero-v2-desc"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, ease: EASE_EXPO, delay: 0.22 }}
+        >
+          {heroDesc}
+        </motion.p>
+
+        {/* ── CTAs ── */}
+        <motion.div
+          className="hero-v2-actions"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.34 }}
+        >
+          <Link to="/gigs" className="hero-v2-btn-primary">
+            {heroPrimaryCta}
+            <ArrowRight size={18} />
+          </Link>
+          <Link to="/contact" className="hero-v2-btn-outline">
+            {heroSecondaryCta}
+          </Link>
+        </motion.div>
+
+        {/* ── Trust Pills ── */}
+        <motion.div
+          className="hero-v2-trust"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.5 }}
+        >
+          {TRUST_PILLS.map((pill, i) => (
+            <div className="hero-v2-pill" key={i}>
+              {pill.icon}
+              <span>{pill.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* ── Visual mockup card ── */}
+        <motion.div
+          className="hero-v2-visual"
+          initial={{ opacity: 0, y: 48, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.1, ease: EASE_EXPO, delay: 0.55 }}
+        >
+          {heroContent.mockup_primary ? (
+            <img
+              src={heroContent.mockup_primary}
+              alt="CreatifyBD creative services dashboard"
+              className="hero-v2-mockup-img"
+              loading="eager"
+              fetchPriority="high"
+              width="1200"
+              height="640"
+            />
+          ) : (
+            <div className="hero-v2-dashboard">
+              {/* Dashboard header */}
+              <div className="hd-header">
+                <div className="hd-dots">
+                  <span /><span /><span />
+                </div>
+                <span className="hd-url">creatifybd.com · Client Portal</span>
+                <div className="hd-actions">
+                  <span className="hd-badge hd-badge-green">● Live</span>
+                </div>
+              </div>
+
+              {/* Dashboard body */}
+              <div className="hd-body">
+                {/* Sidebar */}
+                <div className="hd-sidebar">
+                  <div className="hd-sb-logo">CB</div>
+                  <nav className="hd-sb-nav">
+                    {['Campaigns', 'Deliveries', 'Brief', 'Revisions', 'Reports'].map((item, i) => (
+                      <div key={item} className={`hd-sb-item${i === 0 ? ' active' : ''}`}>
+                        <span className="hd-sb-dot" />
+                        {item}
                       </div>
-                      <div className="mock-schedule-section">
-                        <small className="mock-schedule-label">Weekly Schedule</small>
-                        <div className="calendar-grid">
-                          <div className="calendar-day active"><span>Mon</span><div className="active-bar-content" /></div>
-                          <div className="calendar-day active"><span>Tue</span><div className="active-bar-content" /></div>
-                          <div className="calendar-day active calendar-day-green"><span>Wed</span><div className="active-bar-content active-bar-content-green" /></div>
-                          <div className="calendar-day"><span>Thu</span></div>
-                        </div>
+                    ))}
+                  </nav>
+                  <div className="hd-sb-footer">
+                    <div className="hd-sb-avatar">MD</div>
+                    <div>
+                      <strong>Mark Davis</strong>
+                      <span>Pro Plan</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Main panel */}
+                <div className="hd-main">
+                  {/* Stats row */}
+                  <div className="hd-stats-row">
+                    {STATS.map((s) => (
+                      <div className="hd-stat" key={s.label}>
+                        <strong>{s.value}</strong>
+                        <span>{s.label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Two column cards */}
+                  <div className="hd-cards">
+                    <div className="hd-card">
+                      <div className="hd-card-head">
+                        <span className="hd-card-title">Active Campaign</span>
+                        <span className="hd-badge hd-badge-red">SMM</span>
+                      </div>
+                      <div className="hd-progress-track">
+                        <div className="hd-progress-bar" style={{ width: '72%' }} />
+                      </div>
+                      <div className="hd-delivery-list">
+                        {['Post_Design_v3.png', 'Reel_Script_Apr.docx', 'Stories_Pack.zip'].map((f) => (
+                          <div className="hd-delivery-row" key={f}>
+                            <span className="hd-file-dot" />
+                            <span className="hd-file-name">{f}</span>
+                            <span className="hd-file-badge">Ready</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    <div className="mock-card">
-                      <h3 className="mock-card-title">Recent Deliveries</h3>
-                      <div className="mock-deliveries-list">
-                        <div className="mock-delivery-item">
-                          <span className="mock-delivery-name">SMM_Post_v2.png</span>
-                          <span className="mock-delivery-action">Download</span>
-                        </div>
-                        <div className="mock-delivery-item">
-                          <span className="mock-delivery-name">Campaign_Teaser.mp4</span>
-                          <span className="mock-delivery-action">Download</span>
-                        </div>
+
+                    <div className="hd-card">
+                      <div className="hd-card-head">
+                        <span className="hd-card-title">This Week</span>
+                        <span className="hd-badge hd-badge-blue">Schedule</span>
+                      </div>
+                      <div className="hd-calendar">
+                        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
+                          <div key={i} className={`hd-cal-day${i < 5 ? ' active' : ''}${i === 2 ? ' today' : ''}`}>
+                            <span>{d}</span>
+                            {i < 5 && <div className="hd-cal-bar" />}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="hd-review-item">
+                        <Star size={11} className="hd-star" />
+                        <span>"Delivered exactly on time, great quality!"</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Floating badge */}
+          <motion.div
+            className="hero-v2-float-badge"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT, delay: 1.1 }}
+          >
+            <CheckCircle2 size={16} />
+            <span>Delivery approved!</span>
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* ─── Trust Bar (below hero columns) ─── */}
-      <motion.div
-        className="hero-trust-bar"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.6 }}
-        aria-label="Key guarantees"
-      >
-        {TRUST_PILLS.map((pill, i) => (
-          <div className="hero-trust-pill" key={i}>
-            {pill.icon}
-            <span>{pill.label}</span>
-          </div>
-        ))}
-      </motion.div>
-
       <style>{`
-        /* ── Hero Trust Bar ── */
-        .hero-trust-bar {
+        /* ══════════════════════ HERO V2 ══════════════════════ */
+        .hero-v2 {
+          position: relative;
+          background: var(--surface-soft, #fafafa);
+          overflow: hidden;
+          padding-top: 120px;
+        }
+        .hero-v2-bg {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          user-select: none;
+          z-index: 0;
+        }
+        .hero-v2-glow-a {
+          position: absolute;
+          width: 800px; height: 800px;
+          border-radius: 50%;
+          top: -200px; right: -200px;
+          background: radial-gradient(circle, rgba(232,25,44,0.07) 0%, transparent 65%);
+        }
+        .hero-v2-glow-b {
+          position: absolute;
+          width: 600px; height: 600px;
+          border-radius: 50%;
+          bottom: 10%; left: -150px;
+          background: radial-gradient(circle, rgba(232,25,44,0.05) 0%, transparent 65%);
+        }
+        .hero-v2-glow-c {
+          position: absolute;
+          width: 400px; height: 400px;
+          border-radius: 50%;
+          top: 30%; left: 40%;
+          background: radial-gradient(circle, rgba(255,150,50,0.03) 0%, transparent 65%);
+        }
+
+        /* ── Center stack ── */
+        .hero-v2-inner {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          max-width: 960px;
+          margin: 0 auto;
+          padding: 0 2rem 0;
+        }
+
+        /* Eyebrow */
+        .hero-v2-eyebrow-wrap { margin-bottom: 1.5rem; }
+        .hero-v2-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.8rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--brand-red, #e8192c);
+          background: rgba(232,25,44,0.06);
+          border: 1px solid rgba(232,25,44,0.18);
+          border-radius: 100px;
+          padding: 0.45rem 1.1rem;
+        }
+        .hero-v2-pulse {
+          width: 7px; height: 7px;
+          border-radius: 50%;
+          background: var(--brand-red, #e8192c);
+          flex-shrink: 0;
+          animation: heroV2Pulse 2s ease-in-out infinite;
+        }
+        @keyframes heroV2Pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.4); }
+        }
+
+        /* Headline */
+        .hero-v2-title {
+          font-size: clamp(2.8rem, 6vw, 5rem);
+          font-weight: 900;
+          line-height: 1.06;
+          letter-spacing: -0.03em;
+          color: var(--ink, #0f0f12);
+          margin: 0 0 1.5rem;
+        }
+        .hero-v2-title .hero-highlight {
+          position: relative;
+          color: var(--brand-red, #e8192c);
+          display: inline-block;
+        }
+        .hero-v2-title .hero-highlight::after {
+          content: '';
+          position: absolute;
+          bottom: 4px; left: 0; right: 0;
+          height: 3px;
+          background: var(--brand-red, #e8192c);
+          border-radius: 3px;
+          opacity: 0.25;
+        }
+
+        /* Description */
+        .hero-v2-desc {
+          font-size: clamp(1rem, 2vw, 1.15rem);
+          color: var(--muted, #6b7280);
+          max-width: 620px;
+          line-height: 1.75;
+          margin: 0 0 2.25rem;
+        }
+
+        /* CTAs */
+        .hero-v2-actions {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-bottom: 2rem;
+        }
+        .hero-v2-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.9rem 2rem;
+          background: var(--brand-red, #e8192c);
+          color: #fff;
+          font-weight: 700;
+          font-size: 0.95rem;
+          border-radius: 100px;
+          text-decoration: none;
+          transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 8px 24px rgba(232,25,44,0.25);
+        }
+        .hero-v2-btn-primary:hover {
+          background: #c9162a;
+          transform: translateY(-2px);
+          box-shadow: 0 14px 32px rgba(232,25,44,0.35);
+        }
+        .hero-v2-btn-outline {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.9rem 2rem;
+          background: transparent;
+          color: var(--ink, #0f0f12);
+          font-weight: 700;
+          font-size: 0.95rem;
+          border-radius: 100px;
+          border: 1.5px solid var(--border, #e5e7eb);
+          text-decoration: none;
+          transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .hero-v2-btn-outline:hover {
+          border-color: var(--ink, #0f0f12);
+          background: rgba(15,15,18,0.04);
+          transform: translateY(-2px);
+        }
+
+        /* Trust pills */
+        .hero-v2-trust {
           display: flex;
           align-items: center;
           justify-content: center;
+          gap: 0.6rem;
           flex-wrap: wrap;
-          gap: 0.75rem;
-          margin-top: 3.5rem;
-          padding-top: 2.5rem;
-          border-top: 1px solid var(--border-soft);
+          margin-bottom: 4rem;
         }
-        .hero-trust-pill {
+        .hero-v2-pill {
           display: inline-flex;
           align-items: center;
-          gap: 0.45rem;
-          font-size: 0.82rem;
+          gap: 0.4rem;
+          font-size: 0.78rem;
           font-weight: 600;
-          color: var(--ink-soft);
-          background: var(--surface-card);
-          border: 1px solid var(--border-card);
-          border-radius: var(--radius-pill);
-          padding: 0.45rem 1rem;
-          box-shadow: var(--shadow-sm);
-          transition: box-shadow 0.2s ease, transform 0.2s ease;
+          color: var(--ink-soft, #374151);
+          background: #fff;
+          border: 1px solid var(--border, #e5e7eb);
+          border-radius: 100px;
+          padding: 0.4rem 0.9rem;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+          transition: box-shadow 0.18s ease, transform 0.18s ease;
         }
-        .hero-trust-pill:hover {
-          box-shadow: var(--shadow-card);
+        .hero-v2-pill:hover {
+          box-shadow: 0 4px 12px rgba(0,0,0,0.10);
           transform: translateY(-1px);
         }
-        .hero-trust-pill svg {
-          color: var(--brand-red);
-          flex-shrink: 0;
+        .hero-v2-pill svg { color: var(--brand-red, #e8192c); flex-shrink: 0; }
+
+        /* ── Dashboard Visual ── */
+        .hero-v2-visual {
+          position: relative;
+          width: 100%;
+          max-width: 1020px;
+        }
+        .hero-v2-mockup-img {
+          width: 100%;
+          border-radius: 16px;
+          display: block;
+        }
+        .hero-v2-dashboard {
+          width: 100%;
+          background: var(--surface-card, #fff);
+          border: 1px solid var(--border, #e5e7eb);
+          border-radius: 16px 16px 0 0;
+          box-shadow:
+            0 0 0 1px rgba(0,0,0,0.04),
+            0 32px 80px rgba(0,0,0,0.10),
+            0 8px 24px rgba(232,25,44,0.06);
+          overflow: hidden;
         }
 
-        /* ── Market flags ── */
-        .hero-market-flags {
+        /* Dashboard header bar */
+        .hd-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1.25rem;
+          border-bottom: 1px solid var(--border, #e5e7eb);
+          background: var(--surface-soft, #fafafa);
+        }
+        .hd-dots {
+          display: flex;
+          gap: 5px;
+        }
+        .hd-dots span {
+          width: 10px; height: 10px;
+          border-radius: 50%;
+          background: #e5e7eb;
+        }
+        .hd-dots span:first-child { background: #f87171; }
+        .hd-dots span:nth-child(2) { background: #fbbf24; }
+        .hd-dots span:nth-child(3) { background: #34d399; }
+        .hd-url {
+          flex: 1;
+          font-size: 0.72rem;
+          color: var(--muted, #6b7280);
+          font-weight: 500;
+          text-align: center;
+        }
+        .hd-badge {
+          font-size: 0.68rem;
+          font-weight: 700;
+          padding: 0.2rem 0.6rem;
+          border-radius: 100px;
+        }
+        .hd-badge-green { background: #dcfce7; color: #166534; }
+        .hd-badge-red   { background: #fee2e2; color: #991b1b; }
+        .hd-badge-blue  { background: #dbeafe; color: #1e40af; }
+
+        /* Dashboard body */
+        .hd-body {
+          display: grid;
+          grid-template-columns: 160px 1fr;
+          min-height: 320px;
+        }
+
+        /* Sidebar */
+        .hd-sidebar {
+          border-right: 1px solid var(--border, #e5e7eb);
+          padding: 1.25rem 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          background: var(--surface-soft, #fafafa);
+        }
+        .hd-sb-logo {
+          width: 36px; height: 36px;
+          border-radius: 8px;
+          background: var(--brand-red, #e8192c);
+          color: #fff;
+          font-size: 0.75rem;
+          font-weight: 900;
+          display: flex; align-items: center; justify-content: center;
+          margin: 0 1rem 1.25rem;
+        }
+        .hd-sb-nav { flex: 1; }
+        .hd-sb-item {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-        .market-served-label {
-          font-size: 0.75rem;
-          color: var(--muted);
-          font-weight: 500;
-        }
-        .market-tag {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-          font-size: 0.8rem;
+          padding: 0.55rem 1rem;
+          font-size: 0.73rem;
           font-weight: 600;
-          color: var(--ink-soft);
-          background: var(--surface-soft);
-          border: 1px solid var(--border);
-          border-radius: 100px;
-          padding: 0.3rem 0.75rem;
+          color: var(--muted, #6b7280);
+          cursor: default;
+          border-radius: 0;
+          transition: background 0.15s;
         }
-        .market-dot {
-          width: 8px;
-          height: 8px;
+        .hd-sb-item.active {
+          color: var(--brand-red, #e8192c);
+          background: rgba(232,25,44,0.06);
+          border-right: 2px solid var(--brand-red, #e8192c);
+        }
+        .hd-sb-dot {
+          width: 6px; height: 6px;
           border-radius: 50%;
+          background: currentColor;
+          opacity: 0.4;
           flex-shrink: 0;
         }
-        .market-dot.us { background: #B22234; }
-        .market-dot.ca { background: #FF0000; }
-        .market-dot.au { background: #00008B; }
+        .hd-sb-footer {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1rem;
+          border-top: 1px solid var(--border, #e5e7eb);
+          margin-top: auto;
+        }
+        .hd-sb-avatar {
+          width: 28px; height: 28px;
+          border-radius: 50%;
+          background: var(--brand-red, #e8192c);
+          color: #fff;
+          font-size: 0.6rem;
+          font-weight: 900;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+        }
+        .hd-sb-footer strong { font-size: 0.7rem; display: block; line-height: 1.2; }
+        .hd-sb-footer span { font-size: 0.62rem; color: var(--muted, #9ca3af); }
 
-        /* Reduce motion */
+        /* Main panel */
+        .hd-main { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+
+        .hd-stats-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.75rem;
+        }
+        .hd-stat {
+          background: var(--surface-soft, #fafafa);
+          border: 1px solid var(--border, #f3f4f6);
+          border-radius: 10px;
+          padding: 0.75rem;
+          display: flex; flex-direction: column; gap: 0.2rem;
+        }
+        .hd-stat strong {
+          font-size: 1.1rem;
+          font-weight: 900;
+          color: var(--brand-red, #e8192c);
+          line-height: 1;
+        }
+        .hd-stat span { font-size: 0.65rem; color: var(--muted, #6b7280); font-weight: 500; }
+
+        .hd-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+        .hd-card {
+          border: 1px solid var(--border, #e5e7eb);
+          border-radius: 10px;
+          padding: 0.9rem;
+          display: flex; flex-direction: column; gap: 0.6rem;
+        }
+        .hd-card-head {
+          display: flex; align-items: center; justify-content: space-between;
+        }
+        .hd-card-title { font-size: 0.72rem; font-weight: 700; color: var(--ink, #0f0f12); }
+
+        .hd-progress-track {
+          height: 4px; background: #f3f4f6; border-radius: 100px; overflow: hidden;
+        }
+        .hd-progress-bar {
+          height: 100%; background: var(--brand-red, #e8192c); border-radius: 100px;
+        }
+
+        .hd-delivery-list { display: flex; flex-direction: column; gap: 0.35rem; }
+        .hd-delivery-row {
+          display: flex; align-items: center; gap: 0.4rem;
+          font-size: 0.64rem;
+        }
+        .hd-file-dot {
+          width: 5px; height: 5px; border-radius: 50%;
+          background: var(--brand-red, #e8192c); flex-shrink: 0;
+        }
+        .hd-file-name { flex: 1; color: var(--ink-soft, #374151); font-weight: 500; }
+        .hd-file-badge {
+          background: #dcfce7; color: #166534;
+          font-size: 0.6rem; font-weight: 700;
+          padding: 0.1rem 0.4rem; border-radius: 100px;
+        }
+
+        .hd-calendar {
+          display: flex; gap: 0.3rem; align-items: flex-end;
+        }
+        .hd-cal-day {
+          flex: 1; display: flex; flex-direction: column;
+          align-items: center; gap: 0.25rem;
+        }
+        .hd-cal-day span { font-size: 0.58rem; color: var(--muted, #9ca3af); font-weight: 600; }
+        .hd-cal-bar {
+          width: 100%; height: 28px; border-radius: 4px;
+          background: #f3f4f6;
+        }
+        .hd-cal-day.active .hd-cal-bar { background: rgba(232,25,44,0.15); }
+        .hd-cal-day.today .hd-cal-bar { background: var(--brand-red, #e8192c); }
+
+        .hd-review-item {
+          display: flex; align-items: flex-start; gap: 0.4rem;
+          background: var(--surface-soft, #fafafa);
+          border-radius: 8px;
+          padding: 0.5rem 0.6rem;
+          font-size: 0.62rem;
+          color: var(--ink-soft, #374151);
+          font-style: italic;
+        }
+        .hd-star { color: #f59e0b; flex-shrink: 0; margin-top: 1px; }
+
+        /* Floating approve badge */
+        .hero-v2-float-badge {
+          position: absolute;
+          bottom: -18px;
+          right: 40px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          background: #fff;
+          border: 1px solid rgba(232,25,44,0.15);
+          border-radius: 100px;
+          padding: 0.55rem 1.1rem;
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--ink, #0f0f12);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+          white-space: nowrap;
+        }
+        .hero-v2-float-badge svg { color: #22c55e; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+          .hero-v2 { padding-top: 100px; }
+          .hero-v2-title { font-size: clamp(2.2rem, 10vw, 3.2rem); }
+          .hero-v2-inner { padding: 0 1.25rem; }
+          .hd-body { grid-template-columns: 1fr; }
+          .hd-sidebar { display: none; }
+          .hd-stats-row { grid-template-columns: repeat(2, 1fr); }
+          .hd-cards { grid-template-columns: 1fr; }
+          .hero-v2-float-badge { right: 16px; bottom: -14px; font-size: 0.7rem; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
-          .hero-trust-pill { transition: none; }
+          .hero-v2-pulse { animation: none; }
+          .hero-v2-btn-primary:hover,
+          .hero-v2-btn-outline:hover,
+          .hero-v2-pill:hover { transform: none; }
         }
       `}</style>
     </section>

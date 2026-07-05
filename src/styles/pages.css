@@ -783,29 +783,27 @@ select:focus {
 }
 
 .ceo-quote {
-  margin-top: 2.5rem;
-  padding: 2rem;
-  background: var(--surface-card);
-  border-left: 4px solid var(--red);
-  border-radius: 0 16px 16px 0;
+  margin-top: 2rem;
 }
 
 .ceo-quote p {
   font-style: italic;
   color: var(--ink-soft);
-  margin: 0.75rem 0;
-  line-height: 1.7;
-  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  line-height: 1.75;
+  font-size: 0.98rem;
 }
 
 .ceo-quote strong {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .ceo-quote svg {
   color: var(--red);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 /* Office Gallery */

@@ -611,87 +611,11 @@
      PHASE 4 — AUDIT FIXES (2025-07)
      ══════════════════════════════════════════════════════════════════════ */
 
-  /* ─── HERO — .hero class background (component uses .hero not .hero-sec) ─── */
-  section.hero {
-    position: relative !important;
-    padding: 180px 0 100px !important;
-    overflow: hidden !important;
-    background:
-      radial-gradient(ellipse 75% 55% at 80% -5%, rgba(232,25,44,0.10) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 45% at 20% 110%, rgba(232,25,44,0.07) 0%, transparent 50%),
-      var(--surface-soft) !important;
-  }
-  /* Hero decorative glows */
-  .hero-glow {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    user-select: none;
-  }
-  .hero-glow-1 {
-    width: 600px; height: 600px;
-    top: -80px; right: -120px;
-    background: radial-gradient(circle, rgba(232,25,44,0.09) 0%, transparent 65%);
-    animation: float 8s ease-in-out infinite;
-  }
-  .hero-glow-2 {
-    width: 450px; height: 450px;
-    bottom: -100px; left: -100px;
-    background: radial-gradient(circle, rgba(232,25,44,0.06) 0%, transparent 65%);
-    animation: float 10s ease-in-out infinite reverse;
-  }
-  /* Hero component classes */
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--brand-red);
-    margin-bottom: 1.2rem;
-  }
-  .pulse-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--brand-red);
-    animation: pulseDot 2s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  .hero-main-title {
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    line-height: 1.1;
-    font-weight: 900;
-    color: var(--ink);
-    letter-spacing: -1.5px;
-    margin-bottom: 1.25rem;
-  }
-  .hero-main-title .red,
-  .hero-main-title .wavy-text {
-    background: var(--gradient-red);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-sub {
-    font-size: clamp(1rem, 1.8vw, 1.15rem);
-    color: var(--muted);
-    max-width: 540px;
-    margin-bottom: 2.25rem;
-    line-height: 1.7;
-  }
-  .hero-actions {
-    display: flex;
-    gap: 0.85rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-  .hero-trust { margin-top: 1.5rem; }
-  .hero-content { position: relative; z-index: 1; }
-  @media (max-width: 900px) {
-    section.hero { padding: 120px 0 60px !important; }
-    .hero-actions { justify-content: center !important; }
+  /* Hero v2 — self-contained styles are in Hero.jsx <style> tag */
+  /* Ensure hero-v2 is never treated as a generic section with border/margin */
+  body:not(.admin-body) section.hero-v2 {
+    border-top: none !important;
+    margin-top: 0 !important;
   }
 
   /* ─── MOBILE MENU PANEL (aside inside .mobile-menu-overlay) ─── */
@@ -1047,11 +971,11 @@
     margin-top: 0 !important;
   }
 
-  body:not(.admin-body) .App > section:not(.hero) {
+  body:not(.admin-body) .App > section:not(.hero):not(.hero-v2) {
     border-top: 1px solid rgba(232, 25, 44, 0.10) !important;
   }
 
-  body:not(.admin-body) .App > section:not(.hero)::before {
+  body:not(.admin-body) .App > section:not(.hero):not(.hero-v2)::before {
     display: none !important;
   }
 
@@ -1059,12 +983,10 @@
     background: var(--surface-soft) !important;
   }
 
-  body:not(.admin-body) .hero {
-    min-height: auto !important;
-  }
-
-  body:not(.admin-body) section.hero .hero-container {
-    min-height: calc(100vh - 160px) !important;
+  /* Why Us section — tighter top padding to reduce gap */
+  body:not(.admin-body) .why-us-section {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
   }
 
   body:not(.admin-body) .hero-visual {
@@ -1985,15 +1907,19 @@
 
   body:not(.admin-body) .ceo-portrait-card,
   body:not(.admin-body) .about-ceo-portrait {
-    min-height: 112px !important;
+    min-height: 200px !important;
+    width: 160px !important;
+    height: 200px !important;
     display: grid !important;
     place-items: center !important;
-    border-radius: 22px !important;
+    border-radius: 16px !important;
     background:
       radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.9), transparent 34%),
       linear-gradient(135deg, #e8192c, #8f0f1b) !important;
     color: #ffffff !important;
-    box-shadow: 0 24px 58px rgba(232, 25, 44, 0.22) !important;
+    box-shadow: 0 12px 32px rgba(232, 25, 44, 0.22) !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
   }
 
   body:not(.admin-body) .ceo-portrait-card {
@@ -2018,10 +1944,10 @@
   body:not(.admin-body) .about-ceo-portrait img,
   body:not(.admin-body) .ceo-portrait-card img {
     width: 100% !important;
-    height: 100% !important;
-    min-height: 112px !important;
+    height: 200px !important;
     display: block !important;
     object-fit: cover !important;
+    object-position: top center !important;
     border-radius: inherit !important;
   }
 
@@ -2073,9 +1999,15 @@
   }
 
   body:not(.admin-body) .about-ceo-feature {
-    grid-template-columns: 132px 1fr !important;
-    gap: 1.25rem !important;
+    display: grid !important;
+    grid-template-columns: 160px 1fr !important;
+    gap: 1.75rem !important;
     align-items: center !important;
+    background: var(--surface-card) !important;
+    border: 1px solid rgba(232,25,44,0.12) !important;
+    border-radius: 20px !important;
+    padding: 1.5rem !important;
+    box-shadow: 0 8px 32px rgba(232,25,44,0.07) !important;
   }
 
   body:not(.admin-body) .member-photo {
