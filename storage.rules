@@ -2,10 +2,13 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     function isAdmin() {
+      // Keep in sync with the legacy owner list in firestore.rules — both
+      // accounts must be treated as admins consistently across services.
       return request.auth != null
         && (
           request.auth.token.admin == true
           || request.auth.token.email == "binashad7@gmail.com"
+          || request.auth.token.email == "creatifybd@gmail.com"
         );
     }
 

@@ -202,12 +202,20 @@ service cloud.firestore {
     // Only approved reviews are publicly readable.
     // Only admin can approve, reject, or delete.
     match /reviews/{reviewId} {
+      // Anti-spam: a review can only be created if it references a real order
+      // that has just been marked "completed" by its client, and only once
+      // per order (the order's reviewSubmitted flag is flipped in the same
+      // client transaction that writes this document).
       allow create: if request.resource.data.rating is int
         && request.resource.data.rating >= 1
         && request.resource.data.rating <= 5
         && request.resource.data.reviewText is string
         && request.resource.data.reviewText.size() > 10
-        && request.resource.data.status == "pending";
+        && request.resource.data.status == "pending"
+        && request.resource.data.orderId is string
+        && request.resource.data.orderId.size() > 0
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'completed'
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.reviewSubmitted == true;
       allow read: if resource.data.status == "approved" || isAdmin();
       allow update: if isAdmin()
         && (request.resource.data.diff(resource.data).affectedKeys()

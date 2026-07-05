@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      console.warn('Auth state check timed out. Continuing as guest.');
+      if (import.meta.env.DEV) console.warn('Auth state check timed out. Continuing as guest.');
       setUser(null);
       setLoading(false);
       setRoleLoading(false);
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
             setRole(null);
           }
         } catch (err) {
-          console.error('Failed to resolve admin role:', err);
+          if (import.meta.env.DEV) console.error('Failed to resolve admin role:', err);
           const email = (currentUser.email || '').toLowerCase();
           setRole(LEGACY_OWNER_EMAILS.includes(email) ? 'owner' : null);
         } finally {
@@ -69,14 +69,14 @@ export const AuthProvider = ({ children }) => {
         }
       }, (error) => {
         window.clearTimeout(timeoutId);
-        console.error('Auth state error:', error);
+        if (import.meta.env.DEV) console.error('Auth state error:', error);
         setUser(null);
         setLoading(false);
         setRoleLoading(false);
       });
     } catch (error) {
       window.clearTimeout(timeoutId);
-      console.error('Auth listener failed:', error);
+      if (import.meta.env.DEV) console.error('Auth listener failed:', error);
       setLoading(false);
       setRoleLoading(false);
     }

@@ -718,10 +718,15 @@ function prerender() {
       fs.writeFileSync(BASE_TEMPLATE_PATH, rendered);
       console.log('Prerendered: / -> dist/index.html');
     } else {
-      const dir = path.join(DIST_DIR, route.path);
-      ensureDir(dir);
-      fs.writeFileSync(path.join(dir, 'index.html'), rendered);
-      console.log(`Prerendered: /${route.path} -> dist/${route.path}/index.html`);
+      // Write a flat "<path>.html" file instead of "<path>/index.html".
+      // With Firebase Hosting's "cleanUrls" option this is served directly
+      // at /<path> with a 200 (no physical directory exists), avoiding the
+      // extra 301 redirect that directory-style "index.html" files trigger
+      // when the URL is requested without a trailing slash.
+      const filePath = path.join(DIST_DIR, `${route.path}.html`);
+      ensureDir(path.dirname(filePath));
+      fs.writeFileSync(filePath, rendered);
+      console.log(`Prerendered: /${route.path} -> dist/${route.path}.html`);
     }
     count++;
   }
@@ -741,10 +746,10 @@ function prerender() {
       bodyContent: buildGigBody(gig)
     });
 
-    const dir = path.join(DIST_DIR, gigPath);
-    ensureDir(dir);
-    fs.writeFileSync(path.join(dir, 'index.html'), rendered);
-    console.log(`Prerendered: /${gigPath} -> dist/${gigPath}/index.html`);
+    const filePath = path.join(DIST_DIR, `${gigPath}.html`);
+    ensureDir(path.dirname(filePath));
+    fs.writeFileSync(filePath, rendered);
+    console.log(`Prerendered: /${gigPath} -> dist/${gigPath}.html`);
     count++;
   }
 

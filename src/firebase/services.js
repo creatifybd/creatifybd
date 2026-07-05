@@ -18,7 +18,7 @@ import { toast } from 'react-hot-toast';
 
 // Helper for error handling
 const handleServiceError = (error, customMsg) => {
-  console.error(`Firebase Service Error [${customMsg}]:`, error);
+  if (import.meta.env.DEV) console.error(`Firebase Service Error [${customMsg}]:`, error);
   toast.error(customMsg || 'An error occurred with the database.');
   throw error;
 };
