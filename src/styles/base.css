@@ -25,7 +25,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  cursor: none;
   /* Subtle rose-tinted background with noise texture feel */
   background-image:
     radial-gradient(ellipse 80% 50% at 95% 0%, rgba(232,25,44,0.07) 0%, transparent 55%),
@@ -65,9 +64,7 @@ a {
 }
 a:hover { color: var(--brand-red); }
 
-button, [role="button"], label[for] {
-  cursor: none;
-}
+
 
 /* ─── Brand selection color ─── */
 ::selection {
@@ -112,6 +109,16 @@ button, [role="button"], label[for] {
   color: var(--muted);
   max-width: 700px;
   margin-bottom: var(--space-xl);
+}
+
+/* ─── Custom cursor — desktop only ─── */
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"], label[for] { cursor: none; }
+}
+@media (pointer: coarse), (hover: none) {
+  body { cursor: auto !important; }
+  a, button, [role="button"] { cursor: pointer !important; }
 }
 
 /* ─── Reduced motion ─── */

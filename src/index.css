@@ -625,49 +625,6 @@ h2.section-h .red { color: var(--red); }
   line-height: 1.6;
   font-weight: 400;
 }
-/* ─── SECTION COMMON ─── */
-.section { padding: 6rem 3rem; }
-.section-sm { padding: 5rem 3rem; }
-.container { max-width: 1140px; margin: 0 auto; }
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 1.5rem;
-  position: relative;
-}
-.eyebrow::before {
-  content: '';
-  width: 25px; height: 2px;
-  background: var(--red);
-  border-radius: 2px;
-}
-.text-center .eyebrow::before { display: none; }
-
-h2.section-h {
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-  color: var(--ink);
-}
-h2.section-h .red { color: var(--red); }
-
-.section-sub {
-  margin-top: 1.5rem;
-  font-size: 1.1rem;
-  color: var(--gray-500);
-  max-width: 520px;
-  line-height: 1.6;
-  font-weight: 400;
-}
 
 /* ─── INTRO BAND ─── */
 .intro-band {
@@ -1380,6 +1337,59 @@ h2.section-h .red { color: var(--red); }
   color: rgba(255,255,255,0.6);
 }
 .badge.hot { background: rgba(232,25,44,0.2); border-color: rgba(232,25,44,0.3); color: #ff8891; }
+
+.pricing-billing-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px;
+  width: fit-content;
+  margin: 0 auto 1.5rem;
+}
+.pbt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+.pbt-btn.active {
+  background: var(--brand-red);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(232,25,44,0.3);
+}
+.pbt-save {
+  background: rgba(255,255,255,0.25);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  letter-spacing: 0.02em;
+}
+.pbt-btn:not(.active) .pbt-save {
+  background: rgba(34,197,94,0.15);
+  color: #16a34a;
+}
+.price-original {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
 
 /* ─── PRICING ─── */
 .pricing-section { background: var(--gray-50); }
@@ -5163,10 +5173,10 @@ body:not(.admin-body) .tab-btn.active {
 }
 
 /* ─── Dark footer override → already in overrides.css but ensure ─── */
-.footer-col ul li a  { color: var(--muted) !important; }
-.f-contact-item a    { color: var(--ink) !important; }
-.footer-legal a      { color: var(--muted) !important; }
-.footer-legal a:hover{ color: var(--brand-red) !important; }
+.footer-col ul li a  { color: rgba(255,255,255,0.45) !important; }
+.f-contact-item a    { color: rgba(255,255,255,0.55) !important; }
+.footer-legal a      { color: rgba(255,255,255,0.35) !important; }
+.footer-legal a:hover{ color: rgba(255,255,255,0.85) !important; }
 
 /* ─── Portfolio overlay ─── */
 .portfolio-overlay {
@@ -5498,30 +5508,13 @@ body::before, body::after {
       color 0.3s ease !important;
   }
 
-  .btn-outline-dark::before,
-  .btn-ghost::before,
-  .premium-btn-outline::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--red);
-    transform: translateY(101%);
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    z-index: -1;
-  }
-
   .btn-outline-dark:hover,
   .btn-ghost:hover,
   .premium-btn-outline:hover {
-    color: var(--white) !important;
     border-color: var(--red) !important;
+    color: var(--red) !important;
+    background: var(--brand-red-soft) !important;
     transform: translateY(-2px);
-  }
-
-  .btn-outline-dark:hover::before,
-  .btn-ghost:hover::before,
-  .premium-btn-outline:hover::before {
-    transform: translateY(0);
   }
 
 
@@ -5853,6 +5846,14 @@ body::before, body::after {
     margin-top: 1rem;
     transform-origin: left;
     animation: line-grow 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+  }
+  /* Center-aligned headings: center the underline */
+  .text-center .section-h::after,
+  .text-center h2.section-h::after,
+  [style*="text-align: center"] .section-h::after {
+    margin-left: auto;
+    margin-right: auto;
+    transform-origin: center;
   }
 
 

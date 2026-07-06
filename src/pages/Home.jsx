@@ -4,6 +4,7 @@ import useReveal from '../utils/useReveal';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import SEO from '../components/SEO';
+import StatsCounter from '../components/StatsCounter';
 
 import { useSettings } from '../context/SettingsContext';
 import usePageSEO from '../hooks/usePageSEO';
@@ -85,28 +86,44 @@ const Home = () => {
       {content?.visibility?.hero !== false && <Hero />}
 
       <Suspense fallback={null}>
-        {/* 1 — Client trust strip */}
+        {/* 1 — Stats counter strip */}
+        <StatsCounter />
+
+        {/* 2 — Client trust logos */}
         {content?.visibility?.clients !== false && <Clients />}
 
-        {/* 2 — Portfolio — show real work early */}
-        {content?.visibility?.portfolio !== false && (
-          <Portfolio highlight={true} theme={content?.portfolio?.theme} />
-        )}
-
-        {/* 3 — Services editorial list */}
+        {/* 3 — Services editorial list — what we do first */}
         {content?.visibility?.services !== false && (
           <Services highlight={true} theme={content?.services?.theme} />
         )}
 
-        {/* 4 — Why Us — expandable cards */}
+        {/* 4 — Portfolio — show real work after services */}
+        {content?.visibility?.portfolio !== false && (
+          <Portfolio highlight={true} theme={content?.portfolio?.theme} />
+        )}
+
+        {/* 5 — Why Us */}
         <WhyUsSection />
+
+        {/* 6 — About trust */}
         {content?.visibility?.about_trust !== false && <AboutTrust />}
+
+        {/* 7 — Case studies */}
         {content?.visibility?.case_studies !== false && <CaseStudies />}
+
+        {/* 8 — Process */}
         {content?.visibility?.process !== false && <Process highlight={true} theme={content?.process?.theme} />}
+
+        {/* 9 — Pricing */}
         {content?.visibility?.pricing !== false && <Pricing highlight={true} theme={content?.pricing?.theme} />}
 
+        {/* 10 — Testimonials */}
         {content?.visibility?.testimonials !== false && <Testimonials theme={content?.testimonials?.theme} />}
+
+        {/* 11 — CTA */}
         {content?.visibility?.cta_band !== false && <CTABand />}
+
+        {/* 12 — Contact */}
         {content?.visibility?.contact !== false && <Contact highlight={true} theme={content?.contact?.theme} />}
         <Footer />
       </Suspense>

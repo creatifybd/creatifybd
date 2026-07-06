@@ -17,7 +17,7 @@
   padding: 0.78rem 1.65rem;
   border-radius: var(--radius-pill);
   border: none;
-  cursor: none;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
@@ -51,7 +51,7 @@
   padding: 0.78rem 1.65rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--border-card);
-  cursor: none;
+  cursor: pointer;
   transition: all var(--transition-normal);
 }
 .btn-ghost:hover {
@@ -74,7 +74,7 @@
   padding: 1.1rem 2.6rem;
   border-radius: var(--radius-pill);
   border: none;
-  cursor: none;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: transform 0.25s var(--transition-spring),
@@ -110,7 +110,7 @@
   padding: 0.78rem 1.65rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--border-card);
-  cursor: none;
+  cursor: pointer;
   transition: all var(--transition-normal);
 }
 .btn-outline-white:hover,
@@ -134,7 +134,7 @@
   padding: 0.78rem 1.65rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--brand-red);
-  cursor: none;
+  cursor: pointer;
   transition: all var(--transition-normal);
 }
 .btn-outline-red:hover {
@@ -155,7 +155,7 @@
   font-size: 0.95rem;
   font-family: var(--font-display);
   transition: all var(--transition-normal);
-  cursor: none;
+  cursor: pointer;
 }
 
 /* ─── SECTION TYPOGRAPHY ──────────────────────────────────────── */

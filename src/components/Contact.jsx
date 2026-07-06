@@ -228,6 +228,19 @@ const Contact = () => {
                   >
                     {loading ? <>Processing... <Loader2 size={18} className="animate-spin" style={{ marginLeft: '1rem' }} /></> : <>Send Inquiry <Send size={18} style={{ marginLeft: '1rem' }} /></>}
                   </motion.button>
+
+                  {/* Trust badges */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
+                    {[
+                      { icon: '🔒', text: 'SSL Secured' },
+                      { icon: '✅', text: 'No spam, ever' },
+                      { icon: '⭐', text: '4.9/5 from 100+ clients' },
+                    ].map(b => (
+                      <span key={b.text} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 600 }}>
+                        <span>{b.icon}</span>{b.text}
+                      </span>
+                    ))}
+                  </div>
                 </motion.form>
               ) : (
                 <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, ease: EASE_EXPO }} className="success-message">

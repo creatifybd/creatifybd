@@ -37,6 +37,7 @@ const tabLabels = {
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
   const [activeTab, setActiveTab] = useState('social');
+  const [billing, setBilling] = useState('monthly');
 
   useEffect(() => {
     const unsub = onSnapshot(
@@ -60,8 +61,17 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
   const displayPlans = useMemo(() => {
     const remotePlans = pricingData[activeTab] || [];
     const source = remotePlans.length > 0 ? remotePlans : fallbackPricing[activeTab];
-    return highlight ? source.slice(0, 3) : source;
-  }, [activeTab, highlight, pricingData]);
+    const plans = highlight ? source.slice(0, 3) : source;
+    // Apply yearly discount (20% off) to monthly prices
+    if (billing === 'yearly') {
+      return plans.map(p => ({
+        ...p,
+        _displayPrice: p.price && !isNaN(p.price) ? Math.round(Number(p.price) * 0.8) : p.price,
+        _yearly: true,
+      }));
+    }
+    return plans.map(p => ({ ...p, _displayPrice: p.price }));
+  }, [activeTab, highlight, pricingData, billing]);
 
   return (
     <section className={`section pricing-section ${fullPage ? 'full-page-section' : ''}`} id="pricing">
@@ -75,6 +85,22 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
             <p className="section-sub">Start with a fixed package, then customize scope as your business grows. No long contract required.</p>
           </div>
         )}
+
+        <FadeReveal delay={0.15}>
+          <div className="pricing-billing-toggle">
+            <button
+              className={`pbt-btn ${billing === 'monthly' ? 'active' : ''}`}
+              onClick={() => setBilling('monthly')}
+            >Monthly</button>
+            <button
+              className={`pbt-btn ${billing === 'yearly' ? 'active' : ''}`}
+              onClick={() => setBilling('yearly')}
+            >
+              Yearly
+              <span className="pbt-save">Save 20%</span>
+            </button>
+          </div>
+        </FadeReveal>
 
         <FadeReveal delay={0.2}>
           <div className="pricing-tabs">
@@ -92,7 +118,12 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
               <article className={`price-card ${plan.featured ? 'featured' : ''}`}>
                 {plan.featured && <div className="popular-badge">Most Popular</div>}
                 <div className="price-tier">{plan.tier}</div>
-                <div className="price-amount"><span className="currency">$</span>{plan.price}</div>
+                <div className="price-amount">
+                  <span className="currency">$</span>{plan._displayPrice}
+                  {plan._yearly && !isNaN(plan.price) && (
+                    <span className="price-original">${plan.price}</span>
+                  )}
+                </div>
                 <div className="price-desc">{plan.desc}</div>
                 <div className="price-divider" />
                 <ul className="price-features">

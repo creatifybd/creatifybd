@@ -103,7 +103,7 @@ const FALLBACK = [
 const StarRating = ({ count = 5 }) => (
   <div className="tm-stars" aria-label={`${count} out of 5 stars`}>
     {Array.from({ length: count }).map((_, i) => (
-      <Star key={i} size={13} fill="#e8192c" color="#e8192c" />
+      <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />
     ))}
   </div>
 );
