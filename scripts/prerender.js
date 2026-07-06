@@ -555,6 +555,14 @@ const STATIC_ROUTES = [
     h1: 'Privacy Policy — CreatifyBD Creative Services',
     bodyContent: `<p>This Privacy Policy explains how CreatifyBD collects, uses, and protects personal information. <a href="/contact">Contact us</a> if you have questions about your data.</p>`
   },
+  // /privacy is an alias in App.jsx — canonical is /privacy-policy (above)
+  {
+    path: 'privacy',
+    title: 'Privacy Policy | CreatifyBD',
+    description: 'CreatifyBD privacy policy — how we collect, use, and protect your personal information when using our creative services marketplace.',
+    h1: 'Privacy Policy — CreatifyBD Creative Services',
+    bodyContent: `<p>This Privacy Policy explains how CreatifyBD collects, uses, and protects personal information. <a href="/contact">Contact us</a> if you have questions about your data.</p>`
+  },
   {
     path: 'terms',
     title: 'Terms of Service | CreatifyBD',
@@ -750,6 +758,72 @@ function prerender() {
     ensureDir(path.dirname(filePath));
     fs.writeFileSync(filePath, rendered);
     console.log(`Prerendered: /${gigPath} -> dist/${gigPath}.html`);
+    count++;
+  }
+
+  // Render case study pages
+  const CASE_STUDIES = [
+    {
+      slug: 'graphic-design-apex',
+      title: 'Brand Identity System Design — Sample Concept | CreatifyBD',
+      description: 'Sample concept demonstrating CreatifyBD brand identity design capabilities. Fashion/retail brand visual system including logo, typography, color palette, and guidelines.',
+      h1: 'Brand Identity System Design — Sample Concept',
+      bodyContent: `
+        <p>This is a sample concept demonstrating CreatifyBD brand identity design capabilities for a streetwear brand.</p>
+        <h2>Challenge</h2>
+        <p>Creating a cohesive visual identity that works across digital and print media while maintaining brand consistency.</p>
+        <h2>Solution</h2>
+        <p>We developed a modular brand system with variable logo marks, a refined typography hierarchy, and a flexible color palette.</p>
+        <p><strong>Note:</strong> This is a sample project demonstrating our design capabilities. <a href="/contact">Contact us</a> to discuss your actual brand identity needs.</p>
+        <p><a href="/case-studies">View all case studies</a> | <a href="/gigs/brand-identity-design">Order Brand Identity Design</a></p>
+      `
+    },
+    {
+      slug: 'marketing-luxe',
+      title: 'Social Media Marketing Strategy — Sample Concept | CreatifyBD',
+      description: 'Sample concept demonstrating CreatifyBD social media marketing capabilities for a luxury real estate brand. Content strategy, ad creative design, and campaign planning.',
+      h1: 'Social Media Marketing Strategy — Sample Concept',
+      bodyContent: `
+        <p>This is a sample concept demonstrating CreatifyBD social media marketing capabilities for a luxury real estate brand.</p>
+        <h2>Challenge</h2>
+        <p>Creating engaging social content that resonates with a luxury audience while maintaining brand sophistication.</p>
+        <h2>Solution</h2>
+        <p>We developed a content calendar with high-quality visuals, strategic posting schedules, and engagement-focused community management.</p>
+        <p><strong>Note:</strong> This is a sample project. <a href="/contact">Contact us</a> to discuss your actual marketing needs.</p>
+        <p><a href="/case-studies">View all case studies</a> | <a href="/gigs/monthly-social-media-management">Order Social Media Management</a></p>
+      `
+    },
+    {
+      slug: 'web-design-finflow',
+      title: 'Website UI/UX Design — Sample Concept | CreatifyBD',
+      description: 'Sample concept demonstrating CreatifyBD website design capabilities for a SaaS/FinTech platform. UI/UX design, responsive layouts, and modern web aesthetics.',
+      h1: 'Website UI/UX Design — Sample Concept',
+      bodyContent: `
+        <p>This is a sample concept demonstrating CreatifyBD website design capabilities for a SaaS platform.</p>
+        <h2>Challenge</h2>
+        <p>Creating an intuitive user interface for a complex data-driven platform.</p>
+        <h2>Solution</h2>
+        <p>We implemented a clean, card-based architecture with clear information hierarchy and smooth micro-interactions.</p>
+        <p><strong>Note:</strong> This is a sample project. <a href="/contact">Contact us</a> to discuss your actual website needs.</p>
+        <p><a href="/case-studies">View all case studies</a> | <a href="/gigs/business-website-design">Order Website Design</a></p>
+      `
+    }
+  ];
+
+  for (const cs of CASE_STUDIES) {
+    const csPath = `case-study/${cs.slug}`;
+    const canonical = `https://creatifybd.com/${csPath}`;
+    const rendered = applyMetaAndBody(baseHtml, {
+      title: cs.title,
+      description: cs.description,
+      canonical,
+      h1: cs.h1,
+      bodyContent: cs.bodyContent
+    });
+    const filePath = path.join(DIST_DIR, `${csPath}.html`);
+    ensureDir(path.dirname(filePath));
+    fs.writeFileSync(filePath, rendered);
+    console.log(`Prerendered: /${csPath} -> dist/${csPath}.html`);
     count++;
   }
 

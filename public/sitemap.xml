@@ -187,7 +187,7 @@
 
   <!-- ── Website Design Gigs ── -->
   <url>
-    <loc>https://creatifybd.com/gigs/small-business-website-design</loc>
+    <loc>https://creatifybd.com/gigs/business-website-design</loc>
     <lastmod>2026-07-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -212,6 +212,7 @@
   </url>
 
   <!-- ── Legal Pages ── -->
+  <!-- Canonical privacy route is /privacy-policy; /privacy is an alias in App.jsx -->
   <url>
     <loc>https://creatifybd.com/privacy-policy</loc>
     <lastmod>2026-07-03</lastmod>

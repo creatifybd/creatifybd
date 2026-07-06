@@ -108,7 +108,7 @@ export const gigs = [
     revisionPolicy: 'Revisions cover alignment edits to post designs and captions. Complete topic changes after draft approval may incur additional costs.',
     tags: ['smm', 'social media management', 'content calendar', 'facebook marketing'],
     industries: ['Real Estate', 'E-commerce', 'Coaches', 'Clinics', 'Restaurants'],
-    relatedGigs: ['brand-launch-kit', 'social-media-poster-design', 'short-form-reels-editing'],
+    relatedGigs: ['brand-launch-social-media-kit', 'social-media-poster-design', 'short-form-reels-editing'],
     status: 'active'
   },
   {
@@ -163,7 +163,7 @@ export const gigs = [
     revisionPolicy: 'Free text and graphic adjustments during drafting phase.',
     tags: ['facebook page', 'facebook posts', 'social media management', 'local business'],
     industries: ['Local Services', 'Restaurants', 'Clinics', 'Law Firms'],
-    relatedGigs: ['monthly-social-media-management', 'brand-launch-kit'],
+    relatedGigs: ['monthly-social-media-management', 'brand-launch-social-media-kit'],
     status: 'active'
   },
   {
@@ -330,7 +330,7 @@ export const gigs = [
     revisionPolicy: 'We work closely on concept refining. Revisions cover shape adjustments, typography changes, and color switches.',
     tags: ['logo design', 'vector logo', 'branding', 'business logo'],
     industries: ['Real Estate', 'Law Firms', 'E-commerce', 'Clinics', 'Restaurants'],
-    relatedGigs: ['brand-identity-design', 'business-card-design'],
+    relatedGigs: ['brand-identity-design', 'social-media-poster-design'],
     status: 'active'
   },
   {

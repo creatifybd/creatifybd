@@ -22,24 +22,19 @@ export const siteConfig = {
     youtube: ''
   },
   
-  // Payment Information - Payoneer
+  // Payment configuration is stored in Firestore settings/private/payment
+  // and loaded only in the admin panel and PaymentPage via SettingsContext.
+  // DO NOT store real account numbers or payment links in this public config.
   payoneer: {
-    accountName: 'MD ALAMIN ALI',
-    paymentLink: 'https://link.payoneer.com/Token?t=AC58688EFC1E47B885A7ED5E30B9AC16&src=pl',
     currency: 'USD',
     note: 'Enter the exact amount from your order confirmation. Add your Order ID (e.g. CBD-1234567) in the payment note.',
-    placeholder: false
+    placeholder: true
   },
 
-  // Payment Information - DBBL Bank Transfer
+  // DBBL bank details are stored in Firestore settings/private/payment (admin-only)
   dbbl: {
     bankName: 'Dutch Bangla Bank Limited',
-    accountName: 'MD ALAMIN ALI',
-    accountNumber: '1241580001138',
-    branch: 'Netaiganj Branch',
-    routingNumber: '090274996',
-    paymentReference: 'Client Name / Project Name',
-    placeholder: false
+    placeholder: true
   },
   
   // Payment Instructions
@@ -57,9 +52,9 @@ export const siteConfig = {
   
   // SEO Configuration
   seo: {
-    defaultTitle: 'CreatifyBD | Best Digital Marketing Agency | Social Media Management, Graphic Design, Video Editing',
-    defaultDescription: 'CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia. Hire the best marketing agency for your brand.',
-    defaultKeywords: 'CreatifyBD, Creatify BD, creatify bd, creative agency, digital marketing agency, marketing agency, best marketing agency, social media management, social media manager, graphic design service, video editing service, digital marketing service, social media marketing agency, creative design agency, best graphic design service, professional video editing, social media management USA, digital marketing Canada, creative agency Australia, social media marketing company, graphic design agency, video production company, web design agency, content marketing agency, branding agency, online marketing agency',
+    defaultTitle: 'CreatifyBD | Premium Creative Services for Startups & Small Businesses',
+    defaultDescription: 'CreatifyBD is a premium creative subscription and on-demand design partner for startups and small businesses in the USA, Canada, Australia, and UK. Social media management, graphic design, video editing, and website design.',
+    defaultKeywords: 'creative agency, social media management, graphic design, video editing, website design, brand identity, digital marketing, CreatifyBD',
     canonicalUrl: 'https://creatifybd.com'
   },
   

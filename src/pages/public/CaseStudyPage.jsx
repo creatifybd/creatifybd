@@ -23,6 +23,16 @@ const CaseStudyPage = () => {
   const base = detailedCaseStudies[slug];
   const study = override ? { ...base, ...override, id: slug } : base;
 
+  // Wait for Firestore check before deciding not-found
+  if (!checked) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 40, height: 40, border: '3px solid rgba(232,25,44,0.16)', borderTopColor: '#E8192C', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
   if (!study || study.hidden) {
     return <Navigate to="/case-studies" replace />;
   }
@@ -46,7 +56,7 @@ const CaseStudyPage = () => {
             "@type": "Organization",
             "name": "CreatifyBD"
           },
-          "mainEntityOfPage": `https://creatifybd.com/case-studies/${slug}`
+          "mainEntityOfPage": `https://creatifybd.com/case-study/${slug}`
         }}
       />
       <Navbar />

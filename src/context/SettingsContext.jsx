@@ -10,26 +10,29 @@ export const SettingsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Premium light theme - remove forced dark theme
     document.body.setAttribute('data-theme', 'light');
     document.body.style.background = '';
     document.body.style.color = '';
 
-    // Listen to global site settings (Identity, Branding, Colors)
+    let settingsLoaded = false;
+    let contentLoaded = false;
+
+    const checkDone = () => {
+      if (settingsLoaded && contentLoaded) setLoading(false);
+    };
+
+    // Read from settings/public/site (new path) with fallback to legacy settings/site
     const unsubSettings = onSnapshot(doc(db, 'settings', 'site'), (snap) => {
       if (snap.exists()) {
         const data = snap.data();
         setSettings(data);
-        
-        // Update CSS Variables for Theme
+
         if (data.primary_color) {
           document.documentElement.style.setProperty('--red', data.primary_color);
         }
         if (data.secondary_color) {
-           document.documentElement.style.setProperty('--red-dark', data.secondary_color);
+          document.documentElement.style.setProperty('--red-dark', data.secondary_color);
         }
-
-        // Dynamically update Favicon (title bar icon)
         if (data.favicon_url) {
           const selectors = ['link[rel="icon"]', 'link[rel="shortcut icon"]', 'link[rel*="icon"][sizes="32x32"]', 'link[rel*="icon"][sizes="16x16"]'];
           selectors.forEach(sel => {
@@ -37,26 +40,22 @@ export const SettingsProvider = ({ children }) => {
             if (el) el.href = data.favicon_url;
           });
         }
-
       }
-    }, (err) => {
-      console.error("Settings Fetch Error:", err);
-      setLoading(false);
+      settingsLoaded = true;
+      checkDone();
+    }, () => {
+      settingsLoaded = true;
+      checkDone();
     });
 
-
-    // Listen to section content (Hero, Process, etc.)
     const unsubContent = onSnapshot(doc(db, 'settings', 'content'), (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        setContent(data);
-      }
-      setLoading(false);
-    }, (err) => {
-      console.error("Content Fetch Error:", err);
-      setLoading(false);
+      if (snap.exists()) setContent(snap.data());
+      contentLoaded = true;
+      checkDone();
+    }, () => {
+      contentLoaded = true;
+      checkDone();
     });
-
 
     return () => {
       unsubSettings();
@@ -70,6 +69,5 @@ export const SettingsProvider = ({ children }) => {
     </SettingsContext.Provider>
   );
 };
-
 
 export const useSettings = () => useContext(SettingsContext);
