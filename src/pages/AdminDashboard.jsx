@@ -4,6 +4,7 @@ import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import {
   LayoutDashboard,
+  Bot,
   Briefcase,
   Image as ImageIcon,
   MessageSquare,
@@ -49,6 +50,7 @@ import MediaLibrary from './admin/MediaLibrary';
 import CaseStudiesManager from './admin/CaseStudiesManager';
 import AdminUsers from './admin/AdminUsers';
 import ActivityLog from './admin/ActivityLog';
+import BotDashboard from './admin/BotDashboard';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -72,6 +74,7 @@ const AdminDashboard = () => {
 
   const navItems = [
     { path: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} /> },
+    { path: '/admin/bot', label: 'Marketing Bot', icon: <Bot size={18} /> },
     { path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true },
     { path: '/admin/gigs', label: 'Gigs Manager', icon: <ShoppingBag size={18} /> },
     { path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} /> },
@@ -263,6 +266,7 @@ const AdminDashboard = () => {
                 <Route path="settings" element={<SettingsManager />} />
                 <Route path="users" element={isOwner ? <AdminUsers /> : <Navigate to="/admin" />} />
                 <Route path="activity-log" element={isOwner ? <ActivityLog /> : <Navigate to="/admin" />} />
+                <Route path="bot" element={<BotDashboard />} />
               </Routes>
             </motion.div>
           </AnimatePresence>
