@@ -12,6 +12,7 @@ import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import WhatsAppButton from './components/WhatsAppButton';
+import ScrollProgress from './components/ScrollProgress';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -114,6 +115,7 @@ function AppContent() {
         sessionStorage.setItem('creatify-preloaded', 'true');
         setLoading(false);
       }} />}
+      <ScrollProgress />
       <ScrollToTop />
       <WhatsAppButton />
       <AnimatePresence mode="wait">

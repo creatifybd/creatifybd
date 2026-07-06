@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import SEO from '../components/SEO';
 import StatsCounter from '../components/StatsCounter';
+import FeaturedIn from '../components/FeaturedIn';
 
 import { useSettings } from '../context/SettingsContext';
 import usePageSEO from '../hooks/usePageSEO';
@@ -34,9 +35,9 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: "CreatifyBD | Best Digital Marketing Agency | Social Media Management, Graphic Design, Video Editing",
-    description: "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia. Hire the best marketing agency for your brand.",
-    keywords: "CreatifyBD, Creatify BD, creatify bd, creative agency, digital marketing agency, marketing agency, best marketing agency, social media management, social media manager, graphic design service, video editing service, digital marketing service, social media marketing agency, creative design agency, best graphic design service, professional video editing, social media management USA, digital marketing Canada, creative agency Australia, social media marketing company, graphic design agency, video production company, web design agency, content marketing agency, branding agency, online marketing agency",
+    title: "CreatifyBD | Creative Agency for Social Media, Design & Video — USA, Canada, Australia",
+    description: "CreatifyBD is a dedicated creative agency offering social media management, graphic design, video editing, and website design for brands in USA, Canada, and Australia. 500+ projects delivered, 4.9★ rating.",
+    keywords: "CreatifyBD, creative agency, social media management, graphic design, video editing, website design, digital marketing, branding agency, social media agency USA, graphic design agency Canada, creative services Australia",
     schema: [
       {
         "@context": "https://schema.org",
@@ -88,6 +89,9 @@ const Home = () => {
       <Suspense fallback={null}>
         {/* 1 — Stats counter strip */}
         <StatsCounter />
+
+        {/* 1b — Credentials strip */}
+        <FeaturedIn />
 
         {/* 2 — Client trust logos */}
         {content?.visibility?.clients !== false && <Clients />}

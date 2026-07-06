@@ -183,18 +183,18 @@
 }
 
 .section-h {
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
   color: var(--ink);
-  line-height: 1.14;
-  letter-spacing: -0.5px;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
 }
 
 .section-sub {
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-size: clamp(0.98rem, 1.8vw, 1.12rem);
   color: var(--muted);
   max-width: 640px;
-  line-height: 1.7;
+  line-height: 1.75;
   margin-top: 0.75rem;
 }
 

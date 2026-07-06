@@ -147,4 +147,77 @@
   --section-bg:      var(--surface);
   --section-text:    var(--ink);
   --section-subtext: var(--muted);
+
+  /* ═══════════════════════════════════════════════════════════════
+     LAYOUT TOKENS
+     ═══════════════════════════════════════════════════════════════ */
+  --nav-height:        90px;
+  --nav-height-scroll: 64px;
+  --section-padding:   clamp(4.5rem, 7vw, 7rem);
+  --hero-bg:           var(--surface);
+
+  /* ═══════════════════════════════════════════════════════════════
+     DARK MODE TOKENS
+     ═══════════════════════════════════════════════════════════════ */
+  --dm-surface:      #0f0f12;
+  --dm-surface-soft: #1a1a20;
+  --dm-surface-card: #1e1e26;
+  --dm-ink:          #f0f0f5;
+  --dm-muted:        #8b8fa8;
+  --dm-border:       rgba(255,255,255,0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE — system preference
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface:        #0f0f12;
+    --surface-soft:   #1a1a20;
+    --surface-muted:  #252530;
+    --surface-card:   #1e1e26;
+    --surface-hover:  #252530;
+    --ink:            #f0f0f5;
+    --ink-soft:       #c8c8d8;
+    --muted:          #8b8fa8;
+    --border:         rgba(255,255,255,0.10);
+    --border-soft:    rgba(255,255,255,0.06);
+    --border-card:    rgba(255,255,255,0.08);
+    --shadow-sm:      0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md:      0 12px 32px rgba(0,0,0,0.4);
+    --shadow-lg:      0 24px 64px rgba(0,0,0,0.5);
+    --shadow-card:    0 4px 20px rgba(0,0,0,0.3);
+    --shadow-float:   0 16px 40px rgba(0,0,0,0.4);
+    --shadow-lifted:  0 20px 60px rgba(0,0,0,0.5);
+    --glass:          rgba(30,30,38,0.80);
+    --glass-hover:    rgba(37,37,48,0.90);
+    --glass-border:   rgba(255,255,255,0.10);
+    --gradient-section: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
+    --gradient-hero:  radial-gradient(ellipse 80% 60% at 100% 0%, rgba(232,25,44,0.15) 0%, transparent 60%),
+                      radial-gradient(ellipse 50% 40% at 0% 100%, rgba(232,25,44,0.10) 0%, transparent 55%);
+  }
+}
+
+/* Manual dark mode toggle */
+[data-theme="dark"] {
+  --surface:        #0f0f12;
+  --surface-soft:   #1a1a20;
+  --surface-muted:  #252530;
+  --surface-card:   #1e1e26;
+  --surface-hover:  #252530;
+  --ink:            #f0f0f5;
+  --ink-soft:       #c8c8d8;
+  --muted:          #8b8fa8;
+  --border:         rgba(255,255,255,0.10);
+  --border-soft:    rgba(255,255,255,0.06);
+  --border-card:    rgba(255,255,255,0.08);
+  --shadow-sm:      0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md:      0 12px 32px rgba(0,0,0,0.4);
+  --shadow-lg:      0 24px 64px rgba(0,0,0,0.5);
+  --shadow-card:    0 4px 20px rgba(0,0,0,0.3);
+  --shadow-float:   0 16px 40px rgba(0,0,0,0.4);
+  --shadow-lifted:  0 20px 60px rgba(0,0,0,0.5);
+  --glass:          rgba(30,30,38,0.80);
+  --glass-hover:    rgba(37,37,48,0.90);
+  --glass-border:   rgba(255,255,255,0.10);
 }

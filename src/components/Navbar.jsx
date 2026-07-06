@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Menu, Phone, X } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
+import DarkModeToggle from './DarkModeToggle';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -151,6 +152,8 @@ const Navbar = ({ theme = 'light' }) => {
             >
               <a href="tel:+8801951676600" className="btn-ghost" data-cursor="Call">Call Us</a>
             </motion.div>
+
+            <DarkModeToggle />
 
             <motion.div
               className="nav-cta-wrap"

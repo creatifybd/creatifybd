@@ -14,6 +14,49 @@
     cursor: text !important;
   }
 
+  /* ─── BUTTON RIPPLE EFFECT ─── */
+  .btn-red,
+  .btn-huge-red,
+  .btn-outline-red {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-red::after,
+  .btn-huge-red::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.22) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .btn-red:hover::after,
+  .btn-huge-red:hover::after { opacity: 1; }
+
+  /* ─── GLOBAL REDUCED MOTION ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-red:hover,
+    .btn-huge-red:hover,
+    .btn-outline-red:hover,
+    .btn-ghost:hover,
+    .card-base:hover,
+    .service-card-premium:hover,
+    .process-step-card:hover,
+    .feature-card:hover,
+    .gig-card:hover,
+    .portfolio-card:hover,
+    .f-social-btn:hover,
+    .fi-badge:hover,
+    .cl-brand-pill:hover {
+      transform: none !important;
+    }
+    .hero-split-pulse,
+    .whatsapp-float-btn {
+      animation: none !important;
+    }
+  }
+
   /* ─── IMAGE SKELETON — rose-tinted shimmer ─── */
   .opt-img-skeleton {
     background: linear-gradient(
