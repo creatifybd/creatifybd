@@ -4798,9 +4798,9 @@ body:not(.admin-body) .pf-lightbox {
 body:not(.admin-body) .pf-lb-content {
   width: min(1120px, calc(100vw - 48px)) !important;
   max-height: calc(100dvh - 48px) !important;
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) auto !important;
-  overflow: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
   border: 1px solid rgba(255, 255, 255, 0.72) !important;
   border-radius: 18px !important;
   background: #ffffff !important;
@@ -4808,8 +4808,10 @@ body:not(.admin-body) .pf-lb-content {
 }
 
 body:not(.admin-body) .pf-lb-visual {
-  min-height: min(60vh, 680px) !important;
-  max-height: 68vh !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 65vh !important;
   display: grid !important;
   place-items: center !important;
   padding: clamp(0.75rem, 2vw, 1.5rem) !important;
@@ -4823,12 +4825,17 @@ body:not(.admin-body) .pf-lb-img img {
   width: 100% !important;
   height: 100% !important;
   max-width: 100% !important;
-  max-height: 64vh !important;
+  max-height: 60vh !important;
   display: block !important;
   object-fit: contain !important;
 }
 
 body:not(.admin-body) .pf-lb-meta {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.6rem !important;
   padding: clamp(1.25rem, 2.4vw, 2rem) !important;
   color: #15161a !important;
   background: #ffffff !important;
@@ -4837,7 +4844,7 @@ body:not(.admin-body) .pf-lb-meta {
 
 body:not(.admin-body) .pf-lb-kicker {
   display: block !important;
-  margin-bottom: 0.55rem !important;
+  margin: 0 !important;
   color: #e8192c !important;
   font-size: 0.72rem !important;
   font-weight: 850 !important;
@@ -4853,7 +4860,10 @@ body:not(.admin-body) .pf-lb-title {
 }
 
 body:not(.admin-body) .pf-lb-desc {
+  margin: 0 !important;
   color: #596273 !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
 }
 
 body:not(.admin-body) :is(.pf-lb-close, .pf-lb-nav) {
