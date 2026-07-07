@@ -431,7 +431,11 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                 <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
               </FadeReveal>
               <TextReveal className="wk-heading">
-                {lang === 'bn' ? 'আমাদের কাজ' : 'Our Works'}
+                {lang === 'bn' ? (
+                  'আমাদের কাজ'
+                ) : (
+                  <>Our <span className="text-red">Works</span></>
+                )}
               </TextReveal>
               <FadeReveal delay={0.2}>
                 <p className="wk-header-copy">

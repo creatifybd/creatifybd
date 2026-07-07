@@ -29,7 +29,7 @@ export const renderRichTitle = (value, fallback = '') => {
     const spanMatch = token.match(/^<span\b([^>]*)>(.*?)<\/span>$/is);
     if (spanMatch) {
       const classMatch = spanMatch[1].match(/class\s*=\s*["']([^"']+)["']/i);
-      const className = classMatch && /(red|accent|highlight)/i.test(classMatch[1]) ? 'red' : undefined;
+      const className = classMatch && /(red|accent|highlight|text-red)/i.test(classMatch[1]) ? 'text-red' : undefined;
       return (
         <span key={`span-${index}`} className={className}>
           {stripLegacyMarkup(spanMatch[2])}

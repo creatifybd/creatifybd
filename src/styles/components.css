@@ -200,6 +200,11 @@
   letter-spacing: -0.02em;
 }
 
+/* ─── Brand red inline text accent — used in section headings ─── */
+.text-red {
+  color: var(--brand-red, #E8192C);
+}
+
 .section-sub {
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   color: var(--muted);

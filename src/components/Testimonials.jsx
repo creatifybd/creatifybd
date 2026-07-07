@@ -225,7 +225,7 @@ const Testimonials = () => {
               <div className="eyebrow">Client Testimonials</div>
               <h2 className="section-h tm-heading">
                 Trusted by<br />
-                <span className="tm-heading-accent">visionaries.</span>
+                <span className="text-red">visionaries.</span>
               </h2>
               <p className="section-sub tm-subtext">
                 Real results from real clients globally. Here's what they say about working with CreatifyBD.

@@ -84,9 +84,11 @@ const Services = ({ highlight = false, fullPage = false }) => {
               <div className="eyebrow">Our services</div>
             </FadeReveal>
             <TextReveal className="section-h">
-              {fullPage
-                ? 'Creative support without the hiring headache.'
-                : 'Everything your brand needs to show up better.'}
+              {fullPage ? (
+                <>Creative support without the <span className="text-red">hiring headache.</span></>
+              ) : (
+                <>Everything your brand needs to <span className="text-red">show up better.</span></>
+              )}
             </TextReveal>
             <FadeReveal delay={0.2}>
               <p className="section-sub">

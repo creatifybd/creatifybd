@@ -41,7 +41,7 @@ const Process = ({ highlight = false, fullPage = false }) => {
   const editableSteps = Array.isArray(processContent.steps) && processContent.steps.length
     ? processContent.steps.map((step, index) => ({ ...steps[index % steps.length], ...step }))
     : steps;
-  const title = globalizeCopy(processContent.title, 'A clear process from first brief to final delivery');
+  const title = globalizeCopy(processContent.title, 'A clear process from first brief to <span class="text-red">final delivery</span>');
   const subtitle = globalizeCopy(
     processContent.subtitle,
     'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.'

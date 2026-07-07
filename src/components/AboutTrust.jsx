@@ -31,7 +31,7 @@ const AboutTrust = () => {
   const stats = Array.isArray(aboutContent.stats) && aboutContent.stats.length
     ? aboutContent.stats
     : defaultStats;
-  const title = globalizeCopy(aboutContent.title, 'A specialist creative team serving global brands');
+  const title = globalizeCopy(aboutContent.title, 'A specialist creative team serving <span class="text-red">global brands</span>');
   const subtitle = globalizeCopy(
     aboutContent.subtitle,
     'CreatifyBD gives founders and marketing teams dependable creative execution without the cost or complexity of a full in-house department.'
