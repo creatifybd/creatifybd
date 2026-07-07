@@ -838,3 +838,221 @@
 }
 
 .admin-card:has(.data-table) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ─── Unified Content Manager Styles ─── */
+.admin-control-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.admin-summary-card {
+  background: var(--adm-card);
+  border: 1px solid var(--adm-border);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--adm-radius-md);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: var(--adm-shadow-sm);
+}
+
+.admin-summary-card span {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--adm-red-soft);
+  color: var(--adm-red);
+  flex-shrink: 0;
+}
+
+.admin-summary-card div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-summary-card strong {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--adm-text);
+  line-height: 1.2;
+}
+
+.admin-summary-card small {
+  font-size: 0.75rem;
+  color: var(--adm-dim);
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+
+/* Scroll Tabs */
+.admin-scroll-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--adm-border);
+  scrollbar-width: thin;
+}
+
+.admin-scroll-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.admin-scroll-tabs::-webkit-scrollbar-thumb {
+  background: var(--adm-border-strong);
+  border-radius: 4px;
+}
+
+.admin-tab-btn {
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid var(--adm-border);
+  background: var(--adm-surface);
+  color: var(--adm-dim);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.admin-tab-btn:hover {
+  border-color: var(--adm-border-strong);
+  color: var(--adm-text);
+  background: var(--adm-hover);
+}
+
+.admin-tab-btn.active {
+  background: var(--adm-red);
+  border-color: var(--adm-red);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--adm-red-glow);
+}
+
+/* Control grid of link cards */
+.admin-manager-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.admin-manager-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius-md);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--adm-shadow-sm);
+}
+
+.admin-manager-link:hover {
+  border-color: var(--adm-red);
+  transform: translateY(-2px);
+  box-shadow: var(--adm-shadow-md);
+}
+
+.admin-manager-link span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--adm-text);
+}
+
+.admin-manager-link strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--adm-red);
+  background: var(--adm-red-soft);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+/* ─── Global Status Chip Stats ─── */
+.order-status-chips {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.status-chip-stat {
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 90px;
+  box-shadow: var(--adm-shadow-sm);
+}
+
+.chip-count {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.chip-lbl {
+  font-size: 0.7rem;
+  color: var(--adm-dim);
+  text-align: center;
+  margin-top: 0.1rem;
+}
+
+/* ─── Table actions dropdowns ─── */
+.table-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adm-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-border-strong);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  min-width: 155px; /* Ensures long status like 'payment pending' doesn't cut off */
+  max-width: 100%;
+}
+
+.adm-select-wrap select {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  color: var(--adm-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding-right: 1.25rem;
+  appearance: none;
+  text-transform: capitalize;
+  font-family: inherit;
+}
+
+.adm-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--adm-dim);
+  pointer-events: none;
+}
