@@ -75,9 +75,9 @@ const AboutTrust = () => {
             </Link>
           </div>
 
-          {/* Right Column: Visual Proof Grid */}
+          {/* Right Column: Creative Asymmetrical Visual Grid */}
           <div className="ab-visual-col">
-            {/* Main Office Image with overlay badge */}
+            {/* Main Office Image with overlay reveal */}
             <div className="ab-media-frame main-frame">
               <img
                 src={aboutContent.office_image || fallbackOfficeImage}
@@ -85,9 +85,14 @@ const AboutTrust = () => {
                 className="ab-img-zoom"
                 loading="lazy"
               />
-              <div className="ab-media-badge">
-                <Building2 size={14} />
-                <span>{aboutContent.office_caption || 'Remote-ready creative operations for international clients'}</span>
+              <div className="ab-media-overlay">
+                <div className="ab-media-info">
+                  <Building2 size={32} className="ab-overlay-icon" />
+                  <span className="ab-overlay-kicker">CREATIVE OPERATIONS</span>
+                  <h3 className="ab-overlay-title">
+                    {aboutContent.office_caption || 'Remote-ready creative operations for international clients'}
+                  </h3>
+                </div>
               </div>
             </div>
 
@@ -100,9 +105,14 @@ const AboutTrust = () => {
                   className="ab-img-zoom"
                   loading="lazy"
                 />
-                <div className="ab-media-badge sm">
-                  <UsersRound size={12} />
-                  <span>{aboutContent.team_caption || 'Team production sprint'}</span>
+                <div className="ab-media-overlay">
+                  <div className="ab-media-info">
+                    <UsersRound size={28} className="ab-overlay-icon" />
+                    <span className="ab-overlay-kicker">PRODUCTION SPRINT</span>
+                    <h3 className="ab-overlay-title sm">
+                      {aboutContent.team_caption || 'Team production sprint'}
+                    </h3>
+                  </div>
                 </div>
               </div>
               <div className="ab-media-frame">
@@ -112,9 +122,14 @@ const AboutTrust = () => {
                   className="ab-img-zoom"
                   loading="lazy"
                 />
-                <div className="ab-media-badge sm">
-                  <Video size={12} />
-                  <span>{aboutContent.meeting_caption || 'Online client review'}</span>
+                <div className="ab-media-overlay">
+                  <div className="ab-media-info">
+                    <Video size={28} className="ab-overlay-icon" />
+                    <span className="ab-overlay-kicker">CLIENT CONNECT</span>
+                    <h3 className="ab-overlay-title sm">
+                      {aboutContent.meeting_caption || 'Online client review'}
+                    </h3>
+                  </div>
                 </div>
               </div>
             </div>
@@ -267,78 +282,119 @@ const AboutTrust = () => {
           transform: translateX(4px);
         }
 
-        /* Right Col (Visual Proof Grid) */
+                /* Right Col (Visual Proof Grid) */
         .ab-visual-col {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.5rem;
         }
         .ab-media-frame {
           position: relative;
-          border-radius: 24px;
           overflow: hidden;
-          border: 1.5px solid #EBEBF0;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+          border: 1.5px solid var(--border-soft, #EBEBF0);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .main-frame {
+          border-radius: 48px 16px 48px 16px;
+        }
+        .ab-split-gallery .ab-media-frame:first-child {
+          border-radius: 16px 40px 16px 40px;
+        }
+        .ab-split-gallery .ab-media-frame:last-child {
+          border-radius: 40px 16px 40px 16px;
+        }
+        
         .ab-media-frame img {
           width: 100%;
           display: block;
           object-fit: cover;
-          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .ab-media-frame:hover .ab-img-zoom {
-          transform: scale(1.04);
+        .ab-media-frame:hover {
+          border-color: rgba(232, 25, 44, 0.35) !important;
+          box-shadow: 0 20px 45px rgba(232, 25, 44, 0.08), var(--shadow-md);
+          transform: translateY(-4px);
+        }
+        .ab-media-frame:hover img {
+          transform: scale(1.08) rotate(1.2deg);
         }
         .main-frame img {
-          height: 280px;
+          height: 310px;
         }
         
-        /* Floating Glass Badge */
-        .ab-media-badge {
+        /* Modern Text Reveal Overlay */
+        .ab-media-overlay {
           position: absolute;
-          bottom: 1.25rem;
-          left: 1.25rem;
-          right: 1.25rem;
-          background: rgba(255, 255, 255, 0.82);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1.5px solid rgba(255, 255, 255, 0.4);
-          border-radius: 14px;
-          padding: 0.75rem 1rem;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            rgba(6, 6, 8, 0.92) 0%,
+            rgba(6, 6, 8, 0.6) 60%,
+            rgba(6, 6, 8, 0.3) 100%
+          );
           display: flex;
           align-items: center;
+          justify-content: center;
+          padding: 2.25rem;
+          opacity: 0;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: 2;
+        }
+        .ab-media-frame:hover .ab-media-overlay {
+          opacity: 1;
+        }
+        
+        .ab-media-info {
+          text-align: center;
+          transform: translateY(24px);
+          transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           gap: 0.5rem;
-          font-size: 0.8rem;
-          font-weight: 700;
-          color: var(--ink, #0F0F12);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+          color: white;
+          max-width: 320px;
         }
-        .ab-media-badge.sm {
-          padding: 0.55rem 0.85rem;
-          font-size: 0.72rem;
-          border-radius: 10px;
-          bottom: 0.85rem;
-          left: 0.85rem;
-          right: 0.85rem;
+        .ab-media-frame:hover .ab-media-info {
+          transform: translateY(0);
         }
-        .ab-media-badge svg {
+        
+        .ab-overlay-icon {
           color: var(--brand-red, #E8192C);
-          flex-shrink: 0;
+          margin-bottom: 0.5rem;
+          filter: drop-shadow(0 4px 8px rgba(232,25,44,0.3));
         }
-        .ab-media-badge span {
-          line-height: 1.3;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .ab-overlay-kicker {
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.15em;
+          color: var(--brand-red, #E8192C);
+          text-transform: uppercase;
+        }
+        .ab-overlay-title {
+          font-size: clamp(1.4rem, 2.5vw, 1.85rem) !important;
+          font-weight: 900 !important;
+          line-height: 1.18 !important;
+          letter-spacing: -0.02em !important;
+          color: white !important;
+          margin: 0 !important;
+        }
+        .ab-overlay-title.sm {
+          font-size: clamp(1rem, 1.8vw, 1.25rem) !important;
+          line-height: 1.25 !important;
+          letter-spacing: -0.01em !important;
         }
 
         .ab-split-gallery {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1.25rem;
+          gap: 1.5rem;
         }
         .ab-split-gallery img {
-          height: 170px;
+          height: 190px;
         }
 
         /* Delivery Model Card */
