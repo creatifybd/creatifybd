@@ -394,9 +394,23 @@ const ServiceCategoryPage = () => {
         .category-hero {
           padding: 8rem 2rem 5rem;
           text-align: center;
-          background: #0f0f0f;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          background: #060608;
+          border-bottom: 1px solid rgba(232, 25, 44, 0.15);
+          position: relative;
+          overflow: hidden;
         }
+        .category-hero::before {
+          content: '';
+          position: absolute;
+          width: 900px; height: 700px;
+          border-radius: 50%;
+          top: -250px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .category-hero .hero-container-inner { position: relative; z-index: 1; }
 
         .hero-container-inner {
           max-width: 800px;
@@ -446,8 +460,21 @@ const ServiceCategoryPage = () => {
 
         .category-benefits-section {
           padding: 6rem 2rem;
-          background: #0b0b0b;
+          background: #060608;
+          position: relative;
+          overflow: hidden;
         }
+        .category-benefits-section::before {
+          content: '';
+          position: absolute;
+          width: 700px; height: 600px;
+          border-radius: 50%;
+          top: -150px; right: -100px;
+          background: radial-gradient(circle, rgba(232,25,44,0.14) 0%, transparent 65%);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .category-benefits-section > div { position: relative; z-index: 1; }
 
         .benefits-grid {
           display: grid;
@@ -503,11 +530,22 @@ const ServiceCategoryPage = () => {
         }
 
         .mock-dash-box {
-          background: #161616;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: #0c0c10;
+          border: 1px solid rgba(232, 25, 44, 0.18);
           padding: 2rem;
           border-radius: 16px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 40px rgba(232,25,44,0.06);
+          position: relative;
+          overflow: hidden;
+        }
+        .mock-dash-box::before {
+          content: '';
+          position: absolute;
+          width: 200px; height: 200px;
+          border-radius: 50%;
+          top: -60px; right: -30px;
+          background: radial-gradient(circle, rgba(232,25,44,0.15) 0%, transparent 65%);
+          pointer-events: none;
         }
 
         .mock-dash-box .badge {
@@ -561,12 +599,22 @@ const ServiceCategoryPage = () => {
         }
 
         .process-step-card {
-          background: #161616;
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: #060608;
+          border: 1px solid rgba(232, 25, 44, 0.12);
           border-radius: 12px;
           padding: 2.5rem 2rem;
           position: relative;
-          transition: border-color 0.2s;
+          transition: border-color 0.25s, box-shadow 0.25s;
+          overflow: hidden;
+        }
+        .process-step-card::before {
+          content: '';
+          position: absolute;
+          width: 200px; height: 200px;
+          border-radius: 50%;
+          top: -70px; right: -30px;
+          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
+          pointer-events: none;
         }
 
         .process-step-card:hover {

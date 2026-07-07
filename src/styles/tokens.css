@@ -172,11 +172,11 @@
    ═══════════════════════════════════════════════════════════════ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --surface:        #0f0f12;
-    --surface-soft:   #1a1a20;
-    --surface-muted:  #252530;
-    --surface-card:   #1e1e26;
-    --surface-hover:  #252530;
+    --surface:        #060608;
+    --surface-soft:   #0b0b0e;
+    --surface-muted:  #14141a;
+    --surface-card:   #101015;
+    --surface-hover:  #14141a;
     --ink:            #f0f0f5;
     --ink-soft:       #c8c8d8;
     --muted:          #8b8fa8;
@@ -200,11 +200,11 @@
 
 /* Manual dark mode toggle */
 [data-theme="dark"] {
-  --surface:        #0f0f12;
-  --surface-soft:   #1a1a20;
-  --surface-muted:  #252530;
-  --surface-card:   #1e1e26;
-  --surface-hover:  #252530;
+  --surface:        #060608;
+  --surface-soft:   #0b0b0e;
+  --surface-muted:  #14141a;
+  --surface-card:   #101015;
+  --surface-hover:  #14141a;
   --ink:            #f0f0f5;
   --ink-soft:       #c8c8d8;
   --muted:          #8b8fa8;

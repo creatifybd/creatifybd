@@ -161,11 +161,37 @@
   /* New component classes */
   .cs-section { background: var(--surface-soft) !important; }
   .tm-section  { background: var(--surface-card) !important; }
-  /* CTABand is dark — don't override its background */
-  .ctab-section { background: #0a0a0f !important; }
+  /* CTABand is dark — keep its dark background and glow treatment */
+  .ctab-section { background: #060608 !important; }
+  /* StatsCounter dark section */
+  .sc-section { background: #060608 !important; }
 
-  /* ─── FOOTER COMPLETE OVERRIDE ─── */
-  footer, footer.footer-v2                   { background: var(--surface-soft) !important; border-top: 1px solid var(--border-soft) !important; }
+  /* ─── PREMIUM DARK SECTIONS: reddish gradient glow treatment ─── */
+  /* Applied to every explicitly dark section using ::before pseudo overlay */
+  .ctab-section,
+  .sc-section {
+    position: relative !important;
+  }
+
+  /* ─── FOOTER COMPLETE OVERRIDE — deep dark with red glow ─── */
+  footer, footer.footer-v2 {
+    background: #060608 !important;
+    border-top: 1px solid rgba(232,25,44,0.15) !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+  footer.footer-v2::before {
+    content: '';
+    position: absolute;
+    width: 900px; height: 600px;
+    border-radius: 50%;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(232,25,44,0.14) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  footer.footer-v2 .container { position: relative; z-index: 1; }
   .footer-v2 .footer-brand-mark span,
   .footer-v2 .footer-brand-mark strong,
   .footer-v2 h4, .footer-v2 .footer-col-title { color: var(--ink) !important; }

@@ -68,6 +68,10 @@ const StatsCounter = () => {
 
   return (
     <section className="sc-section" ref={ref} aria-label="Company statistics">
+      <div className="sc-bg" aria-hidden="true">
+        <div className="sc-glow-a" />
+        <div className="sc-glow-b" />
+      </div>
       <div className="container">
         <div className="sc-grid" role="list">
           {STATS.map((stat, i) => (
@@ -79,17 +83,29 @@ const StatsCounter = () => {
       <style>{`
         .sc-section {
           padding: 5rem 0;
-          background: linear-gradient(135deg, var(--surface-dark, #0a0a0f) 0%, var(--surface-dark-secondary, #1a1a20) 50%, var(--surface-dark, #0a0a0f) 100%);
+          background: var(--surface-dark, #0a0a0f);
           position: relative;
           overflow: hidden;
         }
-        .sc-section::before {
-          content: '';
+        .sc-bg {
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at 20% 50%, rgba(232,25,44,0.15) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 50%, rgba(232,25,44,0.1) 0%, transparent 50%);
           pointer-events: none;
+        }
+        .sc-glow-a {
+          position: absolute;
+          width: 800px; height: 800px;
+          border-radius: 50%;
+          top: -200px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
+        }
+        .sc-glow-b {
+          position: absolute;
+          width: 400px; height: 400px;
+          border-radius: 50%;
+          bottom: -100px; right: 10%;
+          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
         }
         .sc-grid {
           display: grid;

@@ -67,19 +67,36 @@ const PackageTabs = ({ packages = {}, onSelect }) => {
 
       <style>{`
         .package-tabs-card {
-          background: #161616;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: #060608;
+          border: 1px solid rgba(232, 25, 44, 0.15);
           border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 60px rgba(232,25,44,0.06);
           width: 100%;
+          position: relative;
+        }
+        .package-tabs-card::before {
+          content: '';
+          position: absolute;
+          width: 400px; height: 400px;
+          border-radius: 50%;
+          top: -120px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(circle, rgba(232,25,44,0.18) 0%, transparent 65%);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .tabs-header,
+        .package-details-pane {
+          position: relative;
+          z-index: 1;
         }
 
         .tabs-header {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          background: var(--surface-soft);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          background: rgba(255,255,255,0.03);
+          border-bottom: 1px solid rgba(232,25,44,0.12);
         }
 
         .tab-btn {
@@ -100,7 +117,7 @@ const PackageTabs = ({ packages = {}, onSelect }) => {
 
         .tab-btn.active {
           color: var(--red);
-          background: #161616;
+          background: rgba(232,25,44,0.07);
         }
 
         .tab-btn.active::after {

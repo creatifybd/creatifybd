@@ -123,8 +123,8 @@ const OrderSuccessPage = () => {
 
       <style>{`
         .success-content-card {
-          background: #161616;
-          border: 1px solid rgba(255,255,255,0.08);
+          background: #060608;
+          border: 1px solid rgba(232,25,44,0.18);
           border-radius: 20px;
           padding: 4rem 3rem;
           max-width: 600px;
@@ -133,8 +133,22 @@ const OrderSuccessPage = () => {
           flex-direction: column;
           align-items: center;
           text-align: center;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 60px rgba(232,25,44,0.06);
+          position: relative;
+          overflow: hidden;
         }
+        .success-content-card::before {
+          content: '';
+          position: absolute;
+          width: 500px; height: 500px;
+          border-radius: 50%;
+          top: -200px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(circle, rgba(232,25,44,0.18) 0%, transparent 65%);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .success-content-card > * { position: relative; z-index: 1; }
 
         @media (max-width: 600px) {
           .success-content-card {

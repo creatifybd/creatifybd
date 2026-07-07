@@ -389,7 +389,9 @@ const OrderStartPage = () => {
       <style>{`
         .order-flow-layout { display: grid; grid-template-columns: 1fr 360px; gap: 3.5rem; max-width: 1200px; margin: 0 auto; align-items: start; }
         @media (max-width: 968px) { .order-flow-layout { grid-template-columns: 1fr; } .order-summary-column { order: -1; } }
-        .order-form-card { background: #161616; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 3rem; }
+        .order-form-card { background: #060608; border: 1px solid rgba(232,25,44,0.15); border-radius: 16px; padding: 3rem; position: relative; overflow: hidden; }
+        .order-form-card::before { content: ''; position: absolute; width: 700px; height: 600px; border-radius: 50%; top: -200px; left: 50%; transform: translateX(-50%); background: radial-gradient(circle, rgba(232,25,44,0.16) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+        .order-form-card > * { position: relative; z-index: 1; }
         @media (max-width: 600px) { .order-form-card { padding: 1.5rem; } }
         .form-title { font-size: 2rem; font-weight: 900; color: white; margin-bottom: 0.5rem; }
         .form-sub-intro { color: #777; font-size: 0.95rem; margin-bottom: 3rem; line-height: 1.5; }
@@ -408,7 +410,9 @@ const OrderStartPage = () => {
         .file-upload-label span { font-size: 0.85rem; }
         .file-upload-label:hover { border-color: var(--red); color: var(--red); }
         .onboarding-notice { font-size: 0.75rem; color: #666; line-height: 1.5; text-align: center; margin-top: 1.5rem; }
-        .order-summary-sidebar { background: #161616; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; position: sticky; top: 110px; }
+        .order-summary-sidebar { background: #060608; border: 1px solid rgba(232,25,44,0.15); border-radius: 16px; padding: 2rem; position: sticky; top: 110px; box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px rgba(232,25,44,0.06); position: relative; overflow: hidden; }
+        .order-summary-sidebar::before { content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%; top: -80px; right: -50px; background: radial-gradient(circle, rgba(232,25,44,0.16) 0%, transparent 65%); pointer-events: none; z-index: 0; }
+        .order-summary-sidebar > * { position: relative; z-index: 1; }
         .sidebar-h { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 1.5rem; }
         .summary-service-box { display: flex; gap: 1rem; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem; }
         .service-thumb-mini { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; background: #222; }
