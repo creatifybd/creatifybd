@@ -134,6 +134,7 @@ function Lightbox({ item, onClose, onPrev, onNext, hasPrev, hasNext }) {
         exit={{ scale: 0.97, opacity: 0, y: 16 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="pf-lb-content"
+        data-lenis-prevent
       >
         <div className="pf-lb-visual">
           <OptimizedImage
