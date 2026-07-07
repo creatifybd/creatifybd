@@ -59,14 +59,14 @@ function ScrollToTop() {
 }
 
 const pageVariants = {
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 20, scale: 0.99 },
   animate: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    opacity: 1, y: 0, scale: 1,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
   },
   exit: {
-    opacity: 0, y: -12,
-    transition: { duration: 0.28, ease: [0.76, 0, 0.24, 1] },
+    opacity: 0, y: -10, scale: 0.994,
+    transition: { duration: 0.3, ease: [0.76, 0, 0.24, 1] },
   },
 };
 
@@ -171,10 +171,14 @@ function AppContent() {
 
   return (
     <>
-      {loading && <Preloader onComplete={() => {
-        sessionStorage.setItem('creatify-preloaded', 'true');
-        setLoading(false);
-      }} />}
+      <AnimatePresence>
+        {loading && (
+          <Preloader onComplete={() => {
+            sessionStorage.setItem('creatify-preloaded', 'true');
+            setLoading(false);
+          }} />
+        )}
+      </AnimatePresence>
       <ScrollProgress />
       <ScrollToTop />
       <WhatsAppButton />
