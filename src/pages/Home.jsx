@@ -90,12 +90,6 @@ const Home = () => {
         {/* 1 — Stats counter strip */}
         <StatsCounter />
 
-        {/* 1b — Credentials strip */}
-        <FeaturedIn />
-
-        {/* 2 — Client trust logos */}
-        {content?.visibility?.clients !== false && <Clients />}
-
         {/* 3 — Services editorial list — what we do first */}
         {content?.visibility?.services !== false && (
           <Services highlight={true} theme={content?.services?.theme} />
