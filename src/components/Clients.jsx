@@ -1,40 +1,63 @@
 import React from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { motion } from 'framer-motion';
+import { Globe } from 'lucide-react';
 
-/* Premium styled brand logos — displayed as pill badges with initials + color identity */
-const DEFAULT_BRANDS = [
-  { name: 'Aurevia',       abbr: 'AV', color: '#c084fc', bg: '#f5f3ff' },
-  { name: 'NexoPay',       abbr: 'NX', color: '#3b82f6', bg: '#eff6ff' },
-  { name: 'Harbor & Pine', abbr: 'HP', color: '#0d9488', bg: '#f0fdfa' },
-  { name: 'NovaGrid',      abbr: 'NG', color: '#e8192c', bg: '#fff1f2' },
-  { name: 'Petello',       abbr: 'PE', color: '#f59e0b', bg: '#fffbeb' },
-  { name: 'Solenne',       abbr: 'SO', color: '#ec4899', bg: '#fdf2f8' },
-  { name: 'ByteWave',      abbr: 'BW', color: '#6366f1', bg: '#eef2ff' },
-  { name: 'Brasa Fire',    abbr: 'BF', color: '#f97316', bg: '#fff7ed' },
-  { name: 'EduBridge',     abbr: 'EB', color: '#22c55e', bg: '#f0fdf4' },
-  { name: 'Summit Fit',    abbr: 'SF', color: '#14b8a6', bg: '#f0fdfa' },
-  { name: 'CraftNest',     abbr: 'CN', color: '#a855f7', bg: '#faf5ff' },
-  { name: 'Riverside Co',  abbr: 'RC', color: '#0ea5e9', bg: '#f0f9ff' },
+const EASE_EXPO = [0.16, 1, 0.3, 1];
+
+/* Brand palette — colorful identity chips */
+const PALETTE = [
+  { color: '#c084fc', bg: '#faf5ff' },
+  { color: '#3b82f6', bg: '#eff6ff' },
+  { color: '#0d9488', bg: '#f0fdfa' },
+  { color: '#e8192c', bg: '#fff1f2' },
+  { color: '#f59e0b', bg: '#fffbeb' },
+  { color: '#ec4899', bg: '#fdf2f8' },
+  { color: '#6366f1', bg: '#eef2ff' },
+  { color: '#f97316', bg: '#fff7ed' },
+  { color: '#22c55e', bg: '#f0fdf4' },
+  { color: '#14b8a6', bg: '#f0fdfa' },
+  { color: '#a855f7', bg: '#faf5ff' },
+  { color: '#0ea5e9', bg: '#f0f9ff' },
 ];
 
-const BrandLogo = ({ brand }) => (
-  <div className="cl-brand-pill">
-    <span
-      className="cl-brand-abbr"
-      style={{ color: brand.color, background: brand.bg }}
+const DEFAULT_BRANDS = [
+  { name: 'Aurevia',       abbr: 'AV' },
+  { name: 'NexoPay',       abbr: 'NX' },
+  { name: 'Harbor & Pine', abbr: 'HP' },
+  { name: 'NovaGrid',      abbr: 'NG' },
+  { name: 'Petello',       abbr: 'PE' },
+  { name: 'Solenne',       abbr: 'SO' },
+  { name: 'ByteWave',      abbr: 'BW' },
+  { name: 'Brasa Fire',    abbr: 'BF' },
+  { name: 'EduBridge',     abbr: 'EB' },
+  { name: 'Summit Fit',    abbr: 'SF' },
+  { name: 'CraftNest',     abbr: 'CN' },
+  { name: 'Riverside Co',  abbr: 'RC' },
+];
+
+const BrandChip = ({ brand, idx }) => {
+  const pal = PALETTE[idx % PALETTE.length];
+  return (
+    <div
+      className="cl-chip"
+      style={{ '--cl-color': pal.color, '--cl-bg': pal.bg }}
     >
-      {brand.abbr}
-    </span>
-    <span className="cl-brand-name">{brand.name}</span>
-  </div>
-);
+      <span
+        className="cl-chip-abbr"
+        style={{ color: pal.color, background: pal.bg }}
+      >
+        {brand.abbr}
+      </span>
+      <span className="cl-chip-name">{brand.name}</span>
+    </div>
+  );
+};
 
 const Clients = () => {
   const { content } = useSettings();
   const clientsContent = content?.clients || {};
 
-  /* Parse custom client list if provided, otherwise use defaults */
   const brands = (() => {
     if (clientsContent.brands && Array.isArray(clientsContent.brands)) {
       return clientsContent.brands;
@@ -47,171 +70,171 @@ const Clients = () => {
       return names.map((name, i) => ({
         name,
         abbr: name.slice(0, 2).toUpperCase(),
-        color: DEFAULT_BRANDS[i % DEFAULT_BRANDS.length].color,
-        bg:    DEFAULT_BRANDS[i % DEFAULT_BRANDS.length].bg,
       }));
     }
     return DEFAULT_BRANDS;
   })();
 
-  /* Duplicate for seamless scroll */
   const track = [...brands, ...brands, ...brands];
 
   return (
-    <section className="clients-section-v2" aria-label="Trusted by global brands">
-      <div className="cl-inner">
-        <motion.p
-          className="cl-label"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Trusted by brands across the US, Canada & Australia
-        </motion.p>
+    <section className="cl2-section" aria-label="Trusted by global brands">
+      {/* Header */}
+      <motion.div
+        className="cl2-header"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE_EXPO }}
+      >
+        <div className="cl2-title-row">
+          <Globe size={16} className="cl2-globe" aria-hidden="true" />
+          <p className="cl2-label">Trusted by brands across the US, Canada &amp; Australia</p>
+        </div>
+        <div className="cl2-count-row">
+          <span className="cl2-count">100<span className="cl2-plus">+</span></span>
+          <span className="cl2-count-label">brands served worldwide</span>
+        </div>
+      </motion.div>
 
-        <div className="cl-marquee-wrap">
-          <div className="cl-marquee-track">
-            {track.map((brand, i) => (
-              <BrandLogo key={`${brand.name}-${i}`} brand={brand} />
-            ))}
-          </div>
+      {/* Marquee */}
+      <div className="cl2-marquee-wrap" aria-hidden="true">
+        <div className="cl2-marquee-track">
+          {track.map((brand, i) => (
+            <BrandChip key={`${brand.name}-${i}`} brand={brand} idx={i} />
+          ))}
         </div>
       </div>
 
       <style>{`
-        .clients-section-v2 {
-          padding: 5rem 0 4rem;
+        .cl2-section {
+          padding: 5rem 0;
           background: var(--surface-soft, #FFFBFB);
-          border-top: 1px solid var(--border-soft, rgba(232,25,44,0.06));
-          border-bottom: 1px solid var(--border-soft, rgba(232,25,44,0.06));
+          border-bottom: 1px solid var(--border-soft, rgba(0,0,0,0.06));
           overflow: hidden;
           position: relative;
         }
-        .clients-section-v2::before {
+        .cl2-section::before {
           content: '';
           position: absolute;
-          top: 50%;
-          left: 50%;
+          top: 50%; left: 50%;
           transform: translate(-50%, -50%);
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(circle, rgba(232,25,44,0.03) 0%, transparent 70%);
+          width: 700px; height: 700px;
+          background: radial-gradient(circle, rgba(232,25,44,0.025) 0%, transparent 70%);
           pointer-events: none;
         }
-        .cl-inner {
+        .cl2-header {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 2.5rem;
+          gap: 0.75rem;
+          margin-bottom: 2.5rem;
           position: relative;
           z-index: 1;
         }
-        .cl-label {
-          font-size: 0.72rem;
+        .cl2-title-row {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .cl2-globe { color: var(--brand-red, #E8192C); }
+        .cl2-label {
+          font-size: 0.7rem;
           font-weight: 800;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: var(--muted, #9ca3af);
-          text-align: center;
-          max-width: 600px;
-          line-height: 1.5;
+          color: var(--muted, #9CA3AF);
+          margin: 0;
+        }
+        .cl2-count-row {
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+        }
+        .cl2-count {
+          font-size: 2.5rem;
+          font-weight: 900;
+          color: var(--ink, #0F0F12);
+          letter-spacing: -0.04em;
+          line-height: 1;
+        }
+        .cl2-plus {
+          color: var(--brand-red, #E8192C);
+        }
+        .cl2-count-label {
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: var(--muted, #6B7280);
+          letter-spacing: -0.01em;
         }
 
         /* Marquee */
-        .cl-marquee-wrap {
+        .cl2-marquee-wrap {
           width: 100%;
           overflow: hidden;
-          -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+          -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
         }
-        .cl-marquee-track {
+        .cl2-marquee-track {
           display: flex;
-          gap: 1.5rem;
+          align-items: center;
+          gap: 0.85rem;
           width: max-content;
-          animation: cl-scroll 40s linear infinite;
+          animation: cl2-scroll 42s linear infinite;
         }
-        .cl-marquee-track:hover { animation-play-state: paused; }
-        @keyframes cl-scroll {
+        .cl2-marquee-track:hover { animation-play-state: paused; }
+        @keyframes cl2-scroll {
           from { transform: translateX(0); }
           to   { transform: translateX(-33.333%); }
         }
 
-        /* Brand pill */
-        .cl-brand-pill {
+        /* Chip */
+        .cl-chip {
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1.4rem 0.75rem 0.75rem;
+          gap: 0.6rem;
+          padding: 0.6rem 1.1rem 0.6rem 0.6rem;
           background: #fff;
-          border: 1.5px solid var(--border-card, #e5e7eb);
-          border-radius: 16px;
-          white-space: nowrap;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1.5px solid rgba(0,0,0,0.07);
+          border-radius: 14px;
           flex-shrink: 0;
-          position: relative;
-          overflow: hidden;
+          white-space: nowrap;
+          cursor: default;
+          transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .cl-brand-pill::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, transparent 50%);
-          pointer-events: none;
-        }
-        .cl-brand-pill:hover {
-          box-shadow: 0 8px 28px rgba(0,0,0,0.12);
-          border-color: var(--brand-red, #E8192C);
+        .cl-chip:hover {
+          border-color: var(--cl-color);
           transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
-        .cl-brand-abbr {
+        .cl-chip-abbr {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 36px; height: 36px;
+          width: 34px;
+          height: 34px;
           border-radius: 10px;
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 900;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.01em;
           flex-shrink: 0;
-          position: relative;
-          z-index: 1;
         }
-        .cl-brand-name {
-          font-size: 0.88rem;
+        .cl-chip-name {
+          font-size: 0.87rem;
           font-weight: 700;
           color: var(--ink, #0F0F12);
           letter-spacing: -0.02em;
-          position: relative;
-          z-index: 1;
         }
 
-        @media (max-width: 768px) {
-          .clients-section-v2 {
-            padding: 3.5rem 0 3rem;
-          }
-          .cl-inner {
-            gap: 2rem;
-          }
-          .cl-label {
-            font-size: 0.68rem;
-            padding: 0 1rem;
-          }
-          .cl-marquee-track {
-            gap: 1rem;
-          }
-          .cl-brand-pill {
-            padding: 0.6rem 1.1rem 0.6rem 0.6rem;
-            gap: 0.6rem;
-          }
-          .cl-brand-abbr {
-            width: 32px; height: 32px;
-            font-size: 0.68rem;
-          }
-          .cl-brand-name {
-            font-size: 0.82rem;
-          }
+        @media (max-width: 640px) {
+          .cl2-section { padding: 3.5rem 0; }
+          .cl2-header { gap: 0.5rem; margin-bottom: 2rem; }
+          .cl2-count { font-size: 2rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cl2-marquee-track { animation: none; }
+          .cl-chip:hover { transform: none; }
         }
       `}</style>
     </section>

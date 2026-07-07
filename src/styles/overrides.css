@@ -847,8 +847,8 @@
   /* ─── MOBILE CONTAINER PADDING ─── */
   @media (max-width: 768px) {
     .container {
-      padding-left: 1rem !important;
-      padding-right: 1rem !important;
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
     }
   }
 
@@ -2826,7 +2826,7 @@
     body:not(.admin-body) .container {
       width: 100% !important;
       max-width: 100% !important;
-      padding-inline: 16px !important;
+      padding-inline: 20px !important;
     }
 
     body:not(.admin-body) :is(h1, h2, h3, h4, p, a, button, label, span) {
@@ -2998,6 +2998,8 @@
     body:not(.admin-body) .contact-premium-section {
       padding-top: 92px !important;
       padding-bottom: 64px !important;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
     }
 
     body:not(.admin-body) .contact-grid-wrap {
@@ -3031,7 +3033,7 @@
     }
 
     body:not(.admin-body) footer.footer-v2 {
-      padding: 56px 0 28px !important;
+      padding: 56px 20px 28px !important;
     }
 
     body:not(.admin-body) .footer-top {

@@ -1,315 +1,297 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Repeat, 
-  X, 
-  RotateCcw, 
-  Zap, 
-  UserCheck, 
-  Award, 
-  LayoutGrid, 
-  FileCode,
-  Users
+import {
+  Repeat, RotateCcw, Zap, UserCheck, LayoutGrid, FileCode,
 } from 'lucide-react';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
-const WHY_CARDS = [
+const FEATURES = [
   {
-    id: 'flexibility',
-    bg: '#FEF3D8',
+    num: '01',
+    accent: '#E8192C',
+    icon: <Repeat size={20} />,
+    title: 'Unlimited Revisions',
+    desc: 'We revise until you\'re 100% satisfied — no round limit, no extra charge.',
+  },
+  {
+    num: '02',
     accent: '#F59E0B',
-    title: 'Flexibility & Peace of Mind',
-    image: null,
-    items: [
-      { icon: <Repeat size={18} />, title: 'Unlimited Revisions', desc: 'We revise until you\'re 100% satisfied — no limit on rounds.' },
-      { icon: <X size={18} />, title: 'Cancel Anytime', desc: 'No lock-in contracts. Pause or cancel your subscription whenever you need.' },
-      { icon: <RotateCcw size={18} />, title: '7-Day Money-Back Guarantee', desc: 'Not happy in the first week? Get a full refund, no questions asked.' },
-      { icon: <Users size={18} />, title: 'Dedicated Account Manager', desc: 'One point of contact who knows your brand, your style, and your goals.' },
-    ],
+    icon: <Zap size={20} />,
+    title: '48-Hour First Delivery',
+    desc: 'First drafts land in your inbox within 48 business hours of kickoff.',
   },
   {
-    id: 'quality',
-    bg: '#E8F5E9',
+    num: '03',
     accent: '#22C55E',
-    title: 'Speed & Professional Quality',
-    image: null,
-    items: [
-      { icon: <Zap size={18} />, title: '48-Hour First Delivery', desc: 'First drafts land in your inbox within 48 business hours of project start.' },
-      { icon: <UserCheck size={18} />, title: 'Senior-Level Creatives', desc: 'Every project is handled by experienced designers and social media strategists.' },
-      { icon: <Award size={18} />, title: 'Quality-Reviewed Output', desc: 'Senior review on every delivery before it reaches you — zero unfinished work.' },
-    ],
+    icon: <UserCheck size={20} />,
+    title: 'Senior-Level Creatives',
+    desc: 'Every project is handled by experienced designers and strategists, not juniors.',
   },
   {
-    id: 'organization',
-    bg: '#EDE9FE',
-    accent: '#7C3AED',
-    title: 'Organization & Full Control',
-    image: null,
-    items: [
-      { icon: <LayoutGrid size={18} />, title: 'Trello Project Management', desc: 'View every task, revision, and delivery in real time on your shared Trello board.' },
-      { icon: <FileCode size={18} />, title: 'Native Source Files Included', desc: 'All original Figma/PSD/AI files delivered with every project — you own everything.' },
-    ],
+    num: '04',
+    accent: '#6366F1',
+    icon: <LayoutGrid size={20} />,
+    title: 'Full Transparency',
+    desc: 'Real-time progress tracking on your shared Trello board — always in the loop.',
+  },
+  {
+    num: '05',
+    accent: '#EC4899',
+    icon: <FileCode size={20} />,
+    title: 'Source Files Included',
+    desc: 'All Figma/PSD/AI source files delivered with every project. You own everything.',
+  },
+  {
+    num: '06',
+    accent: '#14B8A6',
+    icon: <RotateCcw size={20} />,
+    title: '7-Day Money-Back',
+    desc: 'Not happy in the first week? Full refund, no questions asked. Zero risk.',
   },
 ];
 
-const WhyUsSection = () => {
-  const [active, setActive] = useState(0);
+const WhyUsSection = () => (
+  <section className="why-v3-section" aria-labelledby="why-v3-heading">
+    <div className="section-container">
 
-  return (
-    <section className="why-us-section" aria-labelledby="why-us-heading">
-      <div className="section-container">
-        {/* Header */}
-        <motion.div
-          className="why-us-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: EASE_EXPO }}
-        >
-          <div className="section-eyebrow">Why CreatifyBD</div>
-          <h2 id="why-us-heading" className="section-heading">
-            A reliable creative team without<br />
-            <span className="text-red">agency overhead</span>
-          </h2>
-          <p className="section-subtext">
-            We combine structured creative operations with international service standards — dependable output at practical monthly pricing.
-          </p>
-        </motion.div>
+      {/* Header */}
+      <motion.div
+        className="why-v3-header"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, ease: EASE_EXPO }}
+      >
+        <div className="section-eyebrow">Why CreatifyBD</div>
+        <h2 id="why-v3-heading" className="section-heading">
+          A reliable creative team without<br />
+          <span className="text-red">agency overhead</span>
+        </h2>
+        <p className="section-subtext">
+          Structured creative operations, international quality standards,
+          and practical monthly pricing — all under one roof.
+        </p>
+      </motion.div>
 
-        {/* Horizontal Tab Layout */}
-        <div className="why-us-tabs-container">
-          {/* Tab Buttons */}
-          <div className="why-us-tabs" role="tablist" aria-label="Why choose CreatifyBD">
-            {WHY_CARDS.map((card, i) => (
-              <motion.button
-                key={card.id}
-                className={`why-us-tab ${active === i ? 'why-us-tab--active' : ''}`}
-                style={{ '--tab-accent': card.accent }}
-                onClick={() => setActive(i)}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: EASE_EXPO, delay: i * 0.08 }}
-                aria-selected={active === i}
-                role="tab"
-                aria-controls={`panel-${card.id}`}
-                id={`tab-${card.id}`}
-              >
-                <span className="why-us-tab-title">{card.title}</span>
-                <div className="why-us-tab-indicator" />
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Tab Content */}
-          <motion.div
-            className="why-us-content"
-            key={active}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, ease: EASE_EXPO }}
-            role="tabpanel"
-            id={`panel-${WHY_CARDS[active].id}`}
-            aria-labelledby={`tab-${WHY_CARDS[active].id}`}
+      {/* Feature grid */}
+      <div className="why-v3-grid">
+        {FEATURES.map((f, i) => (
+          <motion.article
+            key={f.num}
+            className="why-v3-card"
+            style={{ '--card-accent': f.accent }}
+            initial={{ opacity: 0, y: 36 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.55, ease: EASE_EXPO, delay: i * 0.07 }}
+            aria-label={f.title}
           >
-            <div className="why-us-content-inner" style={{ '--content-bg': WHY_CARDS[active].bg }}>
-              {WHY_CARDS[active].items.map((item, j) => (
-                <motion.div
-                  className="why-us-item"
-                  key={j}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: EASE_EXPO, delay: j * 0.08 }}
-                >
-                  <div className="why-us-item-icon" style={{ color: WHY_CARDS[active].accent }}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div className="why-us-item-title">{item.title}</div>
-                    <div className="why-us-item-desc">{item.desc}</div>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="why-v3-top">
+              <span className="why-v3-num">{f.num}</span>
+              <div
+                className="why-v3-icon"
+                style={{ color: f.accent, background: `${f.accent}1A` }}
+              >
+                {f.icon}
+              </div>
             </div>
-          </motion.div>
-        </div>
+            <h3 className="why-v3-title">{f.title}</h3>
+            <p className="why-v3-desc">{f.desc}</p>
+            <div className="why-v3-accent-line" />
+          </motion.article>
+        ))}
       </div>
 
-      <style>{`
-        .why-us-section {
-          padding: 8rem 0;
-          background: #fff;
-          position: relative;
-          overflow: hidden;
-        }
-        .why-us-section::before {
-          content: '';
-          position: absolute;
-          top: -100px;
-          right: -100px;
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .why-us-section::after {
-          content: '';
-          position: absolute;
-          bottom: -100px;
-          left: -100px;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, rgba(232,25,44,0.03) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .why-us-header {
-          text-align: center;
-          max-width: 720px;
-          margin: 0 auto 5rem;
-          position: relative;
-          z-index: 1;
-        }
-        .why-us-tabs-container {
-          max-width: 1000px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 1;
-        }
-        .why-us-tabs {
-          display: flex;
-          gap: 0.5rem;
-          margin-bottom: 2.5rem;
-          padding: 0.5rem;
-          background: var(--surface-soft, #FFFBFB);
-          border-radius: 16px;
-          border: 1.5px solid var(--border-soft, rgba(232,25,44,0.08));
-        }
-        .why-us-tab {
-          flex: 1;
-          padding: 1.25rem 1.5rem;
-          background: transparent;
-          border: none;
-          border-radius: 12px;
-          cursor: pointer;
-          position: relative;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .why-us-tab-title {
-          font-size: 0.92rem;
-          font-weight: 700;
-          color: var(--muted, #9ca3af);
-          text-align: center;
-          line-height: 1.4;
-        }
-        .why-us-tab--active .why-us-tab-title {
-          color: var(--ink, #0F0F12);
-        }
-        .why-us-tab--active {
-          background: #fff;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-        .why-us-tab:hover:not(.why-us-tab--active) {
-          background: rgba(255,255,255,0.5);
-        }
-        .why-us-content {
-          min-height: 320px;
-        }
-        .why-us-content-inner {
-          background: var(--content-bg, #FEF3D8);
-          border-radius: 24px;
-          padding: 3rem;
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-          position: relative;
-          overflow: hidden;
-        }
-        .why-us-content-inner::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 200px;
-          height: 200px;
-          background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .why-us-item {
-          display: flex;
-          gap: 1.25rem;
-          align-items: flex-start;
-          position: relative;
-          z-index: 1;
-        }
-        .why-us-item-icon {
-          flex-shrink: 0;
-          width: 48px;
-          height: 48px;
-          border-radius: 14px;
-          background: rgba(255,255,255,0.75);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(8px);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .why-us-item-title {
-          font-weight: 700;
-          font-size: 1rem;
-          color: var(--ink, #0F0F12);
-          margin-bottom: 0.4rem;
-          line-height: 1.3;
-        }
-        .why-us-item-desc {
-          font-size: 0.88rem;
-          color: var(--ink-soft, #252A33);
-          line-height: 1.6;
-        }
+      {/* Bottom trust strip */}
+      <motion.div
+        className="why-v3-strip"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.4 }}
+      >
+        {[
+          { val: 'No', label: 'Lock-in contracts' },
+          { val: '24h', label: 'Response guarantee' },
+          { val: '100%', label: 'Scope transparency' },
+          { val: '7-day', label: 'Money-back window' },
+        ].map((s) => (
+          <div className="why-v3-strip-item" key={s.label}>
+            <strong>{s.val}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </motion.div>
+    </div>
 
-        @media (max-width: 768px) {
-          .why-us-section {
-            padding: 6rem 0;
-          }
-          .why-us-header {
-            margin: 0 auto 3rem;
-          }
-          .why-us-tabs {
-            flex-direction: column;
-            gap: 0.35rem;
-          }
-          .why-us-tab {
-            padding: 1rem 1.25rem;
-          }
-          .why-us-tab-title {
-            font-size: 0.88rem;
-          }
-          .why-us-content-inner {
-            padding: 2rem;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-          }
-          .why-us-item {
-            gap: 1rem;
-          }
-          .why-us-item-icon {
-            width: 42px;
-            height: 42px;
-          }
-          .why-us-item-title {
-            font-size: 0.95rem;
-          }
-          .why-us-item-desc {
-            font-size: 0.85rem;
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .why-us-tab { transition: none; }
-          .why-us-tab-indicator { transition: none; }
-        }
-      `}</style>
-    </section>
-  );
-};
+    <style>{`
+      .why-v3-section {
+        padding: 8rem 0;
+        background: var(--surface-light, #FCFCFD);
+        position: relative;
+        overflow: hidden;
+      }
+      .why-v3-section::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.08), transparent);
+        pointer-events: none;
+      }
+      .why-v3-header {
+        text-align: center;
+        max-width: 660px;
+        margin: 0 auto 5rem;
+        position: relative;
+        z-index: 1;
+      }
+      .why-v3-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+      .why-v3-card {
+        position: relative;
+        background: #fff;
+        border: 1.5px solid #EBEBF0;
+        border-radius: 20px;
+        padding: 2rem 1.75rem;
+        overflow: hidden;
+        cursor: default;
+        transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                    box-shadow 0.35s cubic-bezier(0.16,1,0.3,1),
+                    border-color 0.35s;
+      }
+      .why-v3-card::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: var(--card-accent);
+        border-radius: 20px 20px 0 0;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      }
+      .why-v3-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.09);
+        border-color: var(--card-accent);
+      }
+      .why-v3-card:hover::after { transform: scaleX(1); }
+      .why-v3-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+      }
+      .why-v3-num {
+        font-size: 0.7rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        color: #D0D5DD;
+        padding-top: 0.35rem;
+      }
+      .why-v3-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      }
+      .why-v3-card:hover .why-v3-icon { transform: scale(1.1) rotate(-4deg); }
+      .why-v3-title {
+        font-size: 1.02rem;
+        font-weight: 800;
+        color: var(--ink, #0F0F12);
+        line-height: 1.25;
+        margin: 0 0 0.6rem;
+        letter-spacing: -0.022em;
+      }
+      .why-v3-desc {
+        font-size: 0.875rem;
+        color: var(--muted, #6B7280);
+        line-height: 1.7;
+        margin: 0;
+      }
+      .why-v3-accent-line {
+        position: absolute;
+        bottom: 0; left: 0;
+        height: 2px;
+        width: 0%;
+        background: linear-gradient(90deg, var(--card-accent), transparent);
+        transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+      }
+      .why-v3-card:hover .why-v3-accent-line { width: 60%; }
+
+      /* Trust strip */
+      .why-v3-strip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin-top: 4rem;
+        padding: 2rem;
+        background: #fff;
+        border: 1.5px solid #EBEBF0;
+        border-radius: 20px;
+        max-width: 800px;
+        margin-inline: auto;
+        margin-top: 4rem;
+        position: relative;
+        z-index: 1;
+      }
+      .why-v3-strip-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0 1.5rem;
+        border-right: 1px solid #EBEBF0;
+      }
+      .why-v3-strip-item:last-child { border-right: none; }
+      .why-v3-strip-item strong {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--ink, #0F0F12);
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .why-v3-strip-item span {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted, #9CA3AF);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      @media (max-width: 900px) {
+        .why-v3-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        .why-v3-section { padding: 5rem 0; }
+        .why-v3-header { margin-bottom: 3rem; }
+        .why-v3-grid { grid-template-columns: 1fr; gap: 1rem; }
+        .why-v3-card { padding: 1.5rem; }
+        .why-v3-strip { flex-wrap: wrap; gap: 1.5rem; padding: 1.5rem; }
+        .why-v3-strip-item { border-right: none; padding: 0; flex: 0 0 45%; }
+      }
+    `}</style>
+  </section>
+);
 
 export default WhyUsSection;

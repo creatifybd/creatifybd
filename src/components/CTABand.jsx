@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Mail } from 'lucide-react';
+import { ArrowRight, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
+import { renderRichTitle } from '../utils/contentText';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -65,12 +66,15 @@ const CTABand = () => {
               {cta.eyebrow || 'Ready when you are'}
             </div>
             <h2 id="ctab-heading" className="ctab-heading">
-              {cta.title || (
-                <>
-                  Stop patching freelancers.<br />
-                  Get a <span className="ctab-heading-red">dedicated creative team.</span>
-                </>
-              )}
+              {cta.title
+                ? renderRichTitle(cta.title)
+                : (
+                  <>
+                    Stop patching freelancers.<br />
+                    Get a <span className="ctab-heading-red">dedicated creative team.</span>
+                  </>
+                )
+              }
             </h2>
             <p className="ctab-sub">
               {cta.subtitle || 'Tell us your goals — we\'ll recommend the right package, timeline, and first deliverables. No sales calls, no lock-in.'}

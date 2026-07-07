@@ -1,285 +1,235 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
+import { ShieldCheck } from 'lucide-react';
 
-const BADGES = [
-  { 
-    label: 'Fiverr Pro', 
+const EASE_EXPO = [0.16, 1, 0.3, 1];
+
+/* Platform trust items */
+const ITEMS = [
+  {
+    name: 'Fiverr Pro',
+    detail: 'Verified Seller',
+    color: '#1DBF73',
+    bg: '#F0FDF4',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16.5V7.5L16 12L10 16.5Z" fill="#1dbf73"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#1DBF73"/>
+        <path d="M8 17h9m0 0V9m0 8 5-5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="22" cy="10" r="1.5" fill="#fff"/>
       </svg>
-    ), 
-    color: '#1dbf73', 
-    bg: '#f0fdf4' 
+    ),
   },
-  { 
-    label: 'Google ⭐ 4.9', 
+  {
+    name: 'Google',
+    detail: '4.9 ★ Rating',
+    color: '#4285F4',
+    bg: '#EFF6FF',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#fff" stroke="#E5E7EB"/>
+        <path d="M26 16.2c0-.7-.06-1.37-.18-2.02H16v3.83h5.61c-.24 1.26-.98 2.33-2.09 3.04v2.53h3.38C24.87 21.72 26 19.17 26 16.2z" fill="#4285F4"/>
+        <path d="M16 26c2.81 0 5.16-.93 6.88-2.52l-3.38-2.53c-.93.63-2.12 1-3.5 1-2.69 0-4.97-1.82-5.78-4.26H6.72v2.6C8.44 23.52 11.97 26 16 26z" fill="#34A853"/>
+        <path d="M10.22 17.69A6.08 6.08 0 0 1 9.88 16c0-.59.1-1.16.28-1.69V11.7H6.72A9.99 9.99 0 0 0 6 16c0 1.62.39 3.14 1.07 4.47l3.15-2.78z" fill="#FBBC04"/>
+        <path d="M16 9.74c1.52 0 2.89.52 3.96 1.55l2.97-2.97C21.15 6.71 18.8 5.74 16 5.74c-4.03 0-7.56 2.48-9.28 6.06l3.5 2.7C11.03 11.56 13.31 9.74 16 9.74z" fill="#EA4335"/>
       </svg>
-    ), 
-    color: '#4285f4', 
-    bg: '#eff6ff' 
+    ),
   },
-  { 
-    label: 'Clutch Verified', 
+  {
+    name: 'Clutch',
+    detail: 'Top Agency',
+    color: '#E8192C',
+    bg: '#FFF1F2',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#e8192c"/>
-        <path d="M2 17L12 22L22 17V7L12 12L2 7V17Z" fill="#c41024"/>
-        <path d="M12 12V22" stroke="#fff" strokeWidth="2"/>
-        <path d="M12 12L2 7" stroke="#fff" strokeWidth="2"/>
-        <path d="M12 12L22 7" stroke="#fff" strokeWidth="2"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#E8192C"/>
+        <path d="M16 8l2.47 4.93 5.53.8-4 3.87.94 5.4L16 20.27l-4.94 2.73.94-5.4-4-3.87 5.53-.8L16 8z" fill="#fff"/>
       </svg>
-    ), 
-    color: '#e8192c', 
-    bg: '#fff1f2' 
+    ),
   },
-  { 
-    label: '500+ Projects', 
+  {
+    name: 'Upwork',
+    detail: 'Top Rated',
+    color: '#14A800',
+    bg: '#F0FDF4',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#f59e0b"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#14A800"/>
+        <path d="M20.5 11a4.5 4.5 0 0 0-4.31 3.2L14.7 18.5a2.8 2.8 0 0 1-2.7 2 2.8 2.8 0 0 1-2.8-2.8 2.8 2.8 0 0 1 2.8-2.8c.35 0 .68.07 1 .18L14 12.6a6.3 6.3 0 0 0-2-.33A6.3 6.3 0 0 0 5.7 18.5 6.3 6.3 0 0 0 12 24.8a6.3 6.3 0 0 0 6.1-4.5l1.49-4.3a2.8 2.8 0 0 1 2.7-2 2.8 2.8 0 0 1 2.81 2.8 2.8 2.8 0 0 1-2.81 2.8c-.34 0-.67-.06-.98-.18l-1 2.46a6.3 6.3 0 0 0 1.98.32 6.3 6.3 0 0 0 6.3-6.3A6.3 6.3 0 0 0 22.3 9.7" fill="#fff"/>
       </svg>
-    ), 
-    color: '#f59e0b', 
-    bg: '#fffbeb' 
+    ),
   },
-  { 
-    label: 'Upwork Top Rated', 
+  {
+    name: '500+ Projects',
+    detail: 'Delivered',
+    color: '#F59E0B',
+    bg: '#FFFBEB',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18.56 3.44C16.78 1.66 14.5 0.5 12 0.5C9.5 0.5 7.22 1.66 5.44 3.44C3.66 5.22 2.5 7.5 2.5 10C2.5 12.5 3.66 14.78 5.44 16.56C7.22 18.34 9.5 19.5 12 19.5C14.5 19.5 16.78 18.34 18.56 16.56C20.34 14.78 21.5 12.5 21.5 10C21.5 7.5 20.34 5.22 18.56 3.44ZM12 17.5C10.14 17.5 8.44 16.78 7.17 15.6C8.5 14.28 9.5 12.5 9.5 10.5C9.5 8.5 8.5 6.72 7.17 5.4C8.44 4.22 10.14 3.5 12 3.5C13.86 3.5 15.56 4.22 16.83 5.4C15.5 6.72 14.5 8.5 14.5 10.5C14.5 12.5 15.5 14.28 16.83 15.6C15.56 16.78 13.86 17.5 12 17.5Z" fill="#6fda44"/>
-        <circle cx="12" cy="10" r="3" fill="#6fda44"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#F59E0B"/>
+        <path d="M16 8l2.47 5.01L24 14l-4 3.89.94 5.5L16 20.68l-4.94 2.7L12 17.9 8 14l5.53-.99L16 8z" fill="#fff"/>
       </svg>
-    ), 
-    color: '#6fda44', 
-    bg: '#f0fdf4' 
+    ),
   },
-  { 
-    label: '100+ Clients', 
+  {
+    name: '100+ Clients',
+    detail: 'Worldwide',
+    color: '#8B5CF6',
+    bg: '#F5F3FF',
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="10" stroke="#6366f1" strokeWidth="2" fill="none"/>
-        <path d="M2 12H22" stroke="#6366f1" strokeWidth="2"/>
-        <path d="M12 2C12 2 12 12 12 22" stroke="#6366f1" strokeWidth="2"/>
-        <circle cx="12" cy="12" r="4" fill="#6366f1"/>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="16" fill="#8B5CF6"/>
+        <circle cx="16" cy="13" r="3.5" fill="#fff"/>
+        <path d="M8 24c0-4 3.58-7 8-7s8 3 8 7" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
       </svg>
-    ), 
-    color: '#6366f1', 
-    bg: '#eef2ff' 
+    ),
   },
 ];
 
-// Duplicate badges for seamless infinite scroll
-const MARQUEE_BADGES = [...BADGES, ...BADGES, ...BADGES];
+/* Duplicate for seamless marquee */
+const TRACK = [...ITEMS, ...ITEMS, ...ITEMS];
 
-const FeaturedIn = () => {
-  const marqueeRef = useRef(null);
-  const [marqueeWidth, setMarqueeWidth] = useState(0);
+const FeaturedIn = () => (
+  <section className="fi2-section" aria-label="Credentials and recognition">
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (marqueeRef.current) {
-        // Calculate width of a single badge set (total width / 3 since we have 3 duplicates)
-        const totalWidth = marqueeRef.current.scrollWidth;
-        const singleSetWidth = totalWidth / 3;
-        setMarqueeWidth(singleSetWidth);
-      }
-    };
+    <motion.div
+      className="fi2-label"
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: EASE_EXPO }}
+    >
+      <ShieldCheck size={14} aria-hidden="true" />
+      Recognized &amp; Verified Across Platforms
+    </motion.div>
 
-    // Use setTimeout to ensure DOM is fully rendered
-    const timeoutId = setTimeout(updateWidth, 100);
-    
-    window.addEventListener('resize', updateWidth);
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', updateWidth);
-    };
-  }, []);
-
-  return (
-    <section className="featured-in-section" aria-label="Credentials and recognition">
-      <div className="container">
-        <motion.p
-          className="featured-in-label"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Recognized & verified across platforms
-        </motion.p>
-
-        <div className="featured-in-marquee-wrapper">
-          <motion.div 
-            ref={marqueeRef}
-            className="featured-in-marquee"
-            animate={{ x: [0, -marqueeWidth] }}
-            transition={{ 
-              x: { 
-                repeat: Infinity, 
-                repeatType: "loop", 
-                duration: 30, 
-                ease: "linear" 
-              } 
-            }}
-            style={{ animation: 'none' }}
+    {/* Marquee */}
+    <div className="fi2-marquee-wrap" aria-hidden="true">
+      <div className="fi2-marquee-track">
+        {TRACK.map((item, i) => (
+          <div
+            key={`${item.name}-${i}`}
+            className="fi2-tile"
+            style={{ '--ti-color': item.color, '--ti-bg': item.bg }}
           >
-          {MARQUEE_BADGES.map((b, i) => (
-            <div
-              key={`${b.label}-${i}`}
-              className="fi-badge"
-              style={{ '--fi-color': b.color, '--fi-bg': b.bg }}
-            >
-              <span className="fi-badge-icon">{b.icon}</span>
-              <span className="fi-badge-label">{b.label}</span>
+            <div className="fi2-tile-icon">{item.icon}</div>
+            <div className="fi2-tile-body">
+              <span className="fi2-tile-name">{item.name}</span>
+              <span className="fi2-tile-detail">{item.detail}</span>
             </div>
-          ))}
-        </motion.div>
+          </div>
+        ))}
       </div>
+    </div>
 
-      <style>{`
-      .featured-in-section {
-        padding: 4rem 0;
-        background: #fff;
-        border-top: 1px solid var(--border-soft, rgba(232,25,44,0.08));
-        border-bottom: 1px solid var(--border-soft, rgba(232,25,44,0.08));
-        position: relative;
+    <style>{`
+      .fi2-section {
+        padding: 3.5rem 0;
+        background: var(--surface-base, #fff);
+        border-top: 1px solid var(--border-soft, rgba(0,0,0,0.06));
+        border-bottom: 1px solid var(--border-soft, rgba(0,0,0,0.06));
         overflow: hidden;
       }
-      .featured-in-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.1), transparent);
-      }
-      .featured-in-label {
-        text-align: center;
-        font-size: 0.7rem;
-        font-weight: 800;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--muted, #9ca3af);
-        margin-bottom: 2rem;
-        position: relative;
-        z-index: 1;
-      }
-      .featured-in-marquee-wrapper {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-        padding: 0.5rem 0;
-      }
-      .featured-in-marquee-wrapper::before,
-      .featured-in-marquee-wrapper::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 120px;
-        z-index: 2;
-        pointer-events: none;
-      }
-      .featured-in-marquee-wrapper::before {
-        left: 0;
-        background: linear-gradient(to right, #fff, transparent);
-      }
-      .featured-in-marquee-wrapper::after {
-        right: 0;
-        background: linear-gradient(to left, #fff, transparent);
-      }
-      .featured-in-marquee {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-        width: max-content;
-      }
-      .featured-in-badges {
+      .fi2-label {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1.25rem;
-        flex-wrap: wrap;
+        gap: 0.45rem;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted, #9CA3AF);
+        margin-bottom: 2rem;
       }
-      .fi-badge {
+      .fi2-label svg { color: var(--brand-red, #E8192C); flex-shrink: 0; }
+
+      .fi2-marquee-wrap {
+        overflow: hidden;
+        width: 100%;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      }
+      .fi2-marquee-track {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        width: max-content;
+        animation: fi2-scroll 35s linear infinite;
+      }
+      .fi2-marquee-track:hover { animation-play-state: paused; }
+      @keyframes fi2-scroll {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-33.333%); }
+      }
+
+      .fi2-tile {
         display: inline-flex;
         align-items: center;
-        gap: 0.6rem;
-        padding: 0.65rem 1.4rem;
-        background: var(--fi-bg, #fff);
-        border: 1.5px solid color-mix(in srgb, var(--fi-color) 15%, transparent);
-        border-radius: 12px;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: var(--fi-color, #374151);
+        gap: 0.75rem;
+        padding: 0.7rem 1.25rem 0.7rem 0.7rem;
+        background: var(--ti-bg, #f8f8f8);
+        border: 1.5px solid color-mix(in srgb, var(--ti-color) 15%, transparent);
+        border-radius: 14px;
+        flex-shrink: 0;
         cursor: default;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        position: relative;
+        transition: transform 0.3s cubic-bezier(0.16,1,0.3,1),
+                    box-shadow 0.3s cubic-bezier(0.16,1,0.3,1),
+                    border-color 0.3s;
+        white-space: nowrap;
+      }
+      .fi2-tile:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        border-color: var(--ti-color);
+      }
+      .fi2-tile-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
         overflow: hidden;
-      }
-      .fi-badge::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, transparent 50%);
-        pointer-events: none;
-      }
-      .fi-badge:hover {
-        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        transform: translateY(-2px);
-        border-color: var(--fi-color);
-      }
-      .fi-badge-icon {
-        width: 22px; height: 22px;
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        z-index: 1;
       }
-      .fi-badge-icon svg {
+      .fi2-tile-icon svg {
         width: 100%;
         height: 100%;
+        display: block;
       }
-      .fi-badge-label { 
-        line-height: 1; 
-        position: relative;
-        z-index: 1;
+      .fi2-tile-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+      .fi2-tile-name {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--ink, #0F0F12);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+      .fi2-tile-detail {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--ti-color);
+        letter-spacing: 0.02em;
+        line-height: 1;
       }
 
-      @media (max-width: 768px) {
-        .featured-in-section {
-          padding: 3rem 0;
-        }
-        .featured-in-badges { gap: 0.85rem; }
-        .fi-badge { 
-          font-size: 0.76rem; 
-          padding: 0.55rem 1.1rem; 
-          gap: 0.5rem;
-        }
-        .fi-badge-icon {
-          width: 18px; height: 18px;
-        }
+      @media (max-width: 640px) {
+        .fi2-section { padding: 2.5rem 0; }
+        .fi2-tile { padding: 0.55rem 1rem 0.55rem 0.55rem; gap: 0.6rem; }
+        .fi2-tile-icon { width: 28px; height: 28px; }
+        .fi2-tile-name { font-size: 0.82rem; }
+        .fi2-tile-detail { font-size: 0.65rem; }
       }
       @media (prefers-reduced-motion: reduce) {
-        .fi-badge:hover { transform: none; }
-        .featured-in-marquee { animation: none !important; }
+        .fi2-marquee-track { animation: none; }
+        .fi2-tile:hover { transform: none; }
       }
     `}</style>
-      </div>
-    </section>
-  );
-};
+  </section>
+);
 
 export default FeaturedIn;
