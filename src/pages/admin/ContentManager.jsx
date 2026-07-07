@@ -35,7 +35,7 @@ const defaultContent = {
   hero: {
     eyebrow: 'Social media management & design for growing brands',
     title: 'Creative Services That Make Brands Look <span class="text-red">Premium Online</span>',
-    desc: 'CreatifyBD helps brands in the USA, Canada, and Australia grow with social media management, graphic design, video editing, and website design - delivered through a transparent gig-style process.',
+    desc: 'CreatifyBD helps brands globally grow with social media management, graphic design, video editing, and website design - delivered through a transparent gig-style process.',
     cta1: 'Browse Gigs',
     cta2: 'Get a Free Proposal',
     mockup_primary: ''
@@ -86,7 +86,7 @@ const defaultContent = {
       { value: '24h', label: 'Typical response window' }
     ],
     items: [
-      { title: 'Built for US, Canada, and Australia buyers', desc: 'Copy, visuals, formats, and offers are shaped for international audiences.' },
+      { title: 'Built for international buyers', desc: 'Copy, visuals, formats, and offers are shaped for global audiences.' },
       { title: 'Agency process, gig-style clarity', desc: 'Clear scope, milestones, revisions, and deliverables before work begins.' },
       { title: 'Timezone-friendly production', desc: 'Async updates, organized reviews, and steady weekly progress without meetings overload.' },
       { title: 'Creative tied to business outcomes', desc: 'Content and design decisions are made around leads, trust, reach, and conversion.' }

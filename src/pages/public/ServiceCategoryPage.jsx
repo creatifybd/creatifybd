@@ -23,11 +23,11 @@ const ServiceCategoryPage = () => {
   const categoryDetails = {
     'social-media-management': {
       headline: 'Best Social Media Management Agency | Monthly Content Strategy & Management',
-      subheadline: 'CreatifyBD is the best social media management agency offering comprehensive social media marketing services including content calendar, post design, copywriting, and hashtag strategy for USA, Canada, and Australia.',
+      subheadline: 'CreatifyBD is the best social media management agency offering comprehensive social media marketing services including content calendar, post design, copywriting, and hashtag strategy for brands globally.',
       benefits: [
         'Content Calendar: Never guess what to post next; review drafts before publishing.',
         'High-converting designs: Visual grids designed to capture authority in your industry.',
-        'Done-for-you copywriting: Engaging captions and target hashtag clusters tailored for US/CA/AU audiences.',
+        'Done-for-you copywriting: Engaging captions and target hashtag clusters tailored for global audiences.',
         'Performance Reports: Simple, transparent monthly analytics reviews.'
       ],
       process: [
@@ -51,8 +51,8 @@ const ServiceCategoryPage = () => {
       ],
       seo: {
         title: 'Best Social Media Management Agency | Social Media Marketing Services | CreatifyBD',
-        description: 'Hire the best social media management agency at CreatifyBD. We offer professional social media marketing services, content strategy, post design, and management for USA, Canada, and Australia.',
-        keywords: 'social media management agency, social media marketing agency, social media manager, social media marketing services, social media management USA, social media marketing Canada, social media management Australia, social media marketing company, social media strategy, content calendar management, social media post design, social media content creation, Instagram management, Facebook page management, LinkedIn management, social media advertising agency'
+        description: 'Hire the best social media management agency at CreatifyBD. We offer professional social media marketing services, content strategy, post design, and management for brands globally.',
+        keywords: 'social media management agency, social media marketing agency, social media manager, social media marketing services, social media marketing company, social media strategy, content calendar management, social media post design, social media content creation, Instagram management, Facebook page management, LinkedIn management, social media advertising agency'
       }
     },
     'graphic-design': {
@@ -85,8 +85,8 @@ const ServiceCategoryPage = () => {
       ],
       seo: {
         title: 'Best Graphic Design Service | Professional Logo Design & Brand Identity | CreatifyBD',
-        description: 'CreatifyBD is the best graphic design agency offering professional graphic design services including logo design, brand identity, social media graphics, and print design for USA, Canada, and Australia.',
-        keywords: 'graphic design service, graphic design agency, best graphic design service, professional logo design, brand identity design, logo design service, creative design agency, graphic design company, logo design USA, graphic design Canada, graphic design Australia, brand identity agency, corporate logo design, social media graphic design, print design service, vector logo design, business card design, flyer design service'
+        description: 'CreatifyBD is the best graphic design agency offering professional graphic design services including logo design, brand identity, social media graphics, and print design globally.',
+        keywords: 'graphic design service, graphic design agency, best graphic design service, professional logo design, brand identity design, logo design service, creative design agency, graphic design company, brand identity agency, corporate logo design, social media graphic design, print design service, vector logo design, business card design, flyer design service'
       }
     },
     'video-editing': {
@@ -119,8 +119,8 @@ const ServiceCategoryPage = () => {
       ],
       seo: {
         title: 'Best Video Editing Service | Professional Video Production & Editing | CreatifyBD',
-        description: 'CreatifyBD is the best video editing service provider offering professional video editing services including Reels editing, YouTube editing, promotional videos, and video production for USA, Canada, and Australia.',
-        keywords: 'video editing service, video editing agency, best video editing service, professional video editing, video production company, video editing services USA, video editing Canada, video editing Australia, YouTube video editing, Reels editing service, TikTok video editing, promotional video editing, video post production, video editing company, video editing for social media, video editing for YouTube, video editing for business'
+        description: 'CreatifyBD is the best video editing service provider offering professional video editing services including Reels editing, YouTube editing, promotional videos, and video production globally.',
+        keywords: 'video editing service, video editing agency, best video editing service, professional video editing, video production company, YouTube video editing, Reels editing service, TikTok video editing, promotional video editing, video post production, video editing company, video editing for social media, video editing for YouTube, video editing for business'
       }
     },
     'website-design': {
@@ -153,8 +153,8 @@ const ServiceCategoryPage = () => {
       ],
       seo: {
         title: 'Best Web Design Agency | Professional Website Design & Development | CreatifyBD',
-        description: 'CreatifyBD is the best web design agency offering professional website design services including landing pages, business websites, portfolio sites, and web development for USA, Canada, and Australia.',
-        keywords: 'web design agency, website design service, best web design agency, professional website design, web development services, web design company, website design USA, web design Canada, web design Australia, landing page design, business website design, portfolio website design, website development company, responsive web design, custom website design, website redesign service, React web development, SEO web design'
+        description: 'CreatifyBD is the best web design agency offering professional website design services including landing pages, business websites, portfolio sites, and web development globally.',
+        keywords: 'web design agency, website design service, best web design agency, professional website design, web development services, web design company, landing page design, business website design, portfolio website design, website development company, responsive web design, custom website design, website redesign service, React web development, SEO web design'
       }
     }
   };
@@ -172,11 +172,7 @@ const ServiceCategoryPage = () => {
       "name": "CreatifyBD",
       "url": "https://creatifybd.com"
     },
-    "areaServed": [
-      { "@type": "Country", "name": "United States" },
-      { "@type": "Country", "name": "Canada" },
-      { "@type": "Country", "name": "Australia" }
-    ]
+    "areaServed": "Global"
   };
 
   const breadcrumbSchema = {
@@ -347,7 +343,7 @@ const ServiceCategoryPage = () => {
               <div className="mock-dash-box">
                 <span className="badge">CREATIFY AGENCY STANDARDS</span>
                 <h4>Global Production Advantage</h4>
-                <p>We run a structured remote production workflow with international quality standards for brands in the USA, Canada, Australia, and other global markets.</p>
+                <p>We run a structured remote production workflow with international quality standards for brands in global markets.</p>
                 <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <div className="advantage-bar"><span className="label">International Quality</span><span className="percent">100%</span></div>
                   <div className="advantage-bar"><span className="label">Manual verification trust</span><span className="percent">100%</span></div>

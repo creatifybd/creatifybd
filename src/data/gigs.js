@@ -39,7 +39,7 @@ export const gigs = [
     category: 'social-media-management',
     subcategory: 'Full Management',
     overview: 'Get consistent, premium content posted on your channels with full monthly management.',
-    description: 'Struggling to post consistently? We handle everything from content strategy and eye-catching post design to caption writing, hashtag research, and monthly scheduling. Build authority in the USA, Canada, and Australia markets with a team that understands brand growth.',
+    description: 'Struggling to post consistently? We handle everything from content strategy and eye-catching post design to caption writing, hashtag research, and monthly scheduling. Build authority in global markets with a team that understands brand growth.',
     whoIsThisFor: 'Startups, business owners, personal brands, real estate agents, and local shops looking to look professional online.',
     galleryImages: [
       'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1280&h=769&fit=crop',
@@ -396,7 +396,7 @@ export const gigs = [
     category: 'graphic-design',
     subcategory: 'Thumbnails',
     overview: 'Attention-grabbing thumbnails that skyrocket your video CTR.',
-    description: 'A great video with a poor thumbnail gets no views. We design hyper-engaging, high-contrast, attention-grabbing YouTube thumbnails tailored to capture clicks from USA, Canada, and Australia audiences.',
+    description: 'A great video with a poor thumbnail gets no views. We design hyper-engaging, high-contrast, attention-grabbing YouTube thumbnails tailored to capture clicks from global audiences.',
     whoIsThisFor: 'YouTubers, creators, business channels, and coaches seeking growth.',
     galleryImages: [
       'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1280&h=769&fit=crop',

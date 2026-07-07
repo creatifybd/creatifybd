@@ -9,8 +9,8 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const STATS = [
   { value: '100+', label: 'Brands served' },
-  { value: '48h',  label: 'First delivery' },
-  { value: '4.9★', label: 'Average rating' },
+  { value: 'Global', label: 'Coverage' },
+  { value: '5.0★', label: 'Average rating' },
 ];
 
 const CTABand = () => {

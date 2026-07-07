@@ -8,7 +8,7 @@ import usePageSEO from '../../hooks/usePageSEO';
 const PortfolioPage = () => {
   const seo = usePageSEO('portfolio', {
     title: "Creative Agency Portfolio | Graphic Design, Video Editing & Digital Marketing Work | CreatifyBD",
-    description: "Explore CreatifyBD creative agency portfolio featuring premium graphic design, video editing, social media management, and digital marketing projects delivered for USA, Canada, and Australia clients."
+    description: "Explore CreatifyBD creative agency portfolio featuring premium graphic design, video editing, social media management, and digital marketing projects delivered for global clients."
   });
 
   return (

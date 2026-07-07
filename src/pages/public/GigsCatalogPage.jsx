@@ -88,7 +88,7 @@ const GigsCatalogPage = () => {
 
   const seo = usePageSEO('gigs', {
     title: "Buy Creative Services Online | Social Media Management, Graphic Design, Video Editing | CreatifyBD",
-    description: "Browse and buy creative services online at CreatifyBD. Order social media management, graphic design, video editing, and website design with transparent fixed-price packages for USA, Canada, and Australia."
+    description: "Browse and buy creative services online at CreatifyBD. Order social media management, graphic design, video editing, and website design with transparent fixed-price packages globally."
   });
 
   return (

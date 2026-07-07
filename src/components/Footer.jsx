@@ -82,9 +82,9 @@ const Footer = () => {
         {/* Trust strip */}
         <FadeReveal>
           <div className="footer-trust-strip">
-            <span>🌍 Trusted by brands in USA, Canada & Australia</span>
+            <span>🌍 Trusted by brands worldwide</span>
             <span className="footer-trust-div" aria-hidden="true" />
-            <span>⭐ 4.9/5 from 100+ verified clients</span>
+            <span>⭐ 5.0/5 from 100+ verified clients</span>
             <span className="footer-trust-div" aria-hidden="true" />
             <span>🔒 Secure payments · 7-day money-back</span>
           </div>

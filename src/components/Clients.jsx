@@ -89,7 +89,7 @@ const Clients = () => {
       >
         <div className="cl2-title-row">
           <Globe size={16} className="cl2-globe" aria-hidden="true" />
-          <p className="cl2-label">Trusted by brands across the US, Canada &amp; Australia</p>
+          <p className="cl2-label">Trusted by brands globally</p>
         </div>
         <div className="cl2-count-row">
           <span className="cl2-count">100<span className="cl2-plus">+</span></span>

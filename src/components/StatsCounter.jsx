@@ -5,9 +5,9 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const STATS = [
   { value: 500, suffix: '+', label: 'Projects Delivered', desc: 'Across design, video, social & web' },
-  { value: 100, suffix: '+', label: 'Happy Clients', desc: 'USA · Canada · Australia · UK' },
-  { value: 4.9, suffix: '★', label: 'Average Rating', desc: 'From verified client reviews' },
-  { value: 48,  suffix: 'h', label: 'First Delivery', desc: 'From project kickoff to first draft' },
+  { value: 100, suffix: '%', label: 'Full Ownership', desc: 'Figma, PSD, AI source files included' },
+  { value: 5.0, suffix: '★', label: 'Average Rating', desc: 'From verified global reviews' },
+  { value: 24,  suffix: 'h', label: 'Response Time', desc: 'Fast, direct communication support' },
 ];
 
 const useCountUp = (target, duration = 1800, start = false) => {

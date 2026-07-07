@@ -228,7 +228,7 @@ const Testimonials = () => {
                 <span className="tm-heading-accent">visionaries.</span>
               </h2>
               <p className="section-sub tm-subtext">
-                Real results from real clients across the US, Canada, and Australia. Here's what they say about working with CreatifyBD.
+                Real results from real clients globally. Here's what they say about working with CreatifyBD.
               </p>
             </motion.div>
 

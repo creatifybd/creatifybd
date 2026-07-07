@@ -7,8 +7,8 @@ import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 const featureItems = [
   {
     icon: <Globe2 size={22} />,
-    title: 'Built for US, Canada, and Australia buyers',
-    desc: 'Copy, visuals, formats, and offers are shaped for international audiences.'
+    title: 'Built for international buyers',
+    desc: 'Copy, visuals, formats, and offers are shaped for global audiences.'
   },
   {
     icon: <ShieldCheck size={22} />,

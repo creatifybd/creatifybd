@@ -94,7 +94,7 @@ const AboutPage = () => {
 
   const seo = usePageSEO('about', {
     title: "About Best Creative Agency | Social Media Management & Digital Marketing Team | CreatifyBD",
-    description: "Learn about CreatifyBD, the best creative agency and digital marketing team offering social media management, graphic design, video editing, and website design services for USA, Canada, and Australia."
+    description: "Learn about CreatifyBD, the best creative agency and digital marketing team offering social media management, graphic design, video editing, and website design services globally."
   });
 
   return (
@@ -138,7 +138,7 @@ const AboutPage = () => {
                 <div>
                   <Quote size={22} />
                   <p>
-                    "{aboutContent.ceo_quote || 'Our goal is to make high-quality creative support accessible for brands that want to look trustworthy in front of customers in the USA, Canada, Australia, and beyond.'}"
+                    "{aboutContent.ceo_quote || 'Our goal is to make high-quality creative support accessible for brands that want to look trustworthy in front of customers globally.'}"
                   </p>
                   <strong>{ceoName}, {ceoRole}</strong>
                 </div>

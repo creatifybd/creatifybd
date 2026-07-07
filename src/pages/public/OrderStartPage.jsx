@@ -181,7 +181,7 @@ const OrderStartPage = () => {
                   <div className="form-row-2">
                     <div className="form-group">
                       <label htmlFor="country">Country *</label>
-                      <input id="country" type="text" required className="luxury-input" placeholder="e.g. USA, Canada, Australia"
+                      <input id="country" type="text" required className="luxury-input" placeholder="e.g. United Kingdom, Singapore"
                         value={clientDetails.country} onChange={e => setClientDetails({...clientDetails, country: e.target.value})} />
                     </div>
                     <div className="form-group">
@@ -301,7 +301,7 @@ const OrderStartPage = () => {
                   <div className="form-row-2">
                     <div className="form-group">
                       <label htmlFor="proj-audience">Target Audience Description *</label>
-                      <input id="proj-audience" type="text" required className="luxury-input" placeholder="e.g. Business owners, age 30-50, USA"
+                      <input id="proj-audience" type="text" required className="luxury-input" placeholder="e.g. Business owners, age 30-50"
                         value={genericRequirements.targetAudience} onChange={e => setGenericRequirements({...genericRequirements, targetAudience: e.target.value})} />
                     </div>
                     <div className="form-group">

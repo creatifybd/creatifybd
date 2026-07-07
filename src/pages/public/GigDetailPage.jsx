@@ -216,8 +216,8 @@ const GigDetailPage = () => {
     <div className="gig-detail-page">
       <SEO
         title={`${gig.shortTitle || gig.title} | Best ${categoryName} Service | CreatifyBD`}
-        description={`${gig.overview} Hire the best ${categoryName.toLowerCase()} service at CreatifyBD. Premium ${gig.category} package starting at $${gig.startingPrice} USD for USA, Canada, and Australia brands.`}
-        keywords={`${gig.tags.join(', ')}, ${categoryName.toLowerCase()} service, best ${categoryName.toLowerCase()} service, ${gig.category.toLowerCase()} agency, hire ${categoryName.toLowerCase()} expert, ${gig.category.toLowerCase()} USA, ${gig.category.toLowerCase()} Canada, ${gig.category.toLowerCase()} Australia, creative agency services, digital marketing services, professional ${categoryName.toLowerCase()}, affordable ${categoryName.toLowerCase()}, ${gig.category.toLowerCase()} packages, ${gig.category.toLowerCase()} for business, ${gig.category.toLowerCase()} for startups`}
+        description={`${gig.overview} Hire the best ${categoryName.toLowerCase()} service at CreatifyBD. Premium ${gig.category} package starting at $${gig.startingPrice} USD for global brands.`}
+        keywords={`${gig.tags.join(', ')}, ${categoryName.toLowerCase()} service, best ${categoryName.toLowerCase()} service, ${gig.category.toLowerCase()} agency, hire ${categoryName.toLowerCase()} expert, creative agency services, digital marketing services, professional ${categoryName.toLowerCase()}, affordable ${categoryName.toLowerCase()}, ${gig.category.toLowerCase()} packages, ${gig.category.toLowerCase()} for business, ${gig.category.toLowerCase()} for startups`}
         schema={combinedSchema}
       />
 
@@ -423,7 +423,7 @@ const GigDetailPage = () => {
               </div>
               <div className="order-trust-points">
                 <CheckCircle2 size={16} className="check-icon-trust" />
-                <span>USA / Canada / Australia Compliant Delivery</span>
+                <span>International Standard Compliant Delivery</span>
               </div>
               <div className="order-trust-points">
                 <CheckCircle2 size={16} className="check-icon-trust" />

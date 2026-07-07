@@ -9,7 +9,7 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const TRUST_PILLS = [
   { icon: <RefreshCw size={13} />, label: 'Unlimited Revisions' },
-  { icon: <Clock size={13} />,     label: '48h First Delivery' },
+  { icon: <Clock size={13} />,     label: 'Premium Turnaround' },
   { icon: <Shield size={13} />,    label: '7-Day Money-Back' },
   { icon: <CheckCircle2 size={13} />, label: '500+ Projects Done' },
 ];
@@ -17,8 +17,8 @@ const TRUST_PILLS = [
 const STATS = [
   { value: '500+', label: 'Projects' },
   { value: '100+', label: 'Clients' },
-  { value: '4.9★', label: 'Rating' },
-  { value: '48h',  label: 'Delivery' },
+  { value: '5.0★', label: 'Rating' },
+  { value: 'Global', label: 'Coverage' },
 ];
 
 /* Portfolio preview images for the visual grid */
@@ -78,7 +78,7 @@ const Hero = () => {
     'The creative team that makes your brand <span class="hero-hl">impossible to ignore</span>';
 
   const heroEyebrow = heroContent.eyebrow ||
-    'Serving brands across USA · Canada · Australia';
+    'High-end creative execution globally';
 
   const heroDesc = heroContent.desc ||
     'Social media, design, video, and web — delivered monthly by a dedicated creative team. Structured packages, clear timelines, zero agency overhead.';
@@ -282,7 +282,7 @@ const Hero = () => {
                 transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.1 }}
               >
                 <Star size={14} className="badge-star" />
-                <span>4.9 avg. rating</span>
+                <span>5.0 avg. rating</span>
               </motion.div>
 
               <motion.div

@@ -35,9 +35,9 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: "CreatifyBD | Creative Agency for Social Media, Design & Video — USA, Canada, Australia",
-    description: "CreatifyBD is a dedicated creative agency offering social media management, graphic design, video editing, and website design for brands in USA, Canada, and Australia. 500+ projects delivered, 4.9★ rating.",
-    keywords: "CreatifyBD, creative agency, social media management, graphic design, video editing, website design, digital marketing, branding agency, social media agency USA, graphic design agency Canada, creative services Australia",
+    title: "CreatifyBD | Creative Agency for Social Media, Design & Video — Global Services",
+    description: "CreatifyBD is a dedicated creative agency offering social media management, graphic design, video editing, and website design for brands globally. 500+ projects delivered, 5.0★ rating.",
+    keywords: "CreatifyBD, creative agency, social media management, graphic design, video editing, website design, digital marketing, branding agency, social media agency, graphic design agency, creative services",
     schema: [
       {
         "@context": "https://schema.org",
@@ -47,15 +47,11 @@ const Home = () => {
         "url": "https://creatifybd.com",
         "logo": "https://creatifybd.com/logo.png",
         "image": "https://creatifybd.com/og-image.png",
-        "description": "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service for USA, Canada, and Australia.",
+        "description": "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service globally.",
         "telephone": "+8801951676600",
         "email": "hello@creatifybd.com",
         "address": { "@type": "PostalAddress", "addressCountry": "BD", "addressRegion": "Dhaka" },
-        "areaServed": [
-          { "@type": "Country", "name": "United States" },
-          { "@type": "Country", "name": "Canada" },
-          { "@type": "Country", "name": "Australia" }
-        ],
+        "areaServed": "Global",
         "priceRange": "$$",
         "sameAs": [
           "https://www.facebook.com/creatifybd",
