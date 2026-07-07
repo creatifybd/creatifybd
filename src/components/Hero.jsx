@@ -77,8 +77,10 @@ const Hero = () => {
   const heroTitle = heroContent.title ||
     'The creative team that makes your brand <span class="hero-hl">impossible to ignore</span>';
 
-  const heroEyebrow = heroContent.eyebrow ||
-    'High-end creative execution globally';
+  const _rawEyebrow = heroContent.eyebrow || '';
+  const heroEyebrow = _rawEyebrow && !/(dhaka|bangladesh|\bbd\b)/i.test(_rawEyebrow)
+    ? _rawEyebrow
+    : 'High-end creative execution globally';
 
   const heroDesc = heroContent.desc ||
     'Social media, design, video, and web — delivered monthly by a dedicated creative team. Structured packages, clear timelines, zero agency overhead.';
