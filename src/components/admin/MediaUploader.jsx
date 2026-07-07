@@ -25,7 +25,8 @@ const MediaUploader = ({
   onChange,
   accept = '*/*',
   folder = 'creatifybd/media',
-  helperText = 'Images, videos, PDFs, and general files up to 100 MB.'
+  helperText = 'Images, videos, PDFs, and general files up to 100 MB.',
+  context = 'general'
 }) => {
   const inputRef = useRef(null);
   const [mode, setMode] = useState('upload');
@@ -34,6 +35,38 @@ const MediaUploader = ({
   const [progress, setProgress] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [assetType, setAssetType] = useState(inferType(value));
+
+  // Context-aware helper text
+  const getContextHelper = () => {
+    if (helperText && helperText !== 'Images, videos, PDFs, and general files up to 100 MB.') {
+      return helperText;
+    }
+    
+    const folderLower = folder.toLowerCase();
+    
+    if (folderLower.includes('gigs')) {
+      return 'Recommended: 1280x769px (16:9.5) for gig covers. Max 100 MB.';
+    }
+    if (folderLower.includes('portfolio')) {
+      return 'Recommended: 1920x1080px (16:9) for portfolio items. Max 100 MB.';
+    }
+    if (folderLower.includes('services')) {
+      return 'Recommended: 800x600px (4:3) for service images. Max 100 MB.';
+    }
+    if (folderLower.includes('content/hero') || folderLower.includes('hero')) {
+      return 'Recommended: 1920x1080px (16:9) for hero images. Max 100 MB.';
+    }
+    if (folderLower.includes('content/about') || folderLower.includes('about')) {
+      return 'Recommended: 800x800px (1:1) for team/office photos. Max 100 MB.';
+    }
+    if (folderLower.includes('content/contact')) {
+      return 'Recommended: 1200x600px (2:1) for contact/office images. Max 100 MB.';
+    }
+    
+    return 'Images, videos, PDFs, and general files up to 100 MB.';
+  };
+
+  const displayHelperText = getContextHelper();
 
   const uploadFile = async (file) => {
     if (!file) return;
@@ -103,7 +136,7 @@ const MediaUploader = ({
         </div>
       )}
 
-      <p className="media-uploader-help">{helperText}</p>
+      <p className="media-uploader-help">{displayHelperText}</p>
       {value && <div className="media-current"><MediaPreview url={value} type={assetType || inferType(value)} /><a href={value} target="_blank" rel="noreferrer">Open asset</a><button type="button" onClick={clear} aria-label="Remove selected asset"><X size={16} /></button></div>}
       <style>{`
         .media-uploader{display:grid;gap:.75rem}.media-uploader-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}.media-uploader-head>label{font-size:.82rem;font-weight:700;color:var(--adm-text)}

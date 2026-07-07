@@ -105,27 +105,17 @@ const PortfolioManager = () => {
 
   const handleDelete = async (item) => {
     const ok = await confirm({
-      title: item.isCurated ? 'Hide this portfolio item?' : 'Delete this portfolio item?',
-      description: item.isCurated
-        ? 'Built-in portfolio items can be hidden from the site, but not permanently deleted.'
-        : 'This item will be permanently removed.',
-      confirmLabel: item.isCurated ? 'Hide' : 'Delete',
+      title: 'Delete this portfolio item?',
+      description: 'This item will be permanently removed from the portfolio.',
+      confirmLabel: 'Delete',
       tone: 'danger'
     });
     if (!ok) return;
     try {
-      if (item.isCurated) {
-        await setDoc(doc(db, 'portfolio', item.id), {
-          hidden: true,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
-        toast.success('Portfolio item hidden from the website.');
-        logActivity({ action: 'portfolio.hide', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
-      } else {
-        await deleteData('portfolio', item.id);
-        toast.success('Portfolio item deleted.');
-        logActivity({ action: 'portfolio.delete', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
-      }
+      // Delete from database regardless of whether it's curated or custom
+      await deleteData('portfolio', item.id);
+      toast.success('Portfolio item deleted.');
+      logActivity({ action: 'portfolio.delete', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
       fetchItems();
     } catch (err) {
       console.error(err);

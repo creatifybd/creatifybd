@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { db } from '../../firebase/config';
 import { storage } from '../../firebase/config';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, query, orderBy, getDocs, doc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, updateDoc, arrayUnion, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import StatusBadge from '../../components/StatusBadge';
 import { 
   Search, ChevronDown, ExternalLink, Eye, CheckCircle2, Clock, 
-  Loader2, RefreshCcw, AlertTriangle, Package, Upload, Download, FolderOpen
+  Loader2, RefreshCcw, AlertTriangle, Package, Upload, Download, FolderOpen, Trash2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useConfirm } from '../../context/ConfirmContext';
 
 const STATUS_OPTIONS = [
   'all', 'payment_pending', 'payment_submitted', 'payment_verified',
@@ -16,6 +17,7 @@ const STATUS_OPTIONS = [
 ];
 
 const AdminOrders = () => {
+  const confirm = useConfirm();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQ, setSearchQ] = useState('');
@@ -116,6 +118,26 @@ const AdminOrders = () => {
     } finally {
       setUploadingDelivery(false);
       if (deliveryFileRef.current) deliveryFileRef.current.value = '';
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    const ok = await confirm({
+      title: 'Delete this order?',
+      description: 'This will permanently delete the order and all associated data. This action cannot be undone.',
+      confirmLabel: 'Delete',
+      tone: 'danger'
+    });
+    if (!ok) return;
+
+    try {
+      await deleteDoc(doc(db, 'orders', orderId));
+      setOrders(prev => prev.filter(o => o.id !== orderId));
+      if (selectedOrder?.id === orderId) setSelectedOrder(null);
+      toast.success('Order deleted successfully');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to delete order');
     }
   };
 
@@ -253,6 +275,15 @@ const AdminOrders = () => {
                               ))}
                             </select>
                           </div>
+                          <button 
+                            type="button" 
+                            className="adm-icon-btn" 
+                            title="Delete order"
+                            onClick={() => handleDeleteOrder(order.id)}
+                            style={{ color: 'var(--adm-danger)' }}
+                          >
+                            <Trash2 size={15} />
+                          </button>
                         </div>
                       </td>
                     </tr>
