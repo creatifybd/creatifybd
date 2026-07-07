@@ -5322,7 +5322,7 @@ body:not(.admin-body) :is(.order-start-page, .payment-page)
   }
 
   body:not(.admin-body) .duck-services-intro .section-h {
-    font-size: clamp(3.15rem, 15.5vw, 4.35rem) !important;
+    font-size: clamp(2.8rem, 7vw, 5.5rem) !important;
     line-height: 0.98 !important;
     overflow: visible !important;
   }
@@ -5331,4 +5331,90 @@ body:not(.admin-body) :is(.order-start-page, .payment-page)
     font-size: clamp(2.15rem, 10vw, 3rem) !important;
     line-height: 0.98 !important;
   }
+
+  /* Unified Premium Big Heading Size across the entire Homepage */
+  body:not(.admin-body) :is(.section-h, .ab-title, .tm-heading, .why-v3-heading, .process-heading, .pricing-heading) {
+    font-size: clamp(2.8rem, 7vw, 5.5rem) !important;
+    line-height: 0.98 !important;
+    letter-spacing: -0.03em !important;
+    font-weight: 900 !important;
+  }
+
+  /* Ultra-Premium Glassmorphic Bento Cards Overrides */
+  body:not(.admin-body) :is(.process-step-card, .gig-card, .tm-card, .tm-featured, .ab-ceo-card, .order-lookup-card) {
+    background: var(--glass) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Specific Card Hover & Active State Enhancements */
+  body:not(.admin-body) :is(.process-step-card, .gig-card, .ab-ceo-card):hover {
+    transform: translateY(-8px) scale(1.01) !important;
+    border-color: rgba(232, 25, 44, 0.35) !important;
+    box-shadow: 0 30px 60px rgba(232, 25, 44, 0.08), var(--shadow-md) !important;
+  }
+
+  body:not(.admin-body) .process-step-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 100% 100%, var(--brand-red) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+  }
+
+  body:not(.admin-body) .process-step-card:hover::before {
+    opacity: 0.08;
+  }
+
+  body:not(.admin-body) .process-step-card h3 {
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    margin-top: 1rem !important;
+    color: var(--ink) !important;
+    transition: color 0.3s !important;
+  }
+
+  body:not(.admin-body) .process-step-card:hover h3 {
+    color: var(--brand-red) !important;
+  }
+
+  body:not(.admin-body) .tm-card {
+    border-radius: 20px !important;
+  }
+
+  body:not(.admin-body) .tm-card:hover {
+    transform: translateY(-4px) scale(1.01) !important;
+    border-color: rgba(232, 25, 44, 0.3) !important;
+    box-shadow: 0 20px 40px rgba(232, 25, 44, 0.06), var(--shadow-md) !important;
+  }
+
+  body:not(.admin-body) .tm-card--active {
+    background: rgba(232, 25, 44, 0.06) !important;
+    border-color: rgba(232, 25, 44, 0.35) !important;
+  }
+
+  body:not(.admin-body) .tm-featured {
+    border-radius: 28px !important;
+  }
+
+  body:not(.admin-body) .tm-featured:hover {
+    border-color: rgba(232, 25, 44, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(232, 25, 44, 0.08), var(--shadow-lg) !important;
+  }
+
+  body:not(.admin-body) .ab-ceo-card {
+    border-radius: 24px !important;
+  }
+
+  body:not(.admin-body) .ab-ceo-card:hover {
+    transform: translateY(-4px) !important;
+    border-color: rgba(232, 25, 44, 0.25) !important;
+    box-shadow: 0 20px 45px rgba(232, 25, 44, 0.05), var(--shadow-md) !important;
+  }
 }
+

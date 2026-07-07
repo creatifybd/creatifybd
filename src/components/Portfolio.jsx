@@ -428,7 +428,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
           {!fullPage && (
             <div className="wk-header">
               <FadeReveal>
-                <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'আমাদের কাজ' : 'Our Works'}</div>
+                <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
               </FadeReveal>
               <TextReveal className="wk-heading">
                 {lang === 'bn' ? 'আমাদের কাজ' : 'Our Works'}

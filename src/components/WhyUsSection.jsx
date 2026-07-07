@@ -63,8 +63,8 @@ const WhyUsSection = () => (
         viewport={{ once: true }}
         transition={{ duration: 0.7, ease: EASE_EXPO }}
       >
-        <div className="section-eyebrow">Why CreatifyBD</div>
-        <h2 id="why-v3-heading" className="section-heading">
+        <div className="eyebrow why-v3-eyebrow">Why CreatifyBD</div>
+        <h2 id="why-v3-heading" className="section-h why-v3-heading">
           A reliable creative team without<br />
           <span className="text-red">agency overhead</span>
         </h2>
@@ -91,7 +91,7 @@ const WhyUsSection = () => (
               <span className="why-v3-num">{f.num}</span>
               <div
                 className="why-v3-icon"
-                style={{ color: f.accent, background: `${f.accent}1A` }}
+                style={{ color: f.accent, background: `${f.accent}14` }}
               >
                 {f.icon}
               </div>
@@ -127,113 +127,145 @@ const WhyUsSection = () => (
 
     <style>{`
       .why-v3-section {
-        padding: 8rem 0;
-        background: var(--surface-light, #FCFCFD);
+        padding: 9rem 0;
+        background: var(--surface);
         position: relative;
         overflow: hidden;
       }
       .why-v3-section::before {
         content: '';
         position: absolute;
-        top: 0; left: 50%;
-        transform: translateX(-50%);
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.08), transparent);
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,25,44,0.05) 0%, transparent 70%);
         pointer-events: none;
       }
       .why-v3-header {
         text-align: center;
-        max-width: 660px;
-        margin: 0 auto 5rem;
+        max-width: 800px;
+        margin: 0 auto 6rem;
         position: relative;
         z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .why-v3-eyebrow {
+        margin-bottom: 1.5rem;
+      }
+      .why-v3-heading {
+        margin: 0 auto 1.5rem !important;
+      }
+      .section-subtext {
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+        color: var(--muted);
+        max-width: 640px;
+        line-height: 1.6;
       }
       .why-v3-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.25rem;
-        max-width: 1100px;
+        gap: 1.75rem;
+        max-width: 1200px;
         margin: 0 auto;
         position: relative;
         z-index: 1;
       }
       .why-v3-card {
         position: relative;
-        background: #fff;
-        border: 1.5px solid #EBEBF0;
-        border-radius: 20px;
-        padding: 2rem 1.75rem;
+        background: var(--glass);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 3rem 2.25rem;
         overflow: hidden;
-        cursor: default;
-        transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
-                    box-shadow 0.35s cubic-bezier(0.16,1,0.3,1),
-                    border-color 0.35s;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
       }
-      .why-v3-card::after {
+      .why-v3-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: var(--card-accent);
-        border-radius: 20px 20px 0 0;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        inset: 0;
+        background: radial-gradient(circle at 100% 100%, var(--card-accent) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
       }
       .why-v3-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 24px 60px rgba(0,0,0,0.09);
-        border-color: var(--card-accent);
+        transform: translateY(-8px) scale(1.01);
+        border-color: var(--card-accent) !important;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), var(--shadow-md) !important;
       }
-      .why-v3-card:hover::after { transform: scaleX(1); }
+      .why-v3-card:hover::before {
+        opacity: 0.08;
+      }
       .why-v3-top {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
       }
       .why-v3-num {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         font-weight: 900;
-        letter-spacing: 0.12em;
-        color: #D0D5DD;
-        padding-top: 0.35rem;
+        letter-spacing: 0.15em;
+        color: var(--muted);
+        opacity: 0.4;
       }
       .why-v3-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 13px;
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+        background: var(--surface-soft);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
       }
-      .why-v3-card:hover .why-v3-icon { transform: scale(1.1) rotate(-4deg); }
+      .why-v3-card:hover .why-v3-icon {
+        transform: scale(1.1) rotate(-8deg);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      }
       .why-v3-title {
-        font-size: 1.02rem;
-        font-weight: 800;
-        color: var(--ink, #0F0F12);
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: var(--ink);
         line-height: 1.25;
-        margin: 0 0 0.6rem;
-        letter-spacing: -0.022em;
+        margin: 0 0 0.8rem;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+        transition: color 0.3s;
+      }
+      .why-v3-card:hover .why-v3-title {
+        color: var(--card-accent);
       }
       .why-v3-desc {
-        font-size: 0.875rem;
-        color: var(--muted, #6B7280);
+        font-size: 0.92rem;
+        color: var(--muted);
         line-height: 1.7;
         margin: 0;
+        position: relative;
+        z-index: 1;
       }
       .why-v3-accent-line {
         position: absolute;
         bottom: 0; left: 0;
-        height: 2px;
+        height: 3px;
         width: 0%;
-        background: linear-gradient(90deg, var(--card-accent), transparent);
-        transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+        background: var(--card-accent);
+        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1;
       }
-      .why-v3-card:hover .why-v3-accent-line { width: 60%; }
+      .why-v3-card:hover .why-v3-accent-line { width: 100%; }
 
       /* Trust strip */
       .why-v3-strip {
@@ -241,14 +273,16 @@ const WhyUsSection = () => (
         align-items: center;
         justify-content: center;
         gap: 0;
-        margin-top: 4rem;
-        padding: 2rem;
-        background: #fff;
-        border: 1.5px solid #EBEBF0;
-        border-radius: 20px;
-        max-width: 800px;
+        margin-top: 6rem;
+        padding: 2.5rem;
+        background: var(--glass);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        max-width: 900px;
         margin-inline: auto;
-        margin-top: 4rem;
+        box-shadow: var(--shadow-md);
         position: relative;
         z-index: 1;
       }
