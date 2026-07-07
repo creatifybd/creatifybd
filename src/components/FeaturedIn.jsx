@@ -145,24 +145,39 @@ const FeaturedIn = () => {
 
       <style>{`
       .featured-in-section {
-        padding: 3rem 0;
-        background: var(--surface-soft, #FFF0F1);
-        border-top: 1px solid var(--border-soft, rgba(232,25,44,0.06));
-        border-bottom: 1px solid var(--border-soft, rgba(232,25,44,0.06));
+        padding: 4rem 0;
+        background: #fff;
+        border-top: 1px solid var(--border-soft, rgba(232,25,44,0.08));
+        border-bottom: 1px solid var(--border-soft, rgba(232,25,44,0.08));
+        position: relative;
+        overflow: hidden;
+      }
+      .featured-in-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.1), transparent);
       }
       .featured-in-label {
         text-align: center;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--muted, #667085);
-        margin-bottom: 1.5rem;
+        color: var(--muted, #9ca3af);
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
       }
       .featured-in-marquee-wrapper {
         overflow: hidden;
         width: 100%;
         position: relative;
+        padding: 0.5rem 0;
       }
       .featured-in-marquee-wrapper::before,
       .featured-in-marquee-wrapper::after {
@@ -170,65 +185,92 @@ const FeaturedIn = () => {
         position: absolute;
         top: 0;
         bottom: 0;
-        width: 100px;
+        width: 120px;
         z-index: 2;
         pointer-events: none;
       }
       .featured-in-marquee-wrapper::before {
         left: 0;
-        background: linear-gradient(to right, var(--surface-soft, #FFF0F1), transparent);
+        background: linear-gradient(to right, #fff, transparent);
       }
       .featured-in-marquee-wrapper::after {
         right: 0;
-        background: linear-gradient(to left, var(--surface-soft, #FFF0F1), transparent);
+        background: linear-gradient(to left, #fff, transparent);
       }
       .featured-in-marquee {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 1.25rem;
         width: max-content;
       }
       .featured-in-badges {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
+        gap: 1.25rem;
         flex-wrap: wrap;
       }
       .fi-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        padding: 0.5rem 1.1rem;
+        gap: 0.6rem;
+        padding: 0.65rem 1.4rem;
         background: var(--fi-bg, #fff);
-        border: 1.5px solid color-mix(in srgb, var(--fi-color) 20%, transparent);
-        border-radius: 100px;
-        font-size: 0.8rem;
+        border: 1.5px solid color-mix(in srgb, var(--fi-color) 15%, transparent);
+        border-radius: 12px;
+        font-size: 0.82rem;
         font-weight: 700;
         color: var(--fi-color, #374151);
         cursor: default;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        position: relative;
+        overflow: hidden;
+      }
+      .fi-badge::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, transparent 50%);
+        pointer-events: none;
       }
       .fi-badge:hover {
-        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+        border-color: var(--fi-color);
       }
       .fi-badge-icon {
-        width: 20px; height: 20px;
+        width: 22px; height: 22px;
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        z-index: 1;
       }
       .fi-badge-icon svg {
         width: 100%;
         height: 100%;
       }
-      .fi-badge-label { line-height: 1; }
+      .fi-badge-label { 
+        line-height: 1; 
+        position: relative;
+        z-index: 1;
+      }
 
-      @media (max-width: 640px) {
-        .featured-in-badges { gap: 0.5rem; }
-        .fi-badge { font-size: 0.74rem; padding: 0.42rem 0.85rem; }
+      @media (max-width: 768px) {
+        .featured-in-section {
+          padding: 3rem 0;
+        }
+        .featured-in-badges { gap: 0.85rem; }
+        .fi-badge { 
+          font-size: 0.76rem; 
+          padding: 0.55rem 1.1rem; 
+          gap: 0.5rem;
+        }
+        .fi-badge-icon {
+          width: 18px; height: 18px;
+        }
       }
       @media (prefers-reduced-motion: reduce) {
         .fi-badge:hover { transform: none; }

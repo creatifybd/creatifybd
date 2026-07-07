@@ -138,114 +138,170 @@ const WhyUsSection = () => {
 
       <style>{`
         .why-us-section {
-          padding: 7rem 0;
-          background: var(--surface, #FFFBFB);
+          padding: 8rem 0;
+          background: #fff;
+          position: relative;
+          overflow: hidden;
+        }
+        .why-us-section::before {
+          content: '';
+          position: absolute;
+          top: -100px;
+          right: -100px;
+          width: 500px;
+          height: 500px;
+          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .why-us-section::after {
+          content: '';
+          position: absolute;
+          bottom: -100px;
+          left: -100px;
+          width: 400px;
+          height: 400px;
+          background: radial-gradient(circle, rgba(232,25,44,0.03) 0%, transparent 70%);
+          pointer-events: none;
         }
         .why-us-header {
           text-align: center;
-          max-width: 680px;
-          margin: 0 auto 4rem;
+          max-width: 720px;
+          margin: 0 auto 5rem;
+          position: relative;
+          z-index: 1;
         }
         .why-us-tabs-container {
-          max-width: 900px;
+          max-width: 1000px;
           margin: 0 auto;
+          position: relative;
+          z-index: 1;
         }
         .why-us-tabs {
           display: flex;
-          gap: 1rem;
-          margin-bottom: 2rem;
-          border-bottom: 2px solid var(--border-soft, #e5e7eb);
-          padding-bottom: 0.5rem;
+          gap: 0.5rem;
+          margin-bottom: 2.5rem;
+          padding: 0.5rem;
+          background: var(--surface-soft, #FFFBFB);
+          border-radius: 16px;
+          border: 1.5px solid var(--border-soft, rgba(232,25,44,0.08));
         }
         .why-us-tab {
           flex: 1;
-          padding: 1rem 1.5rem;
+          padding: 1.25rem 1.5rem;
           background: transparent;
           border: none;
           border-radius: 12px;
           cursor: pointer;
           position: relative;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .why-us-tab-title {
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           font-weight: 700;
-          color: var(--ink-soft, #252A33);
+          color: var(--muted, #9ca3af);
           text-align: center;
-          line-height: 1.3;
+          line-height: 1.4;
         }
         .why-us-tab--active .why-us-tab-title {
           color: var(--ink, #0F0F12);
         }
-        .why-us-tab-indicator {
-          position: absolute;
-          bottom: -0.5rem;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: var(--tab-accent, #F59E0B);
-          border-radius: 2px;
-          transform: scaleX(0);
-          transition: transform 0.3s ease;
+        .why-us-tab--active {
+          background: #fff;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
-        .why-us-tab--active .why-us-tab-indicator {
-          transform: scaleX(1);
-        }
-        .why-us-tab:hover {
-          background: var(--surface-hover, #FEF2F2);
+        .why-us-tab:hover:not(.why-us-tab--active) {
+          background: rgba(255,255,255,0.5);
         }
         .why-us-content {
-          min-height: 300px;
+          min-height: 320px;
         }
         .why-us-content-inner {
           background: var(--content-bg, #FEF3D8);
-          border-radius: var(--radius-xl, 32px);
-          padding: 2.5rem;
+          border-radius: 24px;
+          padding: 3rem;
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 1.5rem;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          position: relative;
+          overflow: hidden;
+        }
+        .why-us-content-inner::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+          pointer-events: none;
         }
         .why-us-item {
           display: flex;
-          gap: 1rem;
+          gap: 1.25rem;
           align-items: flex-start;
+          position: relative;
+          z-index: 1;
         }
         .why-us-item-icon {
           flex-shrink: 0;
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: rgba(255,255,255,0.65);
+          width: 48px;
+          height: 48px;
+          border-radius: 14px;
+          background: rgba(255,255,255,0.75);
           display: flex;
           align-items: center;
           justify-content: center;
-          backdrop-filter: blur(4px);
+          backdrop-filter: blur(8px);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .why-us-item-title {
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 1rem;
           color: var(--ink, #0F0F12);
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.4rem;
+          line-height: 1.3;
         }
         .why-us-item-desc {
-          font-size: 0.85rem;
+          font-size: 0.88rem;
           color: var(--ink-soft, #252A33);
-          line-height: 1.5;
+          line-height: 1.6;
         }
 
         @media (max-width: 768px) {
+          .why-us-section {
+            padding: 6rem 0;
+          }
+          .why-us-header {
+            margin: 0 auto 3rem;
+          }
           .why-us-tabs {
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.35rem;
           }
           .why-us-tab {
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.25rem;
+          }
+          .why-us-tab-title {
+            font-size: 0.88rem;
           }
           .why-us-content-inner {
-            padding: 1.5rem;
+            padding: 2rem;
             grid-template-columns: 1fr;
+            gap: 1.5rem;
           }
-          .why-us-section { padding: 5rem 0; }
+          .why-us-item {
+            gap: 1rem;
+          }
+          .why-us-item-icon {
+            width: 42px;
+            height: 42px;
+          }
+          .why-us-item-title {
+            font-size: 0.95rem;
+          }
+          .why-us-item-desc {
+            font-size: 0.85rem;
+          }
         }
         @media (prefers-reduced-motion: reduce) {
           .why-us-tab { transition: none; }

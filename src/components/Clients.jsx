@@ -81,38 +81,55 @@ const Clients = () => {
 
       <style>{`
         .clients-section-v2 {
-          padding: 3.5rem 0 3rem;
-          background: #fff;
-          border-top: 1px solid #f0f0f4;
-          border-bottom: 1px solid #f0f0f4;
+          padding: 5rem 0 4rem;
+          background: var(--surface-soft, #FFFBFB);
+          border-top: 1px solid var(--border-soft, rgba(232,25,44,0.06));
+          border-bottom: 1px solid var(--border-soft, rgba(232,25,44,0.06));
           overflow: hidden;
+          position: relative;
+        }
+        .clients-section-v2::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, rgba(232,25,44,0.03) 0%, transparent 70%);
+          pointer-events: none;
         }
         .cl-inner {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 1.75rem;
+          gap: 2.5rem;
+          position: relative;
+          z-index: 1;
         }
         .cl-label {
-          font-size: 0.78rem;
-          font-weight: 700;
-          letter-spacing: 0.07em;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: #9ca3af;
+          color: var(--muted, #9ca3af);
+          text-align: center;
+          max-width: 600px;
+          line-height: 1.5;
         }
 
         /* Marquee */
         .cl-marquee-wrap {
           width: 100%;
           overflow: hidden;
-          -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+          -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
         }
         .cl-marquee-track {
           display: flex;
-          gap: 1rem;
+          gap: 1.5rem;
           width: max-content;
-          animation: cl-scroll 36s linear infinite;
+          animation: cl-scroll 40s linear infinite;
         }
         .cl-marquee-track:hover { animation-play-state: paused; }
         @keyframes cl-scroll {
@@ -124,37 +141,77 @@ const Clients = () => {
         .cl-brand-pill {
           display: inline-flex;
           align-items: center;
-          gap: 0.55rem;
-          padding: 0.5rem 1.1rem 0.5rem 0.55rem;
+          gap: 0.75rem;
+          padding: 0.75rem 1.4rem 0.75rem 0.75rem;
           background: #fff;
-          border: 1px solid #e5e7eb;
-          border-radius: 100px;
+          border: 1.5px solid var(--border-card, #e5e7eb);
+          border-radius: 16px;
           white-space: nowrap;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-          transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           flex-shrink: 0;
+          position: relative;
+          overflow: hidden;
+        }
+        .cl-brand-pill::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, transparent 50%);
+          pointer-events: none;
         }
         .cl-brand-pill:hover {
-          box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-          border-color: #d1d5db;
-          transform: translateY(-1px);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+          border-color: var(--brand-red, #E8192C);
+          transform: translateY(-3px);
         }
         .cl-brand-abbr {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 30px; height: 30px;
-          border-radius: 50%;
-          font-size: 0.65rem;
+          width: 36px; height: 36px;
+          border-radius: 10px;
+          font-size: 0.72rem;
           font-weight: 900;
-          letter-spacing: -0.01em;
+          letter-spacing: -0.02em;
           flex-shrink: 0;
+          position: relative;
+          z-index: 1;
         }
         .cl-brand-name {
-          font-size: 0.82rem;
+          font-size: 0.88rem;
           font-weight: 700;
-          color: #374151;
-          letter-spacing: -0.01em;
+          color: var(--ink, #0F0F12);
+          letter-spacing: -0.02em;
+          position: relative;
+          z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+          .clients-section-v2 {
+            padding: 3.5rem 0 3rem;
+          }
+          .cl-inner {
+            gap: 2rem;
+          }
+          .cl-label {
+            font-size: 0.68rem;
+            padding: 0 1rem;
+          }
+          .cl-marquee-track {
+            gap: 1rem;
+          }
+          .cl-brand-pill {
+            padding: 0.6rem 1.1rem 0.6rem 0.6rem;
+            gap: 0.6rem;
+          }
+          .cl-brand-abbr {
+            width: 32px; height: 32px;
+            font-size: 0.68rem;
+          }
+          .cl-brand-name {
+            font-size: 0.82rem;
+          }
         }
       `}</style>
     </section>

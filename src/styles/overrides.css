@@ -2019,6 +2019,7 @@
     line-height: 1.25 !important;
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
   }
 
   body:not(.admin-body) .portfolio-marquee-arrow {
@@ -2313,19 +2314,204 @@
   }
 
   body:not(.admin-body) .about-trust-section {
-    padding: clamp(4.5rem, 7vw, 7rem) 0 !important;
+    padding: clamp(5rem, 8vw, 8rem) 0 !important;
+    background: #fff !important;
+    border-top: 1px solid var(--border-soft) !important;
+    border-bottom: 1px solid var(--border-soft) !important;
+    position: relative !important;
+  }
+
+  body:not(.admin-body) .about-trust-section::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 1px !important;
+    height: 100% !important;
+    background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.08), transparent) !important;
   }
 
   body:not(.admin-body) .about-trust-grid {
     display: grid !important;
-    grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr) !important;
-    gap: clamp(2.5rem, 5vw, 5rem) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(450px, 1fr) !important;
+    gap: clamp(3rem, 6vw, 6rem) !important;
     align-items: center !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  body:not(.admin-body) .about-trust-section .eyebrow {
+    font-size: 0.7rem !important;
+    letter-spacing: 0.12em !important;
+    margin-bottom: 1rem !important;
+  }
+
+  body:not(.admin-body) .about-trust-section .section-h {
+    font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.1 !important;
+  }
+
+  body:not(.admin-body) .about-trust-section .section-sub {
+    font-size: clamp(0.9rem, 1.5vw, 1rem) !important;
+    line-height: 1.7 !important;
+    margin-bottom: 2rem !important;
+  }
+
+  body:not(.admin-body) .ceo-quote {
+    background: var(--surface-soft) !important;
+    border: 1.5px solid var(--border-soft) !important;
+    border-radius: 16px !important;
+    padding: 1.75rem !important;
+    margin: 2rem 0 !important;
+    position: relative !important;
+  }
+
+  body:not(.admin-body) .ceo-quote blockquote p {
+    font-size: 0.95rem !important;
+    line-height: 1.7 !important;
+    color: var(--ink) !important;
+  }
+
+  body:not(.admin-body) .ceo-quote cite {
+    font-size: 0.85rem !important;
+    color: var(--muted) !important;
+    font-weight: 700 !important;
   }
 
   body:not(.admin-body) .trust-proof-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+  }
+
+  body:not(.admin-body) .office-card {
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+  }
+
+  body:not(.admin-body) .office-card img {
+    width: 100% !important;
+    height: 280px !important;
+    object-fit: cover !important;
+  }
+
+  body:not(.admin-body) .office-card-caption {
+    background: #fff !important;
+    padding: 1rem 1.25rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: var(--ink) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+
+  body:not(.admin-body) .agency-moment-grid {
     display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
     gap: 1rem !important;
+  }
+
+  body:not(.admin-body) .agency-moment-grid figure {
+    margin: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    border: 1.5px solid var(--border-soft) !important;
+  }
+
+  body:not(.admin-body) .agency-moment-grid img {
+    width: 100% !important;
+    height: 180px !important;
+    object-fit: cover !important;
+  }
+
+  body:not(.admin-body) .agency-moment-grid figcaption {
+    background: #fff !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: var(--muted) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+  }
+
+  body:not(.admin-body) .team-role-card {
+    background: #fff !important;
+    border: 1.5px solid var(--border-soft) !important;
+    border-radius: 16px !important;
+    padding: 1.5rem !important;
+  }
+
+  body:not(.admin-body) .team-role-heading {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    margin-bottom: 1rem !important;
+  }
+
+  body:not(.admin-body) .team-role-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  body:not(.admin-body) .team-role-item {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: var(--muted) !important;
+    background: var(--surface-soft) !important;
+    padding: 0.4rem 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  body:not(.admin-body) .trust-mini-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  body:not(.admin-body) .trust-stat {
+    background: #fff !important;
+    border: 1.5px solid var(--border-soft) !important;
+    border-radius: 12px !important;
+    padding: 1.25rem !important;
+    text-align: center !important;
+    transition: all 0.3s ease !important;
+  }
+
+  body:not(.admin-body) .trust-stat:hover {
+    border-color: var(--brand-red) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(232,25,44,0.1) !important;
+  }
+
+  body:not(.admin-body) .trust-stat strong {
+    font-size: 1.5rem !important;
+    font-weight: 900 !important;
+    color: var(--brand-red) !important;
+    display: block !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  body:not(.admin-body) .trust-stat span {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: var(--muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  body:not(.admin-body) .trust-proof-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
   }
 
   body:not(.admin-body) .office-card {

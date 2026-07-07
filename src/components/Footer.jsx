@@ -210,21 +210,41 @@ const Footer = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 1.5rem;
+          gap: 2rem;
           flex-wrap: wrap;
-          padding: 1rem 0 2.5rem;
-          font-size: 0.8rem;
-          font-weight: 600;
+          padding: 1.25rem 0 3rem;
+          font-size: 0.82rem;
+          font-weight: 700;
           color: var(--muted);
+          position: relative;
+        }
+        .footer-trust-strip::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--brand-red), transparent);
+        }
+        .footer-trust-strip span {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
         }
         .footer-trust-div {
           width: 1px;
-          height: 14px;
+          height: 16px;
           background: var(--border-card);
           flex-shrink: 0;
         }
         @media (max-width: 640px) {
-          .footer-trust-strip { gap: 0.75rem; }
+          .footer-trust-strip { 
+            gap: 1rem; 
+            padding: 1rem 0 2.5rem;
+            font-size: 0.76rem;
+          }
           .footer-trust-div { display: none; }
         }
       `}</style>
