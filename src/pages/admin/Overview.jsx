@@ -58,50 +58,125 @@ const Overview = () => {
         const latestMessages = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRecentMessages(latestMessages);
 
-        // Generate mock chart data for messages over last 7 days
-        const chartData = [];
+        // REAL ANALYTICS: Message chart for last 7 days
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        sevenDaysAgo.setHours(0, 0, 0, 0);
+
+        const messagesQuery = query(
+          collection(db, 'messages'),
+          where('createdAt', '>=', sevenDaysAgo),
+          orderBy('createdAt', 'asc')
+        );
+        const messagesSnap = await getDocs(messagesQuery);
+        const allMessages = messagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Group messages by date
+        const messageCounts = {};
         for (let i = 6; i >= 0; i--) {
           const date = new Date();
           date.setDate(date.getDate() - i);
           const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          // Mock data - in production, aggregate from actual messages
-          const count = Math.floor(Math.random() * 8) + 1;
-          chartData.push({ date, count });
+          messageCounts[dateStr] = 0;
         }
+
+        allMessages.forEach(msg => {
+          if (msg.createdAt) {
+            const msgDate = new Date(msg.createdAt.seconds * 1000);
+            const dateStr = msgDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            if (messageCounts.hasOwnProperty(dateStr)) {
+              messageCounts[dateStr]++;
+            }
+          }
+        });
+
+        const chartData = Object.entries(messageCounts).map(([date, count]) => ({ date, count }));
         setMessageChartData(chartData);
 
-        // Generate mock service popularity data
-        const serviceData = [
-          { name: 'Social Media', value: 35 },
-          { name: 'Graphic Design', value: 28 },
-          { name: 'Video Editing', value: 20 },
-          { name: 'Web Design', value: 12 },
-          { name: 'Digital Marketing', value: 5 }
-        ];
-        setServicePopularityData(serviceData);
+        // REAL ANALYTICS: Service popularity from messages
+        const serviceCounts = {};
+        allMessages.forEach(msg => {
+          const service = msg.service || 'Not specified';
+          serviceCounts[service] = (serviceCounts[service] || 0) + 1;
+        });
 
-        // Generate mock rating distribution data
-        const ratingData = [
-          { name: '5 Stars', value: 65, color: '#22c55e' },
-          { name: '4 Stars', value: 25, color: '#3b82f6' },
-          { name: '3 Stars', value: 7, color: '#f59e0b' },
-          { name: '2 Stars', value: 2, color: '#ef4444' },
-          { name: '1 Star', value: 1, color: '#991b1b' }
-        ];
-        setRatingDistributionData(ratingData);
+        const serviceData = Object.entries(serviceCounts)
+          .map(([name, value]) => ({ name, value }))
+          .sort((a, b) => b.value - a.value)
+          .slice(0, 5);
 
-        // Generate mock revenue trend data
-        const revenue = [];
+        if (serviceData.length === 0) {
+          setServicePopularityData([
+            { name: 'No data', value: 1 }
+          ]);
+        } else {
+          setServicePopularityData(serviceData);
+        }
+
+        // REAL ANALYTICS: Rating distribution from reviews
+        const ratingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        approvedReviews.forEach(review => {
+          const rating = Number(review.rating) || 0;
+          if (rating >= 1 && rating <= 5) {
+            ratingCounts[rating]++;
+          }
+        });
+
+        const totalRatings = Object.values(ratingCounts).reduce((a, b) => a + b, 0);
+        const ratingColors = { 5: '#22c55e', 4: '#3b82f6', 3: '#f59e0b', 2: '#ef4444', 1: '#991b1b' };
+        const ratingData = Object.entries(ratingCounts)
+          .map(([name, value]) => ({
+            name: `${name} Stars`,
+            value: totalRatings > 0 ? Math.round((value / totalRatings) * 100) : 0,
+            color: ratingColors[name]
+          }))
+          .filter(item => item.value > 0);
+
+        if (ratingData.length === 0) {
+          setRatingDistributionData([
+            { name: 'No ratings', value: 100, color: '#6b7280' }
+          ]);
+        } else {
+          setRatingDistributionData(ratingData);
+        }
+
+        // REAL ANALYTICS: Revenue trend from orders (last 6 months)
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        sixMonthsAgo.setDate(1);
+        sixMonthsAgo.setHours(0, 0, 0, 0);
+
+        const ordersQuery = query(
+          collection(db, 'orders'),
+          where('createdAt', '>=', sixMonthsAgo),
+          orderBy('createdAt', 'asc')
+        );
+        const ordersSnap = await getDocs(ordersQuery);
+        const allOrders = ordersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Group orders by month
+        const monthlyRevenue = {};
         for (let i = 5; i >= 0; i--) {
           const date = new Date();
           date.setMonth(date.getMonth() - i);
-          const monthStr = date.toLocaleDateString('en-US', { month: 'short' });
-          const amount = Math.floor(Math.random() * 50000) + 20000;
-          revenue.push({ month: monthStr, revenue: amount });
+          const monthStr = date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+          monthlyRevenue[monthStr] = 0;
         }
-        setRevenueData(revenue);
 
-        // Calculate today's summary
+        allOrders.forEach(order => {
+          if (order.createdAt && order.totalAmount) {
+            const orderDate = new Date(order.createdAt.seconds * 1000);
+            const monthStr = orderDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+            if (monthlyRevenue.hasOwnProperty(monthStr)) {
+              monthlyRevenue[monthStr] += Number(order.totalAmount) || 0;
+            }
+          }
+        });
+
+        const revenueData = Object.entries(monthlyRevenue).map(([month, revenue]) => ({ month, revenue }));
+        setRevenueData(revenueData);
+
+        // REAL ANALYTICS: Today's summary
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
@@ -110,17 +185,26 @@ const Overview = () => {
         // Count unread messages
         const unreadMsgCount = latestMessages.filter(m => !m.read).length;
 
-        // Count pending orders (mock data)
-        const pendingOrdersCount = Math.floor(Math.random() * 5);
+        // Count pending orders from today
+        const todayOrdersQuery = query(
+          collection(db, 'orders'),
+          where('createdAt', '>=', today),
+          where('createdAt', '<', tomorrow)
+        );
+        const todayOrdersSnap = await getDocs(todayOrdersQuery);
+        const todayOrders = todayOrdersSnap.docs.map(doc => doc.data());
+        const pendingOrdersCount = todayOrders.filter(o => o.status === 'pending' || !o.status).length;
 
-        // Today's revenue (mock data)
-        const todayRev = Math.floor(Math.random() * 5000) + 1000;
+        // Today's revenue from completed/paid orders
+        const todayRev = todayOrders
+          .filter(o => o.status === 'completed' || o.status === 'paid')
+          .reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
 
-        // Active visitors (mock data)
+        // Active visitors - keep as mock for now (requires analytics integration)
         const activeVis = Math.floor(Math.random() * 20) + 10;
 
-        // Urgent tasks (mock data)
-        const urgentTasks = Math.floor(Math.random() * 3);
+        // Urgent tasks - count unread messages + pending orders
+        const urgentTasks = unreadMsgCount + pendingOrdersCount;
 
         setTodaySummary({
           unreadMessages: unreadMsgCount,
