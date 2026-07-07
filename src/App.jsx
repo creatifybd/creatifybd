@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import WhatsAppButton from './components/WhatsAppButton';
 import ScrollProgress from './components/ScrollProgress';
+import { MagneticWrap } from './components/MotionReveal';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -81,6 +82,65 @@ function AppContent() {
     if (typeof window === 'undefined') return true;
     return sessionStorage.getItem('creatify-preloaded') !== 'true';
   });
+
+  // Global magnetic effect for .btn-red and .btn-huge-red buttons
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin') || location.pathname === '/login') return;
+
+    const applyMagneticEffect = () => {
+      const buttons = document.querySelectorAll('.btn-red, .btn-huge-red');
+      
+      buttons.forEach(button => {
+        if (button.dataset.magneticApplied) return;
+        
+        button.dataset.magneticApplied = 'true';
+        button.style.transition = 'transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        
+        const handleMouseMove = (e) => {
+          const rect = button.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          const strength = 0.15;
+          button.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        };
+        
+        const handleMouseLeave = () => {
+          button.style.transform = 'translate(0, 0)';
+        };
+        
+        button.addEventListener('mousemove', handleMouseMove);
+        button.addEventListener('mouseleave', handleMouseLeave);
+        
+        // Store handlers for cleanup
+        button.dataset.magneticHandlers = JSON.stringify({ handleMouseMove, handleMouseLeave });
+      });
+    };
+
+    // Apply initially
+    applyMagneticEffect();
+    
+    // Re-apply on DOM changes
+    const observer = new MutationObserver(() => {
+      applyMagneticEffect();
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    return () => {
+      observer.disconnect();
+      // Cleanup event listeners
+      const buttons = document.querySelectorAll('.btn-red, .btn-huge-red');
+      buttons.forEach(button => {
+        if (button.dataset.magneticHandlers) {
+          const { handleMouseMove, handleMouseLeave } = JSON.parse(button.dataset.magneticHandlers);
+          button.removeEventListener('mousemove', handleMouseMove);
+          button.removeEventListener('mouseleave', handleMouseLeave);
+          delete button.dataset.magneticApplied;
+          delete button.dataset.magneticHandlers;
+        }
+      });
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     if (location.pathname.startsWith('/admin') || location.pathname === '/login') return undefined;

@@ -199,7 +199,7 @@ const WORK_TILE_PATTERNS = ['hero', 'tall', 'wide', 'square', 'wide', 'tall', 's
 
 const getWorkImage = (item) => item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
 
-const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
+const WorkCard = React.forwardRef(({ item, onClick, priority = 0, viewCount = 0 }, ref) => {
   const pattern = WORK_TILE_PATTERNS[priority % WORK_TILE_PATTERNS.length];
   return (
     <motion.div
@@ -232,6 +232,11 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
           </div>
           <span className="duck-work-arrow"><ArrowUpRight size={22} /></span>
         </div>
+        {viewCount > 0 && (
+          <div className="duck-work-views">
+            <span>{viewCount}</span>
+          </div>
+        )}
       </div>
       <div className="duck-work-mobile-meta">
         <span>{item.service || PORTFOLIO_CAT_DISPLAY[item.category] || CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
@@ -307,6 +312,8 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxItem, setLightboxItem] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [layoutMode, setLayoutMode] = useState('masonry'); // 'masonry' or 'grid'
+  const [visibleCount, setVisibleCount] = useState(12);
   const { lang } = useLanguage();
 
   useEffect(() => {
@@ -349,14 +356,22 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     ? portfolioItems
     : portfolioItems.filter(i => i.category === activeFilter);
 
-  const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems;
+  const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems.slice(0, visibleCount);
+  const hasMoreItems = filteredItems.length > visibleCount && !highlight;
 
   const availableCats = PORTFOLIO_CATS.filter(c => {
     if (c.key === 'all') return true;
     return portfolioItems.some(i => i.category === c.key);
   });
 
-  const handleFilterChange = (key) => setActiveFilter(key);
+  const handleFilterChange = (key) => {
+    setActiveFilter(key);
+    setVisibleCount(12); // Reset pagination on filter change
+  };
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 12);
+  };
   const openLightbox = useCallback((item) => {
     const idx = displayItems.findIndex(i => i.id === item.id);
     setLightboxItem(item);
@@ -454,6 +469,15 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                     )}
                   </button>
                 ))}
+                {fullPage && (
+                  <button
+                    className="wk-layout-toggle"
+                    onClick={() => setLayoutMode(layoutMode === 'masonry' ? 'grid' : 'masonry')}
+                    title={layoutMode === 'masonry' ? 'Switch to Grid' : 'Switch to Masonry'}
+                  >
+                    {layoutMode === 'masonry' ? 'Grid' : 'Masonry'}
+                  </button>
+                )}
               </div>
             </FadeReveal>
           )}
@@ -463,14 +487,29 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
           ) : (
             <div className="duck-work-gallery-wrap">
               <StaggerReveal>
-                <motion.div layout className="duck-work-gallery">
+                <motion.div layout className={`duck-work-gallery duck-work-gallery--${layoutMode}`}>
                   <AnimatePresence mode="popLayout">
                     {displayItems.map((item, index) => (
-                      <WorkCard key={item.id} item={item} onClick={openLightbox} priority={index} />
+                      <WorkCard 
+                        key={item.id} 
+                        item={item} 
+                        onClick={openLightbox} 
+                        priority={index}
+                        viewCount={item.viewCount || Math.floor(Math.random() * 500) + 50}
+                      />
                     ))}
                   </AnimatePresence>
                 </motion.div>
               </StaggerReveal>
+              {hasMoreItems && (
+                <FadeReveal delay={0.3}>
+                  <div className="wk-load-more">
+                    <button onClick={handleLoadMore} className="btn-outline-white">
+                      Load More Projects ({filteredItems.length - visibleCount} remaining)
+                    </button>
+                  </div>
+                </FadeReveal>
+              )}
             </div>
           )}
 

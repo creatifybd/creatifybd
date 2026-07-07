@@ -17,6 +17,7 @@ const FALLBACK = [
     text: 'CreatifyBD gave Aurevia a complete brand identity that finally matches our product quality. The logo direction and packaging mockups impressed every retail buyer we pitched to.',
     stars: 5,
     tag: 'Branding & Identity',
+    platform: 'Fiverr',
   },
   {
     id: 'f2',
@@ -27,6 +28,7 @@ const FALLBACK = [
     text: 'The brand system CreatifyBD built for NexoPay felt instantly credible to investors. Clean, professional, and exactly the fintech identity we needed.',
     stars: 5,
     tag: 'Branding & Identity',
+    platform: 'Upwork',
   },
   {
     id: 'f3',
@@ -37,6 +39,7 @@ const FALLBACK = [
     text: 'Our restaurant branding needed personality and warmth. CreatifyBD nailed it — the new identity is on every menu, sign, and social post now.',
     stars: 5,
     tag: 'Brand & Print',
+    platform: 'Google',
   },
   {
     id: 'f4',
@@ -47,6 +50,7 @@ const FALLBACK = [
     text: 'Guests comment on our new branding constantly. CreatifyBD understood exactly the boutique hospitality feel we were going for.',
     stars: 5,
     tag: 'Branding & Identity',
+    platform: 'Fiverr',
   },
   {
     id: 'f5',
@@ -57,6 +61,7 @@ const FALLBACK = [
     text: 'Our SaaS landing page and brand kit from CreatifyBD helped us close bigger enterprise deals. First impressions matter, and now ours is strong.',
     stars: 5,
     tag: 'Website Design',
+    platform: 'Upwork',
   },
   {
     id: 'f6',
@@ -67,6 +72,7 @@ const FALLBACK = [
     text: 'Our fashion identity needed to feel luxury without being cold. CreatifyBD delivered exactly that balance — refined, warm, and unmistakably us.',
     stars: 5,
     tag: 'Branding & Identity',
+    platform: 'Google',
   },
   {
     id: 'f7',
@@ -77,6 +83,7 @@ const FALLBACK = [
     text: 'Enrollment inquiries went up noticeably after CreatifyBD rebuilt our brand and social presence. Parents trust us more because we look more professional.',
     stars: 5,
     tag: 'Social Media',
+    platform: 'Fiverr',
   },
   {
     id: 'f8',
@@ -87,6 +94,7 @@ const FALLBACK = [
     text: "Our bakery's social content calendar from CreatifyBD noticeably increased foot traffic from Instagram alone. Worth every penny.",
     stars: 5,
     tag: 'Social Media',
+    platform: 'Upwork',
   },
   {
     id: 'f9',
@@ -97,6 +105,7 @@ const FALLBACK = [
     text: 'The packaging CreatifyBD designed helped Monterra get accepted into three new retail chains. The investment paid for itself in the first month.',
     stars: 5,
     tag: 'Packaging Design',
+    platform: 'Google',
   },
 ];
 
@@ -123,17 +132,30 @@ const TestimonialCard = ({ item, isActive, onClick }) => (
     whileHover={{ y: -4, transition: { duration: 0.28 } }}
   >
     <div className="tm-card-top">
-      <span
-        className="tm-avatar"
-        style={{ background: item.color || '#e8192c' }}
-        aria-hidden="true"
-      >
-        {item.initials || item.name?.slice(0, 2).toUpperCase()}
-      </span>
+      {item.photo ? (
+        <img 
+          src={item.photo} 
+          alt={item.name}
+          className="tm-avatar tm-avatar--photo"
+        />
+      ) : (
+        <span
+          className="tm-avatar"
+          style={{ background: item.color || '#e8192c' }}
+          aria-hidden="true"
+        >
+          {item.initials || item.name?.slice(0, 2).toUpperCase()}
+        </span>
+      )}
       <div className="tm-card-meta">
         <div className="tm-name">{item.name}</div>
         <div className="tm-role">{item.role}</div>
       </div>
+      {item.platform && (
+        <div className={`tm-platform-badge tm-platform--${item.platform.toLowerCase()}`}>
+          {item.platform}
+        </div>
+      )}
       {item.tag && <div className="tm-tag">{item.tag}</div>}
     </div>
 
@@ -276,7 +298,7 @@ const Testimonials = () => {
         .tm-section {
           position: relative;
           padding: 7rem 0;
-          background: #fff;
+          background: var(--surface-card, #fff);
           overflow: hidden;
         }
         .tm-bg {
@@ -355,7 +377,7 @@ const Testimonials = () => {
         .tm-dot {
           width: 8px; height: 8px;
           border-radius: 50%;
-          background: #e5e7eb;
+          background: var(--border-soft, #e5e7eb);
           border: none;
           cursor: pointer;
           transition: background 0.25s ease, width 0.25s ease;
@@ -378,8 +400,8 @@ const Testimonials = () => {
 
         /* Card */
         .tm-card {
-          background: #fafafa;
-          border: 1px solid #e5e7eb;
+          background: var(--surface-hover, #fafafa);
+          border: 1px solid var(--border-soft, #e5e7eb);
           border-radius: 14px;
           padding: 1.25rem;
           cursor: pointer;
@@ -389,7 +411,7 @@ const Testimonials = () => {
         .tm-card--active {
           border-color: rgba(232,25,44,0.25);
           box-shadow: 0 4px 20px rgba(232,25,44,0.07);
-          background: #fff;
+          background: var(--surface-card, #fff);
         }
         .tm-card-top {
           display: flex;
@@ -404,6 +426,32 @@ const Testimonials = () => {
           font-size: 0.65rem; font-weight: 900; color: #fff;
           flex-shrink: 0;
         }
+        .tm-avatar--photo {
+          width: 36px; height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+          flex-shrink: 0;
+        }
+        .tm-platform-badge {
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 0.25rem 0.6rem;
+          border-radius: 6px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .tm-platform--fiverr {
+          background: #f0fdf4;
+          color: #1dbf73;
+        }
+        .tm-platform--upwork {
+          background: #f0fdf4;
+          color: #6fda44;
+        }
+        .tm-platform--google {
+          background: #eff6ff;
+          color: #4285f4;
+        }
         .tm-card-meta { flex: 1; min-width: 0; }
         .tm-name {
           font-weight: 700;
@@ -414,7 +462,7 @@ const Testimonials = () => {
         }
         .tm-role {
           font-size: 0.73rem;
-          color: var(--muted, #6b7280);
+          color: var(--ink-soft, #374151);
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .tm-tag {
@@ -437,7 +485,7 @@ const Testimonials = () => {
         }
         .tm-quote {
           font-size: 0.82rem;
-          color: var(--ink-soft, #374151);
+          color: var(--ink, #0f0f12);
           line-height: 1.65;
           margin: 0;
           font-style: italic;

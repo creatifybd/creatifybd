@@ -41,6 +41,8 @@ const StatItem = ({ stat, index, inView }) => {
       initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, ease: EASE_EXPO, delay: index * 0.1 }}
+      role="listitem"
+      aria-label={`${stat.label}: ${stat.value}${stat.suffix}`}
     >
       <div className="sc-value">
         {count}{stat.suffix}
@@ -65,9 +67,9 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section className="sc-section" ref={ref} aria-label="Key statistics">
+    <section className="sc-section" ref={ref} aria-label="Company statistics">
       <div className="container">
-        <div className="sc-grid">
+        <div className="sc-grid" role="list">
           {STATS.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} index={i} inView={inView} />
           ))}
@@ -76,10 +78,18 @@ const StatsCounter = () => {
 
       <style>{`
         .sc-section {
-          padding: 4rem 0;
-          background: #fff;
-          border-top: 1px solid rgba(232,25,44,0.08);
-          border-bottom: 1px solid rgba(232,25,44,0.08);
+          padding: 5rem 0;
+          background: linear-gradient(135deg, var(--surface-dark, #0a0a0f) 0%, var(--surface-dark-secondary, #1a1a20) 50%, var(--surface-dark, #0a0a0f) 100%);
+          position: relative;
+          overflow: hidden;
+        }
+        .sc-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(232,25,44,0.15) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 50%, rgba(232,25,44,0.1) 0%, transparent 50%);
+          pointer-events: none;
         }
         .sc-grid {
           display: grid;
@@ -88,39 +98,50 @@ const StatsCounter = () => {
         }
         .sc-item {
           text-align: center;
-          padding: 2rem 1.5rem;
+          padding: 2.5rem 1.5rem;
           position: relative;
+          z-index: 1;
         }
         .sc-item:not(:last-child)::after {
           content: '';
           position: absolute;
-          right: 0; top: 20%; bottom: 20%;
-          width: 1px;
-          background: rgba(232,25,44,0.10);
+          right: 0; top: 25%; bottom: 25%;
+          width: 2px;
+          background: linear-gradient(180deg, transparent 0%, rgba(232,25,44,0.4) 20%, rgba(232,25,44,0.4) 80%, transparent 100%);
+          animation: separatorPulse 3s ease-in-out infinite;
+        }
+        @keyframes separatorPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
         }
         .sc-value {
           font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
-          font-size: clamp(2.4rem, 4vw, 3.5rem);
+          font-size: clamp(3rem, 5vw, 4.5rem);
           font-weight: 900;
-          letter-spacing: -0.04em;
+          letter-spacing: -0.05em;
           line-height: 1;
-          background: linear-gradient(135deg, #E8192C 0%, #C0142A 100%);
+          background: linear-gradient(135deg, #E8192C 0%, #ff6b6b 50%, #C0142A 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.75rem;
+          text-shadow: 0 0 40px rgba(232,25,44,0.3);
+          filter: drop-shadow(0 0 20px rgba(232,25,44,0.2));
         }
         .sc-label {
-          font-size: 0.9rem;
+          font-size: 1rem;
           font-weight: 800;
-          color: #0f0f12;
-          margin-bottom: 0.25rem;
+          color: var(--white, #fff);
+          margin-bottom: 0.35rem;
           letter-spacing: -0.01em;
+          text-transform: uppercase;
         }
         .sc-desc {
-          font-size: 0.75rem;
-          color: #667085;
-          line-height: 1.4;
+          font-size: 0.8rem;
+          color: var(--text-dim-dark, rgba(255,255,255,0.6));
+          line-height: 1.5;
+          max-width: 140px;
+          margin: 0 auto;
         }
         @media (max-width: 768px) {
           .sc-grid { grid-template-columns: 1fr 1fr; }
@@ -131,7 +152,7 @@ const StatsCounter = () => {
           }
           .sc-item:nth-child(1),
           .sc-item:nth-child(2) {
-            border-bottom: 1px solid rgba(232,25,44,0.08);
+            border-bottom: 1px solid rgba(232,25,44,0.15);
           }
         }
         @media (max-width: 480px) {

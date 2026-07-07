@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FileSearch, Lightbulb, PenTool, Rocket } from 'lucide-react';
 import { FadeReveal, SlideReveal } from './MotionReveal';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
 import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
@@ -47,6 +47,10 @@ const Process = ({ highlight = false, fullPage = false }) => {
     'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.'
   );
 
+  // Timeline animation
+  const { scrollYProgress } = useScroll();
+  const timelineWidth = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+
   return (
     <section className={`section process-section ${fullPage ? 'full-page-section' : ''}`} id="process">
       <div className="container">
@@ -65,7 +69,15 @@ const Process = ({ highlight = false, fullPage = false }) => {
         )}
 
         {/* Keep the native CSS grid — animate each article directly */}
-        <div className="process-grid-light">
+        <div className="process-grid-light" role="list" aria-label="Workflow steps">
+          {/* Timeline connector line */}
+          <motion.div 
+            className="process-timeline-line"
+            style={{ scaleX: timelineWidth }}
+            initial={{ scaleX: 0 }}
+            aria-hidden="true"
+          />
+          
           {editableSteps.map((step, index) => (
             <motion.article
               key={step.num}
@@ -75,6 +87,8 @@ const Process = ({ highlight = false, fullPage = false }) => {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.75, ease: EASE_EXPO, delay: index * 0.12 }}
               whileHover={{ y: -6, transition: { duration: 0.28, ease: EASE_EXPO } }}
+              role="listitem"
+              aria-label={`Step ${step.num}: ${step.title}`}
             >
               <div className="process-step-top">
                 <span>{step.num}</span>

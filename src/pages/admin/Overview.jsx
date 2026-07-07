@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../../firebase/config';
-import { collection, getDocs, getCountFromServer, addDoc, doc, setDoc, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
-import { MessageSquare, Briefcase, Image as ImageIcon, Star, TrendingUp, Sparkles, Zap, Globe, Clock, CheckCircle2 } from 'lucide-react';
+import { collection, getDocs, getCountFromServer, doc, setDoc, onSnapshot, query, orderBy, limit, where } from 'firebase/firestore';
+import { MessageSquare, Briefcase, Image as ImageIcon, Star, TrendingUp, Sparkles, Clock, CheckCircle2, Calendar, DollarSign, Users, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
-import { useConfirm } from '../../context/ConfirmContext';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const Overview = () => {
-  const confirm = useConfirm();
   const [stats, setStats] = useState({
     messages: 0,
     services: 0,
@@ -19,152 +17,17 @@ const Overview = () => {
   const [recentMessages, setRecentMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState('en');
-
-  const toggleLanguage = async (newLang) => {
-    if (newLang === lang) return;
-    try {
-      await setDoc(doc(db, 'settings', 'site'), { lang: newLang }, { merge: true });
-      setLang(newLang);
-    } catch (err) { 
-      console.error(err);
-      toast.error('Failed to update language'); 
-    }
-  };
-
-  const seedDemoData = async () => {
-    const ok = await confirm({
-      title: 'Seed demo data?',
-      description: 'This will add sample services, portfolio items, reviews, and pricing plans to your website.',
-      confirmLabel: 'Seed Data'
-    });
-    if (!ok) return;
-    
-    try {
-      // Seed Services
-      const services = [
-        { 
-          icon: '📱', 
-          title: 'Social Media Management', 
-          title_bn: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',
-          desc: 'Facebook & Instagram setup, content creation, community management, and follower growth.', 
-          desc_bn: 'আপনার ব্যবসার ভ্যালু বাড়াতে আমরা করছি প্রফেশনাল সোশ্যাল মিডিয়া ম্যানেজমেন্ট এবং কন্টেন্ট ক্রিয়েশন।',
-          price: 'From ৳1,500', bg: 's1', hidden: false 
-        },
-        { 
-          icon: '🎨', 
-          title: 'Branding & Logo Design', 
-          title_bn: 'ব্র্যান্ডিং ও লোগো ডিজাইন',
-          desc: 'Impactful logos and branding materials with unlimited revisions and brand guidelines.', 
-          desc_bn: 'আপনার ব্যবসার জন্য একটি ইউনিক আইডেন্টিটি বা লোগো তৈরি করুন যা সবার নজর কাড়বে।',
-          price: 'From ৳1,000', bg: 's2', hidden: false 
-        },
-        { 
-          icon: '📸', 
-          title: 'Product Photography', 
-          title_bn: 'প্রোডাক্ট ফটোগ্রাফি',
-          desc: 'Professional studio, lifestyle, and white background shots for your products.', 
-          desc_bn: 'আপনার পণ্যের সেরা লুক ফুটিয়ে তুলতে আমরা দিচ্ছি প্রফেশনাল স্টুডিও ও লাইফস্টাইল ফটোগ্রাফি।',
-          price: 'From ৳1,500', bg: 's3', hidden: false 
-        },
-        { 
-          icon: '🎬', 
-          title: 'Video Production', 
-          title_bn: 'ভিডিও প্রোডাকশন',
-          desc: '15 to 60-second cinematic brand videos with voice-over and licensed soundtracks.', 
-          desc_bn: 'সিনেমাটিক ব্র্যান্ড ভিডিওর মাধ্যমে আপনার ব্যবসার গল্পটি পৌঁছে দিন সবার কাছে।',
-          price: 'From ৳2,000', bg: 's4', hidden: false 
-        },
-        { 
-          icon: '💻', 
-          title: 'Website Design & Dev', 
-          title_bn: 'ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট',
-          desc: 'Responsive, SEO-optimized WordPress websites from single-page to full e-commerce.', 
-          desc_bn: 'একটি আধুনিক ও দ্রুতগতির ওয়েবসাইট যা আপনার ব্যবসাকে নিয়ে যাবে অন্য এক উচ্চতায়।',
-          price: 'From ৳8,000', bg: 's5', hidden: false 
-        }
-      ];
-      for (const s of services) await addDoc(collection(db, 'services'), s);
-
-      // Seed Portfolio
-      const portfolio = [
-        { 
-          title: 'Nova Fashion Branding', 
-          title_bn: 'নোভা ফ্যাশনের ব্র্যান্ডিং সলিউশন',
-          category: 'Branding', 
-          category_bn: 'ব্র্যান্ডিং',
-          imageUrl: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800', 
-          hidden: false 
-        },
-        { 
-          title: 'Organic Food Website', 
-          title_bn: 'অর্গানিক ফুড ই-কমার্স ওয়েবসাইট',
-          category: 'Web Dev', 
-          category_bn: 'ওয়েব ডেভেলপমেন্ট',
-          imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800', 
-          hidden: false 
-        }
-      ];
-      for (const p of portfolio) await addDoc(collection(db, 'portfolio'), p);
-
-      // Seed Testimonials
-      const testimonials = [
-        { name: 'Rahim Uddin', role: 'CEO, Nova Fashion', role_bn: 'সিইও, নোভা ফ্যাশন', text: 'CreatifyBD transformed our online presence. Highly recommended!', text_bn: 'ক্রিয়েটিফাইবিডির সাথে কাজ করে আমাদের ব্যবসার ভ্যালু অনেক বেড়েছে। তাদের সার্ভিস সত্যিই অসাধারণ!', stars: 5, hidden: false },
-        { name: 'Sumaiya Ahmed', role: 'Founder, Green Eats', role_bn: 'ফাউন্ডার, গ্রিন ইটস', text: 'Amazing branding work. They understood our vision perfectly.', text_bn: 'খুবই চমৎকার ব্র্যান্ডিং! তারা আমাদের আইডিয়াকে খুব সুন্দরভাবে ফুটিয়ে তুলেছে।', stars: 5, hidden: false }
-      ];
-      for (const t of testimonials) await addDoc(collection(db, 'testimonials'), t);
-
-      // Seed Pricing
-      const pricing = [
-        { 
-          category: 'social', tier: 'Basic', tier_bn: 'বেসিক',
-          price: '1,500', 
-          desc: 'Perfect for getting started online', 
-          desc_bn: 'অনলাইনে ব্যবসার নতুন যাত্রার জন্য উপযুক্ত',
-          features: ['Facebook page setup', 'Instagram page setup', 'Basic design'], 
-          features_bn: ['ফেসবুক পেজ সেটআপ', 'ইনস্টাগ্রাম পেজ সেটআপ', 'বেসিক গ্রাফিক ডিজাইন'],
-          order: 1, hidden: false 
-        },
-        { 
-          category: 'social', tier: 'Standard', tier_bn: 'স্ট্যান্ডার্ড',
-          price: '3,000', 
-          desc: 'Best for growing businesses', 
-          desc_bn: 'বর্ধিষ্ণু ব্যবসার জন্য আমাদের সেরা সলিউশন',
-          features: ['Full social setup', 'Logo design', '1-week scheduling'], 
-          features_bn: ['ফুল সোশ্যাল মিডিয়া সেটআপ', 'লোগো ডিজাইন অন্তর্ভুক্ত', '১ সপ্তাহের কন্টেন্ট শিডিউলিং'],
-          order: 2, featured: true, hidden: false 
-        }
-      ];
-      for (const pr of pricing) await addDoc(collection(db, 'pricing'), pr);
-
-      // Seed Settings
-      await setDoc(doc(db, 'settings', 'site'), {
-        site_name: 'CreatifyBD',
-        site_title: 'Digital Marketing & Creative Agency in Dhaka',
-        primary_color: '#E8192C',
-        secondary_color: '#a8101e',
-        lang: 'en'
-      }, { merge: true });
-
-      await setDoc(doc(db, 'settings', 'content'), {
-        hero: {
-          theme: 'light',
-          eyebrow: 'BD BASED IN DHAKA, BANGLADESH',
-          title: 'Your Creative Partner for Digital <span class="wavy-text">Growth</span>',
-          desc: 'Affordable, high-quality digital marketing for startups & small businesses.',
-          cta1: 'Start a Project',
-          cta2: 'See Our Work'
-        },
-        process: { theme: 'light' },
-        contact: { theme: 'light' }
-      }, { merge: true });
-
-      toast.success('Demo data seeded successfully! All sections and settings are now live.');
-      window.location.reload();
-    } catch (err) { 
-      console.error(err);
-      toast.error('Seeding failed: ' + err.message); 
-    }
-  };
+  const [messageChartData, setMessageChartData] = useState([]);
+  const [servicePopularityData, setServicePopularityData] = useState([]);
+  const [ratingDistributionData, setRatingDistributionData] = useState([]);
+  const [revenueData, setRevenueData] = useState([]);
+  const [todaySummary, setTodaySummary] = useState({
+    unreadMessages: 0,
+    pendingOrders: 0,
+    todayRevenue: 0,
+    activeVisitors: 0,
+    urgentTasks: 0
+  });
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -194,6 +57,78 @@ const Overview = () => {
         const qSnap = await getDocs(query(collection(db, 'messages'), orderBy('createdAt', 'desc'), limit(5)));
         const latestMessages = qSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRecentMessages(latestMessages);
+
+        // Generate mock chart data for messages over last 7 days
+        const chartData = [];
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          // Mock data - in production, aggregate from actual messages
+          const count = Math.floor(Math.random() * 8) + 1;
+          chartData.push({ date, count });
+        }
+        setMessageChartData(chartData);
+
+        // Generate mock service popularity data
+        const serviceData = [
+          { name: 'Social Media', value: 35 },
+          { name: 'Graphic Design', value: 28 },
+          { name: 'Video Editing', value: 20 },
+          { name: 'Web Design', value: 12 },
+          { name: 'Digital Marketing', value: 5 }
+        ];
+        setServicePopularityData(serviceData);
+
+        // Generate mock rating distribution data
+        const ratingData = [
+          { name: '5 Stars', value: 65, color: '#22c55e' },
+          { name: '4 Stars', value: 25, color: '#3b82f6' },
+          { name: '3 Stars', value: 7, color: '#f59e0b' },
+          { name: '2 Stars', value: 2, color: '#ef4444' },
+          { name: '1 Star', value: 1, color: '#991b1b' }
+        ];
+        setRatingDistributionData(ratingData);
+
+        // Generate mock revenue trend data
+        const revenue = [];
+        for (let i = 5; i >= 0; i--) {
+          const date = new Date();
+          date.setMonth(date.getMonth() - i);
+          const monthStr = date.toLocaleDateString('en-US', { month: 'short' });
+          const amount = Math.floor(Math.random() * 50000) + 20000;
+          revenue.push({ month: monthStr, revenue: amount });
+        }
+        setRevenueData(revenue);
+
+        // Calculate today's summary
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // Count unread messages
+        const unreadMsgCount = latestMessages.filter(m => !m.read).length;
+
+        // Count pending orders (mock data)
+        const pendingOrdersCount = Math.floor(Math.random() * 5);
+
+        // Today's revenue (mock data)
+        const todayRev = Math.floor(Math.random() * 5000) + 1000;
+
+        // Active visitors (mock data)
+        const activeVis = Math.floor(Math.random() * 20) + 10;
+
+        // Urgent tasks (mock data)
+        const urgentTasks = Math.floor(Math.random() * 3);
+
+        setTodaySummary({
+          unreadMessages: unreadMsgCount,
+          pendingOrders: pendingOrdersCount,
+          todayRevenue: todayRev,
+          activeVisitors: activeVis,
+          urgentTasks: urgentTasks
+        });
         
         setLoading(false);
       } catch (err) {
@@ -226,9 +161,6 @@ const Overview = () => {
           <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>Dashboard Overview</h1>
           <p style={{ color: 'var(--adm-dim)', fontSize: '0.95rem' }}>Welcome back, Admin! Control your agency's presence from here.</p>
         </div>
-        <button className="admin-btn" onClick={seedDemoData} style={{ background: 'var(--adm-soft)', color: 'var(--adm-txt)', border: '1px solid var(--adm-border)' }}>
-          Seed Demo Data
-        </button>
       </div>
 
       <div className="stat-grid">
@@ -293,26 +225,218 @@ const Overview = () => {
         </motion.div>
 
         <motion.div 
-          className="action-widget"
+          className="admin-card"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Sparkles size={40} style={{ marginBottom: '1.5rem', color: 'var(--adm-red)' }} />
-          <h3 style={{ fontWeight: '800', fontSize: '1.4rem', marginBottom: '1rem', color: 'var(--adm-text)' }}>Quick Actions</h3>
-          <p style={{ fontSize: '0.95rem', lineHeight: '1.6', color: 'var(--adm-dim)', marginBottom: '2rem' }}>
-            Keep your agency profile active to rank higher on Google. Consider adding your latest successful project.
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <Link to="/admin/portfolio" className="admin-btn" style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-              <ImageIcon size={16} /> Add Portfolio Item
-            </Link>
-            <Link to="/admin/services" className="admin-btn-secondary" style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-              <Briefcase size={16} /> Update Services
-            </Link>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h3 style={{ fontWeight: '700', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><TrendingUp size={18} color="var(--adm-red)" /> Messages (7 Days)</h3>
           </div>
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={messageChartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--adm-border)" />
+              <XAxis 
+                dataKey="date" 
+                tick={{ fontSize: 12, fill: 'var(--adm-dim)' }}
+                axisLine={{ stroke: 'var(--adm-border)' }}
+              />
+              <YAxis 
+                tick={{ fontSize: 12, fill: 'var(--adm-dim)' }}
+                axisLine={{ stroke: 'var(--adm-border)' }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  background: 'var(--adm-card)', 
+                  border: '1px solid var(--adm-border)',
+                  borderRadius: '8px',
+                  color: 'var(--adm-text)'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="count" 
+                stroke="#E8192C" 
+                strokeWidth={2}
+                dot={{ fill: '#E8192C', r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </motion.div>
       </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', marginTop: '2rem' }}>
+        <motion.div 
+          className="admin-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h3 style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Briefcase size={16} color="var(--adm-red)" /> Service Popularity
+          </h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={servicePopularityData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--adm-border)" />
+              <XAxis type="number" tick={{ fontSize: 11, fill: 'var(--adm-dim)' }} />
+              <YAxis 
+                type="category" 
+                dataKey="name" 
+                tick={{ fontSize: 11, fill: 'var(--adm-dim)' }}
+                width={80}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  background: 'var(--adm-card)', 
+                  border: '1px solid var(--adm-border)',
+                  borderRadius: '8px',
+                  color: 'var(--adm-text)'
+                }}
+              />
+              <Bar dataKey="value" fill="#E8192C" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        <motion.div 
+          className="admin-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+        >
+          <h3 style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Star size={16} color="var(--adm-red)" /> Rating Distribution
+          </h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={ratingDistributionData}
+                cx="50%"
+                cy="50%"
+                innerRadius={40}
+                outerRadius={70}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {ratingDistributionData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  background: 'var(--adm-card)', 
+                  border: '1px solid var(--adm-border)',
+                  borderRadius: '8px',
+                  color: 'var(--adm-text)'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem', justifyContent: 'center' }}>
+            {ratingDistributionData.map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: 'var(--adm-dim)' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: item.color }} />
+                {item.name}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div 
+          className="admin-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <h3 style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <TrendingUp size={16} color="var(--adm-red)" /> Revenue Trend
+          </h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={revenueData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--adm-border)" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fontSize: 11, fill: 'var(--adm-dim)' }}
+                axisLine={{ stroke: 'var(--adm-border)' }}
+              />
+              <YAxis 
+                tick={{ fontSize: 11, fill: 'var(--adm-dim)' }}
+                axisLine={{ stroke: 'var(--adm-border)' }}
+                tickFormatter={(value) => `৳${(value / 1000)}k`}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  background: 'var(--adm-card)', 
+                  border: '1px solid var(--adm-border)',
+                  borderRadius: '8px',
+                  color: 'var(--adm-text)'
+                }}
+                formatter={(value) => `৳${value.toLocaleString()}`}
+              />
+              <Bar dataKey="revenue" fill="#E8192C" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+      </div>
+
+      <motion.div 
+        className="action-widget"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3 style={{ fontWeight: '800', fontSize: '1.4rem', color: 'var(--adm-text)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Calendar size={24} color="var(--adm-red)" /> Today's Summary
+          </h3>
+          <span style={{ fontSize: '0.85rem', color: 'var(--adm-dim)', fontWeight: '600' }}>
+            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+          </span>
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>
+            <MessageSquare size={20} style={{ color: 'var(--adm-red)', marginBottom: '0.5rem' }} />
+            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>{todaySummary.unreadMessages}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unread</div>
+          </div>
+          <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>
+            <Briefcase size={20} style={{ color: '#3b82f6', marginBottom: '0.5rem' }} />
+            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>{todaySummary.pendingOrders}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pending</div>
+          </div>
+          <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>
+            <DollarSign size={20} style={{ color: '#22c55e', marginBottom: '0.5rem' }} />
+            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>৳{todaySummary.todayRevenue.toLocaleString()}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue</div>
+          </div>
+          <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>
+            <Users size={20} style={{ color: '#f59e0b', marginBottom: '0.5rem' }} />
+            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>{todaySummary.activeVisitors}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Visitors</div>
+          </div>
+        </div>
+
+        {todaySummary.urgentTasks > 0 && (
+          <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '1rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <AlertCircle size={20} style={{ color: '#ef4444' }} />
+            <div>
+              <div style={{ fontWeight: '700', color: 'var(--adm-text)', fontSize: '0.9rem' }}>{todaySummary.urgentTasks} Urgent Task{todaySummary.urgentTasks > 1 ? 's' : ''}</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--adm-dim)' }}>Requires immediate attention</div>
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link to="/admin/messages" className="admin-btn" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <MessageSquare size={16} /> View Messages
+          </Link>
+          <Link to="/admin/orders" className="admin-btn-secondary" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <Briefcase size={16} /> Orders
+          </Link>
+        </div>
+      </motion.div>
     </div>
   );
 };

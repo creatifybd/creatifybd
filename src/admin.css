@@ -20,6 +20,7 @@
   --adm-muted: var(--muted, #667085);
   --adm-glass: rgba(15, 15, 18, 0.03);
   --adm-soft: #F2F4F7;
+  --adm-hover: #E8EBF0;
   --adm-success: var(--success, #22c55e);
   --adm-success-soft: var(--success-soft, rgba(34,197,94,0.10));
   --adm-info: var(--info, #3b82f6);
@@ -35,6 +36,35 @@
   --adm-radius-md: 14px;
   --adm-radius-lg: 20px;
   --adm-radius-xl: 28px;
+}
+
+/* Dark mode tokens */
+.admin-body.dark {
+  --adm-bg: #0a0a0f;
+  --adm-page-bg: #0f0f14;
+  --adm-side: #141419;
+  --adm-card: #1a1a20;
+  --adm-surface: #1a1a20;
+  --adm-border: rgba(255, 255, 255, 0.08);
+  --adm-border-strong: rgba(255, 255, 255, 0.14);
+  --adm-txt: #ffffff;
+  --adm-text: #ffffff;
+  --adm-dim: #9ca3af;
+  --adm-muted: #9ca3af;
+  --adm-glass: rgba(255, 255, 255, 0.03);
+  --adm-soft: #1f1f26;
+  --adm-hover: #262630;
+  --adm-success: #22c55e;
+  --adm-success-soft: rgba(34,197,94,0.15);
+  --adm-info: #3b82f6;
+  --adm-info-soft: rgba(59,130,246,0.15);
+  --adm-warning: #f59e0b;
+  --adm-warning-soft: rgba(245,158,11,0.15);
+  --adm-danger: #ef4444;
+  --adm-danger-soft: rgba(239,68,68,0.15);
+  --adm-shadow-sm: 0 2px 10px rgba(0,0,0,0.3);
+  --adm-shadow-md: 0 12px 32px rgba(0,0,0,0.4);
+  --adm-shadow-lg: 0 24px 64px rgba(0,0,0,0.5);
 }
 
 /* ── Base layout ─────────────────────────────────────────── */

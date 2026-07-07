@@ -23,6 +23,16 @@ const CTABand = () => {
         <div className="ctab-glow-a" />
         <div className="ctab-glow-b" />
         <div className="ctab-grid" />
+        <div className="ctab-particles">
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+          <div className="ctab-particle" />
+        </div>
       </div>
 
       <div className="container">
@@ -104,7 +114,7 @@ const CTABand = () => {
       <style>{`
         .ctab-section {
           position: relative;
-          background: #0a0a0f;
+          background: var(--surface-dark, #0a0a0f);
           padding: 7rem 0;
           overflow: hidden;
         }
@@ -132,10 +142,45 @@ const CTABand = () => {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-          background-size: 48px 48px;
+            radial-gradient(circle, rgba(232,25,44,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(232,25,44,0.08) 1px, transparent 1px);
+          background-size: 32px 32px;
+          background-position: 0 0, 16px 16px;
           mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+          animation: gridPulse 8s ease-in-out infinite;
+        }
+        @keyframes gridPulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
+        
+        /* Animated floating particles */
+        .ctab-particles {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+        }
+        .ctab-particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: rgba(232,25,44,0.4);
+          border-radius: 50%;
+          animation: float 6s ease-in-out infinite;
+        }
+        .ctab-particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .ctab-particle:nth-child(2) { left: 20%; top: 60%; animation-delay: 1s; }
+        .ctab-particle:nth-child(3) { left: 80%; top: 30%; animation-delay: 2s; }
+        .ctab-particle:nth-child(4) { left: 70%; top: 70%; animation-delay: 3s; }
+        .ctab-particle:nth-child(5) { left: 50%; top: 40%; animation-delay: 4s; }
+        .ctab-particle:nth-child(6) { left: 30%; top: 80%; animation-delay: 5s; }
+        .ctab-particle:nth-child(7) { left: 90%; top: 50%; animation-delay: 2.5s; }
+        .ctab-particle:nth-child(8) { left: 15%; top: 35%; animation-delay: 1.5s; }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+          50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; }
         }
 
         .ctab-inner {
@@ -165,13 +210,13 @@ const CTABand = () => {
         .ctab-stat strong {
           font-size: 1.75rem;
           font-weight: 900;
-          color: #fff;
+          color: var(--white, #fff);
           letter-spacing: -0.04em;
           line-height: 1;
         }
         .ctab-stat span {
           font-size: 0.72rem;
-          color: rgba(255,255,255,0.45);
+          color: var(--text-dim-dark, rgba(255,255,255,0.45));
           font-weight: 500;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -191,19 +236,19 @@ const CTABand = () => {
           background: rgba(232,25,44,0.08) !important;
         }
         .ctab-heading {
-          font-size: clamp(2rem, 4.5vw, 3.2rem);
+          font-size: clamp(2.5rem, 5.5vw, 4rem);
           font-weight: 900;
-          color: #fff;
-          line-height: 1.1;
-          letter-spacing: -0.03em;
+          color: var(--white, #fff);
+          line-height: 1.05;
+          letter-spacing: -0.04em;
           margin: 0;
         }
         .ctab-heading-red { color: var(--brand-red, #e8192c); }
         .ctab-sub {
-          font-size: 1rem;
-          color: rgba(255,255,255,0.55);
-          line-height: 1.75;
-          max-width: 540px;
+          font-size: 1.15rem;
+          color: var(--text-dim-dark, rgba(255,255,255,0.65));
+          line-height: 1.7;
+          max-width: 580px;
           margin: 0 auto;
         }
 
@@ -240,7 +285,7 @@ const CTABand = () => {
           gap: 0.5rem;
           padding: 0.95rem 2.25rem;
           background: rgba(255,255,255,0.06);
-          color: rgba(255,255,255,0.85);
+          color: var(--text-dim-dark, rgba(255,255,255,0.85));
           font-weight: 700;
           font-size: 0.95rem;
           border-radius: 100px;
@@ -258,7 +303,7 @@ const CTABand = () => {
         /* Trust */
         .ctab-trust {
           font-size: 0.78rem;
-          color: rgba(255,255,255,0.30);
+          color: var(--text-dim-dark, rgba(255,255,255,0.30));
           margin: 0;
           letter-spacing: 0.01em;
         }

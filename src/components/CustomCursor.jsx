@@ -56,7 +56,7 @@ const CustomCursor = () => {
       if (isLink || isBtn) {
         ring.classList.add('cc-ring--hover');
         dot.classList.add('cc-dot--hover');
-        const lbl = t.getAttribute('data-cursor') || t.closest('[data-cursor]')?.getAttribute('data-cursor') || 'View';
+        const lbl = t.getAttribute('data-cursor') || t.closest('[data-cursor]')?.getAttribute('data-cursor') || '';
         if (label) label.textContent = lbl;
       } else {
         ring.classList.remove('cc-ring--hover');
@@ -71,14 +71,28 @@ const CustomCursor = () => {
       ring.style.opacity = '0';
     };
 
+    const onDown = () => {
+      dot.classList.add('cc-dot--click');
+      ring.classList.add('cc-ring--click');
+    };
+
+    const onUp = () => {
+      dot.classList.remove('cc-dot--click');
+      ring.classList.remove('cc-ring--click');
+    };
+
     window.addEventListener('mousemove', onMove, { passive: true });
     window.addEventListener('mouseover', onOver);
+    window.addEventListener('mousedown', onDown);
+    window.addEventListener('mouseup', onUp);
     document.documentElement.addEventListener('mouseleave', onLeave);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseover', onOver);
+      window.removeEventListener('mousedown', onDown);
+      window.removeEventListener('mouseup', onUp);
       document.documentElement.removeEventListener('mouseleave', onLeave);
     };
   }, []);
@@ -88,10 +102,10 @@ const CustomCursor = () => {
   return (
     <>
       {/* Primary dot — exact mouse position */}
-      <div ref={dotRef} className="cc-dot" />
+      <div ref={dotRef} className="cc-dot" aria-hidden="true" />
 
       {/* Follower ring — lags behind with lerp */}
-      <div ref={ringRef} className="cc-ring">
+      <div ref={ringRef} className="cc-ring" aria-hidden="true">
         <span ref={labelRef} className="cc-label" />
       </div>
 
@@ -120,6 +134,11 @@ const CustomCursor = () => {
           height: 4px !important;
           background: #fff !important;
         }
+        .cc-dot--click {
+          width: 3px !important;
+          height: 3px !important;
+          transform: translate(-50%, -50%) scale(0.8) !important;
+        }
 
         /* ── Follower ring ── */
         .cc-ring {
@@ -147,6 +166,11 @@ const CustomCursor = () => {
           background: rgba(232,25,44,.07) !important;
           border-color: #E8192C !important;
           border-width: 1.5px !important;
+        }
+        .cc-ring--click {
+          width: 60px !important;
+          height: 60px !important;
+          transform: translate(-50%, -50%) scale(0.9) !important;
         }
 
         /* ── Label inside ring ── */

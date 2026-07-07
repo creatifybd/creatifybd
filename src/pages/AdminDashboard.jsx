@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
+import { db } from '../firebase/config';
+import { collection, onSnapshot, query, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
 import {
   LayoutDashboard,
   Bot,
@@ -25,7 +27,12 @@ import {
   FolderOpen,
   BookOpen,
   UserCog,
-  History
+  History,
+  Check,
+  Moon,
+  Sun,
+  ChevronDown,
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
@@ -58,6 +65,101 @@ const AdminDashboard = () => {
   const { user, role, isOwner } = useAuth();
   const confirmDialog = useConfirm();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState({});
+  const [currentDateTime, setCurrentDateTime] = useState('');
+  const [visitorCount, setVisitorCount] = useState(0);
+
+  const toggleGroup = (groupId) => {
+    setCollapsedGroups(prev => ({
+      ...prev,
+      [groupId]: !prev[groupId]
+    }));
+  };
+
+  // Real-time notifications listener
+  useEffect(() => {
+    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'), limit(10));
+    const unsub = onSnapshot(q, (snap) => {
+      const msgs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setNotifications(msgs);
+      setUnreadCount(msgs.filter(m => !m.read).length);
+    });
+    return () => unsub();
+  }, []);
+
+  // Dark mode persistence
+  useEffect(() => {
+    const saved = localStorage.getItem('adminDarkMode');
+    if (saved === 'true') {
+      setDarkMode(true);
+      document.body.classList.add('dark');
+    }
+  }, []);
+
+  // Update current date/time every second
+  useEffect(() => {
+    const updateDateTime = () => {
+      const now = new Date();
+      setCurrentDateTime(now.toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }));
+    };
+    updateDateTime();
+    const interval = setInterval(updateDateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Simulate live visitor count
+  useEffect(() => {
+    const updateVisitorCount = () => {
+      // Mock data - in production, this would come from analytics
+      const baseCount = 15;
+      const variation = Math.floor(Math.random() * 8);
+      setVisitorCount(baseCount + variation);
+    };
+    updateVisitorCount();
+    const interval = setInterval(updateVisitorCount, 30000); // Update every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('adminDarkMode', newMode.toString());
+    if (newMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  };
+
+  const markAsRead = async (notifId) => {
+    try {
+      await updateDoc(doc(db, 'messages', notifId), { read: true });
+    } catch (err) {
+      console.error('Failed to mark as read:', err);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const updates = notifications.filter(n => !n.read).map(n => 
+        updateDoc(doc(db, 'messages', n.id), { read: true })
+      );
+      await Promise.all(updates);
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+    }
+  };
 
   const handleLogout = async () => {
     const ok = await confirmDialog({
@@ -73,23 +175,32 @@ const AdminDashboard = () => {
   };
 
   const navItems = [
-    { path: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} /> },
-    { path: '/admin/bot', label: 'Marketing Bot', icon: <Bot size={18} /> },
-    { path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true },
-    { path: '/admin/gigs', label: 'Gigs Manager', icon: <ShoppingBag size={18} /> },
-    { path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} /> },
-    { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} /> },
-    { path: '/admin/content', label: 'Page Content', icon: <Activity size={18} /> },
-    { path: '/admin/case-studies', label: 'Case Studies', icon: <BookOpen size={18} /> },
-    { path: '/admin/services', label: 'Services', icon: <Briefcase size={18} /> },
-    { path: '/admin/portfolio', label: 'Portfolio', icon: <ImageIcon size={18} /> },
-    { path: '/admin/media', label: 'Media Library', icon: <FolderOpen size={18} /> },
-    { path: '/admin/pricing', label: 'Pricing Plans', icon: <CreditCard size={18} /> },
-    { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} /> },
-    { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
-    { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} /> },
-    { path: '/admin/users', label: 'Admin Users', icon: <UserCog size={18} />, ownerOnly: true },
-    { path: '/admin/activity-log', label: 'Activity Log', icon: <History size={18} />, ownerOnly: true },
+    { path: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} />, group: 'main' },
+    { path: '/admin/bot', label: 'Marketing Bot', icon: <Bot size={18} />, group: 'main' },
+    { path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true, group: 'sales' },
+    { path: '/admin/gigs', label: 'Gigs Manager', icon: <ShoppingBag size={18} />, group: 'sales' },
+    { path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} />, group: 'sales' },
+    { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} />, group: 'sales' },
+    { path: '/admin/content', label: 'Page Content', icon: <Activity size={18} />, group: 'content' },
+    { path: '/admin/case-studies', label: 'Case Studies', icon: <BookOpen size={18} />, group: 'content' },
+    { path: '/admin/services', label: 'Services', icon: <Briefcase size={18} />, group: 'content' },
+    { path: '/admin/portfolio', label: 'Portfolio', icon: <ImageIcon size={18} />, group: 'content' },
+    { path: '/admin/media', label: 'Media Library', icon: <FolderOpen size={18} />, group: 'content' },
+    { path: '/admin/pricing', label: 'Pricing Plans', icon: <CreditCard size={18} />, group: 'content' },
+    { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} />, group: 'content' },
+    { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} />, group: 'communication' },
+    { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} />, group: 'settings' },
+    { path: '/admin/users', label: 'Admin Users', icon: <UserCog size={18} />, ownerOnly: true, group: 'admin' },
+    { path: '/admin/activity-log', label: 'Activity Log', icon: <History size={18} />, ownerOnly: true, group: 'admin' },
+  ];
+
+  const navGroups = [
+    { id: 'main', label: 'Main' },
+    { id: 'sales', label: 'Sales & Orders' },
+    { id: 'content', label: 'Content Management' },
+    { id: 'communication', label: 'Communication' },
+    { id: 'settings', label: 'Settings' },
+    { id: 'admin', label: 'Admin Only', ownerOnly: true },
   ];
 
   const visibleNavItems = navItems.filter(item => !item.ownerOnly || isOwner);
@@ -170,16 +281,80 @@ const AdminDashboard = () => {
         </div>
 
         <div className="sidebar-nav">
-          {visibleNavItems.map((item) => (
-            <Link 
-              key={item.path} 
-              to={item.path} 
-              className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
-              onClick={() => setSidebarOpen(false)}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>{item.icon}</span>
-              <span className="nav-text" style={{ pointerEvents: 'none' }}>{item.label}</span>
-            </Link>
+          {navGroups.filter(g => !g.ownerOnly || isOwner).map((group) => (
+            <div key={group.id} className="sidebar-group">
+              <button
+                className="sidebar-group-header"
+                onClick={() => toggleGroup(group.id)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.5rem 0.75rem',
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--adm-dim)',
+                  fontSize: '0.7rem',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  cursor: 'pointer',
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--adm-txt)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--adm-dim)'}
+              >
+                <span>{group.label}</span>
+                <ChevronDown 
+                  size={14} 
+                  style={{ 
+                    transition: 'transform 0.2s',
+                    transform: collapsedGroups[group.id] ? 'rotate(-90deg)' : 'rotate(0deg)'
+                  }} 
+                />
+              </button>
+              <AnimatePresence>
+                {!collapsedGroups[group.id] && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    {visibleNavItems.filter(item => item.group === group.id).map((item) => (
+                      <Link 
+                        key={item.path} 
+                        to={item.path} 
+                        className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+                        onClick={() => setSidebarOpen(false)}
+                        style={{ position: 'relative' }}
+                        title={item.label}
+                      >
+                        <span style={{ display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>{item.icon}</span>
+                        <span className="nav-text" style={{ pointerEvents: 'none' }}>{item.label}</span>
+                        {item.badge && (
+                          <span style={{
+                            marginLeft: 'auto',
+                            background: 'var(--adm-red)',
+                            color: 'white',
+                            fontSize: '0.65rem',
+                            fontWeight: '700',
+                            padding: '2px 6px',
+                            borderRadius: '10px',
+                            minWidth: '18px',
+                            textAlign: 'center'
+                          }}>
+                            3
+                          </span>
+                        )}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ))}
         </div>
 
@@ -223,9 +398,193 @@ const AdminDashboard = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <button aria-label="Notifications" style={{ background: 'none', border: 'none', color: 'var(--adm-dim)', cursor: 'pointer', display: 'flex' }}>
-              <Bell size={20} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--adm-dim)' }}>
+              <span>{currentDateTime}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--adm-dim)' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+                {visitorCount} visitors
+              </span>
+            </div>
+            <button
+              onClick={toggleDarkMode}
+              aria-label="Toggle dark mode"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--adm-dim)',
+                cursor: 'pointer',
+                display: 'flex',
+                padding: '0.5rem',
+                borderRadius: '8px',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--adm-soft)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
+            <div style={{ position: 'relative' }}>
+              <button 
+                aria-label="Notifications" 
+                onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'var(--adm-dim)', 
+                  cursor: 'pointer', 
+                  display: 'flex',
+                  position: 'relative'
+                }}
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-4px',
+                    background: 'var(--adm-red)',
+                    color: 'white',
+                    fontSize: '0.65rem',
+                    fontWeight: '700',
+                    minWidth: '16px',
+                    height: '16px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0 4px'
+                  }}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              <AnimatePresence>
+                {notifDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.15 }}
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      marginTop: '0.5rem',
+                      width: '320px',
+                      background: 'var(--adm-card)',
+                      border: '1px solid var(--adm-border)',
+                      borderRadius: '12px',
+                      boxShadow: 'var(--shadow-lg)',
+                      zIndex: 1000
+                    }}
+                  >
+                    <div style={{
+                      padding: '1rem',
+                      borderBottom: '1px solid var(--adm-border)',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--adm-text)' }}>
+                        Notifications
+                      </span>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={markAllAsRead}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--adm-red)',
+                            fontSize: '0.75rem',
+                            fontWeight: '600',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                      {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                          <div
+                            key={notif.id}
+                            onClick={() => {
+                              markAsRead(notif.id);
+                              navigate('/admin/messages');
+                              setNotifDropdownOpen(false);
+                            }}
+                            style={{
+                              padding: '0.85rem 1rem',
+                              borderBottom: '1px solid var(--adm-border)',
+                              cursor: 'pointer',
+                              background: !notif.read ? 'var(--adm-soft)' : 'transparent',
+                              transition: 'background 0.15s'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--adm-hover)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = !notif.read ? 'var(--adm-soft)' : 'transparent'}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                              <div style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                background: 'var(--adm-red-soft)',
+                                color: 'var(--adm-red)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.8rem',
+                                fontWeight: '700',
+                                flexShrink: 0
+                              }}>
+                                {notif.name?.charAt(0).toUpperCase() || 'U'}
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ 
+                                  fontSize: '0.85rem', 
+                                  fontWeight: !notif.read ? '700' : '500',
+                                  color: 'var(--adm-text)',
+                                  marginBottom: '0.15rem'
+                                }}>
+                                  {notif.name || 'Unknown'}
+                                </div>
+                                <div style={{ 
+                                  fontSize: '0.75rem', 
+                                  color: 'var(--adm-dim)',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  {notif.service || 'New inquiry'}
+                                </div>
+                              </div>
+                              {!notif.read && (
+                                <div style={{
+                                  width: '8px',
+                                  height: '8px',
+                                  borderRadius: '50%',
+                                  background: 'var(--adm-red)',
+                                  flexShrink: 0,
+                                  marginTop: '4px'
+                                }} />
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--adm-dim)' }}>
+                          No notifications
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingLeft: '1.5rem', borderLeft: '1px solid var(--adm-border)' }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--adm-txt)' }}>Admin User</div>

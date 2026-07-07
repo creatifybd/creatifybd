@@ -23,6 +23,8 @@ const Contact = () => {
   const { content } = useSettings();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', company: '',
     country: '', service: '', budget: '', message: ''
@@ -44,15 +46,79 @@ const Contact = () => {
     return /(bangladesh|dhaka)/i.test(location) ? 'Serving clients globally' : location;
   }, [cContent.address]);
 
-  const set = (field) => (e) => setFormData(prev => ({ ...prev, [field]: e.target.value }));
+  const set = (field) => (e) => {
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleBlur = (field) => () => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    validateField(field);
+  };
+
+  const validateField = (field) => {
+    let error = '';
+    const value = formData[field];
+
+    switch (field) {
+      case 'name':
+        if (!value.trim()) error = 'Name is required';
+        else if (value.trim().length < 2) error = 'Name must be at least 2 characters';
+        break;
+      case 'email':
+        if (!value.trim()) error = 'Email is required';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Invalid email address';
+        break;
+      case 'phone':
+        if (!value.trim()) error = 'Phone is required';
+        else if (!/^[\d\s\+\-\(\)]{10,}$/.test(value)) error = 'Invalid phone number';
+        break;
+      case 'country':
+        if (!value) error = 'Country is required';
+        break;
+      case 'service':
+        if (!value) error = 'Service is required';
+        break;
+      case 'budget':
+        if (!value) error = 'Budget is required';
+        break;
+      case 'message':
+        if (!value.trim()) error = 'Message is required';
+        else if (value.trim().length < 10) error = 'Message must be at least 10 characters';
+        break;
+      default:
+        break;
+    }
+
+    setErrors(prev => ({ ...prev, [field]: error }));
+    return !error;
+  };
+
+  const validateForm = () => {
+    const requiredFields = ['name', 'email', 'phone', 'country', 'service', 'budget', 'message'];
+    let isValid = true;
+    requiredFields.forEach(field => {
+      if (!validateField(field)) isValid = false;
+    });
+    return isValid;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, phone, country, service, budget, message } = formData;
-    if (!name || !email || !phone || !country || !service || !budget || !message) {
-      toast.error('Please fill in all required fields');
+    
+    // Mark all fields as touched
+    const requiredFields = ['name', 'email', 'phone', 'country', 'service', 'budget', 'message'];
+    setTouched(requiredFields.reduce((acc, field) => ({ ...acc, [field]: true }), {}));
+    
+    // Validate all fields
+    if (!validateForm()) {
+      toast.error('Please fix the errors before submitting');
       return;
     }
+    
     setLoading(true);
     const toastId = toast.loading('Sending your inquiry...');
     try {
@@ -60,6 +126,8 @@ const Contact = () => {
       setSubmitted(true);
       toast.success('Inquiry received! We\'ll contact you within 24 hours.', { id: toastId });
       setFormData({ name: '', email: '', phone: '', company: '', country: '', service: '', budget: '', message: '' });
+      setErrors({});
+      setTouched({});
     } catch (err) {
       console.error(err);
       toast.error('Failed to send. Please try again.', { id: toastId });
@@ -175,18 +243,63 @@ const Contact = () => {
                   <div className="form-row-2">
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-name">Full Name *</label>
-                      <input id="contact-name" type="text" required className="luxury-input" value={formData.name} onChange={set('name')} placeholder="John Doe" autoComplete="name" />
+                      <input 
+                        id="contact-name" 
+                        type="text" 
+                        required 
+                        className={`luxury-input ${touched.name && errors.name ? 'input-error' : ''}`} 
+                        value={formData.name} 
+                        onChange={set('name')} 
+                        onBlur={handleBlur('name')}
+                        placeholder="John Doe" 
+                        autoComplete="name" 
+                        aria-invalid={touched.name && errors.name ? 'true' : 'false'}
+                        aria-describedby={touched.name && errors.name ? 'contact-name-error' : undefined}
+                      />
+                      {touched.name && errors.name && (
+                        <span id="contact-name-error" className="field-error">{errors.name}</span>
+                      )}
                     </div>
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-email">Email Address *</label>
-                      <input id="contact-email" type="email" required className="luxury-input" value={formData.email} onChange={set('email')} placeholder="john@example.com" autoComplete="email" />
+                      <input 
+                        id="contact-email" 
+                        type="email" 
+                        required 
+                        className={`luxury-input ${touched.email && errors.email ? 'input-error' : ''}`} 
+                        value={formData.email} 
+                        onChange={set('email')} 
+                        onBlur={handleBlur('email')}
+                        placeholder="john@example.com" 
+                        autoComplete="email" 
+                        aria-invalid={touched.email && errors.email ? 'true' : 'false'}
+                        aria-describedby={touched.email && errors.email ? 'contact-email-error' : undefined}
+                      />
+                      {touched.email && errors.email && (
+                        <span id="contact-email-error" className="field-error">{errors.email}</span>
+                      )}
                     </div>
                   </div>
 
                   <div className="form-row-2">
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-phone">Phone / WhatsApp *</label>
-                      <input id="contact-phone" type="tel" required className="luxury-input" value={formData.phone} onChange={set('phone')} placeholder="+1 555 000 0000" autoComplete="tel" />
+                      <input 
+                        id="contact-phone" 
+                        type="tel" 
+                        required 
+                        className={`luxury-input ${touched.phone && errors.phone ? 'input-error' : ''}`} 
+                        value={formData.phone} 
+                        onChange={set('phone')} 
+                        onBlur={handleBlur('phone')}
+                        placeholder="+1 555 000 0000" 
+                        autoComplete="tel" 
+                        aria-invalid={touched.phone && errors.phone ? 'true' : 'false'}
+                        aria-describedby={touched.phone && errors.phone ? 'contact-phone-error' : undefined}
+                      />
+                      {touched.phone && errors.phone && (
+                        <span id="contact-phone-error" className="field-error">{errors.phone}</span>
+                      )}
                     </div>
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-company">Company Name</label>
@@ -197,31 +310,81 @@ const Contact = () => {
                   <div className="form-row-2">
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-country">Country *</label>
-                      <select id="contact-country" className="luxury-input" required value={formData.country} onChange={set('country')}>
+                      <select 
+                        id="contact-country" 
+                        className={`luxury-input ${touched.country && errors.country ? 'input-error' : ''}`} 
+                        required 
+                        value={formData.country} 
+                        onChange={set('country')}
+                        onBlur={handleBlur('country')}
+                        aria-invalid={touched.country && errors.country ? 'true' : 'false'}
+                        aria-describedby={touched.country && errors.country ? 'contact-country-error' : undefined}
+                      >
                         <option value="">Select your country</option>
                         {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
+                      {touched.country && errors.country && (
+                        <span id="contact-country-error" className="field-error">{errors.country}</span>
+                      )}
                     </div>
                     <div className="form-group">
                       <label className="luxury-label" htmlFor="contact-service">Service Needed *</label>
-                      <select id="contact-service" className="luxury-input" required value={formData.service} onChange={set('service')}>
+                      <select 
+                        id="contact-service" 
+                        className={`luxury-input ${touched.service && errors.service ? 'input-error' : ''}`} 
+                        required 
+                        value={formData.service} 
+                        onChange={set('service')}
+                        onBlur={handleBlur('service')}
+                        aria-invalid={touched.service && errors.service ? 'true' : 'false'}
+                        aria-describedby={touched.service && errors.service ? 'contact-service-error' : undefined}
+                      >
                         <option value="">Select a service</option>
                         {siteConfig.services.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
+                      {touched.service && errors.service && (
+                        <span id="contact-service-error" className="field-error">{errors.service}</span>
+                      )}
                     </div>
                   </div>
 
                   <div className="form-group">
                     <label className="luxury-label" htmlFor="contact-budget">Budget Range *</label>
-                    <select id="contact-budget" className="luxury-input" required value={formData.budget} onChange={set('budget')}>
+                    <select 
+                      id="contact-budget" 
+                      className={`luxury-input ${touched.budget && errors.budget ? 'input-error' : ''}`} 
+                      required 
+                      value={formData.budget} 
+                      onChange={set('budget')}
+                      onBlur={handleBlur('budget')}
+                      aria-invalid={touched.budget && errors.budget ? 'true' : 'false'}
+                      aria-describedby={touched.budget && errors.budget ? 'contact-budget-error' : undefined}
+                    >
                       <option value="">Select budget range</option>
                       {siteConfig.budgetRanges.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
                     </select>
+                    {touched.budget && errors.budget && (
+                      <span id="contact-budget-error" className="field-error">{errors.budget}</span>
+                    )}
                   </div>
 
                   <div className="form-group">
                     <label className="luxury-label" htmlFor="contact-message">Tell us about your project *</label>
-                    <textarea id="contact-message" required className="luxury-input" style={{ height: '120px', paddingTop: '1rem' }} value={formData.message} onChange={set('message')} placeholder="Share your vision, goals, and timeline..." />
+                    <textarea 
+                      id="contact-message" 
+                      required 
+                      className={`luxury-input ${touched.message && errors.message ? 'input-error' : ''}`} 
+                      style={{ height: '120px', paddingTop: '1rem' }} 
+                      value={formData.message} 
+                      onChange={set('message')} 
+                      onBlur={handleBlur('message')}
+                      placeholder="Share your vision, goals, and timeline..."
+                      aria-invalid={touched.message && errors.message ? 'true' : 'false'}
+                      aria-describedby={touched.message && errors.message ? 'contact-message-error' : undefined}
+                    />
+                    {touched.message && errors.message && (
+                      <span id="contact-message-error" className="field-error">{errors.message}</span>
+                    )}
                   </div>
 
                   <div className="form-group" style={{ marginBottom: '1.5rem' }}>
@@ -291,6 +454,24 @@ const Contact = () => {
 
         </div>
       </div>
+
+      <style>{`
+        .field-error {
+          display: block;
+          margin-top: 0.4rem;
+          font-size: 0.75rem;
+          color: #dc2626;
+          font-weight: 500;
+        }
+        .input-error {
+          border-color: #dc2626 !important;
+          background-color: #fef2f2 !important;
+        }
+        .input-error:focus {
+          outline-color: #dc2626 !important;
+          box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+        }
+      `}</style>
     </section>
   );
 };

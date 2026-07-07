@@ -1,19 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, Menu, Phone, X } from 'lucide-react';
+import { ChevronRight, Menu, Phone, X, BarChart3, Palette, Clapperboard, Megaphone, Code2, ArrowRight } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import DarkModeToggle from './DarkModeToggle';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const navLinks = [
-  { to: '/services', label: 'Services' },
+  { to: '/services', label: 'Services', hasDropdown: true },
   { to: '/gigs', label: 'Gigs' },
   { to: '/portfolio', label: 'Portfolio' },
   { to: '/reviews', label: 'Reviews' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' }
+];
+
+const servicesDropdown = [
+  {
+    icon: <BarChart3 size={20} />,
+    title: 'Social Media Management',
+    desc: 'Monthly content calendars, post design, captions, scheduling',
+    to: '/services#social-media'
+  },
+  {
+    icon: <Palette size={20} />,
+    title: 'Graphic Design',
+    desc: 'Brand kits, logo systems, ad creatives, flyers, templates',
+    to: '/services#graphic-design'
+  },
+  {
+    icon: <Clapperboard size={20} />,
+    title: 'Video Editing',
+    desc: 'Short-form reels, promotional videos, YouTube edits',
+    to: '/services#video-editing'
+  },
+  {
+    icon: <Megaphone size={20} />,
+    title: 'Digital Marketing',
+    desc: 'Campaign planning, ad creative, landing-page funnels',
+    to: '/services#digital-marketing'
+  },
+  {
+    icon: <Code2 size={20} />,
+    title: 'Website Design',
+    desc: 'Responsive business websites, landing pages, redesigns',
+    to: '/services#website-design'
+  }
 ];
 
 const mobileLinks = [
@@ -65,6 +98,7 @@ const Navbar = ({ theme = 'light' }) => {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -81,6 +115,51 @@ const Navbar = ({ theme = 'light' }) => {
     if (isMobileOpen) window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMobileOpen]);
+
+  // Keyboard navigation for dropdown
+  const handleDropdownKeyDown = (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setDropdownOpen(true);
+      // Focus first dropdown item after opening
+      setTimeout(() => {
+        const firstItem = document.querySelector('.nav-dropdown-item');
+        if (firstItem) firstItem.focus();
+      }, 100);
+    }
+    if (e.key === 'Escape') {
+      setDropdownOpen(false);
+    }
+  };
+
+  const handleDropdownItemKeyDown = (e, index) => {
+    const items = servicesDropdown;
+    const dropdownItems = document.querySelectorAll('.nav-dropdown-item');
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = (index + 1) % items.length;
+      if (dropdownItems[nextIndex]) dropdownItems[nextIndex].focus();
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prevIndex = (index - 1 + items.length) % items.length;
+      if (dropdownItems[prevIndex]) dropdownItems[prevIndex].focus();
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setDropdownOpen(false);
+      // Return focus to trigger button
+      const triggerButton = document.querySelector('[aria-haspopup="true"]');
+      if (triggerButton) triggerButton.focus();
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Navigate to the link
+      const link = dropdownItems[index];
+      if (link) link.click();
+    }
+  };
 
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? 'hidden' : '';
@@ -131,13 +210,62 @@ const Navbar = ({ theme = 'light' }) => {
           <ul className="nav-center">
             {navLinks.map(link => (
               <li key={link.to}>
-                <MagneticLink
-                  to={link.to}
-                  isActive={isActive(link.to)}
-                  data-cursor="Click"
-                >
-                  {link.label}
-                </MagneticLink>
+                {link.hasDropdown ? (
+                  <div 
+                    className="nav-dropdown-trigger"
+                    onMouseEnter={() => setDropdownOpen(true)}
+                    onMouseLeave={() => setDropdownOpen(false)}
+                  >
+                    <MagneticLink
+                      to={link.to}
+                      isActive={isActive(link.to)}
+                      data-cursor="Click"
+                      onKeyDown={handleDropdownKeyDown}
+                      aria-haspopup="true"
+                      aria-expanded={dropdownOpen}
+                    >
+                      {link.label}
+                    </MagneticLink>
+                    <AnimatePresence>
+                      {dropdownOpen && (
+                        <motion.div
+                          className="nav-mega-dropdown"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2, ease: EASE_EXPO }}
+                          role="menu"
+                        >
+                          {servicesDropdown.map((service, i) => (
+                            <Link 
+                              key={i} 
+                              to={service.to} 
+                              className="nav-dropdown-item"
+                              role="menuitem"
+                              tabIndex={dropdownOpen ? 0 : -1}
+                              onKeyDown={(e) => handleDropdownItemKeyDown(e, i)}
+                            >
+                              <div className="nav-dropdown-icon">{service.icon}</div>
+                              <div className="nav-dropdown-content">
+                                <div className="nav-dropdown-title">{service.title}</div>
+                                <div className="nav-dropdown-desc">{service.desc}</div>
+                              </div>
+                              <ArrowRight size={16} className="nav-dropdown-arrow" />
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <MagneticLink
+                    to={link.to}
+                    isActive={isActive(link.to)}
+                    data-cursor="Click"
+                  >
+                    {link.label}
+                  </MagneticLink>
+                )}
               </li>
             ))}
           </ul>

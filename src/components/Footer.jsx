@@ -4,6 +4,8 @@ import { useSettings } from '../context/SettingsContext';
 import { siteConfig } from '../config/siteConfig';
 import { FadeReveal, SlideReveal, StaggerReveal, StaggerChild } from './MotionReveal';
 import toast from 'react-hot-toast';
+import { db } from '../firebase/config';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 
 const FacebookIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -46,11 +48,32 @@ const Footer = () => {
       return;
     }
     setSubLoading(true);
-    // Simulate subscription — replace with real API/Firestore call
-    await new Promise(r => setTimeout(r, 800));
-    toast.success('You\'re subscribed! We\'ll send updates to ' + email);
-    setEmail('');
-    setSubLoading(false);
+    try {
+      // Check if email already exists
+      const q = query(collection(db, 'subscribers'), where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        toast.error('This email is already subscribed.');
+        setSubLoading(false);
+        return;
+      }
+      
+      // Add new subscriber to Firestore
+      await addDoc(collection(db, 'subscribers'), {
+        email,
+        subscribedAt: new Date(),
+        status: 'active'
+      });
+      
+      toast.success('You\'re subscribed! We\'ll send updates to ' + email);
+      setEmail('');
+    } catch (err) {
+      console.error('Newsletter subscription error:', err);
+      toast.error('Failed to subscribe. Please try again.');
+    } finally {
+      setSubLoading(false);
+    }
   };
 
   return (

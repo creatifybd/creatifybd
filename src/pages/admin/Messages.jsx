@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
-import { collection, deleteDoc, doc, onSnapshot, updateDoc, writeBatch } from 'firebase/firestore';
-import { Trash2, CheckCircle2, Circle, Search, MailOpen, MailX } from 'lucide-react';
+import { collection, deleteDoc, doc, onSnapshot, updateDoc, writeBatch, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Trash2, CheckCircle2, Circle, Search, MailOpen, MailX, Reply, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../../context/ConfirmContext';
 
@@ -12,6 +12,10 @@ const MessagesList = () => {
   const [searchQ, setSearchQ] = useState('');
   const [selected, setSelected] = useState(new Set());
   const [bulkWorking, setBulkWorking] = useState(false);
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [replyTo, setReplyTo] = useState(null);
+  const [replyText, setReplyText] = useState('');
+  const [replySending, setReplySending] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'messages'), (snap) => {
@@ -128,6 +132,43 @@ const MessagesList = () => {
       toast.error('Failed to delete messages');
     } finally {
       setBulkWorking(false);
+    }
+  };
+
+  const openReply = (message) => {
+    setReplyTo(message);
+    setReplyText('');
+    setReplyModalOpen(true);
+  };
+
+  const sendReply = async () => {
+    if (!replyText.trim()) {
+      toast.error('Please enter a reply message');
+      return;
+    }
+    setReplySending(true);
+    try {
+      // Save reply to replies subcollection
+      await addDoc(collection(db, 'messages', replyTo.id, 'replies'), {
+        text: replyText,
+        sentAt: serverTimestamp(),
+        sentBy: 'admin'
+      });
+      // Mark original message as read
+      await updateDoc(doc(db, 'messages', replyTo.id), {
+        read: true,
+        status: 'replied',
+        lastRepliedAt: serverTimestamp()
+      });
+      toast.success('Reply sent successfully');
+      setReplyModalOpen(false);
+      setReplyTo(null);
+      setReplyText('');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to send reply');
+    } finally {
+      setReplySending(false);
     }
   };
 
@@ -274,13 +315,23 @@ const MessagesList = () => {
                   </p>
                 </td>
                 <td style={{ verticalAlign: 'top' }}>
-                  <button
-                    onClick={() => handleDelete(m.id)}
-                    aria-label="Delete message"
-                    style={{ background: 'none', border: 'none', color: 'var(--adm-danger)', cursor: 'pointer', padding: '4px' }}
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button
+                      onClick={() => openReply(m)}
+                      aria-label="Reply to message"
+                      style={{ background: 'none', border: 'none', color: 'var(--adm-info)', cursor: 'pointer', padding: '4px' }}
+                      title="Reply"
+                    >
+                      <Reply size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(m.id)}
+                      aria-label="Delete message"
+                      style={{ background: 'none', border: 'none', color: 'var(--adm-danger)', cursor: 'pointer', padding: '4px' }}
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -294,6 +345,131 @@ const MessagesList = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Reply Modal */}
+      {replyModalOpen && replyTo && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div style={{
+            background: 'var(--adm-card)',
+            borderRadius: '16px',
+            width: '100%',
+            maxWidth: '500px',
+            maxHeight: '90vh',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: 'var(--adm-shadow-lg)'
+          }}>
+            <div style={{
+              padding: '1.25rem',
+              borderBottom: '1px solid var(--adm-border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '700', color: 'var(--adm-text)' }}>
+                Reply to {replyTo.name}
+              </h3>
+              <button
+                onClick={() => setReplyModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: 'var(--adm-dim)' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div style={{ padding: '1.25rem', overflowY: 'auto', flex: 1 }}>
+              <div style={{
+                background: 'var(--adm-soft)',
+                padding: '1rem',
+                borderRadius: '8px',
+                marginBottom: '1rem',
+                fontSize: '0.85rem',
+                color: 'var(--adm-dim)',
+                fontStyle: 'italic'
+              }}>
+                <strong style={{ color: 'var(--adm-text)', fontStyle: 'normal' }}>Original message:</strong>
+                <p style={{ margin: '0.5rem 0 0 0', lineHeight: '1.5' }}>
+                  {replyTo.message || replyTo.project}
+                </p>
+              </div>
+              
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--adm-text)', marginBottom: '0.5rem' }}>
+                  Your reply
+                </label>
+                <textarea
+                  value={replyText}
+                  onChange={e => setReplyText(e.target.value)}
+                  placeholder="Type your reply here..."
+                  style={{
+                    width: '100%',
+                    minHeight: '150px',
+                    padding: '0.85rem',
+                    border: '1.5px solid var(--adm-border)',
+                    borderRadius: '8px',
+                    fontSize: '0.9rem',
+                    fontFamily: 'inherit',
+                    resize: 'vertical',
+                    background: 'var(--adm-surface)',
+                    color: 'var(--adm-text)'
+                  }}
+                />
+              </div>
+            </div>
+            
+            <div style={{
+              padding: '1.25rem',
+              borderTop: '1px solid var(--adm-border)',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '0.75rem'
+            }}>
+              <button
+                onClick={() => setReplyModalOpen(false)}
+                disabled={replySending}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '8px',
+                  border: '1.5px solid var(--adm-border)',
+                  background: 'transparent',
+                  color: 'var(--adm-text)',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: replySending ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={sendReply}
+                disabled={replySending}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: 'var(--adm-red)',
+                  color: 'white',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: replySending ? 'not-allowed' : 'pointer',
+                  opacity: replySending ? 0.6 : 1
+                }}
+              >
+                {replySending ? 'Sending...' : 'Send Reply'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

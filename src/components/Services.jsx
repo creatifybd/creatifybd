@@ -3,6 +3,7 @@ import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { ArrowUpRight, BarChart3, Clapperboard, Code2, Megaphone, Palette } from 'lucide-react';
 import { TextReveal, FadeReveal } from './MotionReveal';
+import { motion } from 'framer-motion';
 
 const defaultServices = [
   {
@@ -44,11 +45,11 @@ const defaultServices = [
 ];
 
 const serviceVisuals = [
-  'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1000&auto=format&fit=crop',  // Social media content
-  'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1000&auto=format&fit=crop',  // Graphic design
-  'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1000&auto=format&fit=crop',  // Video editing
-  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',  // Marketing analytics
-  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop'   // Web / brand design
+  '/assets/portfolio/social-media-management/social-media-management-01.jpg',  // Social media content
+  '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg',  // Graphic design
+  '/assets/portfolio/video-editing/video-editing-01.jpg',  // Video editing
+  '/assets/portfolio/digital-marketing/digital-marketing-01.jpg',  // Marketing analytics
+  '/assets/portfolio/website-design/website-design-01.jpg'   // Web / brand design
 ];
 
 const Services = ({ highlight = false, fullPage = false }) => {
@@ -103,7 +104,12 @@ const Services = ({ highlight = false, fullPage = false }) => {
           <div className="duck-service-index">
             {displayServices.map((service, idx) => (
               <FadeReveal key={service.id || idx} delay={idx * 0.04}>
-                <article className={`duck-service-row ${idx === 0 ? 'is-featured' : ''}`}>
+                <motion.article 
+                  className={`duck-service-row ${idx === 0 ? 'is-featured' : ''}`}
+                  initial={{ height: 'auto' }}
+                  whileHover={{ height: 'auto' }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
                   <div className="duck-service-row-main">
                     <span className="duck-service-number">{String(idx + 1).padStart(2, '0')}</span>
                     <div className="duck-service-copy">
@@ -123,11 +129,17 @@ const Services = ({ highlight = false, fullPage = false }) => {
                       </a>
                     </div>
                   </div>
-                  <div className="duck-service-preview" aria-hidden="true">
+                  <motion.div 
+                    className="duck-service-preview" 
+                    aria-hidden="true"
+                    initial={{ x: 20, opacity: 0 }}
+                    whileHover={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  >
                     <img src={service.imageUrl || serviceVisuals[idx % serviceVisuals.length]} alt="" loading="lazy" />
                     <div className="duck-service-icon">{service.icon}</div>
-                  </div>
-                </article>
+                  </motion.div>
+                </motion.article>
               </FadeReveal>
             ))}
           </div>
