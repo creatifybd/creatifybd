@@ -27,7 +27,7 @@ export const uploadAsset = async (file, onProgress, options = {}) => {
   let uploadFile = file;
   if (file.size > 100 * 1024 * 1024) throw new Error('Files must be 100 MB or smaller.');
 
-  if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
+  if (file.type.startsWith('image/') && file.type !== 'image/png' && file.type !== 'image/gif' && file.type !== 'image/svg+xml' && file.size > 2 * 1024 * 1024) {
     uploadFile = await imageCompression(file, {
       maxSizeMB: 2,
       maxWidthOrHeight: 2400,
