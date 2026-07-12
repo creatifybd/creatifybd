@@ -769,12 +769,6 @@
     border-color: rgba(232,25,44,0.22) !important;
   }
 
-  /* ─── PULSEDOT KEYFRAME ─── */
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.75); }
-  }
-
   /* Two-way homepage work reel and no-crop portfolio presentation */
   body:not(.admin-body) .portfolio-marquee {
     width: 100vw !important;

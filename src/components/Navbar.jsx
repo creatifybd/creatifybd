@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Menu, Phone, X, BarChart3, Palette, Clapperboard, Megaphone, Code2, ArrowRight } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
-import DarkModeToggle from './DarkModeToggle';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
@@ -94,7 +93,7 @@ const MagneticLink = ({ to, isActive, children, 'data-cursor': dataCursor }) => 
   );
 };
 
-const Navbar = ({ theme = 'light' }) => {
+const Navbar = () => {
   const { settings } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -189,7 +188,7 @@ const Navbar = ({ theme = 'light' }) => {
 
   return (
     <>
-      <nav id="navbar" className={`${scrolled ? 'scrolled' : ''} theme-${theme}`}>
+      <nav id="navbar" className={scrolled ? 'scrolled' : ''}>
         <div className="nav-container-inner">
           {/* Logo */}
           <motion.div
@@ -281,8 +280,6 @@ const Navbar = ({ theme = 'light' }) => {
               <a href="tel:+8801951676600" className="btn-ghost" data-cursor="Call">Call Us</a>
             </motion.div>
 
-            <DarkModeToggle />
-
             <motion.div
               className="nav-cta-wrap"
               whileHover={{ scale: 1.05 }}
@@ -306,8 +303,8 @@ const Navbar = ({ theme = 'light' }) => {
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isMobileOpen
-                  ? <motion.span className="hamburger-icon" key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.22 }}><X size={22} /></motion.span>
-                  : <motion.span className="hamburger-icon" key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.22 }}><Menu size={22} /></motion.span>
+                  ? <motion.span className="hamburger-icon" key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.22 }}><X /></motion.span>
+                  : <motion.span className="hamburger-icon" key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.22 }}><Menu /></motion.span>
                 }
               </AnimatePresence>
               <span className="hamburger-label">Menu</span>

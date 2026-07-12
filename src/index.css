@@ -4,11 +4,7 @@
 @import './styles/layout.css';
 @import './styles/pages.css';
 
-/* Optimized Image Shimmer effect */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+/* Optimized Image Shimmer effect - using shimmer from base.css */
 
 .opt-img-skeleton {
   position: absolute;
@@ -817,14 +813,10 @@ h2.section-h .red { color: var(--red); }
   width: 8px; height: 8px;
   border-radius: 50%;
   background: rgba(232, 25, 44, 0.3);
-  animation: wkDotPulse 1.2s ease-in-out infinite;
+  animation: pulse 1.2s ease-in-out infinite;
 }
 .wk-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
 .wk-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes wkDotPulse {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
-  40% { transform: scale(1); opacity: 1; }
-}
 
 /* ── Header ── */
 .wk-header {
@@ -846,11 +838,7 @@ h2.section-h .red { color: var(--red); }
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--red);
-  animation: wkPulse 2s ease-in-out infinite;
-}
-@keyframes wkPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232,25,44,0.5); }
-  50% { box-shadow: 0 0 0 6px rgba(232,25,44,0); }
+  animation: glowPulse 2s ease-in-out infinite;
 }
 .wk-heading {
   font-family: var(--font-display);
@@ -4048,21 +4036,12 @@ html, body {
   box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
   z-index: 1000;
   transition: all 0.3s ease;
-  animation: whatsapp-pulse 2s infinite;
+  animation: whatsappPulse 2s infinite;
 }
 
 .whatsapp-float-btn:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
-}
-
-@keyframes whatsapp-pulse {
-  0%, 100% {
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-  }
-  50% {
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.6);
-  }
 }
 
 @media (max-width: 768px) {
@@ -5355,11 +5334,6 @@ body::before, body::after {
      ═══════════════════════════════════════════════════════════════════════════ */
 
   /* ── 1. CSS Keyframes ─────────────────────────────────────────────────────── */
-
-  @keyframes shimmer-sweep {
-    0%   { background-position: -200% center; }
-    100% { background-position:  200% center; }
-  }
 
   @keyframes float-y {
     0%, 100% { transform: translateY(0); }
