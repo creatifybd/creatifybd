@@ -25,11 +25,20 @@ async function getBotConfig() {
 
 async function botFetch(path, cfg) {
   if (!cfg.url || !cfg.token) throw new Error('Bot API not configured in Firestore settings/private');
-  const res = await fetch(`${cfg.url}${path}`, {
+  const fullUrl = `${cfg.url}${path}`;
+  console.log(`[Bot API] Fetching: ${fullUrl}`);
+  const res = await fetch(fullUrl, {
     headers: { 'X-Admin-Token': cfg.token },
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  console.log(`[Bot API] Response status: ${res.status} ${res.statusText}`);
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(`[Bot API] Error response: ${errorText}`);
+    throw new Error(`HTTP ${res.status}: ${errorText}`);
+  }
+  const data = await res.json();
+  console.log(`[Bot API] Response data:`, data);
+  return data;
 }
 
 const SEGMENT_COLORS = { Hot: '#ef4444', Warm: '#f59e0b', Cold: '#3b82f6' };
