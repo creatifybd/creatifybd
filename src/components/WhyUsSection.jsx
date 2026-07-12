@@ -10,44 +10,44 @@ const FEATURES = [
   {
     num: '01',
     accent: '#E8192C',
-    icon: <Repeat size={20} />,
-    title: 'Unlimited Revisions',
-    desc: 'We revise until you\'re 100% satisfied — no round limit, no extra charge.',
+    icon: <UserCheck size={20} />,
+    title: 'Senior-Level Creatives',
+    desc: 'Every piece of content, design, and video is crafted by senior creative experts, ensuring top-tier global standards.',
   },
   {
     num: '02',
     accent: '#F59E0B',
     icon: <Zap size={20} />,
-    title: '48-Hour First Delivery',
-    desc: 'First drafts land in your inbox within 48 business hours of kickoff.',
+    title: 'Async Efficiency (No Meetings)',
+    desc: 'We coordinate asynchronously via shared dashboards, eliminating useless alignment meetings to save you hours of time.',
   },
   {
     num: '03',
     accent: '#22C55E',
-    icon: <UserCheck size={20} />,
-    title: 'Senior-Level Creatives',
-    desc: 'Every project is handled by experienced designers and strategists, not juniors.',
+    icon: <LayoutGrid size={20} />,
+    title: 'Up to 40% Less Retainers',
+    desc: 'No sales commissions, no physical offices, and no administrative bloat. We pass 100% of these savings directly to you.',
   },
   {
     num: '04',
     accent: '#6366F1',
-    icon: <LayoutGrid size={20} />,
-    title: 'Full Transparency',
-    desc: 'Real-time progress tracking on your shared Trello board — always in the loop.',
+    icon: <Repeat size={20} />,
+    title: 'Unlimited Revisions',
+    desc: 'We iterate and refine designs or copywriting until they match your expectations perfectly — no extra fees.',
   },
   {
     num: '05',
     accent: '#EC4899',
     icon: <FileCode size={20} />,
     title: 'Source Files Included',
-    desc: 'All Figma/PSD/AI source files delivered with every project. You own everything.',
+    desc: 'All Figma, PSD, AI, or project files are delivered upon completion. You own 100% of your assets.',
   },
   {
     num: '06',
     accent: '#14B8A6',
     icon: <RotateCcw size={20} />,
-    title: '7-Day Money-Back',
-    desc: 'Not happy in the first week? Full refund, no questions asked. Zero risk.',
+    title: 'Zero Long-Term Lock-in',
+    desc: 'No complex agency contracts or commitments. Pause, cancel, or resume your subscription anytime.',
   },
 ];
 
@@ -65,12 +65,11 @@ const WhyUsSection = () => (
       >
         <div className="eyebrow why-v3-eyebrow">Why CreatifyBD</div>
         <h2 id="why-v3-heading" className="section-h why-v3-heading">
-          A reliable creative team without<br />
-          <span className="text-red">agency overhead</span>
+          Elite creative operations<br />
+          <span className="text-red">without the agency markup</span>
         </h2>
         <p className="section-subtext">
-          Structured creative operations, international quality standards,
-          and practical monthly pricing — all under one roof.
+          We combine senior-level talent, asynchronous project management, and upfront value pricing to deliver premium results at a fraction of standard rates.
         </p>
       </motion.div>
 

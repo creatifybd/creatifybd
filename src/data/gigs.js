@@ -34,13 +34,13 @@ export const gigs = [
     id: 'smm-monthly',
     slug: 'monthly-social-media-management',
     legacySlugs: ['monthly-social-media-management-small-business'],
-    title: 'Monthly Social Media Management for Growing Brands',
+    title: 'Complete Social Media Management & Brand Growth Retainer',
     shortTitle: 'Monthly Social Media Management',
     category: 'social-media-management',
     subcategory: 'Full Management',
-    overview: 'Get consistent, premium content posted on your channels with full monthly management.',
-    description: 'Struggling to post consistently? We handle everything from content strategy and eye-catching post design to caption writing, hashtag research, and monthly scheduling. Build authority in global markets with a team that understands brand growth.',
-    whoIsThisFor: 'Startups, business owners, personal brands, real estate agents, and local shops looking to look professional online.',
+    overview: 'Full-service monthly content creation, design, scheduling, and strategic growth for your brand.',
+    description: 'Stop wasting 15+ hours a week struggling to design posts, write captions, and stay consistent. We take full responsibility for your social media channels. From custom high-conversion post graphics to caption copywriting, SEO-optimized hashtag strategies, and content calendars — we handle it all. By operating on a modern, meeting-free productized model, we deliver international agency-grade work at up to 40% less than traditional retainer costs. Perfect for founders looking to build serious brand authority.',
+    whoIsThisFor: 'Global startups, SaaS companies, founders, e-commerce brands, and agency owners seeking elite social presence with zero management hassle.',
     galleryImages: [
       'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1280&h=769&fit=crop',
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1280&h=769&fit=crop',
@@ -54,44 +54,47 @@ export const gigs = [
     startingPrice: 299,
     packages: {
       basic: {
-        name: 'Starter Growth',
+        name: 'Starter Growth (Save 40%)',
         price: 299,
         deliveryTime: 30,
         revisions: 3,
         deliverables: [
-          '12 Custom Designed Posts',
-          'Caption Writing & Hashtag Strategy',
-          'Content Calendar Planning',
-          '1 Platform Setup / Optimization'
+          '12 Custom Visual Post Designs',
+          'Caption Copywriting & Hashtags',
+          'Complete Content Calendar Planning',
+          '1 Platform Optimization & Setup',
+          'Elite Quality (40% below standard $500/mo)'
         ],
         features: { platforms: 1, postings: 12, strategy: true, reporting: false }
       },
       standard: {
-        name: 'Business Pro',
+        name: 'Business Pro (Save 41%)',
         price: 499,
         deliveryTime: 30,
         revisions: 5,
         deliverables: [
           '20 Premium Posts (Grid + Stories)',
-          'High-engaging Reels scripting & templates',
-          'Caption Writing & Advanced Hashtags',
-          '2 Platforms Management',
-          'Monthly Performance Report'
+          'Reels Video Scripting & Templates',
+          'Caption Copywriting & SEO Hashtags',
+          '2 Platforms Full Management',
+          'Monthly Performance & Growth Report',
+          'Premium Value (41% below standard $850/mo)'
         ],
         features: { platforms: 2, postings: 20, strategy: true, reporting: true }
       },
       premium: {
-        name: 'Ultimate Brand Scale',
+        name: 'Ultimate Scale (Save 41%)',
         price: 799,
         deliveryTime: 30,
         revisions: 10,
         deliverables: [
-          '30 Custom Posts / Carousel Designs',
+          '30 Custom Post / Carousel Designs',
           '5 Short-form Video Reels included',
-          'Full Setup & Caption Copywriting',
-          '3 Platforms Management',
-          'Dedicated Social Account Manager',
-          'Bi-weekly Analytics & Strategy Calls'
+          'Full Strategy & Copywriting',
+          '3 Platforms Full Management',
+          'Dedicated Creative Manager',
+          'Bi-weekly Review & Strategy Call',
+          'Enterprise Quality (41% below standard $1,350/mo)'
         ],
         features: { platforms: 3, postings: 35, strategy: true, reporting: true }
       }

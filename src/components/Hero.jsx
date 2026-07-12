@@ -75,15 +75,15 @@ const Hero = () => {
   const heroContent = content?.hero || {};
 
   const heroTitle = heroContent.title ||
-    'The creative team that makes your brand <span class="hero-hl">impossible to ignore</span>';
+    'Your dedicated creative department for <span class="hero-hl">social growth & design</span>';
 
   const _rawEyebrow = heroContent.eyebrow || '';
   const heroEyebrow = _rawEyebrow && !/(dhaka|bangladesh|\bbd\b)/i.test(_rawEyebrow)
     ? _rawEyebrow
-    : 'High-end creative execution globally';
+    : 'Premium Global Creative Operations';
 
   const heroDesc = heroContent.desc ||
-    'Social media, design, video, and web — delivered monthly by a dedicated creative team. Structured packages, clear timelines, zero agency overhead.';
+    'Complete social media management, high-end graphic design, video editing, and website design. Elite quality delivered monthly at up to 40% less than traditional agency retainers — zero management hassle, no unnecessary meetings.';
 
   const heroPrimaryCta  = heroContent.cta1 || 'See Our Work';
   const heroSecondaryCta = heroContent.cta2 || 'Get a Free Proposal';

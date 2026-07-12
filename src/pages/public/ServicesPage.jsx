@@ -28,11 +28,7 @@ const ServicesPage = () => {
             "name": "CreatifyBD",
             "url": "https://creatifybd.com"
           },
-          "areaServed": [
-            { "@type": "Country", "name": "United States" },
-            { "@type": "Country", "name": "Canada" },
-            { "@type": "Country", "name": "Australia" }
-          ]
+          "areaServed": "Global"
         }}
       />
       <Navbar />
