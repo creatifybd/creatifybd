@@ -1973,6 +1973,17 @@
     }
   }
 
+  /* ─── DARK MODE MOBILE OVERRIDES ─── */
+  @media (max-width: 768px) {
+    @media (prefers-color-scheme: dark) {
+      /* Keep light theme for consistency, but ensure text remains readable */
+      body {
+        background: var(--surface) !important;
+        color: var(--ink) !important;
+      }
+    }
+  }
+
   /* ─── PRINT STYLES FOR MOBILE ─── */
   @media print and (max-width: 768px) {
     nav,

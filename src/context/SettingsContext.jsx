@@ -10,6 +10,7 @@ export const SettingsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.body.setAttribute('data-theme', 'light');
     document.body.style.background = '';
     document.body.style.color = '';
 

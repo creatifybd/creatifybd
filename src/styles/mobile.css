@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE EXCELLENCE LAYER
+   Loaded last (after overrides) → highest precedence.
+   Safe, additive, non-destructive hardening for phones/tablets.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1 ── Media never overflows the viewport width */
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 2 ── Long words / URLs / emails can't force horizontal scroll */
+p,
+li,
+a,
+.section-sub,
+.hero-sub,
+.page-subtitle {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* 3 ── Prevent iOS zoom-on-focus by keeping form controls ≥ 16px */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* 4 ── Correct viewport-height units on mobile (browser-chrome safe) */
+@supports (height: 100dvh) {
+  .hero { min-height: 100dvh; }
+  .mobile-menu-overlay { height: 100dvh; }
+  .page-wrapper-anims { min-height: 100dvh; }
+}
+
+/* 5 ── Mobile perf + overflow: drop fixed background, tighten hero band */
+@media (max-width: 768px) {
+  body { background-attachment: scroll !important; }
+  .home-teaser-section { padding: 6rem 0 !important; }
+}
+
+/* 6 ── Comfortable tap targets on touch devices */
+@media (pointer: coarse) {
+  .btn-red,
+  .btn-ghost,
+  .btn-outline-red,
+  .btn-huge-red,
+  .premium-btn,
+  .premium-btn-outline,
+  .nav-center a,
+  .footer-col a,
+  .f-link,
+  .footer-legal a,
+  .whatsapp-float-btn {
+    min-height: 44px;
+  }
+  a,
+  button,
+  [role="button"],
+  label[for] {
+    cursor: pointer !important;
+  }
+}
+
+/* 7 ── Extreme small phones (320–360px): tighten container + hero */
+@media (max-width: 380px) {
+  .container { padding: 0 1rem !important; }
+  .hero-content { align-items: stretch; }
+  .hero-actions .btn-red,
+  .hero-actions .premium-btn,
+  .hero-actions .btn-outline-dark {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .section-h { font-size: clamp(1.7rem, 8vw, 2.2rem) !important; }
+}
+
+/* 8 ── Data tables scroll horizontally on mobile instead of breaking layout */
+@media (max-width: 768px) {
+  .data-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

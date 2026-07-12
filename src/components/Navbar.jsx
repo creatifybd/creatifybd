@@ -3,11 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Menu, Phone, X, BarChart3, Palette, Clapperboard, Megaphone, Code2, ArrowRight } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
+import DarkModeToggle from './DarkModeToggle';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
-
-// Check for reduced motion preference
-const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const navLinks = [
   { to: '/services', label: 'Services', hasDropdown: true },
@@ -180,13 +178,13 @@ const Navbar = ({ theme = 'light' }) => {
   /* Mobile menu link stagger variants */
   const menuContainerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: prefersReducedMotion ? 0 : 0.055, delayChildren: prefersReducedMotion ? 0 : 0.12 } },
-    exit: { transition: { staggerChildren: prefersReducedMotion ? 0 : 0.03, staggerDirection: -1 } },
+    visible: { transition: { staggerChildren: 0.055, delayChildren: 0.12 } },
+    exit: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
   };
   const menuItemVariants = {
-    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -28 },
-    visible: { opacity: 1, x: 0, transition: { duration: prefersReducedMotion ? 0 : 0.45, ease: EASE_EXPO } },
-    exit:    { opacity: 0, x: prefersReducedMotion ? 0 : -18, transition: { duration: prefersReducedMotion ? 0 : 0.25, ease: EASE_EXPO } },
+    hidden: { opacity: 0, x: -28 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: EASE_EXPO } },
+    exit:    { opacity: 0, x: -18, transition: { duration: 0.25, ease: EASE_EXPO } },
   };
 
   return (
@@ -196,12 +194,12 @@ const Navbar = ({ theme = 'light' }) => {
           {/* Logo */}
           <motion.div
             className="nav-logo-wrap"
-            whileHover={prefersReducedMotion ? {} : { scale: 1.04 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.3, ease: EASE_EXPO }}
+            whileHover={{ scale: 1.04 }}
+            transition={{ duration: 0.3, ease: EASE_EXPO }}
             style={{ display: 'inline-block' }}
           >
             <Link to="/" className="nav-logo" data-cursor="Click" aria-label="CreatifyBD home">
-              <img src={settings?.logo_url || '/favicon.png'} alt="" className="nav-logo-img" style={{ maxWidth: '32px', height: 'auto' }} />
+              <img src={settings?.logo_url || '/favicon.png'} alt="" className="nav-logo-img" />
               <span className="nav-logo-text">
                 {brandBase}<span>BD</span>
               </span>
@@ -232,10 +230,10 @@ const Navbar = ({ theme = 'light' }) => {
                       {dropdownOpen && (
                         <motion.div
                           className="nav-mega-dropdown"
-                          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
+                          initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
-                          transition={{ duration: prefersReducedMotion ? 0 : 0.2, ease: EASE_EXPO }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2, ease: EASE_EXPO }}
                           role="menu"
                         >
                           {servicesDropdown.map((service, i) => (
@@ -276,18 +274,20 @@ const Navbar = ({ theme = 'light' }) => {
           <div className="nav-right">
             <motion.div
               className="nav-call-wrap"
-              whileHover={prefersReducedMotion ? {} : { scale: 1.04 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.28, ease: EASE_EXPO }}
+              whileHover={{ scale: 1.04 }}
+              transition={{ duration: 0.28, ease: EASE_EXPO }}
               style={{ display: 'inline-block' }}
             >
               <a href="tel:+8801951676600" className="btn-ghost" data-cursor="Call">Call Us</a>
             </motion.div>
 
+            <DarkModeToggle />
+
             <motion.div
               className="nav-cta-wrap"
-              whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-              whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.28, ease: EASE_EXPO }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.28, ease: EASE_EXPO }}
               style={{ display: 'inline-block' }}
             >
               <Link to="/contact" className="btn-red" data-cursor="Click">
@@ -303,12 +303,11 @@ const Navbar = ({ theme = 'light' }) => {
               aria-controls="mobile-menu"
               aria-expanded={isMobileOpen}
               type="button"
-              style={{ minWidth: '44px', minHeight: '44px' }}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isMobileOpen
-                  ? <motion.span className="hamburger-icon" key="close" initial={{ rotate: prefersReducedMotion ? 0 : -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: prefersReducedMotion ? 0 : 90, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0 : 0.22 }}><X size={24} /></motion.span>
-                  : <motion.span className="hamburger-icon" key="open" initial={{ rotate: prefersReducedMotion ? 0 : 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: prefersReducedMotion ? 0 : -90, opacity: 0 }} transition={{ duration: prefersReducedMotion ? 0 : 0.22 }}><Menu size={24} /></motion.span>
+                  ? <motion.span className="hamburger-icon" key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.22 }}><X size={22} /></motion.span>
+                  : <motion.span className="hamburger-icon" key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.22 }}><Menu size={22} /></motion.span>
                 }
               </AnimatePresence>
               <span className="hamburger-label">Menu</span>
@@ -326,15 +325,15 @@ const Navbar = ({ theme = 'light' }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.22 }}
+            transition={{ duration: 0.22 }}
           >
             <button type="button" className="mobile-menu-backdrop" onClick={closeMobile} aria-label="Close menu" />
             <motion.aside
               className="mobile-menu-panel"
-              initial={{ x: prefersReducedMotion ? 0 : '-100%' }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: prefersReducedMotion ? 0 : '-100%' }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.32, ease: EASE_EXPO }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.32, ease: EASE_EXPO }}
             >
               <div className="mobile-menu-head">
                 <Link to="/" className="mobile-menu-brand" onClick={closeMobile} aria-label="CreatifyBD home">
