@@ -29,8 +29,6 @@ import {
   UserCog,
   History,
   Check,
-  Moon,
-  Sun,
   ChevronDown,
   Info
 } from 'lucide-react';
@@ -68,7 +66,6 @@ const AdminDashboard = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const [currentDateTime, setCurrentDateTime] = useState('');
   const [visitorCount, setVisitorCount] = useState(0);
@@ -89,15 +86,6 @@ const AdminDashboard = () => {
       setUnreadCount(msgs.filter(m => !m.read).length);
     });
     return () => unsub();
-  }, []);
-
-  // Dark mode persistence
-  useEffect(() => {
-    const saved = localStorage.getItem('adminDarkMode');
-    if (saved === 'true') {
-      setDarkMode(true);
-      document.body.classList.add('dark');
-    }
   }, []);
 
   // Update current date/time every second
@@ -130,17 +118,6 @@ const AdminDashboard = () => {
     const interval = setInterval(updateVisitorCount, 30000); // Update every 30 seconds
     return () => clearInterval(interval);
   }, []);
-
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('adminDarkMode', newMode.toString());
-    if (newMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-  };
 
   const markAsRead = async (notifId) => {
     try {
@@ -407,24 +384,6 @@ const AdminDashboard = () => {
                 {visitorCount} visitors
               </span>
             </div>
-            <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle dark mode"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--adm-dim)',
-                cursor: 'pointer',
-                display: 'flex',
-                padding: '0.5rem',
-                borderRadius: '8px',
-                transition: 'background 0.2s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--adm-soft)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-            >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
             <div style={{ position: 'relative' }}>
               <button 
                 aria-label="Notifications" 
@@ -474,11 +433,13 @@ const AdminDashboard = () => {
                       right: 0,
                       marginTop: '0.5rem',
                       width: '320px',
+                      maxWidth: 'calc(100vw - 2rem)',
                       background: 'var(--adm-card)',
                       border: '1px solid var(--adm-border)',
                       borderRadius: '12px',
                       boxShadow: 'var(--shadow-lg)',
-                      zIndex: 1000
+                      zIndex: 1000,
+                      boxSizing: 'border-box'
                     }}
                   >
                     <div style={{

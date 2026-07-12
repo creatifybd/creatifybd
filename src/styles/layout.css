@@ -40,6 +40,14 @@ nav.scrolled {
   nav { padding: 0 1.5rem; height: 80px; }
   nav.scrolled { width: 92%; padding: 0 1rem; top: 12px; }
 }
+@media (max-width: 768px) {
+  nav { padding: 0 1.25rem; height: 72px; }
+  nav.scrolled { width: 94%; padding: 0 1rem; }
+}
+@media (max-width: 640px) {
+  nav { padding: 0 1rem; height: 68px; }
+  nav.scrolled { width: 96%; padding: 0 0.75rem; }
+}
 @media (max-width: 900px) {
   nav,
   nav.scrolled {
@@ -68,6 +76,26 @@ nav.scrolled {
   position: relative;
 }
 
+/* Hamburger button - ensure 44x44px touch target */
+.hamburger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 480px) {
+  .hamburger-btn {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
+
 /* Logo */
 .nav-logo,
 .nav-logo-text {
@@ -84,6 +112,17 @@ nav.scrolled {
 }
 .nav-logo .dot,
 .nav-logo strong { color: var(--brand-red); }
+
+@media (max-width: 640px) {
+  .nav-logo-text {
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 480px) {
+  .nav-logo-text {
+    font-size: 1.1rem;
+  }
+}
 
 /* Center nav links — pill background like Duck Design */
 .nav-center {
