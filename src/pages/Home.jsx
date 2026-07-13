@@ -35,9 +35,9 @@ const Home = () => {
   }, [loading]);
 
   const seo = {
-    title: "CreatifyBD | Creative Agency for Social Media, Design & Video — Global Services",
-    description: "CreatifyBD is a dedicated creative agency offering social media management, graphic design, video editing, and website design for brands globally. 500+ projects delivered, 5.0★ rating.",
-    keywords: "CreatifyBD, creative agency, social media management, graphic design, video editing, website design, digital marketing, branding agency, social media agency, graphic design agency, creative services",
+    title: "CreatifyBD | Strategic Creative Services for Growing Businesses Worldwide",
+    description: "Professional creative agency offering strategic social media management, brand design, video production, and performance marketing. Helping small businesses compete globally with transparent pricing and dedicated support.",
+    keywords: "CreatifyBD, creative agency, social media management, brand design, video production, performance marketing, website design, digital strategy, business growth, creative services",
     schema: [
       {
         "@context": "https://schema.org",
@@ -47,7 +47,7 @@ const Home = () => {
         "url": "https://creatifybd.com",
         "logo": "https://creatifybd.com/logo.png",
         "image": "https://creatifybd.com/og-image.png",
-        "description": "CreatifyBD is the best digital marketing agency and creative agency offering social media management, graphic design service, video editing service, and digital marketing service globally.",
+        "description": "CreatifyBD is a strategic creative agency offering social media management, brand design, video production, and performance marketing for growing businesses worldwide.",
         "telephone": "+8801951676600",
         "email": "hello@creatifybd.com",
         "address": { "@type": "PostalAddress", "addressCountry": "BD", "addressRegion": "Dhaka" },

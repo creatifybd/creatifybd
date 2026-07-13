@@ -49,8 +49,8 @@ const TeamPage = () => {
   ];
 
   const seo = usePageSEO('team', {
-    title: "Meet Our Creative Team & Workspace | CreatifyBD",
-    description: "Meet the creative agency specialists building premium social content, design assets, videos, and websites for global brands."
+    title: "Global Creative Team | Professional Creative Services | CreatifyBD",
+    description: "Meet our global creative team delivering professional design, social media, and marketing services for growing businesses worldwide. Transparent communication and accountable project management."
   });
 
   return (
@@ -153,7 +153,7 @@ const TeamPage = () => {
             transition={{ duration: 0.65, ease: EASE_EXPO }}
           >
             <h2 className="section-h">Meet Our Specialists</h2>
-            <p className="section-sub">Transparent billing structures backed by professional, accountable experts.</p>
+            <p className="section-sub">Global creative talent delivering professional results with transparent communication and accountable project management.</p>
           </motion.div>
 
           <div className="team-grid">

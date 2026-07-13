@@ -9,37 +9,37 @@ const defaultServices = [
   {
     id: 'signature-social-media-manager',
     icon: <BarChart3 size={28} />,
-    title: 'Managed Social Media Growth',
-    desc: 'Monthly content calendars, post design, captions, scheduling, community support, and analytics for busy brands.',
+    title: 'Strategic Social Media Management',
+    desc: 'Data-driven content strategies that increase engagement and drive conversions. Full-service management from strategy to execution.',
     price: 'From $299/mo',
     badge: 'Most requested'
   },
   {
     id: 'graphic-design',
     icon: <Palette size={28} />,
-    title: 'Graphic Design',
-    desc: 'Brand kits, logo systems, ad creatives, flyers, carousels, and social templates built for clear conversion.',
+    title: 'Brand Design Systems',
+    desc: 'Comprehensive visual identity that communicates your unique value proposition. From brand strategy to execution-ready assets.',
     price: 'From $45'
   },
   {
     id: 'video-editing',
     icon: <Clapperboard size={28} />,
-    title: 'Video Editing',
-    desc: 'Short-form reels, promotional videos, YouTube edits, captions, hooks, pacing, and platform-ready exports.',
+    title: 'Professional Video Production',
+    desc: 'Strategic video content that tells your brand story and drives action. From concept to final delivery with platform optimization.',
     price: 'From $60'
   },
   {
     id: 'digital-marketing',
     icon: <Megaphone size={28} />,
-    title: 'Digital Marketing',
-    desc: 'Campaign planning, ad creative direction, landing-page funnels, lead magnets, and monthly performance insight.',
+    title: 'Performance Marketing',
+    desc: 'Data-driven campaigns that generate qualified leads and measurable ROI. Strategic planning with continuous optimization.',
     price: 'Custom quote'
   },
   {
     id: 'website-design',
     icon: <Code2 size={28} />,
-    title: 'Website Design',
-    desc: 'Fast, responsive business websites, landing pages, redesigns, SEO foundations, and inquiry-focused UX.',
+    title: 'Conversion-Focused Web Design',
+    desc: 'Strategic websites that turn visitors into customers. User experience design with business goals at the center.',
     price: 'From $249'
   }
 ];
@@ -85,14 +85,14 @@ const Services = ({ highlight = false, fullPage = false }) => {
             </FadeReveal>
             <TextReveal className="section-h">
               {fullPage ? (
-                <>Creative support without the <span className="text-red">hiring headache.</span></>
+                <>Strategic creative services that <span className="text-red">drive business results.</span></>
               ) : (
-                <>Everything your brand needs to <span className="text-red">show up better.</span></>
+                <>Professional creative support for <span className="text-red">growing businesses.</span></>
               )}
             </TextReveal>
             <FadeReveal delay={0.2}>
               <p className="section-sub">
-                One reliable team for ongoing social media, design, video, marketing, and web work. Start with one project or build a monthly workflow.
+                A dedicated creative partner that understands your business goals. From strategy to execution, we deliver measurable results without the agency overhead.
               </p>
             </FadeReveal>
             <FadeReveal delay={0.3}>
@@ -124,8 +124,8 @@ const Services = ({ highlight = false, fullPage = false }) => {
                     <div className="duck-service-action">
                       <span className="duck-service-price">{service.price || 'Custom quote'}</span>
                       <a
-                        href={service.price && service.price !== 'Custom quote' ? `/payment?service=${encodeURIComponent(service.title)}` : '#contact'}
-                        aria-label={`Start ${service.title}`}
+                        href="#contact"
+                        aria-label={`Discuss ${service.title}`}
                       >
                         <ArrowUpRight size={24} />
                       </a>

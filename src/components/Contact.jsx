@@ -412,7 +412,7 @@ const Contact = () => {
                     {[
                       { icon: '🔒', text: 'SSL Secured' },
                       { icon: '✅', text: 'No spam, ever' },
-                      { icon: '⭐', text: '5.0/5 · 100+ clients' },
+                      { icon: '🌍', text: 'Global team' },
                     ].map(b => (
                       <span key={b.text} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.74rem', color: 'var(--muted)', fontWeight: 600 }}>
                         <span>{b.icon}</span>{b.text}

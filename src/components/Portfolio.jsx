@@ -420,8 +420,8 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
               <FadeReveal delay={0.35}>
                 <div className="agency-work-page-stats">
                   <div><strong><Counter target={portfolioItems.length} />+</strong><span>Projects</span></div>
-                  <div><strong><Counter target={50} />+</strong><span>Clients</span></div>
-                  <div><strong><Counter target={5} /></strong><span>Years</span></div>
+                  <div><strong><Counter target={40} />%</strong><span>Cost Savings</span></div>
+                  <div><strong><Counter target={24} />h</strong><span>Response Time</span></div>
                 </div>
               </FadeReveal>
             </div>
@@ -447,9 +447,9 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                 <div className="wk-stats-row">
                   <div className="wk-stat"><strong><Counter target={portfolioItems.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
                   <div className="wk-stat-div" />
-                  <div className="wk-stat"><strong><Counter target={50} />+</strong><span>{lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</span></div>
+                  <div className="wk-stat"><strong><Counter target={40} />%</strong><span>{lang === 'bn' ? 'খরচ সাশ্রয়' : 'Cost Savings'}</span></div>
                   <div className="wk-stat-div" />
-                  <div className="wk-stat"><strong><Counter target={5} /></strong><span>{lang === 'bn' ? 'বছরের অভিজ্ঞতা' : 'Years Experience'}</span></div>
+                  <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'প্রতিক্রিয়া সময়' : 'Response Time'}</span></div>
                 </div>
               </FadeReveal>
             </div>

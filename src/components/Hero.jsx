@@ -8,17 +8,17 @@ import { useSettings } from '../context/SettingsContext';
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const TRUST_PILLS = [
-  { icon: <RefreshCw size={13} />, label: 'Unlimited Revisions' },
-  { icon: <Clock size={13} />,     label: 'Premium Turnaround' },
-  { icon: <Shield size={13} />,    label: '7-Day Money-Back' },
-  { icon: <CheckCircle2 size={13} />, label: '500+ Projects Done' },
+  { icon: <RefreshCw size={13} />, label: 'Global Team' },
+  { icon: <Clock size={13} />,     label: '24h Response' },
+  { icon: <Shield size={13} />,    label: 'Fixed Pricing' },
+  { icon: <CheckCircle2 size={13} />, label: 'Satisfaction Guarantee' },
 ];
 
 const STATS = [
-  { value: '500+', label: 'Projects' },
-  { value: '100+', label: 'Clients' },
-  { value: '5.0★', label: 'Rating' },
-  { value: 'Global', label: 'Coverage' },
+  { value: '24/7', label: 'Support' },
+  { value: '40%', label: 'Cost Savings' },
+  { value: '5+', label: 'Years Experience' },
+  { value: 'Global', label: 'Reach' },
 ];
 
 /* Portfolio preview images for the visual grid */
@@ -75,18 +75,18 @@ const Hero = () => {
   const heroContent = content?.hero || {};
 
   const heroTitle = heroContent.title ||
-    'Your dedicated creative department for <span class="hero-hl">social growth & design</span>';
+    'Creative services that drive <span class="hero-hl">business growth</span> for small businesses worldwide';
 
   const _rawEyebrow = heroContent.eyebrow || '';
   const heroEyebrow = _rawEyebrow && !/(dhaka|bangladesh|\bbd\b)/i.test(_rawEyebrow)
     ? _rawEyebrow
-    : 'Premium Global Creative Operations';
+    : 'Strategic Creative Partner';
 
   const heroDesc = heroContent.desc ||
-    'Complete social media management, high-end graphic design, video editing, and website design. Elite quality delivered monthly at up to 40% less than traditional agency retainers — zero management hassle, no unnecessary meetings.';
+    'Professional creative services designed to help small businesses compete with larger brands. Strategic design, social media management, and digital marketing with transparent pricing and dedicated support.';
 
-  const heroPrimaryCta  = heroContent.cta1 || 'See Our Work';
-  const heroSecondaryCta = heroContent.cta2 || 'Get a Free Proposal';
+  const heroPrimaryCta  = heroContent.cta1 || 'View Our Work';
+  const heroSecondaryCta = heroContent.cta2 || 'Get a Free Strategy Consultation';
 
   const sanitizedTitle = useMemo(() => DOMPurify.sanitize(heroTitle, {
     ALLOWED_TAGS: ['span', 'br', 'strong', 'em'],
@@ -284,7 +284,7 @@ const Hero = () => {
                 transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.1 }}
               >
                 <Star size={14} className="badge-star" />
-                <span>5.0 avg. rating</span>
+                <span>Premium Quality</span>
               </motion.div>
 
               <motion.div
@@ -294,7 +294,7 @@ const Hero = () => {
                 transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.3 }}
               >
                 <CheckCircle2 size={15} />
-                <span>Delivery approved!</span>
+                <span>Results-Driven</span>
               </motion.div>
             </div>
           )}
