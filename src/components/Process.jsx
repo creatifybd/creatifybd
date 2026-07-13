@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileSearch, Lightbulb, PenTool, Rocket } from 'lucide-react';
+import { FileSearch, Lightbulb, PenTool, Rocket, CheckCircle, BarChart } from 'lucide-react';
 import { FadeReveal, SlideReveal } from './MotionReveal';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
@@ -29,6 +29,12 @@ const steps = [
   },
   {
     num: '04',
+    icon: <CheckCircle size={26} />,
+    title: 'Review and refine',
+    desc: 'Client feedback is incorporated through structured revision rounds to ensure quality and alignment.'
+  },
+  {
+    num: '05',
     icon: <Rocket size={26} />,
     title: 'Launch and improve',
     desc: 'Final assets are delivered, scheduled, or launched with performance notes and next-step recommendations.'

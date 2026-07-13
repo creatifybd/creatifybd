@@ -215,7 +215,7 @@
 
 /* Section structure */
 .section {
-  padding: 7rem 0;
+  padding: 7rem 1.5rem;
 }
 .section-header {
   margin-bottom: 4rem;

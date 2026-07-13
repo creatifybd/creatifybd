@@ -194,18 +194,18 @@
   footer.footer-v2 .container { position: relative; z-index: 1; }
   .footer-v2 .footer-brand-mark span,
   .footer-v2 .footer-brand-mark strong,
-  .footer-v2 h4, .footer-v2 .footer-col-title { color: var(--ink) !important; }
+  .footer-v2 h4, .footer-v2 .footer-col-title { color: #ffffff !important; }
   .footer-v2 p, .footer-v2 .footer-col ul a,
-  .footer-v2 .f-link                          { color: var(--muted) !important; }
+  .footer-v2 .f-link                          { color: rgba(255, 255, 255, 0.7) !important; }
   .footer-v2 .footer-col ul a:hover,
   .footer-v2 .f-link:hover                    { color: var(--brand-red) !important; }
-  .footer-v2 .footer-bottom, .footer-v2 .f-bottom { border-top: 1px solid var(--border-soft) !important; color: var(--muted) !important; }
+  .footer-v2 .footer-bottom, .footer-v2 .f-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1) !important; color: rgba(255, 255, 255, 0.6) !important; }
   .footer-v2 .footer-legal-links a,
-  .footer-v2 .f-legal a                       { color: var(--muted) !important; }
+  .footer-v2 .f-legal a                       { color: rgba(255, 255, 255, 0.6) !important; }
   .footer-v2 .footer-legal-links a:hover,
-  .footer-v2 .f-legal a:hover                 { color: var(--ink) !important; }
-  .footer-v2 .f-social-btn { color: var(--muted) !important; border-color: var(--border-card) !important; background: var(--surface-card) !important; }
-  .footer-v2 .f-social-btn:hover { color: var(--brand-red) !important; border-color: var(--brand-red) !important; background: var(--brand-red-soft) !important; }
+  .footer-v2 .f-legal a:hover                 { color: #ffffff !important; }
+  .footer-v2 .f-social-btn { color: rgba(255, 255, 255, 0.7) !important; border-color: rgba(255, 255, 255, 0.2) !important; background: rgba(255, 255, 255, 0.1) !important; }
+  .footer-v2 .f-social-btn:hover { color: var(--brand-red) !important; border-color: var(--brand-red) !important; background: rgba(232, 25, 44, 0.2) !important; }
 
   /* ─── NAV SCROLLED PILL ─── */
   nav.scrolled {
@@ -247,6 +247,7 @@
   /* ─── PROCESS GRID RESPONSIVE ─── */
   @media (max-width: 768px) {
     .hero-container         { grid-template-columns: 1fr !important; padding: 0 1.5rem !important; gap: 2.5rem !important; }
+    .hero-split             { padding: 0 1.5rem !important; }
     .hero-visual            { display: none !important; }
     .smm-grid               { grid-template-columns: 1fr !important; gap: 2rem !important; }
     .smm-metrics-grid       { grid-template-columns: repeat(3, 1fr) !important; }
@@ -337,6 +338,7 @@
   /* ─── INTRO BAND V2 — was var(--ink) dark → light surface ─── */
   .intro-band-v2 {
     background: var(--surface-soft) !important;
+    padding: 4rem 1.5rem !important;
   }
   .intro-title-v2 {
     color: var(--ink) !important;
@@ -490,17 +492,17 @@
 
   /* Footer inside dark-section → already handled by footer override above */
 
-  /* ─── FOOTER V2 — direct class (was var(--charcoal)) → light ─── */
+  /* ─── FOOTER V2 — direct class (was var(--charcoal)) → dark ─── */
   .footer-v2 {
-    background: var(--surface-soft) !important;
-    border-top: 1px solid var(--border-soft) !important;
-    color: var(--muted) !important;
+    background: #060608 !important;
+    border-top: 1px solid rgba(232,25,44,0.15) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
   }
   .footer-v2 h4,
   .footer-v2 .footer-col-title,
-  .footer-v2 strong { color: var(--ink) !important; }
+  .footer-v2 strong { color: #ffffff !important; }
   .footer-v2 p,
-  .footer-v2 a:not(.btn-red) { color: var(--muted) !important; }
+  .footer-v2 a:not(.btn-red) { color: rgba(255, 255, 255, 0.7) !important; }
   .footer-v2 a:not(.btn-red):hover { color: var(--brand-red) !important; }
 
   /* ─── SMM HIGHLIGHT — ensure light bg ─── */
@@ -2234,7 +2236,7 @@
   }
 
   body:not(.admin-body) .clients-section {
-    padding: clamp(1.6rem, 2.4vw, 2.4rem) 0 !important;
+    padding: clamp(1.6rem, 2.4vw, 2.4rem) 1.5rem !important;
     overflow: hidden !important;
   }
 
@@ -3741,7 +3743,7 @@
     }
 
     body:not(.admin-body) .clients-section {
-      padding: 28px 0 !important;
+      padding: 28px 1.5rem !important;
       overflow: hidden !important;
     }
 
