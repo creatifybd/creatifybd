@@ -161,22 +161,15 @@
   /* New component classes */
   .cs-section { background: var(--surface-soft) !important; }
   .tm-section  { background: var(--surface-card) !important; }
-  /* CTABand is dark — keep its dark background and glow treatment */
-  .ctab-section { background: #060608 !important; }
-  /* StatsCounter dark section */
-  .sc-section { background: #060608 !important; }
+  /* CTABand - light theme */
+  .ctab-section { background: var(--gradient-red) !important; }
+  /* StatsCounter - light theme */
+  .sc-section { background: var(--surface-soft) !important; }
 
-  /* ─── PREMIUM DARK SECTIONS: reddish gradient glow treatment ─── */
-  /* Applied to every explicitly dark section using ::before pseudo overlay */
-  .ctab-section,
-  .sc-section {
-    position: relative !important;
-  }
-
-  /* ─── FOOTER COMPLETE OVERRIDE — deep dark with red glow ─── */
+  /* ─── FOOTER COMPLETE OVERRIDE — light theme ─── */
   footer, footer.footer-v2 {
-    background: #060608 !important;
-    border-top: 1px solid rgba(232,25,44,0.15) !important;
+    background: var(--surface-soft) !important;
+    border-top: 1px solid var(--border-soft) !important;
     position: relative !important;
     overflow: hidden !important;
   }
@@ -497,17 +490,17 @@
 
   /* Footer inside dark-section → already handled by footer override above */
 
-  /* ─── FOOTER V2 — direct class (was var(--charcoal)) → dark ─── */
+  /* ─── FOOTER V2 — direct class → light theme ─── */
   .footer-v2 {
-    background: #060608 !important;
-    border-top: 1px solid rgba(232,25,44,0.15) !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    background: var(--surface-soft) !important;
+    border-top: 1px solid var(--border-soft) !important;
+    color: var(--muted) !important;
   }
   .footer-v2 h4,
   .footer-v2 .footer-col-title,
-  .footer-v2 strong { color: #ffffff !important; }
+  .footer-v2 strong { color: var(--ink) !important; }
   .footer-v2 p,
-  .footer-v2 a:not(.btn-red) { color: rgba(255, 255, 255, 0.7) !important; }
+  .footer-v2 a:not(.btn-red) { color: var(--muted) !important; }
   .footer-v2 a:not(.btn-red):hover { color: var(--brand-red) !important; }
 
   /* ─── SMM HIGHLIGHT — ensure light bg ─── */
