@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -38,8 +38,6 @@ const Hero = () => {
   const y2 = useTransform(scrollY, [0, 600], [0, -100]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  // Word-by-word stagger for headline
-  const words = useMemo(() => headline.split(' '), [headline]);
 
   return (
     <section className="hero-agency" id="hero">
@@ -67,27 +65,11 @@ const Hero = () => {
           {/* Headline */}
           <motion.h1
             className="hero-agency-h1"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.055, delayChildren: 0.05 } },
-            }}
-          >
-            {words.map((word, i) => (
-              <motion.span
-                key={i}
-                className="hero-word"
-                variants={{
-                  hidden:  { opacity: 0, y: 40, skewY: 4 },
-                  visible: { opacity: 1, y: 0,  skewY: 0, transition: { duration: 0.65, ease: EASE_EXPO } },
-                }}
-              >
-                {word}
-                {i < words.length - 1 ? '\u00a0' : ''}
-              </motion.span>
-            ))}
-          </motion.h1>
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.05 }}
+            dangerouslySetInnerHTML={{ __html: headline }}
+          />
 
           {/* Description */}
           <motion.p
