@@ -417,8 +417,8 @@ nav.scrolled .nav-center {
 
 footer,
 footer.footer-v2 {
-  background: #0F0F12 !important;
-  border-top: 1px solid rgba(232, 25, 44, 0.2) !important;
+  background: var(--surface-soft) !important;
+  border-top: 1px solid var(--border-soft) !important;
   padding: 5rem 1.5rem 3rem;
   position: relative;
   overflow: hidden;
@@ -454,12 +454,12 @@ footer::before {
   margin-bottom: 1rem;
 }
 .footer-brand-mark img { height: 36px; width: auto; }
-.footer-brand-mark span { font-size: 1.4rem; font-weight: 900; color: #ffffff !important; }
+.footer-brand-mark span { font-size: 1.4rem; font-weight: 900; color: var(--ink) !important; }
 .footer-brand-mark strong { color: var(--brand-red) !important; font: inherit !important; }
 
 .footer-v2 p,
 footer p {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--muted) !important;
   font-size: 0.92rem;
   line-height: 1.7;
   max-width: 300px;
@@ -470,16 +470,16 @@ footer p {
 .f-social-btn {
   width: 40px; height: 40px;
   border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  border: 1.5px solid var(--border) !important;
+  background: var(--surface-card) !important;
+  color: var(--muted) !important;
   display: flex; align-items: center; justify-content: center;
   transition: all var(--transition-normal);
 }
 .f-social-btn:hover {
   color: var(--brand-red) !important;
   border-color: var(--brand-red) !important;
-  background: rgba(232, 25, 44, 0.2) !important;
+  background: var(--brand-red-soft) !important;
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(232,25,44,0.15);
 }
@@ -491,7 +491,7 @@ footer p {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #ffffff !important;
+  color: var(--ink) !important;
   margin-bottom: 1.25rem;
 }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
@@ -499,7 +499,7 @@ footer p {
 .footer-col a,
 .f-link {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--muted) !important;
   transition: color var(--transition-fast), transform var(--transition-fast);
   display: inline-block;
   line-height: 1.5;
@@ -513,14 +513,14 @@ footer p {
 
 /* Footer contact info */
 .footer-contact-info { display: flex; flex-direction: column; gap: 1rem; }
-.f-contact-item small { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.5); margin-bottom: 0.3rem; }
-.f-contact-item a { font-size: 0.92rem; color: rgba(255, 255, 255, 0.9) !important; font-weight: 600; }
+.f-contact-item small { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
+.f-contact-item a { font-size: 0.92rem; color: var(--ink) !important; font-weight: 600; }
 .f-contact-item a:hover { color: var(--brand-red) !important; }
 
 /* Footer bottom */
 .footer-bottom,
 .f-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 1px solid var(--border-soft) !important;
   padding-top: 2rem;
   display: flex;
   justify-content: space-between;
@@ -528,18 +528,18 @@ footer p {
   flex-wrap: wrap;
   gap: 1.5rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--muted) !important;
 }
 .footer-legal-links,
 .f-legal { display: flex; gap: 1.5rem; }
 .footer-legal-links a,
 .f-legal a {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--muted) !important;
   font-size: 0.85rem;
   transition: color var(--transition-fast);
 }
 .footer-legal-links a:hover,
-.f-legal a:hover { color: #ffffff !important; }
+.f-legal a:hover { color: var(--ink) !important; }
 
 /* Page wrapper */
 .page-wrapper-anims {

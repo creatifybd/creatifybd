@@ -194,18 +194,18 @@
   footer.footer-v2 .container { position: relative; z-index: 1; }
   .footer-v2 .footer-brand-mark span,
   .footer-v2 .footer-brand-mark strong,
-  .footer-v2 h4, .footer-v2 .footer-col-title { color: #ffffff !important; }
+  .footer-v2 h4, .footer-v2 .footer-col-title { color: var(--ink) !important; }
   .footer-v2 p, .footer-v2 .footer-col ul a,
-  .footer-v2 .f-link                          { color: rgba(255, 255, 255, 0.7) !important; }
+  .footer-v2 .f-link                          { color: var(--muted) !important; }
   .footer-v2 .footer-col ul a:hover,
   .footer-v2 .f-link:hover                    { color: var(--brand-red) !important; }
-  .footer-v2 .footer-bottom, .footer-v2 .f-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1) !important; color: rgba(255, 255, 255, 0.6) !important; }
+  .footer-v2 .footer-bottom, .footer-v2 .f-bottom { border-top: 1px solid var(--border-soft) !important; color: var(--muted) !important; }
   .footer-v2 .footer-legal-links a,
-  .footer-v2 .f-legal a                       { color: rgba(255, 255, 255, 0.6) !important; }
+  .footer-v2 .f-legal a                       { color: var(--muted) !important; }
   .footer-v2 .footer-legal-links a:hover,
-  .footer-v2 .f-legal a:hover                 { color: #ffffff !important; }
-  .footer-v2 .f-social-btn { color: rgba(255, 255, 255, 0.7) !important; border-color: rgba(255, 255, 255, 0.2) !important; background: rgba(255, 255, 255, 0.1) !important; }
-  .footer-v2 .f-social-btn:hover { color: var(--brand-red) !important; border-color: var(--brand-red) !important; background: rgba(232, 25, 44, 0.2) !important; }
+  .footer-v2 .f-legal a:hover                 { color: var(--ink) !important; }
+  .footer-v2 .f-social-btn { color: var(--muted) !important; border-color: var(--border) !important; background: var(--surface-card) !important; }
+  .footer-v2 .f-social-btn:hover { color: var(--brand-red) !important; border-color: var(--brand-red) !important; background: var(--brand-red-soft) !important; }
 
   /* ─── NAV SCROLLED PILL ─── */
   nav.scrolled {
