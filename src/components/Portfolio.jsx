@@ -190,7 +190,7 @@ const WORK_TILE_PATTERNS = ['hero', 'tall', 'wide', 'square', 'wide', 'tall', 's
 
 const getWorkImage = (item) => item.imageUrl || item.image || item.imgUrl || item.img || item.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
 
-const WorkCard = React.forwardRef(({ item, onClick, priority = 0, viewCount = 0 }, ref) => {
+const WorkCard = React.forwardRef(({ item, onClick, priority = 0 }, ref) => {
   const pattern = WORK_TILE_PATTERNS[priority % WORK_TILE_PATTERNS.length];
   return (
     <motion.div
@@ -223,11 +223,6 @@ const WorkCard = React.forwardRef(({ item, onClick, priority = 0, viewCount = 0 
           </div>
           <span className="duck-work-arrow"><ArrowUpRight size={22} /></span>
         </div>
-        {viewCount > 0 && (
-          <div className="duck-work-views">
-            <span>{viewCount}</span>
-          </div>
-        )}
       </div>
       <div className="duck-work-mobile-meta">
         <span>{item.service || PORTFOLIO_CAT_DISPLAY[item.category] || CAT_DISPLAY[item.category] || item.category || 'Creative work'}</span>
@@ -490,7 +485,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                         item={item} 
                         onClick={openLightbox} 
                         priority={index}
-                        viewCount={item.viewCount || Math.floor(Math.random() * 500) + 50}
                       />
                     ))}
                   </AnimatePresence>

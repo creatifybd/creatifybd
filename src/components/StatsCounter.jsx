@@ -1,54 +1,46 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-const EASE_EXPO = [0.16, 1, 0.3, 1];
+const EASE = [0.16, 1, 0.3, 1];
 
 const STATS = [
-  { value: 500, suffix: '+', label: 'Projects Delivered', desc: 'Across design, video, social & web' },
-  { value: 100, suffix: '%', label: 'Full Ownership', desc: 'Figma, PSD, AI source files included' },
-  { value: 5.0, suffix: '★', label: 'Average Rating', desc: 'From verified global reviews' },
-  { value: 24,  suffix: 'h', label: 'Response Time', desc: 'Fast, direct communication support' },
+  { value: 200, suffix: '+', label: 'Global Clients',      desc: 'Brands served worldwide' },
+  { value: 7,   suffix: '+', label: 'Years Experience',    desc: 'In brand & logo design'  },
+  { value: 98,  suffix: '%', label: 'Satisfaction Rate',   desc: 'From verified reviews'   },
+  { value: 24,  suffix: 'h', label: 'Response Time',       desc: 'Direct communication'    },
 ];
 
-const useCountUp = (target, duration = 1800, start = false) => {
+const useCountUp = (target, duration = 1600, active = false) => {
   const [count, setCount] = useState(0);
   const isFloat = !Number.isInteger(target);
-
   useEffect(() => {
-    if (!start) return;
+    if (!active) return;
     let startTime = null;
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = eased * target;
-      setCount(isFloat ? parseFloat(current.toFixed(1)) : Math.floor(current));
-      if (progress < 1) requestAnimationFrame(step);
+    const tick = (ts) => {
+      if (!startTime) startTime = ts;
+      const p = Math.min((ts - startTime) / duration, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      setCount(isFloat ? parseFloat((e * target).toFixed(1)) : Math.floor(e * target));
+      if (p < 1) requestAnimationFrame(tick);
       else setCount(target);
     };
-    requestAnimationFrame(step);
-  }, [start, target, duration, isFloat]);
-
+    requestAnimationFrame(tick);
+  }, [active, target, duration, isFloat]);
   return count;
 };
 
-const StatItem = ({ stat, index, inView }) => {
-  const count = useCountUp(stat.value, 1600, inView);
-
+const StatItem = ({ stat, idx, inView }) => {
+  const count = useCountUp(stat.value, 1500, inView);
   return (
     <motion.div
-      className="sc-item"
-      initial={{ opacity: 0, y: 32 }}
+      className="stats-item"
+      initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: EASE_EXPO, delay: index * 0.1 }}
-      role="listitem"
-      aria-label={`${stat.label}: ${stat.value}${stat.suffix}`}
+      transition={{ duration: 0.65, ease: EASE, delay: idx * 0.1 }}
     >
-      <div className="sc-value">
-        {count}{stat.suffix}
-      </div>
-      <div className="sc-label">{stat.label}</div>
-      <div className="sc-desc">{stat.desc}</div>
+      <div className="stats-value">{count}{stat.suffix}</div>
+      <div className="stats-label">{stat.label}</div>
+      <div className="stats-desc">{stat.desc}</div>
     </motion.div>
   );
 };
@@ -58,125 +50,105 @@ const StatsCounter = () => {
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect(); } },
-      { threshold: 0.3 }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold: 0.25 }
     );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <section className="sc-section" ref={ref} aria-label="Company statistics">
-      <div className="sc-bg" aria-hidden="true">
-        <div className="sc-glow-a" />
-        <div className="sc-glow-b" />
-      </div>
+    <section className="stats-section" ref={ref} aria-label="Company statistics">
       <div className="container">
-        <div className="sc-grid" role="list">
-          {STATS.map((stat, i) => (
-            <StatItem key={stat.label} stat={stat} index={i} inView={inView} />
+        <div className="stats-grid">
+          {STATS.map((s, i) => (
+            <React.Fragment key={s.label}>
+              <StatItem stat={s} idx={i} inView={inView} />
+              {i < STATS.length - 1 && (
+                <div className="stats-divider" aria-hidden="true" />
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>
 
       <style>{`
-        .sc-section {
-          padding: 5rem 0;
-          background: var(--surface-dark, #0a0a0f);
-          position: relative;
-          overflow: hidden;
+        /* ══ STATS COUNTER ══════════════════════════════════════ */
+        .stats-section {
+          background: var(--surface);
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          padding: 3.5rem 0;
         }
-        .sc-bg {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-        }
-        .sc-glow-a {
-          position: absolute;
-          width: 800px; height: 800px;
-          border-radius: 50%;
-          top: -200px; left: 50%;
-          transform: translateX(-50%);
-          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
-        }
-        .sc-glow-b {
-          position: absolute;
-          width: 400px; height: 400px;
-          border-radius: 50%;
-          bottom: -100px; right: 10%;
-          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
-        }
-        .sc-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
+
+        .stats-grid {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           gap: 0;
-        }
-        .sc-item {
-          text-align: center;
-          padding: 2.5rem 1.5rem;
-          position: relative;
-          z-index: 1;
-        }
-        .sc-item:not(:last-child)::after {
-          content: '';
-          position: absolute;
-          right: 0; top: 25%; bottom: 25%;
-          width: 2px;
-          background: linear-gradient(180deg, transparent 0%, rgba(232,25,44,0.4) 20%, rgba(232,25,44,0.4) 80%, transparent 100%);
-          animation: separatorPulse 3s ease-in-out infinite;
-        }
-        @keyframes separatorPulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-        .sc-value {
-          font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
-          font-size: clamp(3rem, 5vw, 4.5rem);
-          font-weight: 900;
-          letter-spacing: -0.05em;
-          line-height: 1;
-          background: linear-gradient(135deg, #E8192C 0%, #ff6b6b 50%, #C0142A 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          margin-bottom: 0.75rem;
-          text-shadow: 0 0 40px rgba(232,25,44,0.3);
-          filter: drop-shadow(0 0 20px rgba(232,25,44,0.2));
-        }
-        .sc-label {
-          font-size: 1rem;
-          font-weight: 800;
-          color: var(--white, #fff);
-          margin-bottom: 0.35rem;
-          letter-spacing: -0.01em;
-          text-transform: uppercase;
-        }
-        .sc-desc {
-          font-size: 0.8rem;
-          color: var(--text-dim-dark, rgba(255,255,255,0.6));
-          line-height: 1.5;
-          max-width: 140px;
+          max-width: 980px;
           margin: 0 auto;
         }
+
+        .stats-item {
+          flex: 1;
+          text-align: center;
+          padding: 1.5rem 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .stats-value {
+          font-family: var(--font-display);
+          font-size: clamp(2.2rem, 4vw, 3.2rem);
+          font-weight: 800;
+          letter-spacing: -0.05em;
+          color: var(--brand-red);
+          line-height: 1;
+        }
+
+        .stats-label {
+          font-family: var(--font-display);
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: var(--ink);
+          letter-spacing: -0.02em;
+          line-height: 1.2;
+          margin-top: 0.35rem;
+        }
+
+        .stats-desc {
+          font-size: 0.75rem;
+          color: var(--muted);
+          line-height: 1.4;
+        }
+
+        .stats-divider {
+          width: 1px;
+          height: 60px;
+          background: var(--border);
+          flex-shrink: 0;
+        }
+
         @media (max-width: 768px) {
-          .sc-grid { grid-template-columns: 1fr 1fr; }
-          .sc-item:nth-child(2)::after { display: none; }
-          .sc-item:nth-child(odd):not(:last-child)::after {
-            right: 0; top: 20%; bottom: 20%;
-            width: 1px; height: auto;
+          .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
           }
-          .sc-item:nth-child(1),
-          .sc-item:nth-child(2) {
-            border-bottom: 1px solid rgba(232,25,44,0.15);
+          .stats-divider { display: none; }
+          .stats-item {
+            border: 1px solid var(--border);
+            border-collapse: collapse;
+            margin: -0.5px;
           }
         }
-        @media (max-width: 480px) {
-          .sc-grid { grid-template-columns: 1fr 1fr; }
-          .sc-value { font-size: 2rem; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .sc-value { transition: none; }
+        @media (max-width: 420px) {
+          .stats-item { padding: 1.25rem 1rem; }
+          .stats-value { font-size: 1.75rem; }
         }
       `}</style>
     </section>

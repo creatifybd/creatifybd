@@ -1,324 +1,212 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Mail } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
-import { renderRichTitle } from '../utils/contentText';
 
-const EASE_EXPO = [0.16, 1, 0.3, 1];
-
-const STATS = [
-  { value: '100+', label: 'Brands served' },
-  { value: 'Global', label: 'Coverage' },
-  { value: '5.0★', label: 'Average rating' },
-];
+const EASE = [0.16, 1, 0.3, 1];
 
 const CTABand = () => {
   const { content } = useSettings();
   const cta = content?.cta_band || {};
 
+  const headline = cta.headline || 'Know what you want? Great.\u00a0 Got questions? Even better.';
+  const subtext  = cta.subtext  || "Tell me about your project and I'll get back to you within 24\u00a0hours.";
+  const ctaLabel = cta.cta_label || "Start a Project";
+
   return (
-    <section className="ctab-section" aria-labelledby="ctab-heading">
-      {/* Background layers */}
-      <div className="ctab-bg" aria-hidden="true">
-        <div className="ctab-glow-a" />
-        <div className="ctab-glow-b" />
-        <div className="ctab-grid" />
-        <div className="ctab-particles">
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-          <div className="ctab-particle" />
-        </div>
-      </div>
+    <section className="ctaband-section" aria-labelledby="ctaband-heading">
+      {/* Subtle grid overlay */}
+      <div className="ctaband-grid" aria-hidden="true" />
 
       <div className="container">
-        <div className="ctab-inner">
-          {/* Stats strip */}
+        <motion.div
+          className="ctaband-inner"
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: EASE }}
+        >
           <motion.div
-            className="ctab-stats"
+            className="ctaband-eyebrow"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: EASE, delay: 0.05 }}
+          >
+            <span className="ctaband-pulse" />
+            Ready to start?
+          </motion.div>
+
+          <motion.h2
+            id="ctaband-heading"
+            className="ctaband-heading"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: EASE_EXPO }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.1 }}
           >
-            {STATS.map((s, i) => (
-              <div className="ctab-stat" key={i}>
-                <strong>{s.value}</strong>
-                <span>{s.label}</span>
-              </div>
-            ))}
-          </motion.div>
+            {headline}
+          </motion.h2>
 
-          {/* Heading */}
-          <motion.div
-            className="ctab-copy"
-            initial={{ opacity: 0, y: 28 }}
+          <motion.p
+            className="ctaband-sub"
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: EASE_EXPO, delay: 0.08 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
           >
-            <div className="eyebrow ctab-eyebrow">
-              {cta.eyebrow || 'Ready when you are'}
-            </div>
-            <h2 id="ctab-heading" className="ctab-heading">
-              {cta.title
-                ? renderRichTitle(cta.title)
-                : (
-                  <>
-                    Stop patching freelancers.<br />
-                    Get a <span className="ctab-heading-red">dedicated creative team.</span>
-                  </>
-                )
-              }
-            </h2>
-            <p className="ctab-sub">
-              {cta.subtitle || 'Tell us your goals — we\'ll recommend the right package, timeline, and first deliverables. No sales calls, no lock-in.'}
-            </p>
-          </motion.div>
+            {subtext}
+          </motion.p>
 
-          {/* Actions */}
           <motion.div
-            className="ctab-actions"
-            initial={{ opacity: 0, y: 20 }}
+            className="ctaband-actions"
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.18 }}
+            transition={{ duration: 0.55, ease: EASE, delay: 0.28 }}
           >
-            <Link to={cta.primary_link || '/contact'} className="ctab-btn-primary">
-              {cta.primary_btn || 'Start a Project'}
+            <Link to="/contact" className="ctaband-btn-primary">
+              {ctaLabel}
               <ArrowRight size={18} />
             </Link>
-            <a
-              href={`mailto:${cta.email || 'hello@creatifybd.com'}`}
-              className="ctab-btn-outline"
-            >
-              <Mail size={16} />
-              {cta.secondary_btn || 'Email Us Directly'}
+            <a href="mailto:hello@creatifybd.com" className="ctaband-btn-ghost">
+              hello@creatifybd.com
             </a>
           </motion.div>
-
-          {/* Trust note */}
-          <motion.p
-            className="ctab-trust"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.28 }}
-          >
-            No contracts. 7-day money-back guarantee. We respond within 24 hours.
-          </motion.p>
-        </div>
+        </motion.div>
       </div>
 
       <style>{`
-        .ctab-section {
+        /* ══ CTA BAND ══════════════════════════════════════════ */
+        .ctaband-section {
           position: relative;
-          background: var(--surface-dark, #0a0a0f);
-          padding: 7rem 0;
+          background: var(--ink, #0f0f12);
+          padding: clamp(5rem, 9vw, 9rem) 0;
           overflow: hidden;
         }
-        .ctab-bg {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-        }
-        .ctab-glow-a {
-          position: absolute;
-          width: 800px; height: 800px;
-          border-radius: 50%;
-          top: -200px; left: 50%;
-          transform: translateX(-50%);
-          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
-        }
-        .ctab-glow-b {
-          position: absolute;
-          width: 400px; height: 400px;
-          border-radius: 50%;
-          bottom: -100px; right: 10%;
-          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
-        }
-        .ctab-grid {
+
+        .ctaband-grid {
           position: absolute;
           inset: 0;
           background-image:
-            radial-gradient(circle, rgba(232,25,44,0.15) 1px, transparent 1px),
-            radial-gradient(circle, rgba(232,25,44,0.08) 1px, transparent 1px);
-          background-size: 32px 32px;
-          background-position: 0 0, 16px 16px;
-          mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
-          animation: gridPulse 8s ease-in-out infinite;
-        }
-        @keyframes gridPulse {
-          0%, 100% { opacity: 0.6; }
-          50% { opacity: 1; }
-        }
-        
-        /* Animated floating particles */
-        .ctab-particles {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+          background-size: 60px 60px;
+          mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
+          -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
           pointer-events: none;
         }
-        .ctab-particle {
-          position: absolute;
-          width: 4px;
-          height: 4px;
-          background: rgba(232,25,44,0.4);
-          border-radius: 50%;
-          animation: float 6s ease-in-out infinite;
-        }
-        .ctab-particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
-        .ctab-particle:nth-child(2) { left: 20%; top: 60%; animation-delay: 1s; }
-        .ctab-particle:nth-child(3) { left: 80%; top: 30%; animation-delay: 2s; }
-        .ctab-particle:nth-child(4) { left: 70%; top: 70%; animation-delay: 3s; }
-        .ctab-particle:nth-child(5) { left: 50%; top: 40%; animation-delay: 4s; }
-        .ctab-particle:nth-child(6) { left: 30%; top: 80%; animation-delay: 5s; }
-        .ctab-particle:nth-child(7) { left: 90%; top: 50%; animation-delay: 2.5s; }
-        .ctab-particle:nth-child(8) { left: 15%; top: 35%; animation-delay: 1.5s; }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
-          50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; }
-        }
 
-        .ctab-inner {
+        .ctaband-inner {
+          max-width: 820px;
+          margin: 0 auto;
+          text-align: center;
           position: relative;
           z-index: 1;
           display: flex;
           flex-direction: column;
           align-items: center;
-          text-align: center;
-          max-width: 720px;
-          margin: 0 auto;
-          gap: 2rem;
+          gap: 1.5rem;
         }
 
-        /* Stats */
-        .ctab-stats {
-          display: flex;
-          gap: 2.5rem;
+        .ctaband-eyebrow {
+          display: inline-flex;
           align-items: center;
-        }
-        .ctab-stat {
-          display: flex;
-          flex-direction: column;
-          gap: 0.15rem;
-          text-align: center;
-        }
-        .ctab-stat strong {
-          font-size: 1.75rem;
-          font-weight: 900;
-          color: var(--white, #fff);
-          letter-spacing: -0.04em;
-          line-height: 1;
-        }
-        .ctab-stat span {
+          gap: 0.5rem;
           font-size: 0.72rem;
-          color: var(--text-dim-dark, rgba(255,255,255,0.45));
-          font-weight: 500;
+          font-weight: 700;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
+          color: var(--brand-red);
+          background: rgba(232,25,44,0.12);
+          border: 1px solid rgba(232,25,44,0.22);
+          border-radius: 100px;
+          padding: 0.4rem 1rem;
         }
 
-        /* Divider between stats */
-        .ctab-stats .ctab-stat:not(:last-child) {
-          border-right: 1px solid rgba(255,255,255,0.1);
-          padding-right: 2.5rem;
+        .ctaband-pulse {
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: var(--brand-red);
+          animation: heroPulse 2s ease-in-out infinite;
         }
 
-        /* Copy */
-        .ctab-copy { display: flex; flex-direction: column; gap: 1rem; }
-        .ctab-eyebrow {
-          color: rgba(232,25,44,0.85) !important;
-          border-color: rgba(232,25,44,0.25) !important;
-          background: rgba(232,25,44,0.08) !important;
-        }
-        .ctab-heading {
-          font-size: clamp(2.5rem, 5.5vw, 4rem);
-          font-weight: 900;
-          color: var(--white, #fff);
-          line-height: 1.05;
+        .ctaband-heading {
+          font-family: var(--font-display);
+          font-size: clamp(2rem, 4.5vw, 3.6rem);
+          font-weight: 800;
+          color: #fff;
           letter-spacing: -0.04em;
+          line-height: 1.1;
+          margin: 0;
+          max-width: 760px;
+        }
+
+        .ctaband-sub {
+          font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+          color: rgba(255,255,255,0.55);
+          max-width: 520px;
+          line-height: 1.75;
           margin: 0;
         }
-        .ctab-heading-red { color: var(--brand-red, #e8192c); }
-        .ctab-sub {
-          font-size: 1.15rem;
-          color: var(--text-dim-dark, rgba(255,255,255,0.65));
-          line-height: 1.7;
-          max-width: 580px;
-          margin: 0 auto;
-        }
 
-        /* Actions */
-        .ctab-actions {
+        .ctaband-actions {
           display: flex;
+          align-items: center;
           gap: 1rem;
           flex-wrap: wrap;
           justify-content: center;
+          margin-top: 0.5rem;
         }
-        .ctab-btn-primary {
+
+        .ctaband-btn-primary {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.95rem 2.25rem;
-          background: var(--brand-red, #e8192c);
+          padding: 0.9rem 2.25rem;
+          background: var(--brand-red);
           color: #fff;
+          font-family: var(--font-body);
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           border-radius: 100px;
           text-decoration: none;
           transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
-          box-shadow: 0 8px 28px rgba(232,25,44,0.40);
+          box-shadow: 0 8px 32px rgba(232,25,44,0.36);
           letter-spacing: -0.01em;
         }
-        .ctab-btn-primary:hover {
-          background: #c41024;
+        .ctaband-btn-primary:hover {
+          background: var(--brand-red-dark);
           transform: translateY(-3px);
-          box-shadow: 0 16px 40px rgba(232,25,44,0.55);
+          box-shadow: 0 16px 48px rgba(232,25,44,0.44);
+          color: #fff;
         }
-        .ctab-btn-outline {
+
+        .ctaband-btn-ghost {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.95rem 2.25rem;
-          background: rgba(255,255,255,0.06);
-          color: var(--text-dim-dark, rgba(255,255,255,0.85));
-          font-weight: 700;
-          font-size: 0.95rem;
+          padding: 0.9rem 2rem;
+          background: transparent;
+          color: rgba(255,255,255,0.7);
+          font-family: var(--font-body);
+          font-weight: 600;
+          font-size: 0.9rem;
           border-radius: 100px;
           border: 1.5px solid rgba(255,255,255,0.15);
           text-decoration: none;
-          transition: background 0.2s, border-color 0.2s, transform 0.2s;
+          transition: color 0.2s, border-color 0.2s, transform 0.2s;
           letter-spacing: -0.01em;
         }
-        .ctab-btn-outline:hover {
-          background: rgba(255,255,255,0.10);
-          border-color: rgba(255,255,255,0.35);
+        .ctaband-btn-ghost:hover {
+          color: #fff;
+          border-color: rgba(255,255,255,0.4);
           transform: translateY(-3px);
         }
 
-        /* Trust */
-        .ctab-trust {
-          font-size: 0.78rem;
-          color: var(--text-dim-dark, rgba(255,255,255,0.30));
-          margin: 0;
-          letter-spacing: 0.01em;
-        }
-
-        @media (max-width: 600px) {
-          .ctab-section { padding: 5rem 0; }
-          .ctab-stats { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-          .ctab-stats .ctab-stat:not(:last-child) { border-right: none; padding-right: 0; }
-          .ctab-heading { font-size: clamp(1.75rem, 8vw, 2.4rem); }
-          .ctab-actions { flex-direction: column; align-items: center; }
-          .ctab-btn-primary, .ctab-btn-outline { width: 100%; justify-content: center; }
+        @media (max-width: 540px) {
+          .ctaband-actions { flex-direction: column; gap: 0.75rem; }
+          .ctaband-btn-primary, .ctaband-btn-ghost { width: 100%; justify-content: center; }
         }
       `}</style>
     </section>

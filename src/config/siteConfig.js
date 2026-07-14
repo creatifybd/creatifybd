@@ -52,9 +52,9 @@ export const siteConfig = {
   
   // SEO Configuration
   seo: {
-    defaultTitle: 'CreatifyBD | Premium Creative Services for Startups & Small Businesses',
-    defaultDescription: 'CreatifyBD is a premium creative subscription and on-demand design partner for startups and small businesses globally. Social media management, graphic design, video editing, and website design.',
-    defaultKeywords: 'creative agency, social media management, graphic design, video editing, website design, brand identity, digital marketing, CreatifyBD',
+    defaultTitle: 'CreatifyBD | Premium Global Creative Partner & Design Subscription',
+    defaultDescription: 'CreatifyBD is an elite creative partner for brands globally. Get high-end social media management, brand design, video editing, and website creation at up to 50% lower cost than standard agency rates.',
+    defaultKeywords: 'creative agency, global design subscription, social media management, graphic design, video editing, website design, brand identity, digital marketing, CreatifyBD',
     canonicalUrl: 'https://creatifybd.com'
   },
   

@@ -81,8 +81,8 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
             <FadeReveal>
               <div className="eyebrow">Pricing</div>
             </FadeReveal>
-            <h2 className="section-h">Simple packages for <span className="text-red">predictable growth</span></h2>
-            <p className="section-sub">Start with a fixed package, then customize scope as your business grows. No long contract required.</p>
+            <h2 className="section-h">Elite creative services at <span className="text-red">50% lower pricing</span></h2>
+            <p className="section-sub">Start with a transparent, cost-effective package. Get senior agency quality without the premium price tag. Cancel or pause anytime.</p>
           </div>
         )}
 

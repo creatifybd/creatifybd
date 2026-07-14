@@ -1,517 +1,263 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { db } from '../firebase/config';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Quote, Star } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
 
-const EASE_EXPO = [0.16, 1, 0.3, 1];
+const EASE = [0.16, 1, 0.3, 1];
 
-/* ── Clean English-only fallback testimonials ── */
-const FALLBACK = [
-  {
-    id: 'f1',
-    name: 'Emily Carter',
-    role: 'Founder, Aurevia Skincare',
-    initials: 'EC',
-    color: '#c084fc',
-    text: 'CreatifyBD gave Aurevia a complete brand identity that finally matches our product quality. The logo direction and packaging mockups impressed every retail buyer we pitched to.',
-    stars: 5,
-    tag: 'Branding & Identity',
-    platform: 'Fiverr',
-    date: 'June 2024'
-  },
-  {
-    id: 'f2',
-    name: 'Daniel Osei',
-    role: 'Co-Founder, NexoPay',
-    initials: 'DO',
-    color: '#3b82f6',
-    text: 'The brand system CreatifyBD built for NexoPay felt instantly credible to investors. Clean, professional, and exactly the fintech identity we needed.',
-    stars: 5,
-    tag: 'Branding & Identity',
-    platform: 'Upwork',
-    date: 'March 2024'
-  },
-  {
-    id: 'f3',
-    name: 'Marco Ruiz',
-    role: 'Owner, Brasa Fire Restaurant',
-    initials: 'MR',
-    color: '#f97316',
-    text: 'Our restaurant branding needed personality and warmth. CreatifyBD nailed it — the new identity is on every menu, sign, and social post now.',
-    stars: 4,
-    tag: 'Brand & Print',
-    platform: 'Google',
-    date: 'January 2024'
-  },
-  {
-    id: 'f4',
-    name: 'Claire Whitman',
-    role: 'GM, Harbor & Pine Hotels',
-    initials: 'CW',
-    color: '#0d9488',
-    text: 'Guests comment on our new branding constantly. CreatifyBD understood exactly the boutique hospitality feel we were going for.',
-    stars: 5,
-    tag: 'Branding & Identity',
-    platform: 'Fiverr',
-    date: 'April 2024'
-  },
-  {
-    id: 'f5',
-    name: 'Priya Nair',
-    role: 'Head of Marketing, NovaGrid',
-    initials: 'PN',
-    color: '#e8192c',
-    text: 'Our SaaS landing page and brand kit from CreatifyBD helped us close bigger enterprise deals. First impressions matter, and now ours is strong.',
-    stars: 4,
-    tag: 'Website Design',
-    platform: 'Upwork',
-    date: 'February 2024'
-  },
-  {
-    id: 'f6',
-    name: 'Isabelle Moreau',
-    role: 'Creative Director, Solenne',
-    initials: 'IM',
-    color: '#ec4899',
-    text: 'Our fashion identity needed to feel luxury without being cold. CreatifyBD delivered exactly that balance — refined, warm, and unmistakably us.',
-    stars: 5,
-    tag: 'Branding & Identity',
-    platform: 'Google',
-    date: 'May 2024'
-  },
-  {
-    id: 'f7',
-    name: 'Marcus Reed',
-    role: 'Director, BrightNest Academy',
-    initials: 'MR',
-    color: '#22c55e',
-    text: 'Enrollment inquiries went up noticeably after CreatifyBD rebuilt our brand and social presence. Parents trust us more because we look more professional.',
-    stars: 5,
-    tag: 'Social Media',
-    platform: 'Fiverr',
-    date: 'July 2024'
-  },
-  {
-    id: 'f8',
-    name: 'Olivia Bennett',
-    role: 'Owner, Crumb & Hearth Bakery',
-    initials: 'OB',
-    color: '#f59e0b',
-    text: "Our bakery's social content calendar from CreatifyBD noticeably increased foot traffic from Instagram alone. Worth every penny.",
-    stars: 4,
-    tag: 'Social Media',
-    platform: 'Upwork',
-    date: 'March 2024'
-  },
-  {
-    id: 'f9',
-    name: 'Carlos Medina',
-    role: 'Founder, Monterra Coffee Co.',
-    initials: 'CM',
-    color: '#78716c',
-    text: 'The packaging CreatifyBD designed helped Monterra get accepted into three new retail chains. The investment paid for itself in the first month.',
-    stars: 5,
-    tag: 'Packaging Design',
-    platform: 'Google',
-    date: 'June 2024'
-  },
+const FALLBACK_TESTIMONIALS = [
+  { id:'t1', name:'Emily Carter',    role:'Founder, Aurevia Skincare',    initials:'EC', color:'#c084fc', stars:5, tag:'Branding',         text:'CreatifyBD gave Aurevia a complete brand identity that finally matches our product quality. The logo direction and packaging mockups impressed every retail buyer we pitched to.' },
+  { id:'t2', name:'Daniel Osei',     role:'Co-Founder, NexoPay',          initials:'DO', color:'#3b82f6', stars:5, tag:'Brand Identity',    text:'The brand system CreatifyBD built for NexoPay felt instantly credible to investors. Clean, professional, and exactly the fintech identity we needed.' },
+  { id:'t3', name:'Marco Ruiz',      role:'Owner, Brasa Fire Restaurant',  initials:'MR', color:'#f97316', stars:5, tag:'Brand & Print',     text:'Our restaurant branding needed personality and warmth. CreatifyBD nailed it — the new identity is on every menu, sign, and social post now.' },
+  { id:'t4', name:'Claire Whitman',  role:'GM, Harbor & Pine Hotels',      initials:'CW', color:'#0d9488', stars:5, tag:'Branding',          text:'Guests comment on our new branding constantly. CreatifyBD understood exactly the boutique hospitality feel we were going for.' },
+  { id:'t5', name:'Priya Nair',      role:'Head of Marketing, NovaGrid',   initials:'PN', color:'#e8192c', stars:5, tag:'Website Design',    text:'Our SaaS landing page and brand kit from CreatifyBD helped us close bigger enterprise deals. First impressions matter, and now ours is strong.' },
+  { id:'t6', name:'Isabelle Moreau', role:'Creative Director, Solenne',    initials:'IM', color:'#ec4899', stars:5, tag:'Brand Identity',    text:'Our fashion identity needed to feel luxury without being cold. CreatifyBD delivered exactly that balance — refined, warm, and unmistakably us.' },
+  { id:'t7', name:'Marcus Reed',     role:'Director, BrightNest Academy',  initials:'MR', color:'#22c55e', stars:5, tag:'Social Media',      text:'Enrollment inquiries went up noticeably after CreatifyBD rebuilt our brand and social presence. Parents trust us more because we look more professional.' },
+  { id:'t8', name:'Olivia Bennett',  role:'Owner, Crumb & Hearth Bakery',  initials:'OB', color:'#f59e0b', stars:5, tag:'Packaging Design',  text:'The packaging CreatifyBD designed for our artisan bakery has become our strongest marketing tool. Every order drives compliments and Instagram shares.' },
 ];
 
-const StarRating = ({ count = 5 }) => (
-  <div className="tm-stars" aria-label={`${count} out of 5 stars`}>
-    {Array.from({ length: count }).map((_, i) => (
-      <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />
+const Stars = ({ count = 5 }) => (
+  <div className="testi-stars" aria-label={`${count} out of 5 stars`}>
+    {Array.from({ length: 5 }, (_, i) => (
+      <span key={i} style={{ color: i < count ? '#f59e0b' : '#e5e7eb' }}>★</span>
     ))}
   </div>
 );
 
-const TestimonialCard = ({ item, isActive, onClick }) => (
-  <motion.article
-    className={`tm-card ${isActive ? 'tm-card--active' : ''}`}
-    onClick={onClick}
-    role="button"
-    tabIndex={0}
-    onKeyDown={e => e.key === 'Enter' && onClick()}
-    aria-pressed={isActive}
-    initial={{ opacity: 0, y: 28 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-30px' }}
-    transition={{ duration: 0.65, ease: EASE_EXPO }}
-    whileHover={{ y: -4, transition: { duration: 0.28 } }}
-  >
-    <div className="tm-card-top">
-      {item.photo ? (
-        <img 
-          src={item.photo} 
-          alt={item.name}
-          className="tm-avatar tm-avatar--photo"
-        />
-      ) : (
-        <span
-          className="tm-avatar"
-          style={{ background: item.color || '#e8192c' }}
-          aria-hidden="true"
-        >
-          {item.initials || item.name?.slice(0, 2).toUpperCase()}
-        </span>
-      )}
-      <div className="tm-card-meta">
-        <div className="tm-name">{item.name}</div>
-        <div className="tm-role">{item.role}</div>
-      </div>
-      {item.platform && (
-        <div className={`tm-platform-badge tm-platform--${item.platform.toLowerCase()}`}>
-          {item.platform}
-        </div>
-      )}
-      {item.tag && <div className="tm-tag">{item.tag}</div>}
+// Single scrolling row
+const MarqueeRow = ({ items, reverse = false }) => (
+  <div className="testi-marquee-outer">
+    <div className={`testi-marquee-track${reverse ? ' reverse' : ''}`}>
+      {[...items, ...items].map((t, i) => (
+        <article key={`${t.id}-${i}`} className="testi-card">
+          <div className="testi-card-top">
+            <Stars count={t.stars} />
+            <span className="testi-tag">{t.tag}</span>
+          </div>
+          <p className="testi-text">"{t.text}"</p>
+          <div className="testi-author">
+            <div className="testi-avatar" style={{ background: `${t.color}22`, color: t.color }}>
+              {t.initials}
+            </div>
+            <div>
+              <div className="testi-name">{t.name}</div>
+              <div className="testi-role">{t.role}</div>
+            </div>
+          </div>
+        </article>
+      ))}
     </div>
-
-    <StarRating count={item.stars || 5} />
-
-    <blockquote className="tm-quote">"{item.text}"</blockquote>
-  </motion.article>
+  </div>
 );
 
 const Testimonials = () => {
-  const [items, setItems]   = useState([]);
-  const [active, setActive] = useState(0);
-  const intervalRef         = useRef(null);
-
-  useEffect(() => {
-    const unsub = onSnapshot(
-      collection(db, 'testimonials'),
-      snap => {
-        if (!snap.empty) {
-          const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setItems(data);
-        }
-      },
-      () => {}
-    );
-    return () => unsub();
-  }, []);
-
-  const display = items.length > 0 ? items : FALLBACK;
-
-  /* Auto-rotate featured quote */
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setActive(prev => (prev + 1) % display.length);
-    }, 5500);
-    return () => clearInterval(intervalRef.current);
-  }, [display.length]);
-
-  const handleSelect = idx => {
-    clearInterval(intervalRef.current);
-    setActive(idx);
-    intervalRef.current = setInterval(() => {
-      setActive(prev => (prev + 1) % display.length);
-    }, 5500);
-  };
-
-  const featured = display[active];
+  const half = Math.ceil(FALLBACK_TESTIMONIALS.length / 2);
+  const row1 = FALLBACK_TESTIMONIALS.slice(0, half);
+  const row2 = FALLBACK_TESTIMONIALS.slice(half);
 
   return (
-    <section className="tm-section" id="testimonials">
-      {/* Subtle bg glow */}
-      <div className="tm-bg" aria-hidden="true">
-        <div className="tm-bg-glow" />
+    <section className="testi-section section" id="testimonials">
+      {/* Header */}
+      <div className="container">
+        <motion.div
+          className="testi-header"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.65, ease: EASE }}
+        >
+          <div className="eyebrow">Client testimonials</div>
+          <h2 className="section-h">
+            Trusted by brands <span className="text-red">worldwide</span>
+          </h2>
+          <p className="section-sub">
+            Real results from real clients — businesses that came to us for design and stayed for the experience.
+          </p>
+        </motion.div>
       </div>
 
+      {/* Marquee rows */}
+      <div className="testi-marquee-wrap">
+        <MarqueeRow items={row1} reverse={false} />
+        <MarqueeRow items={row2} reverse={true}  />
+      </div>
+
+      {/* CTA */}
       <div className="container">
-        <div className="tm-layout">
-          {/* ── Left: Featured large quote ── */}
-          <div className="tm-left">
-            <motion.div
-              className="tm-header"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: EASE_EXPO }}
-            >
-              <div className="eyebrow">Client Testimonials</div>
-              <h2 className="section-h tm-heading">
-                Trusted by<br />
-                <span className="text-red">visionaries.</span>
-              </h2>
-              <p className="section-sub tm-subtext">
-                Real results from real clients globally. Here's what they say about working with CreatifyBD.
-              </p>
-            </motion.div>
-
-            {/* Featured animated quote */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={featured?.id}
-                className="tm-featured"
-                initial={{ opacity: 0, x: -24 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 24 }}
-                transition={{ duration: 0.55, ease: EASE_EXPO }}
-              >
-                <Quote size={42} className="tm-quote-icon" aria-hidden="true" />
-                <blockquote className="tm-featured-quote">
-                  "{featured?.text}"
-                </blockquote>
-                <div className="tm-featured-author">
-                  <span
-                    className="tm-featured-avatar"
-                    style={{ background: featured?.color || '#e8192c' }}
-                    aria-hidden="true"
-                  >
-                    {featured?.initials || featured?.name?.slice(0, 2).toUpperCase()}
-                  </span>
-                  <div>
-                    <div className="tm-featured-name">{featured?.name}</div>
-                    <div className="tm-featured-role">{featured?.role}</div>
-                    <StarRating count={featured?.stars || 5} />
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Dot navigation */}
-            <div className="tm-dots" role="tablist" aria-label="Testimonials navigation">
-              {display.map((_, i) => (
-                <button
-                  key={i}
-                  className={`tm-dot ${active === i ? 'tm-dot--active' : ''}`}
-                  onClick={() => handleSelect(i)}
-                  aria-label={`View testimonial ${i + 1}`}
-                  role="tab"
-                  aria-selected={active === i}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* ── Right: Card grid ── */}
-          <div className="tm-right">
-            <div className="tm-cards-grid">
-              {display.map((item, i) => (
-                <TestimonialCard
-                  key={item.id}
-                  item={item}
-                  isActive={active === i}
-                  onClick={() => handleSelect(i)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <motion.div
+          className="testi-cta"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, ease: EASE, delay: 0.2 }}
+        >
+          <Link to="/contact" className="testi-cta-link">
+            Start your project <ArrowUpRight size={16} />
+          </Link>
+        </motion.div>
       </div>
 
       <style>{`
-        .tm-section {
-          position: relative;
-          padding: 7rem 0;
-          background: var(--surface-card, #fff);
+        /* ══ TESTIMONIALS ══════════════════════════════════════ */
+        .testi-section {
+          padding: var(--section-padding) 0;
+          background: var(--surface-soft);
+          border-top: 1px solid var(--border);
           overflow: hidden;
         }
-        .tm-bg {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-        }
-        .tm-bg-glow {
-          position: absolute;
-          width: 600px; height: 600px;
-          border-radius: 50%;
-          top: -200px; right: -150px;
-          background: radial-gradient(circle, rgba(232,25,44,0.06) 0%, transparent 70%);
-        }
 
-        /* Layout */
-        .tm-layout {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 5rem;
-          align-items: start;
-        }
-        .tm-left { position: sticky; top: 120px; }
-        .tm-header { margin-bottom: 2.5rem; }
-        .tm-heading { line-height: 1.08; }
-        .tm-heading-accent { color: var(--brand-red, #e8192c); }
-        .tm-subtext { margin-top: 0.75rem; }
-
-        /* Featured quote */
-        .tm-featured { margin-top: 2rem; }
-        .tm-quote-icon {
-          color: var(--brand-red, #e8192c);
-          opacity: 0.2;
-          margin-bottom: 1rem;
-        }
-        .tm-featured-quote {
-          font-size: 1.15rem;
-          font-weight: 500;
-          color: var(--ink, #0f0f12);
-          line-height: 1.7;
-          margin: 0 0 1.5rem;
-          font-style: italic;
-          letter-spacing: -0.01em;
-        }
-        .tm-featured-author {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-        }
-        .tm-featured-avatar {
-          width: 44px; height: 44px;
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 0.78rem; font-weight: 900; color: #fff;
-          flex-shrink: 0;
-        }
-        .tm-featured-name {
-          font-weight: 800;
-          font-size: 0.9rem;
-          color: var(--ink, #0f0f12);
-          margin-bottom: 0.1rem;
-        }
-        .tm-featured-role {
-          font-size: 0.78rem;
-          color: var(--muted, #6b7280);
-          margin-bottom: 0.3rem;
-        }
-
-        /* Dot nav */
-        .tm-dots {
-          display: flex;
-          gap: 0.5rem;
-          margin-top: 2rem;
-          flex-wrap: wrap;
-        }
-        .tm-dot {
-          width: 8px; height: 8px;
-          border-radius: 50%;
-          background: var(--border-soft, #e5e7eb);
-          border: none;
-          cursor: pointer;
-          transition: background 0.25s ease, width 0.25s ease;
-          padding: 0;
-        }
-        .tm-dot--active {
-          background: var(--brand-red, #e8192c);
-          width: 24px;
-          border-radius: 4px;
-        }
-
-        /* Right card grid */
-        .tm-right { max-height: 600px; overflow-y: auto; scrollbar-width: none; }
-        .tm-right::-webkit-scrollbar { display: none; }
-        .tm-cards-grid {
+        .testi-header {
+          max-width: 640px;
+          margin: 0 auto 4rem;
+          text-align: center;
           display: flex;
           flex-direction: column;
+          align-items: center;
           gap: 1rem;
         }
 
+        /* Marquee area */
+        .testi-marquee-wrap {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 3.5rem;
+          mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        }
+
+        .testi-marquee-outer {
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .testi-marquee-track {
+          display: flex;
+          gap: 1rem;
+          width: max-content;
+          animation: testiScroll 40s linear infinite;
+        }
+        .testi-marquee-track.reverse {
+          animation-direction: reverse;
+          animation-duration: 45s;
+        }
+
+        @keyframes testiScroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+
         /* Card */
-        .tm-card {
-          background: var(--surface-hover, #fafafa);
-          border: 1px solid var(--border-soft, #e5e7eb);
-          border-radius: 14px;
-          padding: 1.25rem;
-          cursor: pointer;
-          transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        .testi-card {
+          width: 340px;
+          flex-shrink: 0;
+          background: #fff;
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          padding: 1.75rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+          transition: box-shadow 0.25s;
         }
-        .tm-card:hover,
-        .tm-card--active {
-          border-color: rgba(232,25,44,0.25);
-          box-shadow: 0 4px 20px rgba(232,25,44,0.07);
-          background: var(--surface-card, #fff);
-        }
-        .tm-card-top {
+        .testi-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+        .testi-card-top {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 0.75rem;
+          justify-content: space-between;
+          gap: 0.5rem;
         }
-        .tm-avatar {
-          width: 36px; height: 36px;
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 0.65rem; font-weight: 900; color: #fff;
-          flex-shrink: 0;
+
+        .testi-stars {
+          display: flex;
+          gap: 2px;
+          font-size: 0.88rem;
         }
-        .tm-avatar--photo {
-          width: 36px; height: 36px;
-          border-radius: 50%;
-          object-fit: cover;
-          flex-shrink: 0;
-        }
-        .tm-platform-badge {
-          font-size: 0.7rem;
-          font-weight: 700;
-          padding: 0.25rem 0.6rem;
-          border-radius: 6px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .tm-platform--fiverr {
-          background: #f0fdf4;
-          color: #1dbf73;
-        }
-        .tm-platform--upwork {
-          background: #f0fdf4;
-          color: #6fda44;
-        }
-        .tm-platform--google {
-          background: #eff6ff;
-          color: #4285f4;
-        }
-        .tm-card-meta { flex: 1; min-width: 0; }
-        .tm-name {
-          font-weight: 700;
-          font-size: 0.85rem;
-          color: var(--ink, #0f0f12);
-          line-height: 1.2;
-          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .tm-role {
-          font-size: 0.73rem;
-          color: var(--ink-soft, #374151);
-          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .tm-tag {
-          font-size: 0.65rem;
+
+        .testi-tag {
+          font-size: 0.68rem;
           font-weight: 700;
           letter-spacing: 0.04em;
           text-transform: uppercase;
-          color: var(--brand-red, #e8192c);
-          background: rgba(232,25,44,0.07);
-          border: 1px solid rgba(232,25,44,0.14);
+          color: var(--muted);
+          background: var(--surface-soft);
+          border: 1px solid var(--border);
           border-radius: 100px;
-          padding: 0.2rem 0.6rem;
+          padding: 0.22rem 0.65rem;
           white-space: nowrap;
-          flex-shrink: 0;
         }
-        .tm-stars {
-          display: flex;
-          gap: 2px;
-          margin-bottom: 0.6rem;
-        }
-        .tm-quote {
-          font-size: 0.82rem;
-          color: var(--ink, #0f0f12);
-          line-height: 1.65;
-          margin: 0;
-          font-style: italic;
 
-          /* Clamp to 3 lines */
+        .testi-text {
+          font-size: 0.9rem;
+          color: var(--ink-soft);
+          line-height: 1.72;
+          margin: 0;
+          flex: 1;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 5;
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        .tm-card--active .tm-quote { -webkit-line-clamp: unset; }
 
-        @media (max-width: 900px) {
-          .tm-layout { grid-template-columns: 1fr; gap: 3rem; }
-          .tm-left { position: static; }
-          .tm-right { max-height: none; }
-          .tm-section { padding: 5rem 0; }
+        .testi-author {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          border-top: 1px solid var(--border);
+          padding-top: 1rem;
+        }
+
+        .testi-avatar {
+          width: 40px; height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: var(--font-display);
+          font-size: 0.78rem;
+          font-weight: 800;
+          flex-shrink: 0;
+          letter-spacing: 0.02em;
+        }
+
+        .testi-name {
+          font-family: var(--font-display);
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: var(--ink);
+          letter-spacing: -0.02em;
+          line-height: 1.2;
+        }
+        .testi-role {
+          font-size: 0.76rem;
+          color: var(--muted);
+          line-height: 1.3;
+        }
+
+        /* CTA */
+        .testi-cta {
+          display: flex;
+          justify-content: center;
+        }
+        .testi-cta-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-family: var(--font-body);
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: var(--brand-red);
+          text-decoration: none;
+          border-bottom: 1.5px solid rgba(232,25,44,0.3);
+          padding-bottom: 2px;
+          transition: border-color 0.2s;
+        }
+        .testi-cta-link:hover { border-color: var(--brand-red); color: var(--brand-red); }
+
+        @media (prefers-reduced-motion: reduce) {
+          .testi-marquee-track { animation: none; }
         }
       `}</style>
     </section>

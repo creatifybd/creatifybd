@@ -1,341 +1,299 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
-  Repeat, RotateCcw, Zap, UserCheck, LayoutGrid, FileCode,
-} from 'lucide-react';
+import { Repeat, RotateCcw, Zap, UserCheck, LayoutGrid, FileCode } from 'lucide-react';
 
-const EASE_EXPO = [0.16, 1, 0.3, 1];
+const EASE = [0.16, 1, 0.3, 1];
 
 const FEATURES = [
   {
     num: '01',
-    accent: '#E8192C',
-    icon: <UserCheck size={20} />,
+    icon: <UserCheck size={22} />,
     title: 'Senior-Level Creatives',
-    desc: 'Every piece of content, design, and video is crafted by senior creative experts, ensuring top-tier global standards.',
-    featured: true
+    desc: 'Every design is crafted by senior creative experts, ensuring top-tier global standards — not templates or juniors.',
+    accent: '#E8192C',
   },
   {
     num: '02',
+    icon: <Zap size={22} />,
+    title: 'Async Efficiency',
+    desc: 'We coordinate asynchronously via shared dashboards, eliminating useless meetings to save you hours every week.',
     accent: '#F59E0B',
-    icon: <Zap size={20} />,
-    title: 'Async Efficiency (No Meetings)',
-    desc: 'We coordinate asynchronously via shared dashboards, eliminating useless alignment meetings to save you hours of time.',
-    featured: true
   },
   {
     num: '03',
+    icon: <LayoutGrid size={22} />,
+    title: 'Up to 50% Lower Cost',
+    desc: 'No heavy agency markup, no physical office overhead, no admin bloat. We pass 100% of these operational savings directly to you.',
     accent: '#22C55E',
-    icon: <LayoutGrid size={20} />,
-    title: 'Up to 40% Less Retainers',
-    desc: 'No sales commissions, no physical offices, and no administrative bloat. We pass 100% of these savings directly to you.',
-    featured: true
   },
   {
     num: '04',
-    accent: '#6366F1',
-    icon: <Repeat size={20} />,
+    icon: <Repeat size={22} />,
     title: 'Unlimited Revisions',
-    desc: 'We iterate and refine designs or copywriting until they match your expectations perfectly — no extra fees.',
+    desc: 'We iterate and refine until the design perfectly matches your expectations — no extra fees, no arguments.',
+    accent: '#6366F1',
   },
   {
     num: '05',
-    accent: '#EC4899',
-    icon: <FileCode size={20} />,
+    icon: <FileCode size={22} />,
     title: 'Source Files Included',
-    desc: 'All Figma, PSD, AI, or project files are delivered upon completion. You own 100% of your assets.',
+    desc: 'All Figma, PSD, AI, or project files are delivered on completion. You own 100% of your assets, always.',
+    accent: '#EC4899',
   },
   {
     num: '06',
+    icon: <RotateCcw size={22} />,
+    title: 'Zero Lock-in',
+    desc: 'No complex agency contracts or commitments. Pause, cancel, or resume your subscription anytime — no questions.',
     accent: '#14B8A6',
-    icon: <RotateCcw size={20} />,
-    title: 'Zero Long-Term Lock-in',
-    desc: 'No complex agency contracts or commitments. Pause, cancel, or resume your subscription anytime.',
   },
 ];
 
-const WhyUsSection = () => (
-  <section className="why-v3-section" aria-labelledby="why-v3-heading">
-    <div className="section-container">
+const TRUST_STATS = [
+  { val: 'No',   label: 'Lock-in contracts'     },
+  { val: '24h',  label: 'Response guarantee'    },
+  { val: '100%', label: 'Scope transparency'    },
+  { val: '7-day',label: 'Money-back window'     },
+];
 
+const WhyUsSection = () => (
+  <section className="why-section section" aria-labelledby="why-heading">
+    <div className="container">
       {/* Header */}
       <motion.div
-        className="why-v3-header"
+        className="why-header"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.7, ease: EASE_EXPO }}
+        transition={{ duration: 0.65, ease: EASE }}
       >
-        <div className="eyebrow why-v3-eyebrow">Why CreatifyBD</div>
-        <h2 id="why-v3-heading" className="section-h why-v3-heading">
+        <div className="eyebrow">Why CreatifyBD</div>
+        <h2 id="why-heading" className="section-h">
           Elite creative operations<br />
           <span className="text-red">without the agency markup</span>
         </h2>
-        <p className="section-subtext">
-          We combine senior-level talent, asynchronous project management, and upfront value pricing to deliver premium results at a fraction of standard rates.
+        <p className="section-sub">
+          Senior-level talent, async project management, and transparent pricing — premium results at a fraction of standard agency rates.
         </p>
       </motion.div>
 
       {/* Feature grid */}
-      <div className="why-v3-grid">
+      <div className="why-grid">
         {FEATURES.map((f, i) => (
           <motion.article
             key={f.num}
-            className={`why-v3-card ${f.featured ? 'is-featured' : ''}`}
-            style={{ '--card-accent': f.accent }}
-            initial={{ opacity: 0, y: 36 }}
+            className="why-card"
+            style={{ '--accent': f.accent }}
+            initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.55, ease: EASE_EXPO, delay: i * 0.07 }}
-            aria-label={f.title}
+            viewport={{ once: true, margin: '-30px' }}
+            transition={{ duration: 0.55, ease: EASE, delay: i * 0.07 }}
+            whileHover={{ y: -8, transition: { duration: 0.28, ease: EASE } }}
           >
-            <div className="why-v3-top">
-              <span className="why-v3-num">{f.num}</span>
-              <div
-                className="why-v3-icon"
-                style={{ color: f.accent, background: `${f.accent}14` }}
-              >
+            <div className="why-card-top">
+              <span className="why-card-num">{f.num}</span>
+              <div className="why-card-icon" style={{ color: f.accent, background: `${f.accent}14` }}>
                 {f.icon}
               </div>
             </div>
-            <h3 className="why-v3-title">{f.title}</h3>
-            <p className="why-v3-desc">{f.desc}</p>
-            <div className="why-v3-accent-line" />
+            <h3 className="why-card-title">{f.title}</h3>
+            <p className="why-card-desc">{f.desc}</p>
+            <div className="why-card-bar" />
           </motion.article>
         ))}
       </div>
 
-      {/* Bottom trust strip */}
+      {/* Trust strip */}
       <motion.div
-        className="why-v3-strip"
-        initial={{ opacity: 0, y: 16 }}
+        className="why-trust-strip"
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.4 }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.35 }}
       >
-        {[
-          { val: 'No', label: 'Lock-in contracts' },
-          { val: '24h', label: 'Response guarantee' },
-          { val: '100%', label: 'Scope transparency' },
-          { val: '7-day', label: 'Money-back window' },
-        ].map((s) => (
-          <div className="why-v3-strip-item" key={s.label}>
-            <strong>{s.val}</strong>
-            <span>{s.label}</span>
-          </div>
+        {TRUST_STATS.map((s, i) => (
+          <React.Fragment key={s.label}>
+            <div className="why-trust-item">
+              <strong>{s.val}</strong>
+              <span>{s.label}</span>
+            </div>
+            {i < TRUST_STATS.length - 1 && (
+              <div className="why-trust-div" aria-hidden="true" />
+            )}
+          </React.Fragment>
         ))}
       </motion.div>
     </div>
 
     <style>{`
-      .why-v3-section {
-        padding: 5rem 1.5rem;
+      /* ══ WHY US ════════════════════════════════════════════ */
+      .why-section {
+        padding: var(--section-padding) 0;
         background: var(--surface);
         position: relative;
         overflow: hidden;
       }
-      @media (max-width: 768px) {
-        .why-v3-section {
-          padding: 3rem 1.5rem;
-        }
-      }
-      .why-v3-section::before {
+      .why-section::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,25,44,0.05) 0%, transparent 70%);
+        inset: 0;
+        background: radial-gradient(ellipse 55% 35% at 50% 0%, rgba(232,25,44,0.04) 0%, transparent 70%);
         pointer-events: none;
       }
-      .why-v3-header {
+
+      .why-header {
+        max-width: 700px;
+        margin: 0 auto 4.5rem;
         text-align: center;
-        max-width: 800px;
-        margin: 0 auto 6rem;
-        position: relative;
-        z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 1.1rem;
+        position: relative;
+        z-index: 1;
       }
-      .why-v3-eyebrow {
-        margin-bottom: 1.5rem;
-      }
-      .why-v3-heading {
-        margin: 0 auto 1.5rem !important;
-      }
-      .section-subtext {
-        font-size: clamp(1rem, 2.5vw, 1.15rem);
-        color: var(--muted);
-        max-width: 640px;
-        line-height: 1.6;
-      }
-      .why-v3-grid {
+
+      /* Grid */
+      .why-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.75rem;
-        max-width: 1200px;
+        gap: 1.5rem;
+        max-width: 1140px;
         margin: 0 auto;
         position: relative;
         z-index: 1;
       }
-      .why-v3-card {
+
+      .why-card {
         position: relative;
-        background: var(--glass);
-        backdrop-filter: var(--glass-blur);
-        -webkit-backdrop-filter: var(--glass-blur);
-        border: 1px solid var(--glass-border);
-        border-radius: 24px;
-        padding: 3rem 2.25rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.25rem 2rem;
         overflow: hidden;
-        cursor: pointer;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+        gap: 0.85rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        cursor: default;
       }
-      .why-v3-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 100% 100%, var(--card-accent) 0%, transparent 60%);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        z-index: 0;
+      .why-card:hover {
+        border-color: var(--accent);
+        box-shadow: 0 20px 56px rgba(0,0,0,0.07);
       }
-      .why-v3-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        border-color: var(--card-accent) !important;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), var(--shadow-md) !important;
-      }
-      .why-v3-card.is-featured {
-        border: 2px solid var(--card-accent);
-      }
-      .why-v3-card.is-featured:hover {
-        transform: translateY(-16px) scale(1.03);
-      }
-      .why-v3-card:hover::before {
-        opacity: 0.08;
-      }
-      .why-v3-top {
+
+      .why-card-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 2rem;
-        position: relative;
-        z-index: 1;
       }
-      .why-v3-num {
-        font-size: 0.8rem;
+      .why-card-num {
+        font-family: var(--font-display);
+        font-size: 0.72rem;
         font-weight: 900;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.12em;
         color: var(--muted);
-        opacity: 0.4;
+        opacity: 0.35;
       }
-      .why-v3-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
+      .why-card:hover .why-card-num { opacity: 1; color: var(--accent); }
+
+      .why-card-icon {
+        width: 48px; height: 48px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
-        background: var(--surface-soft);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+        transition: transform 0.3s;
       }
-      .why-v3-card:hover .why-v3-icon {
-        transform: scale(1.1) rotate(-8deg);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      }
-      .why-v3-title {
-        font-size: 1.25rem;
-        font-weight: 900;
+      .why-card:hover .why-card-icon { transform: scale(1.1) rotate(-6deg); }
+
+      .why-card-title {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        font-weight: 700;
         color: var(--ink);
-        line-height: 1.25;
-        margin: 0 0 0.8rem;
-        letter-spacing: -0.02em;
-        position: relative;
-        z-index: 1;
-        transition: color 0.3s;
+        letter-spacing: -0.025em;
+        line-height: 1.3;
+        margin: 0;
+        transition: color 0.25s;
       }
-      .why-v3-card:hover .why-v3-title {
-        color: var(--card-accent);
-      }
-      .why-v3-desc {
-        font-size: 0.92rem;
+      .why-card:hover .why-card-title { color: var(--accent); }
+
+      .why-card-desc {
+        font-size: 0.875rem;
         color: var(--muted);
         line-height: 1.7;
         margin: 0;
-        position: relative;
-        z-index: 1;
       }
-      .why-v3-accent-line {
+
+      .why-card-bar {
         position: absolute;
         bottom: 0; left: 0;
         height: 3px;
-        width: 0%;
-        background: var(--card-accent);
-        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 1;
+        width: 0;
+        background: var(--accent);
+        transition: width 0.35s cubic-bezier(0.16,1,0.3,1);
+        border-radius: 0 2px 0 0;
       }
-      .why-v3-card:hover .why-v3-accent-line { width: 100%; }
+      .why-card:hover .why-card-bar { width: 100%; }
 
       /* Trust strip */
-      .why-v3-strip {
+      .why-trust-strip {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0;
-        margin-top: 6rem;
-        padding: 2.5rem;
-        background: var(--glass);
-        backdrop-filter: var(--glass-blur);
-        -webkit-backdrop-filter: var(--glass-blur);
-        border: 1px solid var(--glass-border);
-        border-radius: 24px;
-        max-width: 900px;
-        margin-inline: auto;
-        box-shadow: var(--shadow-md);
+        margin: 4rem auto 0;
+        max-width: 860px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.05);
         position: relative;
         z-index: 1;
       }
-      .why-v3-strip-item {
+      .why-trust-item {
         flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.2rem;
         padding: 0 1.5rem;
-        border-right: 1px solid #EBEBF0;
+        text-align: center;
       }
-      .why-v3-strip-item:last-child { border-right: none; }
-      .why-v3-strip-item strong {
-        font-size: 1.5rem;
-        font-weight: 900;
-        color: var(--ink, #0F0F12);
+      .why-trust-item strong {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--ink);
         letter-spacing: -0.04em;
         line-height: 1;
       }
-      .why-v3-strip-item span {
-        font-size: 0.72rem;
+      .why-trust-item span {
+        font-size: 0.68rem;
         font-weight: 600;
-        color: var(--muted, #9CA3AF);
+        color: var(--muted);
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        text-align: center;
+        letter-spacing: 0.07em;
         line-height: 1.4;
       }
-
-      @media (max-width: 900px) {
-        .why-v3-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-trust-div {
+        width: 1px;
+        height: 36px;
+        background: var(--border);
+        flex-shrink: 0;
       }
+
+      /* Responsive */
+      @media (max-width: 960px) { .why-grid { grid-template-columns: repeat(2, 1fr); } }
       @media (max-width: 600px) {
-        .why-v3-section { padding: 5rem 0; }
-        .why-v3-header { margin-bottom: 3rem; }
-        .why-v3-grid { grid-template-columns: 1fr; gap: 1rem; }
-        .why-v3-card { padding: 1.5rem; }
-        .why-v3-strip { flex-wrap: wrap; gap: 1.5rem; padding: 1.5rem; }
-        .why-v3-strip-item { border-right: none; padding: 0; flex: 0 0 45%; }
+        .why-grid { grid-template-columns: 1fr; gap: 1rem; }
+        .why-card { padding: 1.75rem 1.5rem; }
+        .why-trust-strip { flex-wrap: wrap; gap: 1.5rem; padding: 1.5rem; }
+        .why-trust-item { flex: 0 0 45%; }
+        .why-trust-div { display: none; }
       }
     `}</style>
   </section>

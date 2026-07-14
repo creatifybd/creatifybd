@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
-import GigCard from '../../components/GigCard';
 import { categories, getGigsByCategory } from '../../data/gigs';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
@@ -17,6 +16,9 @@ const ServiceCategoryPage = () => {
   if (!category) {
     return <Navigate to="/services" replace />;
   }
+
+  const [selectedGig, setSelectedGig] = useState(null);
+  const [activePackageTab, setActivePackageTab] = useState('basic');
 
   const categoryGigs = getGigsByCategory(categorySlug);
 
@@ -36,18 +38,9 @@ const ServiceCategoryPage = () => {
         { title: 'Review & Publish', desc: 'You approve the content calendar, and we schedule posts at optimal times on your platforms.' }
       ],
       faqs: [
-        {
-          question: 'Which platforms do you manage?',
-          answer: 'We primarily manage Facebook, Instagram, LinkedIn, and Pinterest. We can also handle Twitter/X or TikTok depending on your custom needs.'
-        },
-        {
-          question: 'How is the content approved?',
-          answer: 'We create a content calendar draft for the entire month. We do not publish anything without your direct review and approval.'
-        },
-        {
-          question: 'Do you run paid ads?',
-          answer: 'Yes, we design the ad creatives and copy. Advanced campaign setup is available as an extra add-on.'
-        }
+        { question: 'Which platforms do you manage?', answer: 'We primarily manage Facebook, Instagram, LinkedIn, and Pinterest. We can also handle Twitter/X or TikTok depending on your custom needs.' },
+        { question: 'How is the content approved?', answer: 'We create a content calendar draft for the entire month. We do not publish anything without your direct review and approval.' },
+        { question: 'Do you run paid ads?', answer: 'Yes, we design the ad creatives and copy. Advanced campaign setup is available as an extra add-on.' }
       ],
       seo: {
         title: 'Best Social Media Management Agency | Social Media Marketing Services | CreatifyBD',
@@ -60,7 +53,7 @@ const ServiceCategoryPage = () => {
       subheadline: 'CreatifyBD is the best graphic design agency offering professional graphic design services including logo design, brand identity, social media graphics, and print design for businesses worldwide.',
       benefits: [
         'Corporate Brand Style Guides: Ensure 100% color and typographical consistency across media.',
-        'memorable vector logos: Unique corporate logos that establish instant client trust.',
+        'Memorable vector logos: Unique corporate logos that establish instant client trust.',
         'Scrolling promotional posts: High CTR designs built to stand out on social media feeds.',
         'Print-ready files: Bleed-configured high-resolution flyer layouts and brochures.'
       ],
@@ -70,18 +63,9 @@ const ServiceCategoryPage = () => {
         { title: 'Revision & Asset Export', desc: 'Refine your choice and receive editable vector source files (AI/EPS/SVG/PDF).' }
       ],
       faqs: [
-        {
-          question: 'What file formats do you deliver?',
-          answer: 'We deliver AI, EPS, SVG, PDF, high-res PNG, and JPEG formats for all graphic design projects.'
-        },
-        {
-          question: 'Do you use templates?',
-          answer: 'No. Every design is custom created from scratch using premium visual layout software to ensure uniqueness.'
-        },
-        {
-          question: 'How many revisions do I get?',
-          answer: 'Revision counts vary by package. Basic packages include 2-3 revisions, while premium packages include up to 10 revisions.'
-        }
+        { question: 'What file formats do you deliver?', answer: 'We deliver AI, EPS, SVG, PDF, high-res PNG, and JPEG formats for all graphic design projects.' },
+        { question: 'Do you use templates?', answer: 'No. Every design is custom created from scratch using premium visual layout software to ensure uniqueness.' },
+        { question: 'How many revisions do I get?', answer: 'Revision counts vary by package. Basic packages include 2-3 revisions, while premium packages include up to 10 revisions.' }
       ],
       seo: {
         title: 'Best Graphic Design Service | Professional Logo Design & Brand Identity | CreatifyBD',
@@ -104,23 +88,14 @@ const ServiceCategoryPage = () => {
         { title: 'Draft Review & Adjustments', desc: 'Download your draft edit, request subtitle tweaks, and receive the finalized HD copy.' }
       ],
       faqs: [
-        {
-          question: 'Do you provide the raw footage?',
-          answer: 'No, you must provide your raw video clips (talking head footage or screen recordings). We edit and enhance your footage.'
-        },
-        {
-          question: 'What is the format?',
-          answer: 'Delivered in standard 1280x720 JPEG or PNG under 2MB, optimized for YouTube upload guidelines or social media platforms.'
-        },
-        {
-          question: 'Can you add captions?',
-          answer: 'Yes, we include Alex Hormozi style text captions and subtitles in our video editing packages.'
-        }
+        { question: 'Do you provide the raw footage?', answer: 'No, you must provide your raw video clips. We edit and enhance your footage.' },
+        { question: 'What is the format?', answer: 'Delivered in standard 1280x720 or HD 1920x1080, optimized for YouTube or social media platforms.' },
+        { question: 'Can you add captions?', answer: 'Yes, we include Alex Hormozi style text captions and subtitles in our video editing packages.' }
       ],
       seo: {
         title: 'Best Video Editing Service | Professional Video Production & Editing | CreatifyBD',
         description: 'CreatifyBD is the best video editing service provider offering professional video editing services including Reels editing, YouTube editing, promotional videos, and video production globally.',
-        keywords: 'video editing service, video editing agency, best video editing service, professional video editing, video production company, YouTube video editing, Reels editing service, TikTok video editing, promotional video editing, video post production, video editing company, video editing for social media, video editing for YouTube, video editing for business'
+        keywords: 'video editing service, video editing agency, best video editing service, professional video editing, video production company, YouTube video editing, Reels editing service, TikTok video editing, promotional video editing, video post production'
       }
     },
     'website-design': {
@@ -138,28 +113,26 @@ const ServiceCategoryPage = () => {
         { title: 'SEO Tagging & Domain Launch', desc: 'We configure meta structures, deploy files to hosting, and index canonical URLs.' }
       ],
       faqs: [
-        {
-          question: 'What technology do you use?',
-          answer: 'We build websites using React for modern, fast, and SEO-optimized web applications with excellent performance.'
-        },
-        {
-          question: 'Are websites mobile responsive?',
-          answer: 'Yes, all our websites are fully responsive and optimized for desktop, tablet, and mobile devices.'
-        },
-        {
-          question: 'Do you include SEO?',
-          answer: 'Yes, we include proper SEO configurations including meta tags, schema markup, and semantic HTML structure.'
-        }
+        { question: 'What technology do you use?', answer: 'We build websites using React for modern, fast, and SEO-optimized web applications with excellent performance.' },
+        { question: 'Are websites mobile responsive?', answer: 'Yes, all our websites are fully responsive and optimized for desktop, tablet, and mobile devices.' },
+        { question: 'Do you include SEO?', answer: 'Yes, we include proper SEO configurations including meta tags, schema markup, and semantic HTML structure.' }
       ],
       seo: {
         title: 'Best Web Design Agency | Professional Website Design & Development | CreatifyBD',
         description: 'CreatifyBD is the best web design agency offering professional website design services including landing pages, business websites, portfolio sites, and web development globally.',
-        keywords: 'web design agency, website design service, best web design agency, professional website design, web development services, web design company, landing page design, business website design, portfolio website design, website development company, responsive web design, custom website design, website redesign service, React web development, SEO web design'
+        keywords: 'web design agency, website design service, best web design agency, professional website design, web development services, web design company, landing page design, business website design, portfolio website design, website development company, responsive web design, custom website design'
       }
     }
   };
 
-  const details = categoryDetails[categorySlug] || { headline: category.name, subheadline: category.desc, benefits: [], process: [], seo: {}, faqs: [] };
+  const details = categoryDetails[categorySlug] || {
+    headline: category.name,
+    subheadline: category.desc,
+    benefits: [],
+    process: [],
+    seo: {},
+    faqs: []
+  };
 
   const serviceSchema = {
     "@context": "https://schema.org",
@@ -167,11 +140,7 @@ const ServiceCategoryPage = () => {
     "serviceType": category.name,
     "name": details.headline,
     "description": details.subheadline,
-    "provider": {
-      "@type": "Organization",
-      "name": "CreatifyBD",
-      "url": "https://creatifybd.com"
-    },
+    "provider": { "@type": "Organization", "name": "CreatifyBD", "url": "https://creatifybd.com" },
     "areaServed": "Global"
   };
 
@@ -179,24 +148,9 @@ const ServiceCategoryPage = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://creatifybd.com"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Services",
-        "item": "https://creatifybd.com/services"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": category.name,
-        "item": `https://creatifybd.com/services/${categorySlug}`
-      }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://creatifybd.com" },
+      { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://creatifybd.com/services" },
+      { "@type": "ListItem", "position": 3, "name": category.name, "item": `https://creatifybd.com/services/${categorySlug}` }
     ]
   };
 
@@ -206,10 +160,7 @@ const ServiceCategoryPage = () => {
     "mainEntity": details.faqs.map(faq => ({
       "@type": "Question",
       "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
+      "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
     }))
   } : null;
 
@@ -220,27 +171,27 @@ const ServiceCategoryPage = () => {
       <SEO
         title={details.seo?.title || `${category.name} Services | CreatifyBD`}
         description={details.seo?.description || details.subheadline}
-        keywords={details.seo?.keywords || `${categorySlug}, creatifybd services, global creative agency, brand creative services`}
+        keywords={details.seo?.keywords || `${categorySlug}, creatifybd services`}
         schema={combinedSchema}
       />
 
       <Navbar />
 
-      {/* ── Category Hero (dark branded) ── */}
-      <section className="category-hero category-hero-light">
-        <div className="container hero-container-inner">
-          <motion.span
-            className="category-icon-large"
+      {/* ── Hero ── */}
+      <section className="scp-hero">
+        <div className="scp-hero-inner">
+          <motion.div
+            className="scp-hero-icon"
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0 }}
+            transition={{ duration: 0.6, ease: EASE_EXPO }}
           >
             {category.icon}
-          </motion.span>
+          </motion.div>
 
           <motion.h1
-            className="hero-title"
-            initial={{ opacity: 0, y: 36, filter: 'blur(8px)' }}
+            className="scp-hero-title"
+            initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.85, ease: EASE_EXPO, delay: 0.1 }}
           >
@@ -248,7 +199,7 @@ const ServiceCategoryPage = () => {
           </motion.h1>
 
           <motion.p
-            className="hero-desc"
+            className="scp-hero-desc"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.22 }}
@@ -257,19 +208,21 @@ const ServiceCategoryPage = () => {
           </motion.p>
 
           <motion.div
-            className="hero-actions"
+            className="scp-hero-actions"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.35 }}
           >
-            <a href="#gigs-section" className="premium-btn">Explore Gigs <ArrowRight size={18} /></a>
-            <Link to="/contact" className="premium-btn-outline">Custom Consultation</Link>
+            <a href="#gigs-section" className="premium-btn">
+              Explore Services <ArrowRight size={18} />
+            </a>
+            <Link to="/contact" className="premium-btn-outline">Free Consultation</Link>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Gigs List Section ── */}
-      <section id="gigs-section" className="category-gigs-section">
+      {/* ── Services / Gigs Grid ── */}
+      <section id="gigs-section" className="scp-gigs-section">
         <div className="container">
           <motion.div
             className="section-header text-center"
@@ -278,47 +231,180 @@ const ServiceCategoryPage = () => {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.65, ease: EASE_EXPO }}
           >
-            <h2 className="section-h">Browse Our <span className="red">{category.name}</span> Gigs</h2>
-            <p className="section-sub">Choose a transparent, fixed-price package below to start your order flow instantly.</p>
+            <span className="eyebrow" style={{ color: 'var(--brand-red)' }}>Browse Services</span>
+            <h2 className="section-h" style={{ marginTop: '0.5rem' }}>
+              Available <span className="red">{category.name}</span> Plans
+            </h2>
+            <p className="section-sub">
+              Select a service package below to see deliverables, pricing options, and to get started immediately.
+            </p>
           </motion.div>
 
-          {categoryGigs.length > 0 ? (
-            <div className="gigs-grid">
-              {categoryGigs.map((gig, idx) => (
-                <motion.div
-                  key={gig.id}
-                  initial={{ opacity: 0, y: 32 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.65, ease: EASE_EXPO, delay: Math.min(idx * 0.1, 0.4) }}
-                >
-                  <GigCard gig={gig} />
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-gigs text-center">
-              <p>No active gigs in this category at the moment. Contact us for custom quotes.</p>
-              <Link to="/contact" className="btn-red">Get in Touch</Link>
-            </div>
-          )}
+          <div className="scp-gigs-grid">
+            {categoryGigs.map((gig, idx) => (
+              <motion.div
+                key={gig.id}
+                className="scp-gig-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.55, ease: EASE_EXPO, delay: idx * 0.08 }}
+                onClick={() => { setSelectedGig(gig); setActivePackageTab('basic'); }}
+              >
+                <div className="scp-gig-badge">{gig.subcategory || 'Creative Service'}</div>
+                <h3 className="scp-gig-title">{gig.shortTitle || gig.title}</h3>
+                <p className="scp-gig-desc">{gig.overview}</p>
+
+                <div className="scp-gig-rating">
+                  <span style={{ color: '#FFB800' }}>★★★★★</span>
+                  <span className="scp-rating-val">{gig.rating.toFixed(1)}</span>
+                  <span className="scp-rating-count">({gig.reviewCount} reviews)</span>
+                </div>
+
+                <div className="scp-gig-footer">
+                  <div className="scp-gig-price">
+                    <span className="scp-price-lbl">Starting from</span>
+                    <span className="scp-price-val">${gig.startingPrice}</span>
+                  </div>
+                  <button className="scp-gig-btn">
+                    View Packages <ArrowRight size={14} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Custom plan CTA */}
+          <div className="scp-custom-cta">
+            <h3>Need a completely custom enterprise plan?</h3>
+            <p>We build custom scale solutions and retainer structures for global client operations.</p>
+            <Link to="/contact" className="premium-btn">
+              Book a Free Consultation <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </section>
 
+      {/* ── Gig Modal ── */}
+      <AnimatePresence>
+        {selectedGig && (
+          <div className="scp-modal-overlay" onClick={() => setSelectedGig(null)}>
+            <motion.div
+              className="scp-modal"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.28, ease: EASE_EXPO }}
+            >
+              <button className="scp-modal-close" onClick={() => setSelectedGig(null)} aria-label="Close">
+                &times;
+              </button>
+
+              <div className="scp-modal-header">
+                <span className="scp-gig-badge" style={{ marginBottom: '0.5rem' }}>{selectedGig.subcategory}</span>
+                <h2 className="scp-modal-title">{selectedGig.title}</h2>
+                <div className="scp-modal-rating">
+                  <span style={{ color: '#FFB800' }}>★★★★★</span>
+                  <span className="scp-rating-val">{selectedGig.rating.toFixed(1)}</span>
+                  <span className="scp-rating-count">({selectedGig.reviewCount} client reviews)</span>
+                </div>
+              </div>
+
+              <div className="scp-modal-grid">
+                {/* Left — details */}
+                <div className="scp-modal-left">
+                  <div>
+                    <p className="scp-sec-label">Overview</p>
+                    <p className="scp-sec-text">{selectedGig.description}</p>
+                  </div>
+                  <div>
+                    <p className="scp-sec-label">Who Is This For?</p>
+                    <p className="scp-sec-text">{selectedGig.whoIsThisFor}</p>
+                  </div>
+                  {selectedGig.industries && (
+                    <div>
+                      <p className="scp-sec-label">Recommended Industries</p>
+                      <div className="scp-industries">
+                        {selectedGig.industries.map((ind, i) => (
+                          <span key={i} className="scp-industry-tag">{ind}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {selectedGig.revisionPolicy && (
+                    <div className="scp-revision-note">
+                      <p className="scp-sec-label">Revision Policy</p>
+                      <p className="scp-sec-text" style={{ fontStyle: 'italic', color: '#777' }}>{selectedGig.revisionPolicy}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right — packages */}
+                <div className="scp-pkg-panel">
+                  <div className="scp-pkg-tabs">
+                    {Object.keys(selectedGig.packages).map((key) => (
+                      <button
+                        key={key}
+                        className={`scp-pkg-tab ${activePackageTab === key ? 'active' : ''}`}
+                        onClick={() => setActivePackageTab(key)}
+                      >
+                        {key.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
+
+                  {(() => {
+                    const pkg = selectedGig.packages[activePackageTab];
+                    if (!pkg) return null;
+                    return (
+                      <>
+                        <div className="scp-pkg-price">${pkg.price}</div>
+                        <div className="scp-pkg-name">{pkg.name}</div>
+                        {pkg.desc && <div className="scp-pkg-desc">{pkg.desc}</div>}
+                        <div className="scp-pkg-meta">
+                          <span>⏱ {pkg.deliveryTime} Days</span>
+                          <span>↺ {pkg.revisions === 10 ? 'Unlimited' : `${pkg.revisions} Revisions`}</span>
+                        </div>
+                        <ul className="scp-pkg-features">
+                          {pkg.deliverables.map((del, i) => (
+                            <li key={i}><span className="scp-check">✓</span>{del}</li>
+                          ))}
+                        </ul>
+                        <Link
+                          to={`/contact?service=${encodeURIComponent(`${selectedGig.shortTitle || selectedGig.title} - ${pkg.name}`)}&message=${encodeURIComponent(`Hi CreatifyBD team, I want to order the "${pkg.name}" package ($${pkg.price}) for ${selectedGig.title}.`)}`}
+                          className="scp-pkg-order-btn"
+                          onClick={() => setSelectedGig(null)}
+                        >
+                          Select Package <ArrowRight size={16} />
+                        </Link>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* ── Benefits / Why Us ── */}
-      <section className="category-benefits-section">
+      <section className="scp-benefits-section">
         <div className="container">
           <motion.div
-            className="benefits-grid"
+            className="scp-benefits-grid"
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.75, ease: EASE_EXPO }}
           >
-            <div className="benefits-text">
+            <div className="scp-benefits-text">
               <h2 className="section-h">Why Partner with Us for {category.name}?</h2>
-              <p className="benefits-intro">We provide premium creative agency standards at competitive production price rates, delivering Fiverr-like transparency and security.</p>
-              <ul className="benefits-list">
+              <p className="scp-benefits-intro">
+                We provide premium creative agency standards at competitive production price rates,
+                delivering Fiverr-like transparency and security.
+              </p>
+              <ul className="scp-benefits-list">
                 {details.benefits.map((benefit, idx) => {
                   const [title, desc] = benefit.split(': ');
                   return (
@@ -326,10 +412,10 @@ const ServiceCategoryPage = () => {
                       key={idx}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: '-30px' }}
+                      viewport={{ once: true }}
                       transition={{ duration: 0.55, ease: EASE_EXPO, delay: idx * 0.08 }}
                     >
-                      <CheckCircle2 size={20} className="check-icon" />
+                      <CheckCircle2 size={20} className="scp-check-icon" />
                       <div>
                         <strong>{title}</strong>
                         {desc && <p>{desc}</p>}
@@ -339,24 +425,23 @@ const ServiceCategoryPage = () => {
                 })}
               </ul>
             </div>
-            <div className="benefits-graphic-mock">
-              <div className="mock-dash-box">
-                <span className="badge">CREATIFY AGENCY STANDARDS</span>
-                <h4>Global Production Advantage</h4>
-                <p>We run a structured remote production workflow with international quality standards for brands in global markets.</p>
-                <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <div className="advantage-bar"><span className="label">International Quality</span><span className="percent">100%</span></div>
-                  <div className="advantage-bar"><span className="label">Manual verification trust</span><span className="percent">100%</span></div>
-                  <div className="advantage-bar"><span className="label">Pricing affordability</span><span className="percent">Save 60%</span></div>
-                </div>
+
+            <div className="scp-advantage-card">
+              <span className="scp-advantage-badge">CREATIFY AGENCY STANDARDS</span>
+              <h4>Global Production Advantage</h4>
+              <p>We run a structured remote production workflow with international quality standards for brands in global markets.</p>
+              <div className="scp-advantage-bars">
+                <div className="scp-bar"><span>International Quality</span><strong>100%</strong></div>
+                <div className="scp-bar"><span>Manual verification trust</span><strong>100%</strong></div>
+                <div className="scp-bar"><span>Pricing affordability</span><strong>Save 60%</strong></div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Process / How it Works ── */}
-      <section className="category-process-section">
+      {/* ── Process ── */}
+      <section className="scp-process-section">
         <div className="container">
           <motion.div
             className="section-header text-center"
@@ -366,20 +451,20 @@ const ServiceCategoryPage = () => {
             transition={{ duration: 0.65, ease: EASE_EXPO }}
           >
             <h2 className="section-h">Our Step-by-Step Delivery Process</h2>
-            <p className="section-sub">A seamless order execution roadmap built to guarantee revisions satisfaction.</p>
+            <p className="section-sub">A seamless order execution roadmap built to guarantee revision satisfaction.</p>
           </motion.div>
 
-          <div className="process-stepper-grid">
+          <div className="scp-process-grid">
             {details.process.map((step, idx) => (
               <motion.div
                 key={idx}
-                className="process-step-card"
+                className="scp-step-card"
                 initial={{ opacity: 0, y: 32 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.65, ease: EASE_EXPO, delay: idx * 0.12 }}
               >
-                <div className="step-number">0{idx + 1}</div>
+                <div className="scp-step-num">0{idx + 1}</div>
                 <h4>{step.title}</h4>
                 <p>{step.desc}</p>
               </motion.div>
@@ -391,260 +476,628 @@ const ServiceCategoryPage = () => {
       <Footer />
 
       <style>{`
-        .category-hero {
+        /* ── Page Wrapper ───────────────────────────────────────── */
+        .category-landing-page {
+          background: var(--surface, #ffffff);
+          color: var(--ink, #0f0f12);
+        }
+
+        /* ── Hero ──────────────────────────────────────────────── */
+        .scp-hero {
           padding: 8rem 2rem 5rem;
           text-align: center;
-          background: #060608;
-          border-bottom: 1px solid rgba(232, 25, 44, 0.15);
+          background: #ffffff;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
           position: relative;
           overflow: hidden;
         }
-        .category-hero::before {
+        .scp-hero::before {
           content: '';
           position: absolute;
-          width: 900px; height: 700px;
+          width: 800px; height: 600px;
           border-radius: 50%;
           top: -250px; left: 50%;
           transform: translateX(-50%);
-          background: radial-gradient(circle, rgba(232,25,44,0.22) 0%, transparent 65%);
+          background: radial-gradient(circle, rgba(232,25,44,0.05) 0%, transparent 65%);
           pointer-events: none;
-          z-index: 0;
         }
-        .category-hero .hero-container-inner { position: relative; z-index: 1; }
-
-        .hero-container-inner {
-          max-width: 800px;
+        .scp-hero-inner {
+          position: relative;
+          max-width: 760px;
           margin: 0 auto;
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 1.5rem;
+          gap: 1.25rem;
         }
-
-        .category-icon-large {
-          font-size: 4rem;
-          margin-bottom: 0.5rem;
+        .scp-hero-icon {
+          width: 64px; height: 64px;
+          border-radius: 18px;
+          background: rgba(232, 25, 44, 0.06);
+          border: 1px solid rgba(232, 25, 44, 0.12);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 1.75rem;
+          color: var(--brand-red);
+          margin-bottom: 0.25rem;
         }
-
-        .hero-title {
-          font-size: clamp(2.2rem, 5vw, 3.8rem);
+        .scp-hero-title {
+          font-size: clamp(1.85rem, 4.5vw, 3.2rem);
           font-weight: 900;
           line-height: 1.1;
+          color: var(--ink, #0f0f12);
+          letter-spacing: -0.03em;
+          margin: 0;
+        }
+        .scp-hero-desc {
+          font-size: clamp(0.93rem, 2vw, 1.08rem);
+          color: var(--muted, #666);
+          line-height: 1.7;
+          max-width: 600px;
+          margin: 0;
+        }
+        .scp-hero-actions {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-top: 0.5rem;
+        }
+
+        /* ── Gigs Section ─────────────────────────────────────── */
+        .scp-gigs-section {
+          padding: 5rem 2rem;
+          background: #f7f8fa;
+        }
+        .scp-gigs-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 1.5rem;
+          max-width: 1200px;
+          margin: 2.5rem auto 0;
+        }
+
+        /* Gig card */
+        .scp-gig-card {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.07);
+          border-radius: 16px;
+          padding: 1.75rem;
+          display: flex;
+          flex-direction: column;
+          cursor: pointer;
+          min-height: 270px;
+          transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.25s;
+        }
+        .scp-gig-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 16px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(232,25,44,0.14);
+          border-color: rgba(232,25,44,0.2);
+        }
+        .scp-gig-badge {
+          background: rgba(232,25,44,0.08);
+          color: var(--brand-red);
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          padding: 0.25rem 0.65rem;
+          border-radius: 100px;
+          align-self: flex-start;
+          margin-bottom: 1rem;
+        }
+        .scp-gig-title {
+          font-size: 1.08rem;
+          font-weight: 800;
+          color: var(--ink, #0f0f12);
+          line-height: 1.3;
+          margin: 0 0 0.5rem;
+        }
+        .scp-gig-desc {
+          font-size: 0.82rem;
+          color: var(--muted, #666);
+          line-height: 1.55;
+          flex: 1;
+          margin: 0 0 1rem;
+        }
+        .scp-gig-rating {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          margin-bottom: 1.1rem;
+          font-size: 0.9rem;
+        }
+        .scp-rating-val {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--ink, #0f0f12);
+        }
+        .scp-rating-count {
+          font-size: 0.74rem;
+          color: #999;
+        }
+        .scp-gig-footer {
+          border-top: 1px solid rgba(0,0,0,0.06);
+          padding-top: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .scp-gig-price {
+          display: flex;
+          flex-direction: column;
+        }
+        .scp-price-lbl {
+          font-size: 0.62rem;
+          color: #999;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+        }
+        .scp-price-val {
+          font-size: 1.2rem;
+          font-weight: 900;
+          color: var(--ink, #0f0f12);
+        }
+        .scp-gig-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0.48rem 0.9rem;
+          background: #f0f1f3;
+          border: 1px solid rgba(0,0,0,0.07);
+          color: var(--ink, #0f0f12);
+          font-size: 0.76rem;
+          font-weight: 700;
+          border-radius: 100px;
+          cursor: pointer;
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .scp-gig-card:hover .scp-gig-btn {
+          background: var(--brand-red);
+          border-color: var(--brand-red);
+          color: #fff;
+        }
+
+        /* Custom CTA block */
+        .scp-custom-cta {
+          margin-top: 3.5rem;
+          text-align: center;
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
+          padding: 2.5rem;
+          border-radius: 16px;
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .scp-custom-cta h3 {
+          font-size: 1.2rem;
+          color: var(--ink, #0f0f12);
+          margin-bottom: 0.4rem;
+          font-weight: 800;
+        }
+        .scp-custom-cta p {
+          color: var(--muted, #666);
+          font-size: 0.88rem;
+          margin-bottom: 1.25rem;
+        }
+        .scp-custom-cta { margin-top: 3.5rem; }
+
+        /* ── Modal ─────────────────────────────────────────────── */
+        .scp-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(10,10,15,0.6);
+          backdrop-filter: blur(8px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 100005;
+          padding: 1.5rem;
+        }
+        .scp-modal {
+          background: #ffffff;
+          width: 100%;
+          max-width: 820px;
+          border-radius: 20px;
+          box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+          border: 1px solid rgba(0,0,0,0.06);
+          position: relative;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+        .scp-modal-close {
+          position: absolute;
+          right: 1.25rem;
+          top: 1.25rem;
+          background: #f1f2f4;
+          border: none;
+          width: 34px; height: 34px;
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer;
+          color: #555;
+          font-size: 1.4rem;
+          line-height: 1;
+          transition: background 0.2s, color 0.2s;
+        }
+        .scp-modal-close:hover { background: var(--brand-red); color: white; }
+        .scp-modal-header {
+          padding: 2rem 2rem 1.25rem;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .scp-modal-title {
+          font-size: 1.6rem;
+          font-weight: 900;
+          color: var(--ink, #0f0f12);
+          margin: 0.35rem 2.5rem 0 0;
+          letter-spacing: -0.02em;
+        }
+        .scp-modal-rating {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          margin-top: 0.4rem;
+          font-size: 0.9rem;
+        }
+        .scp-modal-grid {
+          display: grid;
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: 2rem;
+          padding: 1.75rem 2rem 2rem;
+        }
+        .scp-modal-left {
+          display: flex;
+          flex-direction: column;
+          gap: 1.1rem;
+        }
+        .scp-sec-label {
+          font-size: 0.68rem;
+          font-weight: 800;
+          color: var(--brand-red);
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin: 0 0 0.3rem;
+        }
+        .scp-sec-text {
+          font-size: 0.875rem;
+          color: var(--ink, #333);
+          line-height: 1.6;
+          margin: 0;
+        }
+        .scp-industries {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          margin-top: 0.35rem;
+        }
+        .scp-industry-tag {
+          background: #f0f1f3;
+          color: #555;
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+        }
+        .scp-revision-note {
+          border-top: 1px solid rgba(0,0,0,0.06);
+          padding-top: 1rem;
+        }
+
+        /* Package Panel */
+        .scp-pkg-panel {
+          background: #f7f8fa;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 16px;
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          align-self: start;
+          position: sticky;
+          top: 1rem;
+        }
+        .scp-pkg-tabs {
+          display: flex;
+          background: #eef0f2;
+          padding: 0.2rem;
+          border-radius: 10px;
+          margin-bottom: 1.1rem;
+        }
+        .scp-pkg-tab {
+          flex: 1;
+          background: transparent;
+          border: none;
+          padding: 0.52rem 0;
+          font-size: 0.76rem;
+          font-weight: 700;
+          border-radius: 8px;
+          cursor: pointer;
+          color: #888;
+          transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+          letter-spacing: 0.03em;
+        }
+        .scp-pkg-tab.active {
+          background: #ffffff;
+          color: var(--ink, #0f0f12);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .scp-pkg-price {
+          font-size: 2.1rem;
+          font-weight: 900;
+          color: var(--ink, #0f0f12);
+          letter-spacing: -0.04em;
+          line-height: 1;
+          margin-bottom: 0.2rem;
+        }
+        .scp-pkg-name {
+          font-size: 1rem;
+          font-weight: 800;
+          color: var(--ink, #0f0f12);
+          margin-bottom: 0.3rem;
+        }
+        .scp-pkg-desc {
+          font-size: 0.8rem;
+          color: var(--muted, #666);
+          line-height: 1.5;
+          margin-bottom: 0.9rem;
+        }
+        .scp-pkg-meta {
+          display: flex;
+          gap: 0.75rem;
+          font-size: 0.74rem;
+          color: var(--muted, #555);
+          font-weight: 600;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+          padding-bottom: 0.85rem;
+          margin-bottom: 0.9rem;
+          flex-wrap: wrap;
+        }
+        .scp-pkg-features {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 1.1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .scp-pkg-features li {
+          font-size: 0.8rem;
+          color: var(--ink, #333);
+          display: flex;
+          align-items: flex-start;
+          gap: 0.45rem;
+          line-height: 1.4;
+        }
+        .scp-check {
+          color: var(--brand-red);
+          font-weight: bold;
+          flex-shrink: 0;
+          line-height: 1.5;
+        }
+        .scp-pkg-order-btn {
+          width: 100%;
+          padding: 0.8rem;
+          background: var(--brand-red);
+          color: white;
+          border: none;
+          font-weight: 800;
+          font-size: 0.875rem;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.45rem;
+          box-shadow: 0 6px 20px rgba(232,25,44,0.22);
+          text-decoration: none;
+        }
+        .scp-pkg-order-btn:hover {
+          background: var(--brand-red-dark, #c01020);
+          transform: translateY(-1px);
+          box-shadow: 0 10px 24px rgba(232,25,44,0.3);
           color: white;
         }
 
-        .hero-desc {
-          font-size: clamp(1rem, 2.5vw, 1.2rem);
-          color: #888;
-          line-height: 1.6;
+        /* Modal responsive */
+        @media (max-width: 768px) {
+          .scp-modal-grid { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.25rem; }
+          .scp-modal-header { padding: 1.5rem 1.5rem 1rem; }
         }
 
-        .hero-actions {
-          display: flex;
-          gap: 1rem;
-          margin-top: 1rem;
-        }
-
-        .category-gigs-section {
-          padding: 6rem 2rem;
-          background: var(--surface-soft);
-        }
-
-        .gigs-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 2.5rem;
-          max-width: 1200px;
-          margin: 4rem auto 0;
-        }
-
-        .category-benefits-section {
-          padding: 6rem 2rem;
-          background: #060608;
+        /* ── Benefits Section ─────────────────────────────────── */
+        .scp-benefits-section {
+          padding: 5rem 2rem;
+          background: #ffffff;
           position: relative;
           overflow: hidden;
         }
-        .category-benefits-section::before {
+        .scp-benefits-section::before {
           content: '';
           position: absolute;
-          width: 700px; height: 600px;
+          width: 600px; height: 500px;
           border-radius: 50%;
           top: -150px; right: -100px;
-          background: radial-gradient(circle, rgba(232,25,44,0.14) 0%, transparent 65%);
+          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 65%);
           pointer-events: none;
-          z-index: 0;
         }
-        .category-benefits-section > div { position: relative; z-index: 1; }
-
-        .benefits-grid {
+        .scp-benefits-grid {
           display: grid;
           grid-template-columns: 1.2fr 0.8fr;
           gap: 4rem;
           max-width: 1200px;
           margin: 0 auto;
           align-items: center;
+          position: relative;
         }
-
-        .benefits-text h2 {
-          font-size: 2.2rem;
-          margin-bottom: 1rem;
+        .scp-benefits-text h2 {
+          color: var(--ink, #0f0f12);
         }
-
-        .benefits-intro {
-          color: #888;
+        .scp-benefits-intro {
+          color: var(--muted, #666);
           margin-bottom: 2rem;
-          font-size: 1.05rem;
-          line-height: 1.5;
+          font-size: 1rem;
+          line-height: 1.65;
         }
-
-        .benefits-list {
+        .scp-benefits-list {
           list-style: none;
+          padding: 0;
+          margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1.2rem;
         }
-
-        .benefits-list li {
+        .scp-benefits-list li {
           display: flex;
           align-items: flex-start;
-          gap: 1rem;
+          gap: 0.75rem;
         }
-
-        .benefits-list li strong {
-          color: white;
-          font-size: 1.1rem;
+        .scp-benefits-list li strong {
+          color: var(--ink, #0f0f12);
+          font-size: 0.95rem;
           display: block;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.15rem;
         }
-
-        .benefits-list li p {
-          color: #888;
-          font-size: 0.9rem;
-          line-height: 1.4;
+        .scp-benefits-list li p {
+          color: var(--muted, #666);
+          font-size: 0.85rem;
+          line-height: 1.5;
+          margin: 0;
         }
-
-        .check-icon {
-          color: var(--red);
+        .scp-check-icon {
+          color: var(--brand-red);
           flex-shrink: 0;
-          margin-top: 0.15rem;
+          margin-top: 0.1rem;
         }
 
-        .mock-dash-box {
-          background: #0c0c10;
-          border: 1px solid rgba(232, 25, 44, 0.18);
-          padding: 2rem;
+        /* Advantage card */
+        .scp-advantage-card {
+          background: #f7f8fa;
+          border: 1px solid rgba(0,0,0,0.07);
           border-radius: 16px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 40px rgba(232,25,44,0.06);
+          padding: 1.75rem;
+          box-shadow: 0 6px 24px rgba(0,0,0,0.05);
           position: relative;
           overflow: hidden;
         }
-        .mock-dash-box::before {
+        .scp-advantage-card::before {
           content: '';
           position: absolute;
-          width: 200px; height: 200px;
+          width: 180px; height: 180px;
           border-radius: 50%;
           top: -60px; right: -30px;
-          background: radial-gradient(circle, rgba(232,25,44,0.15) 0%, transparent 65%);
+          background: radial-gradient(circle, rgba(232,25,44,0.06) 0%, transparent 65%);
           pointer-events: none;
         }
-
-        .mock-dash-box .badge {
-          background: rgba(232, 25, 44, 0.15);
-          color: var(--red);
-          font-size: 0.7rem;
+        .scp-advantage-badge {
+          background: rgba(232,25,44,0.1);
+          color: var(--brand-red);
+          font-size: 0.65rem;
           font-weight: 700;
           padding: 0.25rem 0.6rem;
           border-radius: 4px;
           display: inline-block;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
+          letter-spacing: 0.05em;
         }
-
-        .mock-dash-box h4 {
-          font-size: 1.25rem;
-          margin-bottom: 0.5rem;
-          color: white;
+        .scp-advantage-card h4 {
+          font-size: 1.1rem;
+          font-weight: 800;
+          color: var(--ink, #0f0f12);
+          margin: 0 0 0.4rem;
         }
-
-        .mock-dash-box p {
-          font-size: 0.85rem;
-          color: #888;
-          line-height: 1.5;
+        .scp-advantage-card > p {
+          font-size: 0.83rem;
+          color: var(--muted, #666);
+          line-height: 1.55;
+          margin: 0 0 1.25rem;
         }
-
-        .advantage-bar {
+        .scp-advantage-bars {
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+        .scp-bar {
           display: flex;
           justify-content: space-between;
-          padding: 0.75rem;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.05);
+          padding: 0.65rem 0.85rem;
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
           border-radius: 8px;
-          font-size: 0.85rem;
-          font-weight: 600;
+          font-size: 0.8rem;
         }
+        .scp-bar span { color: var(--muted, #666); }
+        .scp-bar strong { color: var(--brand-red); font-weight: 800; }
 
-        .advantage-bar .label { color: #aaa; }
-        .advantage-bar .percent { color: white; }
-
-        .category-process-section {
-          padding: 6rem 2rem;
-          background: var(--surface-soft);
+        /* ── Process Section ──────────────────────────────────── */
+        .scp-process-section {
+          padding: 5rem 2rem;
+          background: #f7f8fa;
         }
-
-        .process-stepper-grid {
+        .scp-process-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 2.5rem;
+          gap: 1.5rem;
           max-width: 1200px;
-          margin: 4rem auto 0;
+          margin: 3rem auto 0;
         }
-
-        .process-step-card {
-          background: #060608;
-          border: 1px solid rgba(232, 25, 44, 0.12);
-          border-radius: 12px;
-          padding: 2.5rem 2rem;
+        .scp-step-card {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 14px;
+          padding: 2rem 1.75rem;
           position: relative;
-          transition: border-color 0.25s, box-shadow 0.25s;
           overflow: hidden;
+          transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
         }
-        .process-step-card::before {
+        .scp-step-card::before {
           content: '';
           position: absolute;
-          width: 200px; height: 200px;
+          width: 180px; height: 180px;
           border-radius: 50%;
           top: -70px; right: -30px;
-          background: radial-gradient(circle, rgba(232,25,44,0.12) 0%, transparent 65%);
+          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 65%);
           pointer-events: none;
         }
-
-        .process-step-card:hover {
-          border-color: rgba(232, 25, 44, 0.2);
+        .scp-step-card:hover {
+          border-color: rgba(232,25,44,0.18);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+          transform: translateY(-3px);
         }
-
-        .step-number {
+        .scp-step-num {
           font-size: 2.5rem;
           font-weight: 900;
-          color: rgba(255,255,255,0.05);
+          color: rgba(0,0,0,0.04);
           position: absolute;
           top: 1rem;
-          right: 1.5rem;
+          right: 1.25rem;
+          letter-spacing: -0.04em;
+          line-height: 1;
+        }
+        .scp-step-card h4 {
+          font-size: 1.05rem;
+          color: var(--ink, #0f0f12);
+          font-weight: 800;
+          margin: 0 0 0.6rem;
+        }
+        .scp-step-card p {
+          font-size: 0.85rem;
+          color: var(--muted, #666);
+          line-height: 1.6;
+          margin: 0;
         }
 
-        .process-step-card h4 {
-          font-size: 1.15rem;
-          color: white;
-          margin-bottom: 0.75rem;
-        }
-
-        .process-step-card p {
-          font-size: 0.875rem;
-          color: #888;
-          line-height: 1.5;
-        }
-
+        /* ── Responsive ───────────────────────────────────────── */
         @media (max-width: 968px) {
-          .benefits-grid { grid-template-columns: 1fr; gap: 3rem; }
-          .process-stepper-grid { grid-template-columns: 1fr; }
+          .scp-benefits-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+          .scp-process-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+          .scp-hero { padding: 6.5rem 1.25rem 4rem; }
+          .scp-gigs-grid { grid-template-columns: 1fr; }
+          .scp-hero-actions { flex-direction: column; align-items: center; }
+          .scp-process-grid { grid-template-columns: 1fr; }
+          .scp-benefits-grid { gap: 2rem; }
         }
       `}</style>
     </div>

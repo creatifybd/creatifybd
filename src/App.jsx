@@ -8,7 +8,6 @@ import { AuthProvider } from './context/AuthContext';
 import { ConfirmProvider } from './context/ConfirmContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
-import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -32,9 +31,6 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Marketplace pages
 const ServiceCategoryPage = lazy(() => import('./pages/public/ServiceCategoryPage'));
-const GigsCatalogPage = lazy(() => import('./pages/public/GigsCatalogPage'));
-const GigDetailPage = lazy(() => import('./pages/public/GigDetailPage'));
-const OrderStartPage = lazy(() => import('./pages/public/OrderStartPage'));
 const OrderSuccessPage = lazy(() => import('./pages/public/OrderSuccessPage'));
 
 // Client portal pages
@@ -78,10 +74,7 @@ const PageWrapper = ({ children }) => (
 
 function AppContent() {
   const location = useLocation();
-  const [loading, setLoading] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return sessionStorage.getItem('creatify-preloaded') !== 'true';
-  });
+  const [loading, setLoading] = useState(false);
 
   // Global magnetic effect for .btn-red and .btn-huge-red buttons
   useEffect(() => {
@@ -171,14 +164,6 @@ function AppContent() {
 
   return (
     <>
-      <AnimatePresence>
-        {loading && (
-          <Preloader onComplete={() => {
-            sessionStorage.setItem('creatify-preloaded', 'true');
-            setLoading(false);
-          }} />
-        )}
-      </AnimatePresence>
       <ScrollProgress />
       <ScrollToTop />
       <WhatsAppButton />
@@ -187,9 +172,9 @@ function AppContent() {
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
           <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
           <Route path="/services/:categorySlug" element={<PageWrapper><ServiceCategoryPage /></PageWrapper>} />
-          <Route path="/gigs" element={<PageWrapper><GigsCatalogPage /></PageWrapper>} />
-          <Route path="/gigs/:slug" element={<PageWrapper><GigDetailPage /></PageWrapper>} />
-          <Route path="/order/start/:gigSlug" element={<PageWrapper><OrderStartPage /></PageWrapper>} />
+          <Route path="/gigs" element={<Navigate to="/services" replace />} />
+          <Route path="/gigs/:slug" element={<Navigate to="/services" replace />} />
+          <Route path="/order/start/:gigSlug" element={<Navigate to="/contact" replace />} />
           <Route path="/order/success" element={<PageWrapper><OrderSuccessPage /></PageWrapper>} />
           <Route path="/client/orders" element={<PageWrapper><ClientOrdersPortal /></PageWrapper>} />
           <Route path="/client/orders/:orderId" element={<PageWrapper><ClientOrderDetail /></PageWrapper>} />

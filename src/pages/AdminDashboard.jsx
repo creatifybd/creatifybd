@@ -48,7 +48,6 @@ import SettingsManager from './admin/Settings';
 import ContentManager from './admin/ContentManager';
 import PricingManager from './admin/PricingManager';
 import PaymentVerification from './admin/PaymentVerification';
-import AdminGigs from './admin/AdminGigs';
 import AdminOrders from './admin/AdminOrders';
 import AdminReviews from './admin/AdminReviews';
 import MediaLibrary from './admin/MediaLibrary';
@@ -154,9 +153,8 @@ const AdminDashboard = () => {
   const navItems = [
     { path: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} />, group: 'main' },
     { path: '/admin/bot', label: 'Marketing Bot', icon: <Bot size={18} />, group: 'main' },
-    { path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true, group: 'sales' },
-    { path: '/admin/gigs', label: 'Gigs Manager', icon: <ShoppingBag size={18} />, group: 'sales' },
-    { path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} />, group: 'sales' },
+    {path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true, group: 'sales'},
+    {path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} />, group: 'sales'},
     { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} />, group: 'sales' },
     { path: '/admin/content', label: 'Page Content', icon: <Activity size={18} />, group: 'content' },
     { path: '/admin/case-studies', label: 'Case Studies', icon: <BookOpen size={18} />, group: 'content' },
@@ -570,7 +568,7 @@ const AdminDashboard = () => {
               <Routes location={location} key={location.pathname}>
                 <Route index element={<Overview />} />
                 <Route path="orders" element={<AdminOrders />} />
-                <Route path="gigs" element={<AdminGigs />} />
+                <Route path="gigs" element={<Navigate to="/admin" replace />} />
                 <Route path="reviews" element={<AdminReviews />} />
                 <Route path="content" element={<ContentManager />} />
                 <Route path="case-studies" element={<CaseStudiesManager />} />

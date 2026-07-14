@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/config';
-import { collection, deleteDoc, doc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore';
 import { Plus, Trash2, X, Loader2, BookOpen, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
@@ -48,6 +48,8 @@ const CaseStudiesManager = () => {
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState(emptyForm);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkWorking, setBulkWorking] = useState(false);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -169,6 +171,63 @@ const CaseStudiesManager = () => {
     }
   };
 
+  // ── Bulk select helpers ──────────────────────────────────────────
+  const toggleSelect = (id) =>
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+
+  const toggleSelectAll = () => {
+    const allIds = items.map(i => i.id);
+    setSelectedIds(prev => prev.length === allIds.length ? [] : allIds);
+  };
+
+  const bulkHideShow = async (hidden) => {
+    if (!selectedIds.length) return;
+    setBulkWorking(true);
+    try {
+      const batch = writeBatch(db);
+      selectedIds.forEach(id => batch.set(doc(db, 'case_studies', id), { hidden, updatedAt: serverTimestamp() }, { merge: true }));
+      await batch.commit();
+      toast.success(`${selectedIds.length} items ${hidden ? 'hidden' : 'shown'}`);
+      setSelectedIds([]);
+      fetchItems();
+    } catch (err) {
+      toast.error('Bulk update failed');
+    } finally {
+      setBulkWorking(false);
+    }
+  };
+
+  const bulkDelete = async () => {
+    if (!selectedIds.length) return;
+    const ok = await confirm({
+      title: `Remove ${selectedIds.length} case studies?`,
+      description: 'Built-in items will be hidden; custom items will be deleted permanently.',
+      confirmLabel: 'Remove All',
+      tone: 'danger'
+    });
+    if (!ok) return;
+    setBulkWorking(true);
+    try {
+      const batch = writeBatch(db);
+      selectedIds.forEach(id => {
+        const item = items.find(i => i.id === id);
+        if (item?.isCurated) {
+          batch.set(doc(db, 'case_studies', id), { hidden: true, updatedAt: serverTimestamp() }, { merge: true });
+        } else {
+          batch.delete(doc(db, 'case_studies', id));
+        }
+      });
+      await batch.commit();
+      toast.success(`${selectedIds.length} items removed`);
+      setSelectedIds([]);
+      fetchItems();
+    } catch (err) {
+      toast.error('Bulk remove failed');
+    } finally {
+      setBulkWorking(false);
+    }
+  };
+
   return (
     <div className="admin-section-page">
       <div className="adm-page-header">
@@ -182,24 +241,66 @@ const CaseStudiesManager = () => {
       {loading ? (
         <div className="admin-loading"><Loader2 className="animate-spin" size={28} /></div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-          {items.map(item => (
-            <div key={item.id} className="admin-card" style={{ padding: '1.5rem', opacity: item.hidden ? 0.55 : 1 }}>
-              <div style={{ fontSize: '0.68rem', color: 'var(--adm-red)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.4rem' }}>{item.category || 'Case Study'}</div>
-              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{item.title}</h4>
-              <p style={{ fontSize: '0.82rem', color: 'var(--adm-dim)', marginBottom: '1.25rem', lineHeight: 1.5 }}>{item.client} &middot; {item.industry}</p>
-              <div style={{ display: 'flex', gap: '0.6rem' }}>
-                <button className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => openEdit(item)}>Edit</button>
-                <button className="admin-icon-btn" onClick={() => toggleHidden(item)} title={item.hidden ? 'Show' : 'Hide'}>
-                  {item.hidden ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
-                <button className="admin-icon-btn" onClick={() => handleDelete(item)} title="Remove">
-                  <Trash2 size={15} color="var(--adm-danger)" />
-                </button>
+        <>
+          {/* Bulk action bar */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--adm-dim)' }}>
+              <input
+                type="checkbox"
+                checked={items.length > 0 && items.every(i => selectedIds.includes(i.id))}
+                onChange={toggleSelectAll}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--adm-red)' }}
+              />
+              Select All
+            </label>
+            {selectedIds.length > 0 && (
+              <div className="bulk-action-bar" style={{ marginBottom: 0 }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--adm-dim)' }}>{selectedIds.length} selected</span>
+                <button onClick={() => bulkHideShow(false)} disabled={bulkWorking}><span>Show</span></button>
+                <button onClick={() => bulkHideShow(true)} disabled={bulkWorking}><span>Hide</span></button>
+                <button className="danger" onClick={bulkDelete} disabled={bulkWorking}><Trash2 size={14} /> Remove</button>
+                <button onClick={() => setSelectedIds([])} style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.2)' }} disabled={bulkWorking}>Clear</button>
               </div>
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            {items.map(item => {
+              const isSelected = selectedIds.includes(item.id);
+              return (
+                <div key={item.id} className="admin-card" style={{
+                  padding: '1.5rem',
+                  opacity: item.hidden ? 0.55 : 1,
+                  position: 'relative',
+                  border: isSelected ? '2px solid var(--adm-red)' : '1px solid var(--adm-border)',
+                  outline: isSelected ? '2px solid rgba(232,25,44,0.15)' : 'none',
+                  transition: 'border-color 0.2s, outline 0.2s'
+                }}>
+                  <label style={{ position: 'absolute', top: '1rem', right: '1rem', cursor: 'pointer', zIndex: 2 }}>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleSelect(item.id)}
+                      style={{ width: '16px', height: '16px', accentColor: 'var(--adm-red)' }}
+                    />
+                  </label>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--adm-red)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.4rem' }}>{item.category || 'Case Study'}</div>
+                  <h4 style={{ fontWeight: 700, marginBottom: '0.5rem', paddingRight: '2rem' }}>{item.title}</h4>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--adm-dim)', marginBottom: '1.25rem', lineHeight: 1.5 }}>{item.client} &middot; {item.industry}</p>
+                  <div style={{ display: 'flex', gap: '0.6rem' }}>
+                    <button className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => openEdit(item)}>Edit</button>
+                    <button className="admin-icon-btn" onClick={() => toggleHidden(item)} title={item.hidden ? 'Show' : 'Hide'}>
+                      {item.hidden ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                    <button className="admin-icon-btn" onClick={() => handleDelete(item)} title="Remove">
+                      <Trash2 size={15} color="var(--adm-danger)" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {isModalOpen && (

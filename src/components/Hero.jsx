@@ -1,369 +1,259 @@
-import React, { useMemo, useEffect, useRef, useState } from 'react';
-import DOMPurify from 'dompurify';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Clock, RefreshCw, Shield, Star, Play } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useSettings } from '../context/SettingsContext';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
-const TRUST_PILLS = [
-  { icon: <Clock size={13} />,     label: '24h Response' },
-  { icon: <Shield size={13} />,    label: 'Fixed Pricing' },
+const PREVIEW_IMAGES = [
+  '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg',
+  '/assets/portfolio/logo-design-branding/logo-design-branding-02.jpg',
+  '/assets/portfolio/product-packaging-design/product-packaging-design-01.jpg',
+  '/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg',
+  '/assets/portfolio/product-packaging-design/product-packaging-design-02.jpg',
+  '/assets/portfolio/logo-design-branding/logo-design-branding-04.jpg',
 ];
 
 const STATS = [
-  { value: '40%', label: 'Cost Savings' },
-  { value: '5+', label: 'Years Experience' },
+  { value: '200+', label: 'Clients Served' },
+  { value: '7+',   label: 'Years Experience' },
+  { value: '98%',  label: 'Satisfaction Rate' },
 ];
-
-/* Portfolio preview images for the visual grid */
-const PREVIEW_IMAGES = [
-  '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg',
-  '/assets/portfolio/social-media-management/social-media-management-01.jpg',
-  '/assets/portfolio/video-editing/video-editing-01.jpg',
-  '/assets/portfolio/website-design/website-design-01.jpg',
-];
-
-const NoiseCanvas = () => {
-  const canvasRef = useRef(null);
-  
-  const noiseData = useMemo(() => {
-    const W = 100;
-    const H = 100;
-    const img = new Uint8ClampedArray(W * H * 4);
-    for (let i = 0; i < img.length; i += 4) {
-      const v = Math.random() * 255;
-      img[i] = img[i+1] = img[i+2] = v;
-      img[i+3] = 14;
-    }
-    return { W, H, img };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    const imageData = ctx.createImageData(noiseData.W, noiseData.H);
-    for (let i = 0; i < noiseData.img.length; i++) {
-      imageData.data[i] = noiseData.img[i];
-    }
-    
-    // Scale up the noise pattern
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = noiseData.W;
-    tempCanvas.height = noiseData.H;
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.putImageData(imageData, 0, 0);
-    
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
-  }, [noiseData]);
-  
-  return <canvas ref={canvasRef} className="hero-noise" aria-hidden="true" />;
-};
 
 const Hero = () => {
   const { content } = useSettings();
   const heroContent = content?.hero || {};
 
-  const heroTitle = heroContent.title ||
-    'Creative services that drive <span class="hero-hl">business growth</span> for small businesses worldwide';
-
-  const _rawEyebrow = heroContent.eyebrow || '';
-  const heroEyebrow = _rawEyebrow && !/(dhaka|bangladesh|\bbd\b)/i.test(_rawEyebrow)
-    ? _rawEyebrow
-    : 'Strategic Creative Partner';
-
-  const heroDesc = heroContent.desc ||
-    'Professional creative services designed to help small businesses compete with larger brands. Strategic design, social media management, and digital marketing with transparent pricing and dedicated support.';
-
-  const heroPrimaryCta  = heroContent.cta1 || 'View Our Work';
-  const heroSecondaryCta = heroContent.cta2 || 'Get a Free Strategy Consultation';
-
-  const sanitizedTitle = useMemo(() => DOMPurify.sanitize(heroTitle, {
-    ALLOWED_TAGS: ['span', 'br', 'strong', 'em'],
-    ALLOWED_ATTR: ['class'],
-  }), [heroTitle]);
-
-  // Split title into words for stagger animation
-  const titleWords = useMemo(() => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = sanitizedTitle;
-    const text = tempDiv.textContent || tempDiv.innerText || '';
-    return text.split(' ').map((word, i) => (
-      <span key={i} className="hero-word">{word}</span>
-    ));
-  }, [sanitizedTitle]);
-
+  const headline     = heroContent.title    || 'Elite Creative Operations For Global Brands';
+  const eyebrow      = heroContent.eyebrow  || 'Trusted Global Creative Partner';
+  const description  = heroContent.desc     ||
+    'Get dedicated senior-level social media management, brand design, video editing, and website creation. Premium agency-grade execution delivered at up to 50% lower cost than traditional market markup.';
+  const cta1Label    = heroContent.cta1     || 'View Our Work';
+  const cta2Label    = heroContent.cta2     || 'Get a Free Proposal';
   const previewImages = heroContent.preview_images || PREVIEW_IMAGES;
 
-  // Parallax effect for visual grid
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, -50]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
+  const y1 = useTransform(scrollY, [0, 600], [0, -60]);
+  const y2 = useTransform(scrollY, [0, 600], [0, -100]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  // Word-by-word stagger for headline
+  const words = useMemo(() => headline.split(' '), [headline]);
 
   return (
-    <section className="hero-split">
-      {/* Background */}
-      <div className="hero-split-bg" aria-hidden="true">
-        <div className="hero-split-glow-a" />
-        <div className="hero-split-glow-b" />
-        <div className="hero-split-grid" />
-        <NoiseCanvas />
+    <section className="hero-agency" id="hero">
+      {/* Ambient background */}
+      <div className="hero-agency-bg" aria-hidden="true">
+        <div className="hero-agency-glow-a" />
+        <div className="hero-agency-glow-b" />
+        <div className="hero-agency-grid" />
       </div>
 
-      <div className="hero-split-inner">
-        {/* ── LEFT COLUMN ── */}
-        <div className="hero-split-copy">
+      <div className="hero-agency-inner">
+        {/* ── LEFT COPY ── */}
+        <div className="hero-agency-copy">
+          {/* Eyebrow */}
           <motion.div
-            className="hero-split-eyebrow-wrap"
-            initial={{ opacity: 0, y: 16 }}
+            className="hero-agency-eyebrow"
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO }}
+            transition={{ duration: 0.55, ease: EASE_EXPO }}
           >
-            <div className="hero-split-eyebrow">
-              <span className="hero-split-pulse" />
-              {heroEyebrow}
-            </div>
+            <span className="hero-agency-pulse" />
+            {eyebrow}
           </motion.div>
 
+          {/* Headline */}
           <motion.h1
-            className="hero-split-title"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE_EXPO, delay: 0.08 }}
+            className="hero-agency-h1"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.055, delayChildren: 0.05 } },
+            }}
           >
-            {titleWords.map((word, i) => (
+            {words.map((word, i) => (
               <motion.span
                 key={i}
-                className="hero-word-wrapper"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.1 + i * 0.05 }}
+                className="hero-word"
+                variants={{
+                  hidden:  { opacity: 0, y: 40, skewY: 4 },
+                  visible: { opacity: 1, y: 0,  skewY: 0, transition: { duration: 0.65, ease: EASE_EXPO } },
+                }}
               >
                 {word}
+                {i < words.length - 1 ? '\u00a0' : ''}
               </motion.span>
             ))}
           </motion.h1>
 
+          {/* Description */}
           <motion.p
-            className="hero-split-desc"
+            className="hero-agency-desc"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, ease: EASE_EXPO, delay: 0.2 }}
+            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.32 }}
           >
-            {heroDesc}
+            {description}
           </motion.p>
 
           {/* CTAs */}
           <motion.div
-            className="hero-split-actions"
+            className="hero-agency-ctas"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.3 }}
+            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.44 }}
           >
-            <Link to="/portfolio" className="hero-split-btn-primary">
-              {heroPrimaryCta}
-              <ArrowRight size={18} />
+            <Link to="/portfolio" className="hero-cta-primary">
+              {cta1Label}
+              <ArrowRight size={17} />
             </Link>
-            <Link to="/contact" className="hero-split-btn-outline">
-              {heroSecondaryCta}
+            <Link to="/contact" className="hero-cta-ghost">
+              {cta2Label}
             </Link>
-            {heroContent.reel_url && (
-              <a
-                href={heroContent.reel_url}
-                target="_blank"
-                rel="noreferrer"
-                className="hero-split-btn-reel"
-                aria-label="Watch our reel"
-              >
-                <span className="hero-reel-icon"><Play size={14} fill="currentColor" /></span>
-                Watch Reel
-              </a>
-            )}
           </motion.div>
 
-          {/* Trust pills */}
+          {/* Stats row */}
           <motion.div
-            className="hero-split-trust"
+            className="hero-agency-stats"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.44 }}
-          >
-            {TRUST_PILLS.map((pill, i) => (
-              <div className="hero-split-pill" key={i}>
-                {pill.icon}
-                <span>{pill.label}</span>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Inline stats */}
-          <motion.div
-            className="hero-split-stats"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: EASE_EXPO, delay: 0.55 }}
+            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.6 }}
           >
             {STATS.map((s, i) => (
               <React.Fragment key={s.label}>
-                <div className="hero-split-stat">
+                <div className="hero-stat-item">
                   <strong>{s.value}</strong>
                   <span>{s.label}</span>
                 </div>
-                {i < STATS.length - 1 && <div className="hero-split-stat-div" aria-hidden="true" />}
+                {i < STATS.length - 1 && (
+                  <div className="hero-stat-divider" aria-hidden="true" />
+                )}
               </React.Fragment>
             ))}
           </motion.div>
         </div>
 
-        {/* ── RIGHT COLUMN — Visual Grid ── */}
+        {/* ── RIGHT VISUAL GRID ── */}
         <motion.div
-          className="hero-split-visual"
-          initial={{ opacity: 0, x: 48, scale: 0.96 }}
+          className="hero-agency-visual"
+          initial={{ opacity: 0, x: 40, scale: 0.96 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
-          transition={{ duration: 1.2, ease: EASE_EXPO, delay: 0.18 }}
+          transition={{ duration: 1.1, ease: EASE_EXPO, delay: 0.15 }}
           style={{ y: y1 }}
         >
-          {heroContent.mockup_primary ? (
-            <img
-              src={heroContent.mockup_primary}
-              alt="CreatifyBD creative services"
-              className="hero-split-mockup-img"
-              loading="eager"
-              fetchPriority="high"
-              width="640"
-              height="560"
-            />
-          ) : (
-            <div className="hero-split-grid-wrap">
-              {/* Large featured image */}
-              <motion.div className="hero-grid-main" style={{ y: y2 }}>
-                <img
-                  src={previewImages[0]}
-                  alt="Graphic design work"
-                  loading="eager"
-                  fetchPriority="high"
-                />
-                <div className="hero-grid-overlay">
-                  <span>Graphic Design</span>
-                </div>
+          <div className="hero-img-grid">
+            {/* Main large image */}
+            <motion.div className="hero-img-main" style={{ y: y2 }}>
+              <img
+                src={previewImages[0]}
+                alt="Brand identity design"
+                loading="eager"
+                fetchPriority="high"
+              />
+            </motion.div>
+
+            {/* Tall side stack */}
+            <div className="hero-img-col">
+              <motion.div className="hero-img-sm" style={{ y: y1 }}>
+                <img src={previewImages[1]} alt="Logo design" loading="eager" />
               </motion.div>
-
-              {/* Right column — 2 stacked */}
-              <div className="hero-grid-col">
-                <motion.div className="hero-grid-item" style={{ y: y1 }}>
-                  <img src={previewImages[1]} alt="Social media content" loading="eager" />
-                  <div className="hero-grid-overlay"><span>Social Media</span></div>
-                </motion.div>
-                <motion.div className="hero-grid-item" style={{ y: y2 }}>
-                  <img src={previewImages[2]} alt="Video editing" loading="lazy" />
-                  <div className="hero-grid-overlay"><span>Video Editing</span></div>
-                </motion.div>
-              </div>
-
-              {/* Bottom strip */}
-              <motion.div className="hero-grid-bottom" style={{ y: y1 }}>
-                <img src={previewImages[3]} alt="Digital marketing" loading="lazy" />
-                <div className="hero-grid-overlay"><span>Digital Marketing</span></div>
+              <motion.div className="hero-img-sm" style={{ y: y2 }}>
+                <img src={previewImages[2]} alt="Packaging design" loading="lazy" />
               </motion.div>
-
-              {/* Floating badges */}
-              <motion.div
-                className="hero-float-badge hero-float-badge--tr"
-                initial={{ opacity: 0, scale: 0.7, y: -12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.1 }}
-              >
-                <Star size={14} className="badge-star" />
-                <span>Premium Quality</span>
-              </motion.div>
-
-              <motion.div
-                className="hero-float-badge hero-float-badge--bl"
-                initial={{ opacity: 0, scale: 0.7, y: 12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.3 }}
-              >
-                <CheckCircle2 size={15} />
-                <span>Results-Driven</span>
+              <motion.div className="hero-img-sm" style={{ y: y1 }}>
+                <img src={previewImages[3]} alt="Brand mark" loading="lazy" />
               </motion.div>
             </div>
-          )}
+
+            {/* Bottom strip */}
+            <motion.div className="hero-img-wide" style={{ y: y1 }}>
+              <img src={previewImages[4]} alt="Creative design" loading="lazy" />
+            </motion.div>
+
+            {/* Floating badge top */}
+            <motion.div
+              className="hero-badge hero-badge--tr"
+              initial={{ opacity: 0, scale: 0.7, y: -12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.1 }}
+            >
+              <span className="hero-badge-star">★</span>
+              5.0 Rated Designer
+            </motion.div>
+
+            {/* Floating badge bottom */}
+            <motion.div
+              className="hero-badge hero-badge--bl"
+              initial={{ opacity: 0, scale: 0.7, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.25 }}
+            >
+              <span className="hero-badge-dot" />
+              Available for new projects
+            </motion.div>
+          </div>
         </motion.div>
       </div>
 
       <style>{`
-        /* ══════════════════ HERO SPLIT ══════════════════ */
-        .hero-split {
+        /* ══ HERO AGENCY ══════════════════════════════════════════ */
+        .hero-agency {
           position: relative;
-          background: var(--surface, #FFFBFB);
+          background: var(--surface);
           overflow: hidden;
           padding-top: var(--nav-height, 90px);
         }
 
-        /* Background layers */
-        .hero-split-bg {
+        /* Background */
+        .hero-agency-bg {
           position: absolute;
           inset: 0;
           pointer-events: none;
           z-index: 0;
         }
-        .hero-split-glow-a {
+        .hero-agency-glow-a {
           position: absolute;
-          width: 800px; height: 800px;
+          width: 900px; height: 900px;
+          top: -300px; right: -200px;
+          background: radial-gradient(circle, rgba(232,25,44,0.07) 0%, transparent 60%);
           border-radius: 50%;
-          top: -250px; right: -150px;
-          background: radial-gradient(circle, rgba(232,25,44,0.10) 0%, transparent 60%);
         }
-        .hero-split-glow-b {
+        .hero-agency-glow-b {
           position: absolute;
-          width: 500px; height: 500px;
+          width: 400px; height: 400px;
+          bottom: -100px; left: -80px;
+          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 60%);
           border-radius: 50%;
-          bottom: -100px; left: -100px;
-          background: radial-gradient(circle, rgba(232,25,44,0.06) 0%, transparent 60%);
         }
-        .hero-split-grid {
+        .hero-agency-grid {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-          background-size: 52px 52px;
-          mask-image: radial-gradient(ellipse 90% 80% at 60% 0%, black 20%, transparent 100%);
-        }
-        .hero-noise {
-          position: absolute;
-          inset: 0;
-          width: 100%; height: 100%;
-          mix-blend-mode: multiply;
-          opacity: 0.3;
+            linear-gradient(rgba(0,0,0,0.028) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.028) 1px, transparent 1px);
+          background-size: 56px 56px;
+          mask-image: radial-gradient(ellipse 85% 70% at 65% 0%, black 15%, transparent 100%);
+          -webkit-mask-image: radial-gradient(ellipse 85% 70% at 65% 0%, black 15%, transparent 100%);
         }
 
-        /* Inner two-column layout */
-        .hero-split-inner {
+        /* Two-column inner */
+        .hero-agency-inner {
           position: relative;
           z-index: 1;
           display: grid;
           grid-template-columns: 1fr 1fr;
           align-items: center;
-          gap: clamp(3rem, 5vw, 6rem);
-          max-width: 1280px;
+          gap: clamp(3rem, 5vw, 7rem);
+          max-width: 1300px;
           margin: 0 auto;
-          padding: 6rem 1.5rem 5rem;
-        }
-        @media (max-width: 768px) {
-          .hero-split-inner {
-            padding: 4rem 1.5rem 3rem;
-          }
+          padding: clamp(4rem, 7vw, 7rem) 2rem clamp(4rem, 6vw, 6rem);
         }
 
-        /* ── Copy column ── */
-        .hero-split-copy {
+        /* ── Copy ── */
+        .hero-agency-copy {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -371,187 +261,127 @@ const Hero = () => {
         }
 
         /* Eyebrow */
-        .hero-split-eyebrow-wrap { margin-bottom: 1.75rem; }
-        .hero-split-eyebrow {
+        .hero-agency-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          font-size: 0.75rem;
+          font-family: var(--font-body);
+          font-size: 0.72rem;
           font-weight: 700;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: var(--brand-red, #e8192c);
+          color: var(--brand-red);
           background: rgba(232,25,44,0.06);
-          border: 1px solid rgba(232,25,44,0.18);
+          border: 1px solid rgba(232,25,44,0.16);
           border-radius: 100px;
-          padding: 0.42rem 1.1rem;
+          padding: 0.45rem 1.1rem;
+          margin-bottom: 2rem;
         }
-        .hero-split-pulse {
-          width: 7px; height: 7px;
+        .hero-agency-pulse {
+          width: 6px; height: 6px;
           border-radius: 50%;
-          background: var(--brand-red, #e8192c);
+          background: var(--brand-red);
           flex-shrink: 0;
-          animation: heroSplitPulse 2s ease-in-out infinite;
+          animation: heroPulse 2s ease-in-out infinite;
         }
-        @keyframes heroSplitPulse {
-          0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(232,25,44,0.4); }
-          50% { opacity: 0.6; transform: scale(1.3); box-shadow: 0 0 0 5px rgba(232,25,44,0); }
+        @keyframes heroPulse {
+          0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 0 0 rgba(232,25,44,0.4); }
+          50%      { opacity:0.6; transform:scale(1.3); box-shadow: 0 0 0 5px rgba(232,25,44,0); }
         }
 
         /* Headline */
-        .hero-split-title {
-          font-size: clamp(2.8rem, 5.5vw, 5rem);
-          font-weight: 900;
+        .hero-agency-h1 {
+          font-family: var(--font-display);
+          font-size: clamp(3rem, 6vw, 5.5rem);
+          font-weight: 800;
           line-height: 1.04;
-          letter-spacing: -0.035em;
-          color: var(--ink, #0a0a0f);
-          margin: 0 0 1.5rem;
+          letter-spacing: -0.04em;
+          color: var(--ink);
+          margin: 0 0 1.75rem;
           display: flex;
           flex-wrap: wrap;
-          gap: 0.3em;
         }
-        .hero-word-wrapper {
+        .hero-word {
           display: inline-block;
-          white-space: nowrap;
-        }
-        .hero-word-wrapper .hero-hl {
-          position: relative;
-          color: var(--brand-red, #e8192c);
-          display: inline-block;
-        }
-        .hero-word-wrapper .hero-hl::after {
-          content: '';
-          position: absolute;
-          bottom: 2px; left: 0; right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--brand-red, #e8192c), rgba(232,25,44,0.25));
-          border-radius: 4px;
-          opacity: 0.35;
+          overflow: hidden;
         }
 
         /* Description */
-        .hero-split-desc {
-          font-size: clamp(0.98rem, 1.6vw, 1.12rem);
-          color: var(--ink-soft, #1f2937);
+        .hero-agency-desc {
+          font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+          color: var(--muted);
           max-width: 520px;
-          line-height: 1.8;
-          margin: 0 0 2.25rem;
+          line-height: 1.82;
+          margin: 0 0 2.5rem;
           font-weight: 400;
         }
 
         /* CTAs */
-        .hero-split-actions {
+        .hero-agency-ctas {
           display: flex;
           align-items: center;
           gap: 0.85rem;
           flex-wrap: wrap;
-          margin-bottom: 1.75rem;
+          margin-bottom: 2.75rem;
         }
-        .hero-split-btn-primary {
+        .hero-cta-primary {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
           padding: 0.9rem 2rem;
-          background: var(--brand-red, #e8192c);
-          color: var(--white, #fff);
+          background: var(--brand-red);
+          color: #fff;
+          font-family: var(--font-body);
           font-weight: 700;
-          font-size: 0.92rem;
+          font-size: 0.9rem;
           border-radius: 100px;
           text-decoration: none;
-          transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
-          box-shadow: 0 8px 28px rgba(232,25,44,0.28), 0 2px 6px rgba(232,25,44,0.18);
           letter-spacing: -0.01em;
+          transition: background 0.22s, transform 0.22s, box-shadow 0.22s;
+          box-shadow: 0 8px 28px rgba(232,25,44,0.28), 0 2px 8px rgba(232,25,44,0.16);
         }
-        .hero-split-btn-primary:hover {
-          background: var(--brand-red-dark, #c41024);
+        .hero-cta-primary:hover {
+          background: var(--brand-red-dark);
           transform: translateY(-3px);
-          box-shadow: 0 16px 40px rgba(232,25,44,0.38);
-          color: var(--white, #fff);
+          box-shadow: 0 16px 44px rgba(232,25,44,0.36);
+          color: #fff;
         }
-        .hero-split-btn-outline {
+        .hero-cta-ghost {
           display: inline-flex;
           align-items: center;
+          gap: 0.4rem;
           padding: 0.9rem 2rem;
-          background: rgba(255,255,255,0.85);
-          color: var(--ink, #0a0a0f);
-          font-weight: 700;
-          font-size: 0.92rem;
-          border-radius: 100px;
-          border: 1.5px solid #e0e0e6;
-          text-decoration: none;
-          transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-          backdrop-filter: blur(4px);
-          letter-spacing: -0.01em;
-        }
-        .hero-split-btn-outline:hover {
-          border-color: var(--ink, #0a0a0f);
-          background: rgba(10,10,15,0.05);
-          transform: translateY(-3px);
-          color: var(--ink, #0a0a0f);
-        }
-        .hero-split-btn-reel {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.9rem 1.5rem;
           background: transparent;
-          color: var(--brand-red, #e8192c);
-          font-weight: 700;
-          font-size: 0.88rem;
-          border-radius: 100px;
-          text-decoration: none;
-          transition: background 0.2s ease;
-        }
-        .hero-split-btn-reel:hover { background: rgba(232,25,44,0.06); color: var(--brand-red, #e8192c); }
-        .hero-reel-icon {
-          width: 32px; height: 32px;
-          border-radius: 50%;
-          background: var(--brand-red, #e8192c);
-          color: var(--white, #fff);
-          display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(232,25,44,0.3);
-        }
-
-        /* Trust pills */
-        .hero-split-trust {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-          margin-bottom: 2rem;
-        }
-        .hero-split-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.38rem;
-          font-size: 0.73rem;
+          color: var(--ink);
+          font-family: var(--font-body);
           font-weight: 600;
-          color: var(--ink, #0a0a0f);
-          background: rgba(255,255,255,0.9);
-          border: 1px solid #e5e7eb;
+          font-size: 0.9rem;
           border-radius: 100px;
-          padding: 0.35rem 0.8rem;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-          transition: box-shadow 0.18s ease, transform 0.18s ease;
-          backdrop-filter: blur(4px);
+          border: 1.5px solid rgba(15,15,18,0.15);
+          text-decoration: none;
+          transition: border-color 0.2s, background 0.2s, transform 0.2s;
+          letter-spacing: -0.01em;
         }
-        .hero-split-pill:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .hero-split-pill svg { color: var(--brand-red, #e8192c); flex-shrink: 0; }
+        .hero-cta-ghost:hover {
+          border-color: var(--ink);
+          background: rgba(15,15,18,0.04);
+          transform: translateY(-3px);
+          color: var(--ink);
+        }
 
-        /* Stats row */
-        .hero-split-stats {
+        /* Stats */
+        .hero-agency-stats {
           display: flex;
           align-items: center;
           gap: 0;
           padding: 1.25rem 1.5rem;
           background: rgba(255,255,255,0.85);
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--border);
           border-radius: 16px;
-          backdrop-filter: blur(8px);
-          box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+          backdrop-filter: blur(12px);
+          box-shadow: 0 4px 24px rgba(0,0,0,0.05);
         }
-        .hero-split-stat {
+        .hero-stat-item {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -559,169 +389,145 @@ const Hero = () => {
           padding: 0 1.5rem;
           text-align: center;
         }
-        .hero-split-stat strong {
+        .hero-stat-item strong {
+          font-family: var(--font-display);
           font-size: 1.5rem;
-          font-weight: 900;
-          color: var(--brand-red, #e8192c);
+          font-weight: 800;
+          color: var(--brand-red);
           line-height: 1;
-          letter-spacing: -0.03em;
-          font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+          letter-spacing: -0.04em;
         }
-        .hero-split-stat span {
-          font-size: 0.68rem;
-          color: var(--text-dim, #9ca3af);
+        .hero-stat-item span {
+          font-size: 0.67rem;
           font-weight: 600;
+          color: var(--muted);
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.06em;
         }
-        .hero-split-stat-div {
+        .hero-stat-divider {
           width: 1px;
-          height: 32px;
-          background: var(--border, #e5e7eb);
+          height: 34px;
+          background: var(--border);
           flex-shrink: 0;
         }
 
         /* ── Visual column ── */
-        .hero-split-visual {
+        .hero-agency-visual {
           position: relative;
         }
-        .hero-split-mockup-img {
-          width: 100%;
-          border-radius: 20px;
-          display: block;
-          box-shadow: 0 32px 80px rgba(0,0,0,0.12);
-        }
-
-        /* Image grid */
-        .hero-split-grid-wrap {
+        .hero-img-grid {
           position: relative;
           display: grid;
           grid-template-columns: 1fr 1fr;
           grid-template-rows: auto auto;
-          gap: 0.75rem;
+          gap: 0.7rem;
         }
-        .hero-grid-main {
+
+        /* Images */
+        .hero-img-main {
           grid-column: 1;
           grid-row: 1;
-          position: relative;
-          border-radius: 16px;
+          border-radius: 18px;
           overflow: hidden;
           aspect-ratio: 4/3;
-          background: var(--surface-soft, #f4f4f2);
+          background: var(--surface-soft);
         }
-        .hero-grid-col {
+        .hero-img-col {
           grid-column: 2;
           grid-row: 1;
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.7rem;
         }
-        .hero-grid-item {
-          position: relative;
-          border-radius: 12px;
+        .hero-img-sm {
+          border-radius: 14px;
           overflow: hidden;
           flex: 1;
-          background: var(--surface-soft, #f4f4f2);
-          min-height: 120px;
+          background: var(--surface-soft);
+          min-height: 100px;
         }
-        .hero-grid-bottom {
+        .hero-img-wide {
           grid-column: 1 / -1;
           grid-row: 2;
-          position: relative;
-          border-radius: 12px;
+          border-radius: 14px;
           overflow: hidden;
           aspect-ratio: 16/5;
-          background: var(--surface-soft, #f4f4f2);
+          background: var(--surface-soft);
         }
-        .hero-grid-main img,
-        .hero-grid-item img,
-        .hero-grid-bottom img {
+        .hero-img-main img,
+        .hero-img-sm img,
+        .hero-img-wide img {
           width: 100%; height: 100%;
           object-fit: cover;
           display: block;
           transition: transform 0.55s cubic-bezier(0.25,0.8,0.25,1);
         }
-        .hero-grid-main:hover img,
-        .hero-grid-item:hover img,
-        .hero-grid-bottom:hover img { transform: scale(1.05); }
-        .hero-grid-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(180deg, transparent 40%, rgba(10,10,15,0.72) 100%);
-          display: flex;
-          align-items: flex-end;
-          padding: 0.75rem;
-          opacity: 0;
-          transition: opacity 0.28s ease;
-        }
-        .hero-grid-main:hover .hero-grid-overlay,
-        .hero-grid-item:hover .hero-grid-overlay,
-        .hero-grid-bottom:hover .hero-grid-overlay { opacity: 1; }
-        .hero-grid-overlay span {
-          font-size: 0.72rem;
-          font-weight: 700;
-          color: var(--white, #fff);
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-        }
+        .hero-img-main:hover img,
+        .hero-img-sm:hover img,
+        .hero-img-wide:hover img { transform: scale(1.05); }
 
         /* Floating badges */
-        .hero-float-badge {
+        .hero-badge {
           position: absolute;
           display: inline-flex;
           align-items: center;
-          gap: 0.42rem;
-          background: var(--white, #fff);
+          gap: 0.45rem;
+          background: #fff;
+          border: 1px solid rgba(0,0,0,0.07);
           border-radius: 100px;
-          padding: 0.5rem 1rem;
-          font-size: 0.78rem;
+          padding: 0.5rem 1.1rem;
+          font-family: var(--font-body);
+          font-size: 0.75rem;
           font-weight: 700;
-          color: var(--ink, #0a0a0f);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+          color: var(--ink);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
           white-space: nowrap;
-          border: 1px solid rgba(0,0,0,0.06);
-          z-index: 2;
+          z-index: 5;
         }
-        .hero-float-badge--tr { top: -14px; right: -14px; }
-        .hero-float-badge--tr .badge-star { color: var(--warning, #f59e0b); }
-        .hero-float-badge--bl { bottom: 60px; left: -14px; }
-        .hero-float-badge--bl svg { color: var(--success, #22c55e); }
+        .hero-badge--tr { top: -14px; right: -14px; }
+        .hero-badge--bl { bottom: 62px; left: -14px; }
+        .hero-badge-star { color: #f59e0b; font-size: 0.85rem; }
+        .hero-badge-dot {
+          width: 7px; height: 7px;
+          border-radius: 50%;
+          background: #22c55e;
+          flex-shrink: 0;
+          animation: heroPulse 2.5s ease-in-out infinite;
+        }
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {
-          .hero-split-inner {
+          .hero-agency-inner {
             grid-template-columns: 1fr;
-            gap: 3rem;
+            gap: 3.5rem;
             padding-bottom: 4rem;
           }
-          .hero-split-copy { align-items: center; text-align: center; }
-          .hero-split-desc { max-width: 600px; }
-          .hero-split-actions { justify-content: center; }
-          .hero-split-trust { justify-content: center; }
-          .hero-split-stats { align-self: center; }
-          .hero-split-visual { max-width: 640px; margin: 0 auto; width: 100%; }
-          .hero-float-badge--tr { top: -10px; right: 10px; }
-          .hero-float-badge--bl { bottom: 50px; left: 10px; }
+          .hero-agency-copy { align-items: center; text-align: center; }
+          .hero-agency-desc { max-width: 600px; }
+          .hero-agency-ctas { justify-content: center; }
+          .hero-agency-stats { align-self: center; }
+          .hero-agency-visual { max-width: 640px; margin: 0 auto; width: 100%; }
+          .hero-badge--tr { top: -10px; right: 10px; }
+          .hero-badge--bl { bottom: 48px; left: 10px; }
         }
         @media (max-width: 640px) {
-          .hero-split-title { font-size: clamp(2.2rem, 10vw, 3.2rem); }
-          .hero-split-inner { padding: 2.5rem 1.25rem 3.5rem; }
-          .hero-split-stats { padding: 1rem; gap: 0; }
-          .hero-split-stat { padding: 0 0.85rem; }
-          .hero-split-stat strong { font-size: 1.2rem; }
-          .hero-grid-bottom { display: none; }
-          .hero-float-badge { font-size: 0.68rem; padding: 0.4rem 0.75rem; }
-          .hero-float-badge--tr { top: -8px; right: 8px; }
-          .hero-float-badge--bl { bottom: 12px; left: 8px; }
+          .hero-agency-h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+          .hero-agency-inner { padding: 2.5rem 1.25rem 3.5rem; }
+          .hero-agency-stats { padding: 1rem; }
+          .hero-stat-item { padding: 0 0.85rem; }
+          .hero-stat-item strong { font-size: 1.2rem; }
+          .hero-img-wide { display: none; }
+          .hero-badge { font-size: 0.68rem; padding: 0.4rem 0.8rem; }
+          .hero-badge--tr { top: -8px; right: 8px; }
+          .hero-badge--bl { bottom: 12px; left: 8px; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .hero-split-pulse { animation: none; }
-          .hero-split-btn-primary:hover,
-          .hero-split-btn-outline:hover,
-          .hero-split-pill:hover { transform: none; }
-          .hero-grid-main img,
-          .hero-grid-item img,
-          .hero-grid-bottom img { transition: none; }
+          .hero-agency-pulse, .hero-badge-dot { animation: none; }
+          .hero-cta-primary:hover,
+          .hero-cta-ghost:hover { transform: none; }
+          .hero-img-main img,
+          .hero-img-sm img,
+          .hero-img-wide img { transition: none; }
         }
       `}</style>
     </section>

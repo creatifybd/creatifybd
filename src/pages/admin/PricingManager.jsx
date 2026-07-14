@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
-import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { Plus, Trash2, Edit2, X, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../../context/ConfirmContext';
@@ -173,6 +173,8 @@ const PricingManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingData, setEditingData] = useState(null);
   const [activeTab, setActiveTab] = useState('social');
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkWorking, setBulkWorking] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'pricing'), (snap) => {
@@ -232,9 +234,58 @@ const PricingManager = () => {
     }
   };
 
+  // ── Bulk select helpers ──────────────────────────────────────────
+  const toggleSelect = (id) =>
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+
+  const toggleSelectAll = (plans) => {
+    const allIds = plans.map(p => p.id);
+    setSelectedIds(prev => prev.length === allIds.length ? [] : allIds);
+  };
+
+  const bulkHideShow = async (hidden) => {
+    if (!selectedIds.length) return;
+    setBulkWorking(true);
+    try {
+      const batch = writeBatch(db);
+      selectedIds.forEach(id => batch.update(doc(db, 'pricing', id), { hidden }));
+      await batch.commit();
+      toast.success(`${selectedIds.length} plans ${hidden ? 'hidden' : 'shown'}`);
+      setSelectedIds([]);
+    } catch (err) {
+      toast.error('Bulk update failed');
+    } finally {
+      setBulkWorking(false);
+    }
+  };
+
+  const bulkDelete = async () => {
+    if (!selectedIds.length) return;
+    const ok = await confirm({
+      title: `Delete ${selectedIds.length} plans?`,
+      description: 'This cannot be undone.',
+      confirmLabel: 'Delete All',
+      tone: 'danger'
+    });
+    if (!ok) return;
+    setBulkWorking(true);
+    try {
+      const batch = writeBatch(db);
+      selectedIds.forEach(id => batch.delete(doc(db, 'pricing', id)));
+      await batch.commit();
+      toast.success(`${selectedIds.length} plans deleted`);
+      setSelectedIds([]);
+    } catch (err) {
+      toast.error('Bulk delete failed');
+    } finally {
+      setBulkWorking(false);
+    }
+  };
+
   if (loading) return <div className="admin-loading">Loading Pricing Plans...</div>;
 
   const currentPlans = allPlans.filter(p => p.category === activeTab).sort((a,b) => (a.order || 0) - (b.order || 0));
+  const allCurrentSelected = currentPlans.length > 0 && currentPlans.every(p => selectedIds.includes(p.id));
 
   return (
     <div className="admin-section-page">
@@ -274,39 +325,78 @@ const PricingManager = () => {
           <button className="admin-btn-secondary" onClick={() => { setEditingData({ category: activeTab }); setIsModalOpen(true); }}>Create your first one</button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-          {currentPlans.map(plan => (
-            <div key={plan.id} className="admin-card" style={{
-              border: plan.featured ? '1.5px solid var(--adm-red)' : '1px solid var(--adm-border)',
-              position: 'relative', display: 'flex', flexDirection: 'column'
-            }}>
-              {plan.featured && <div style={{ position: 'absolute', top: '-10px', left: '1.5rem', background: 'var(--adm-red)', color: 'white', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.6rem', borderRadius: '100px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Most Popular</div>}
-              {plan.hidden && <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', color: 'var(--adm-danger)', fontSize: '0.75rem', fontWeight: 700 }}><AlertCircle size={14} style={{ display: 'inline', verticalAlign: 'text-bottom' }} /> Hidden</div>}
-
-              <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => { setEditingData(plan); setIsModalOpen(true); }} aria-label="Edit plan" className="admin-icon-btn"><Edit2 size={14} /></button>
-                <button onClick={() => handleDelete(plan.id)} aria-label="Delete plan" className="admin-icon-btn"><Trash2 size={14} color="var(--adm-danger)" /></button>
+        <>
+          {/* Bulk action bar */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--adm-dim)' }}>
+              <input
+                type="checkbox"
+                checked={allCurrentSelected}
+                onChange={() => toggleSelectAll(currentPlans)}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--adm-red)' }}
+              />
+              Select All
+            </label>
+            {selectedIds.length > 0 && (
+              <div className="bulk-action-bar" style={{ marginBottom: 0 }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--adm-dim)' }}>{selectedIds.length} selected</span>
+                <button onClick={() => bulkHideShow(false)} disabled={bulkWorking}><span>Show</span></button>
+                <button onClick={() => bulkHideShow(true)} disabled={bulkWorking}><span>Hide</span></button>
+                <button className="danger" onClick={bulkDelete} disabled={bulkWorking}><Trash2 size={14} /> Delete</button>
+                <button onClick={() => setSelectedIds([])} style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.2)' }} disabled={bulkWorking}>Clear</button>
               </div>
+            )}
+          </div>
 
-              <div style={{ marginTop: plan.featured || plan.hidden ? '1rem' : '0' }}>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.2rem' }}>{plan.tier}</h3>
-                <div style={{ color: 'var(--adm-dim)', fontSize: '0.8rem', marginBottom: '1rem' }}>{plan.desc}</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem' }}>৳{plan.price}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            {currentPlans.map(plan => {
+              const isSelected = selectedIds.includes(plan.id);
+              return (
+                <div key={plan.id} className="admin-card" style={{
+                  border: isSelected ? '2px solid var(--adm-red)' : plan.featured ? '1.5px solid var(--adm-red)' : '1px solid var(--adm-border)',
+                  position: 'relative', display: 'flex', flexDirection: 'column',
+                  outline: isSelected ? '2px solid rgba(232,25,44,0.15)' : 'none',
+                  transition: 'border-color 0.2s, outline 0.2s'
+                }}>
+                  {/* Checkbox top-left */}
+                  <label style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 2, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleSelect(plan.id)}
+                      style={{ width: '16px', height: '16px', accentColor: 'var(--adm-red)' }}
+                    />
+                  </label>
 
-                <div style={{ borderTop: '1px solid var(--adm-border)', paddingTop: '1rem' }}>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.8rem' }}>Features</div>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {plan.features?.map((f, i) => (
-                      <li key={i} style={{ color: 'var(--adm-txt)', fontSize: '0.85rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                        <span style={{ color: 'var(--adm-red)' }}>✓</span> {f}
-                      </li>
-                    ))}
-                  </ul>
+                  {plan.featured && <div style={{ position: 'absolute', top: '-10px', left: '3rem', background: 'var(--adm-red)', color: 'white', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.6rem', borderRadius: '100px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Most Popular</div>}
+                  {plan.hidden && <div style={{ position: 'absolute', top: '1rem', left: '3rem', color: 'var(--adm-danger)', fontSize: '0.75rem', fontWeight: 700 }}><AlertCircle size={14} style={{ display: 'inline', verticalAlign: 'text-bottom' }} /> Hidden</div>}
+
+                  <div style={{ position: 'absolute', top: '1rem', right: '1rem', display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => { setEditingData(plan); setIsModalOpen(true); }} aria-label="Edit plan" className="admin-icon-btn"><Edit2 size={14} /></button>
+                    <button onClick={() => handleDelete(plan.id)} aria-label="Delete plan" className="admin-icon-btn"><Trash2 size={14} color="var(--adm-danger)" /></button>
+                  </div>
+
+                  <div style={{ marginTop: '2.5rem' }}>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.2rem' }}>{plan.tier}</h3>
+                    <div style={{ color: 'var(--adm-dim)', fontSize: '0.8rem', marginBottom: '1rem' }}>{plan.desc}</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem' }}>${plan.price}</div>
+
+                    <div style={{ borderTop: '1px solid var(--adm-border)', paddingTop: '1rem' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.8rem' }}>Features</div>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {plan.features?.map((f, i) => (
+                          <li key={i} style={{ color: 'var(--adm-txt)', fontSize: '0.85rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                            <span style={{ color: 'var(--adm-red)' }}>✓</span> {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       <PricingFormModal

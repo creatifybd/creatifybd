@@ -3,6 +3,7 @@ import useReveal from '../utils/useReveal';
 
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import InfiniteMarquee from '../components/InfiniteMarquee';
 import SEO from '../components/SEO';
 import StatsCounter from '../components/StatsCounter';
 import FeaturedIn from '../components/FeaturedIn';
@@ -81,6 +82,7 @@ const Home = () => {
 
       <Navbar />
       {content?.visibility?.hero !== false && <Hero />}
+      {content?.visibility?.hero !== false && <InfiniteMarquee />}
 
       <Suspense fallback={null}>
         {/* 1 — Stats counter strip */}

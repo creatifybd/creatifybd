@@ -25,10 +25,26 @@ const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [formData, setFormData] = useState({
-    name: '', email: '', phone: '', company: '',
-    country: '', service: '', budget: '', message: ''
+  const [formData, setFormData] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      name: '', email: '', phone: '', company: '',
+      country: '', service: params.get('service') || '', budget: '', message: params.get('message') || ''
+    };
   });
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const svc = params.get('service');
+    const msg = params.get('message');
+    if (svc || msg) {
+      setFormData(prev => ({
+        ...prev,
+        service: svc || prev.service,
+        message: msg || prev.message
+      }));
+    }
+  }, []);
 
   const cContent = content?.contact || {};
 
