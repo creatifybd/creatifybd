@@ -12,13 +12,13 @@
   --red-mid:          rgba(232, 25, 44, 0.25);
 
   /* ═══════════════════════════════════════════════════════════════
-     SURFACE — Light Rose Theme (Duck Design inspired, red edition)
+     SURFACE — Clean Light Theme (Duck Design inspired)
      ═══════════════════════════════════════════════════════════════ */
-  --surface:        #FFFBFB;   /* near-white with warmth — body bg */
-  --surface-soft:   #FFF0F1;   /* rose-tinted sections — like Duck's cream  */
-  --surface-muted:  #FDE8EA;   /* deeper rose — inputs, tags, chips */
+  --surface:        #FFFFFF;   /* pure white — body bg */
+  --surface-soft:   #F8F9FA;   /* light gray sections — like Duck's cream  */
+  --surface-muted:  #F1F3F5;   /* deeper gray — inputs, tags, chips */
   --surface-card:   #FFFFFF;   /* pure white cards for contrast */
-  --surface-hover:  #FEF2F2;   /* card hover state */
+  --surface-hover:  #F8F9FA;   /* card hover state */
 
   /* ═══════════════════════════════════════════════════════════════
      TYPOGRAPHY
@@ -30,20 +30,20 @@
   /* ═══════════════════════════════════════════════════════════════
      BORDERS
      ═══════════════════════════════════════════════════════════════ */
-  --border:      rgba(232, 25, 44, 0.12);
-  --border-soft: rgba(232, 25, 44, 0.06);
-  --border-card: rgba(16, 24, 40, 0.08);
+  --border:      rgba(16, 24, 40, 0.08);
+  --border-soft: rgba(16, 24, 40, 0.05);
+  --border-card: rgba(16, 24, 40, 0.06);
 
   /* ═══════════════════════════════════════════════════════════════
-     SHADOWS — warmer, red-tinged
+     SHADOWS — neutral, professional
      ═══════════════════════════════════════════════════════════════ */
-  --shadow-sm:      0 2px 8px rgba(232, 25, 44, 0.06);
-  --shadow-md:      0 12px 32px rgba(232, 25, 44, 0.09);
-  --shadow-lg:      0 24px 64px rgba(232, 25, 44, 0.11);
-  --shadow-card:    0 4px 20px rgba(232, 25, 44, 0.07);
-  --shadow-float:   0 16px 40px rgba(232, 25, 44, 0.12);
+  --shadow-sm:      0 2px 8px rgba(16, 24, 40, 0.06);
+  --shadow-md:      0 12px 32px rgba(16, 24, 40, 0.09);
+  --shadow-lg:      0 24px 64px rgba(16, 24, 40, 0.11);
+  --shadow-card:    0 4px 20px rgba(16, 24, 40, 0.07);
+  --shadow-float:   0 16px 40px rgba(16, 24, 40, 0.12);
   --shadow-red-glow:0 4px 20px rgba(232, 25, 44, 0.25), 0 0 50px rgba(232, 25, 44, 0.12);
-  --shadow-lifted:  0 20px 60px rgba(232, 25, 44, 0.14);
+  --shadow-lifted:  0 20px 60px rgba(16, 24, 40, 0.14);
 
   /* ═══════════════════════════════════════════════════════════════
      BORDER RADIUS
@@ -89,11 +89,11 @@
   --space-xxl: 4rem;
 
   /* ═══════════════════════════════════════════════════════════════
-     GLASSMORPHISM — rose-tinted glass
+     GLASSMORPHISM — clean glass
      ═══════════════════════════════════════════════════════════════ */
-  --glass:        rgba(255, 251, 251, 0.75);
-  --glass-hover:  rgba(255, 247, 248, 0.90);
-  --glass-border: rgba(232, 25, 44, 0.12);
+  --glass:        rgba(255, 255, 255, 0.75);
+  --glass-hover:  rgba(255, 255, 255, 0.90);
+  --glass-border: rgba(16, 24, 40, 0.08);
   --glass-blur:   blur(20px);
 
   /* ═══════════════════════════════════════════════════════════════
@@ -118,12 +118,12 @@
   /* ═══════════════════════════════════════════════════════════════
      GRADIENTS — Brand red gradients
      ═══════════════════════════════════════════════════════════════ */
-  --gradient-hero:    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(232,25,44,0.12) 0%, transparent 60%),
-                      radial-gradient(ellipse 50% 40% at 0% 100%, rgba(232,25,44,0.07) 0%, transparent 55%);
+  --gradient-hero:    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(232,25,44,0.08) 0%, transparent 60%),
+                      radial-gradient(ellipse 50% 40% at 0% 100%, rgba(232,25,44,0.05) 0%, transparent 55%);
   --gradient-red:     linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-dark) 100%);
-  --gradient-red-soft:linear-gradient(135deg, #FFF0F1 0%, #FFF7F8 100%);
+  --gradient-red-soft:linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
   --gradient-section: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
-  --gradient-glow:    radial-gradient(circle at center, rgba(232,25,44,0.15) 0%, transparent 65%);
+  --gradient-glow:    radial-gradient(circle at center, rgba(232,25,44,0.10) 0%, transparent 65%);
 
   /* ═══════════════════════════════════════════════════════════════
      LEGACY COMPATIBILITY ALIASES
