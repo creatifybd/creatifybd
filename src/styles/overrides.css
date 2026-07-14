@@ -587,8 +587,8 @@
       .gigs-catalog-page, .about-page, .team-page, .reviews-page,
       .gig-detail-page, .order-success-page, .client-orders-page)
     nav:not(.scrolled) .nav-center {
-    background: rgba(255, 251, 251, 0.82) !important;
-    border-color: rgba(232, 25, 44, 0.14) !important;
+    background: rgba(255, 255, 255, 0.82) !important;
+    border-color: rgba(16, 24, 40, 0.08) !important;
     backdrop-filter: blur(18px) !important;
     -webkit-backdrop-filter: blur(18px) !important;
   }
@@ -618,7 +618,7 @@
       .gig-detail-page, .order-success-page, .client-orders-page)
     nav:not(.scrolled) .btn-ghost {
     color: var(--ink) !important;
-    border-color: rgba(232, 25, 44, 0.22) !important;
+    border-color: rgba(16, 24, 40, 0.12) !important;
   }
 
   /* ─── Hamburger icon: white → dark ─── */
@@ -643,8 +643,8 @@
       .gigs-catalog-page, .about-page, .team-page, .reviews-page,
       .gig-detail-page, .order-success-page, .client-orders-page)
     nav:not(.scrolled) .nav-minimal-dropdown {
-    background: rgba(255, 251, 251, 0.98) !important;
-    border-color: rgba(232, 25, 44, 0.1) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: rgba(16, 24, 40, 0.08) !important;
   }
   :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page,
       .case-studies-page, .portfolio-page, .premium-cs-page,
@@ -658,7 +658,7 @@
       .gigs-catalog-page, .about-page, .team-page, .reviews-page,
       .gig-detail-page, .order-success-page, .client-orders-page)
     nav:not(.scrolled) .minimal-dropdown-item:hover {
-    background: rgba(232, 25, 44, 0.06) !important;
+    background: rgba(16, 24, 40, 0.04) !important;
     color: var(--red) !important;
   }
   :is(.services-page, .pricing-page, .process-page, .work-page, .contact-page,
@@ -827,7 +827,7 @@
   body:not(.admin-body) .portfolio-marquee-card:hover,
   body:not(.admin-body) .portfolio-marquee-card:focus-visible {
     transform: translateY(-5px) !important;
-    border-color: rgba(232, 25, 44, 0.45) !important;
+    border-color: rgba(16, 24, 40, 0.15) !important;
     box-shadow: 0 18px 42px rgba(20, 21, 24, 0.12) !important;
     outline: none !important;
   }
@@ -2154,15 +2154,15 @@
     left: clamp(1rem, 6vw, 7.5rem) !important;
     right: clamp(1rem, 6vw, 7.5rem) !important;
     height: 1px !important;
-    background: linear-gradient(90deg, transparent, rgba(232, 25, 44, 0.18), transparent) !important;
+    background: linear-gradient(90deg, transparent, rgba(16, 24, 40, 0.08), transparent) !important;
     pointer-events: none !important;
   }
 
   body:not(.admin-body) .agency-services {
     background:
-      linear-gradient(135deg, rgba(232, 25, 44, 0.11), rgba(255, 247, 248, 0.96) 46%, #ffffff 100%) !important;
-    border-top: 1px solid rgba(232, 25, 44, 0.16) !important;
-    border-bottom: 1px solid rgba(232, 25, 44, 0.16) !important;
+      linear-gradient(135deg, rgba(16, 24, 40, 0.03), rgba(248, 249, 250, 0.96) 46%, #ffffff 100%) !important;
+    border-top: 1px solid rgba(16, 24, 40, 0.08) !important;
+    border-bottom: 1px solid rgba(16, 24, 40, 0.08) !important;
   }
 
   body:not(.admin-body) .duck-service-icon,
@@ -2185,7 +2185,7 @@
 
   body:not(.admin-body) .duck-service-index,
   body:not(.admin-body) .duck-service-row {
-    border-color: rgba(232, 25, 44, 0.76) !important;
+    border-color: rgba(16, 24, 40, 0.12) !important;
   }
 
   @media (max-width: 768px) {
@@ -2200,7 +2200,7 @@
   }
 
   body:not(.admin-body) .App > section:not(.hero):not(.hero-v2) {
-    border-top: 1px solid rgba(232, 25, 44, 0.10) !important;
+    border-top: 1px solid rgba(16, 24, 40, 0.06) !important;
   }
 
   body:not(.admin-body) .App > section:not(.hero):not(.hero-v2)::before {
@@ -2229,8 +2229,8 @@
 
   body:not(.admin-body) .hero-mockup-wrapper {
     background: var(--surface-card) !important;
-    border: 1px solid rgba(232, 25, 44, 0.13) !important;
-    box-shadow: 0 28px 70px rgba(232, 25, 44, 0.16) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
+    box-shadow: 0 28px 70px rgba(16, 24, 40, 0.10) !important;
   }
 
   body:not(.admin-body) .clients-section {
@@ -2266,15 +2266,15 @@
   body:not(.admin-body) .client-logo {
     opacity: 0.74 !important;
     background: rgba(255, 255, 255, 0.72) !important;
-    border-color: rgba(232, 25, 44, 0.12) !important;
-    box-shadow: 0 10px 26px rgba(232, 25, 44, 0.06) !important;
+    border-color: rgba(16, 24, 40, 0.08) !important;
+    box-shadow: 0 10px 26px rgba(16, 24, 40, 0.04) !important;
     transition: transform 220ms ease, opacity 220ms ease, border-color 220ms ease, color 220ms ease !important;
   }
 
   body:not(.admin-body) .client-logo:hover {
     opacity: 1 !important;
     transform: translateY(-3px) !important;
-    border-color: rgba(232, 25, 44, 0.35) !important;
+    border-color: rgba(16, 24, 40, 0.15) !important;
     color: var(--brand-red) !important;
   }
 
@@ -2300,7 +2300,7 @@
     align-items: start !important;
     padding: 1rem !important;
     background: rgba(255, 255, 255, 0.68) !important;
-    border: 1px solid rgba(232, 25, 44, 0.10) !important;
+    border: 1px solid rgba(16, 24, 40, 0.06) !important;
     border-radius: 18px !important;
   }
 
@@ -2327,7 +2327,7 @@
 
   body:not(.admin-body) .smm-visuals {
     background: var(--surface-card) !important;
-    border: 1px solid rgba(232, 25, 44, 0.14) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     border-radius: 28px !important;
     padding: clamp(1.3rem, 2.4vw, 2rem) !important;
     box-shadow: var(--shadow-float) !important;
@@ -2538,7 +2538,7 @@
     overflow: hidden !important;
     border-radius: 26px !important;
     background: var(--surface-card) !important;
-    border: 1px solid rgba(232, 25, 44, 0.14) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     box-shadow: var(--shadow-md) !important;
   }
 
@@ -2561,7 +2561,7 @@
   body:not(.admin-body) .team-role-card,
   body:not(.admin-body) .trust-stat {
     background: var(--surface-card) !important;
-    border: 1px solid rgba(232, 25, 44, 0.12) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     border-radius: 18px !important;
   }
 
@@ -2606,8 +2606,8 @@
 
   body:not(.admin-body) .duck-work-gallery {
     gap: 0 !important;
-    border: 1px solid rgba(232, 25, 44, 0.10) !important;
-    background: rgba(232, 25, 44, 0.10) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
+    background: rgba(16, 24, 40, 0.02) !important;
   }
 
   body:not(.admin-body) .duck-work-media {
@@ -2616,7 +2616,7 @@
   }
 
   body:not(.admin-body) .duck-work-tile {
-    border: 1px solid rgba(232, 25, 44, 0.10) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     overflow: hidden !important;
   }
 
@@ -2683,8 +2683,8 @@
     min-height: auto !important;
     padding: clamp(5rem, 8vw, 8rem) 1.5rem !important;
     background:
-      radial-gradient(circle at 50% 50%, rgba(232, 25, 44, 0.08), transparent 44%),
-      linear-gradient(135deg, #fff7f8 0%, #ffffff 100%) !important;
+      radial-gradient(circle at 50% 50%, rgba(16, 24, 40, 0.03), transparent 44%),
+      linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
     color: var(--ink) !important;
   }
 
@@ -3168,14 +3168,14 @@
   body:not(.admin-body) .duck-service-action a {
     background: #ffffff !important;
     color: var(--brand-red) !important;
-    box-shadow: 0 12px 30px rgba(232, 25, 44, 0.08) !important;
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08) !important;
   }
 
   body:not(.admin-body) .duck-service-row:hover .duck-service-action a {
     background: #ffffff !important;
     color: var(--brand-red) !important;
     transform: translateY(-3px) rotate(12deg) !important;
-    box-shadow: 0 18px 44px rgba(232, 25, 44, 0.18) !important;
+    box-shadow: 0 18px 44px rgba(16, 24, 40, 0.12) !important;
   }
 
   body:not(.admin-body) .duck-service-row:hover .duck-service-action a svg {
@@ -3383,7 +3383,7 @@
     overflow: hidden !important;
     border-radius: 22px !important;
     background: #ffffff !important;
-    border: 1px solid rgba(232, 25, 44, 0.14) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     box-shadow: 0 18px 50px rgba(232, 25, 44, 0.08) !important;
   }
 
@@ -3932,7 +3932,7 @@
       .payment-method-card, .payment-faq, .payment-form-wrapper) {
       background: #ffffff !important;
       color: #0f0f12 !important;
-      border: 1px solid rgba(232, 25, 44, 0.14) !important;
+      border: 1px solid rgba(16, 24, 40, 0.08) !important;
       box-shadow: 0 18px 52px rgba(232, 25, 44, 0.08) !important;
       border-radius: 12px !important;
       padding: 18px !important;
@@ -4067,7 +4067,7 @@
 
   body:not(.admin-body) .duck-work-gallery {
     gap: 0 !important;
-    border: 1px solid rgba(232, 25, 44, 0.14) !important;
+    border: 1px solid rgba(16, 24, 40, 0.08) !important;
     background: rgba(232, 25, 44, 0.14) !important;
     overflow: hidden !important;
   }
@@ -5398,7 +5398,7 @@ body:not(.admin-body) :is(.order-start-page, .payment-page)
   }
 
   body:not(.admin-body) .tm-card--active {
-    background: rgba(232, 25, 44, 0.06) !important;
+    background: rgba(16, 24, 40, 0.04) !important;
     border-color: rgba(232, 25, 44, 0.35) !important;
   }
 
