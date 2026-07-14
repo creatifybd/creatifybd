@@ -129,10 +129,15 @@ const WhyUsSection = () => (
 
     <style>{`
       .why-v3-section {
-        padding: 9rem 0;
+        padding: 5rem 1.5rem;
         background: var(--surface);
         position: relative;
         overflow: hidden;
+      }
+      @media (max-width: 768px) {
+        .why-v3-section {
+          padding: 3rem 1.5rem;
+        }
       }
       .why-v3-section::before {
         content: '';

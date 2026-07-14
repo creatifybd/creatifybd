@@ -215,7 +215,12 @@
 
 /* Section structure */
 .section {
-  padding: 7rem 1.5rem;
+  padding: 5rem 1.5rem;
+}
+@media (max-width: 768px) {
+  .section {
+    padding: 3rem 1.5rem;
+  }
 }
 .section-header {
   margin-bottom: 4rem;
@@ -796,10 +801,15 @@
 .cta-band {
   background: var(--gradient-red);
   color: var(--white);
-  padding: 5rem 0;
+  padding: 5rem 1.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+@media (max-width: 768px) {
+  .cta-band {
+    padding: 3rem 1.5rem;
+  }
 }
 .cta-band::before {
   content: '';

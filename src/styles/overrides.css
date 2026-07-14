@@ -338,7 +338,12 @@
   /* ─── INTRO BAND V2 — was var(--ink) dark → light surface ─── */
   .intro-band-v2 {
     background: var(--surface-soft) !important;
-    padding: 4rem 1.5rem !important;
+    padding: 5rem 1.5rem !important;
+  }
+  @media (max-width: 768px) {
+    .intro-band-v2 {
+      padding: 3rem 1.5rem !important;
+    }
   }
   .intro-title-v2 {
     color: var(--ink) !important;

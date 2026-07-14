@@ -419,9 +419,15 @@ footer,
 footer.footer-v2 {
   background: #0F0F12 !important;
   border-top: 1px solid rgba(232, 25, 44, 0.2) !important;
-  padding: 6rem 0 3rem;
+  padding: 5rem 1.5rem 3rem;
   position: relative;
   overflow: hidden;
+}
+@media (max-width: 768px) {
+  footer,
+  footer.footer-v2 {
+    padding: 3rem 1.5rem 2rem;
+  }
 }
 footer::before {
   content: '';

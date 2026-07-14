@@ -354,7 +354,12 @@ const Hero = () => {
           gap: clamp(3rem, 5vw, 6rem);
           max-width: 1280px;
           margin: 0 auto;
-          padding: clamp(3.5rem, 6vw, 6rem) clamp(1.5rem, 4vw, 3rem) clamp(4rem, 7vw, 7rem);
+          padding: 6rem 1.5rem 5rem;
+        }
+        @media (max-width: 768px) {
+          .hero-split-inner {
+            padding: 4rem 1.5rem 3rem;
+          }
         }
 
         /* ── Copy column ── */
