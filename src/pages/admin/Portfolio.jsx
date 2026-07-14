@@ -52,49 +52,26 @@ const PortfolioManager = () => {
       
       setItems([...syncedCurated, ...customItems]);
 
-      // Auto-sync local curated titles, descriptions, categories to Firestore (preserving image & hidden status)
+      // Unconditionally sync local curated titles, descriptions, categories to Firestore (preserving image & hidden status, removing old text fields)
       const batch = writeBatch(db);
       let needsCommit = false;
       CURATED_PORTFOLIO.forEach(item => {
         const override = storedById.get(item.id);
-        if (override) {
-          if (
-            override.title !== item.title ||
-            override.description !== item.description ||
-            override.category !== item.category ||
-            override.service !== item.service ||
-            override.industry !== item.industry ||
-            JSON.stringify(override.tags) !== JSON.stringify(item.tags)
-          ) {
-            batch.set(doc(db, 'portfolio', item.id), {
-              title: item.title,
-              description: item.description,
-              category: item.category,
-              service: item.service,
-              industry: item.industry,
-              tags: item.tags,
-              seoTitle: item.seoTitle,
-              seoDescription: item.seoDescription,
-              updatedAt: serverTimestamp()
-            }, { merge: true });
-            needsCommit = true;
-          }
-        } else {
-          batch.set(doc(db, 'portfolio', item.id), {
-            title: item.title,
-            description: item.description,
-            category: item.category,
-            service: item.service,
-            industry: item.industry,
-            tags: item.tags,
-            seoTitle: item.seoTitle,
-            seoDescription: item.seoDescription,
-            imageUrl: item.image,
-            hidden: false,
-            createdAt: serverTimestamp()
-          });
-          needsCommit = true;
-        }
+        batch.set(doc(db, 'portfolio', item.id), {
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          service: item.service,
+          industry: item.industry,
+          tags: item.tags,
+          seoTitle: item.seoTitle,
+          seoDescription: item.seoDescription,
+          imageUrl: override?.imageUrl || override?.image || item.image,
+          hidden: override?.hidden !== undefined ? override.hidden : false,
+          isCurated: true,
+          updatedAt: serverTimestamp()
+        });
+        needsCommit = true;
       });
       if (needsCommit) {
         await batch.commit();
