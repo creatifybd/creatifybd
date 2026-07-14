@@ -35,19 +35,70 @@ const PortfolioManager = () => {
       const data = await getData('portfolio');
       const storedItems = data || [];
       const storedById = new Map(storedItems.map(item => [item.id, item]));
+      
       const syncedCurated = CURATED_PORTFOLIO.map(item => {
         const override = storedById.get(item.id);
         return {
           ...item,
-          ...override,
           imageUrl: override?.imageUrl || override?.image || item.image,
+          hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
           isCurated: true
         };
       });
+
       const customItems = storedItems
         .filter(item => !curatedIds.has(item.id))
         .map(item => ({ ...item, imageUrl: item.imageUrl || item.image }));
+      
       setItems([...syncedCurated, ...customItems]);
+
+      // Auto-sync local curated titles, descriptions, categories to Firestore (preserving image & hidden status)
+      const batch = writeBatch(db);
+      let needsCommit = false;
+      CURATED_PORTFOLIO.forEach(item => {
+        const override = storedById.get(item.id);
+        if (override) {
+          if (
+            override.title !== item.title ||
+            override.description !== item.description ||
+            override.category !== item.category ||
+            override.service !== item.service ||
+            override.industry !== item.industry ||
+            JSON.stringify(override.tags) !== JSON.stringify(item.tags)
+          ) {
+            batch.set(doc(db, 'portfolio', item.id), {
+              title: item.title,
+              description: item.description,
+              category: item.category,
+              service: item.service,
+              industry: item.industry,
+              tags: item.tags,
+              seoTitle: item.seoTitle,
+              seoDescription: item.seoDescription,
+              updatedAt: serverTimestamp()
+            }, { merge: true });
+            needsCommit = true;
+          }
+        } else {
+          batch.set(doc(db, 'portfolio', item.id), {
+            title: item.title,
+            description: item.description,
+            category: item.category,
+            service: item.service,
+            industry: item.industry,
+            tags: item.tags,
+            seoTitle: item.seoTitle,
+            seoDescription: item.seoDescription,
+            imageUrl: item.image,
+            hidden: false,
+            createdAt: serverTimestamp()
+          });
+          needsCommit = true;
+        }
+      });
+      if (needsCommit) {
+        await batch.commit();
+      }
     } catch (err) {
       setItems(CURATED_PORTFOLIO.map(item => ({ ...item, imageUrl: item.image, isCurated: true })));
     } finally {

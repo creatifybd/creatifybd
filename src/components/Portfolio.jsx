@@ -324,8 +324,8 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
       const override = adminById.get(item.id);
       return {
         ...item,
-        ...override,
-        image: override?.imageUrl || override?.image || item.image
+        image: override?.imageUrl || override?.image || item.image,
+        hidden: override?.hidden !== undefined ? override.hidden : item.hidden
       };
     })
     .filter(item => item.hidden !== true);
