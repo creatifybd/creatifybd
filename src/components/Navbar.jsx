@@ -8,10 +8,8 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const navLinks = [
   { to: '/services', label: 'Services', hasDropdown: true },
-  { to: '/gigs', label: 'Gigs' },
   { to: '/portfolio', label: 'Portfolio' },
-  { to: '/reviews', label: 'Reviews' },
-  { to: '/about', label: 'About' },
+  { to: '/pricing', label: 'Pricing' },
   { to: '/contact', label: 'Contact' }
 ];
 
@@ -51,10 +49,8 @@ const servicesDropdown = [
 const mobileLinks = [
   { to: '/', label: 'Home' },
   { to: '/services', label: 'Services' },
-  { to: '/gigs', label: 'Gigs' },
   { to: '/portfolio', label: 'Portfolio' },
-  { to: '/reviews', label: 'Reviews' },
-  { to: '/about', label: 'About' },
+  { to: '/pricing', label: 'Pricing' },
   { to: '/contact', label: 'Contact' }
 ];
 

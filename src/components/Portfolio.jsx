@@ -16,7 +16,6 @@ const CATS = [
   { key: 'branding', label: 'Branding', label_bn: 'ব্র্যান্ডিং' },
   { key: 'web', label: 'Web Design', label_bn: 'ওয়েব ডিজাইন' },
   { key: 'video', label: 'Video', label_bn: 'ভিডিও' },
-  { key: 'ai', label: 'AI Art', label_bn: 'এআই আর্ট' },
 ];
 
 const CAT_DISPLAY = {
@@ -24,32 +23,23 @@ const CAT_DISPLAY = {
   branding: 'Branding',
   web: 'Web Design',
   video: 'Video',
-  ai: 'AI Art',
 };
 
 const PORTFOLIO_CATS = [
   { key: 'all', label: 'All Work', label_bn: 'All Work' },
   { key: 'social', label: 'Social Media', label_bn: 'Social Media' },
   { key: 'branding', label: 'Branding', label_bn: 'Branding' },
-  { key: 'packaging', label: 'Packaging', label_bn: 'Packaging' },
-  { key: 'apparel', label: 'T-Shirt Design', label_bn: 'T-Shirt Design' },
-  { key: 'marketing', label: 'Digital Marketing', label_bn: 'Digital Marketing' },
   { key: 'web', label: 'Web Design', label_bn: 'Web Design' },
   { key: 'video', label: 'Video Editing', label_bn: 'Video Editing' },
   { key: 'graphic', label: 'Graphic Design', label_bn: 'Graphic Design' },
-  { key: 'ai', label: 'AI Art', label_bn: 'AI Art' },
 ];
 
 const PORTFOLIO_CAT_DISPLAY = {
   social: 'Social Media Management',
   graphic: 'Graphic Design',
   branding: 'Branding & Logo Design',
-  packaging: 'Product Packaging Design',
-  apparel: 'T-Shirt Design',
-  marketing: 'Digital Marketing',
   web: 'Website Design',
   video: 'Video Editing',
-  ai: 'AI Art',
 };
 
 const FALLBACK_WORK = [

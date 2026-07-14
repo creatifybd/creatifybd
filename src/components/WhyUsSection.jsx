@@ -13,6 +13,7 @@ const FEATURES = [
     icon: <UserCheck size={20} />,
     title: 'Senior-Level Creatives',
     desc: 'Every piece of content, design, and video is crafted by senior creative experts, ensuring top-tier global standards.',
+    featured: true
   },
   {
     num: '02',
@@ -20,6 +21,7 @@ const FEATURES = [
     icon: <Zap size={20} />,
     title: 'Async Efficiency (No Meetings)',
     desc: 'We coordinate asynchronously via shared dashboards, eliminating useless alignment meetings to save you hours of time.',
+    featured: true
   },
   {
     num: '03',
@@ -27,6 +29,7 @@ const FEATURES = [
     icon: <LayoutGrid size={20} />,
     title: 'Up to 40% Less Retainers',
     desc: 'No sales commissions, no physical offices, and no administrative bloat. We pass 100% of these savings directly to you.',
+    featured: true
   },
   {
     num: '04',
@@ -78,7 +81,7 @@ const WhyUsSection = () => (
         {FEATURES.map((f, i) => (
           <motion.article
             key={f.num}
-            className="why-v3-card"
+            className={`why-v3-card ${f.featured ? 'is-featured' : ''}`}
             style={{ '--card-accent': f.accent }}
             initial={{ opacity: 0, y: 36 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -195,9 +198,15 @@ const WhyUsSection = () => (
         z-index: 0;
       }
       .why-v3-card:hover {
-        transform: translateY(-8px) scale(1.01);
+        transform: translateY(-12px) scale(1.02);
         border-color: var(--card-accent) !important;
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), var(--shadow-md) !important;
+      }
+      .why-v3-card.is-featured {
+        border: 2px solid var(--card-accent);
+      }
+      .why-v3-card.is-featured:hover {
+        transform: translateY(-16px) scale(1.03);
       }
       .why-v3-card:hover::before {
         opacity: 0.08;

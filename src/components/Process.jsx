@@ -13,31 +13,31 @@ const steps = [
     num: '01',
     icon: <FileSearch size={26} />,
     title: 'Audit and brief',
-    desc: 'We review your current brand, competitors, audience, goals, and existing assets before proposing scope.'
+    desc: 'We review your brand, competitors, and goals before proposing scope.'
   },
   {
     num: '02',
     icon: <Lightbulb size={26} />,
     title: 'Strategy and calendar',
-    desc: 'We map the service plan, creative direction, content calendar, milestones, and approval process.'
+    desc: 'We map the service plan, creative direction, and content calendar.'
   },
   {
     num: '03',
     icon: <PenTool size={26} />,
     title: 'Creative production',
-    desc: 'Designers, editors, writers, and web specialists produce drafts with organized review checkpoints.'
+    desc: 'Our specialists produce drafts with organized review checkpoints.'
   },
   {
     num: '04',
     icon: <CheckCircle size={26} />,
     title: 'Review and refine',
-    desc: 'Client feedback is incorporated through structured revision rounds to ensure quality and alignment.'
+    desc: 'Client feedback is incorporated through structured revision rounds.'
   },
   {
     num: '05',
     icon: <Rocket size={26} />,
     title: 'Launch and improve',
-    desc: 'Final assets are delivered, scheduled, or launched with performance notes and next-step recommendations.'
+    desc: 'Final assets are delivered with performance notes and recommendations.'
   }
 ];
 

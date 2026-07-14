@@ -18,6 +18,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Branding & Identity',
     platform: 'Fiverr',
+    date: 'June 2024'
   },
   {
     id: 'f2',
@@ -29,6 +30,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Branding & Identity',
     platform: 'Upwork',
+    date: 'March 2024'
   },
   {
     id: 'f3',
@@ -37,9 +39,10 @@ const FALLBACK = [
     initials: 'MR',
     color: '#f97316',
     text: 'Our restaurant branding needed personality and warmth. CreatifyBD nailed it — the new identity is on every menu, sign, and social post now.',
-    stars: 5,
+    stars: 4,
     tag: 'Brand & Print',
     platform: 'Google',
+    date: 'January 2024'
   },
   {
     id: 'f4',
@@ -51,6 +54,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Branding & Identity',
     platform: 'Fiverr',
+    date: 'April 2024'
   },
   {
     id: 'f5',
@@ -59,9 +63,10 @@ const FALLBACK = [
     initials: 'PN',
     color: '#e8192c',
     text: 'Our SaaS landing page and brand kit from CreatifyBD helped us close bigger enterprise deals. First impressions matter, and now ours is strong.',
-    stars: 5,
+    stars: 4,
     tag: 'Website Design',
     platform: 'Upwork',
+    date: 'February 2024'
   },
   {
     id: 'f6',
@@ -73,6 +78,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Branding & Identity',
     platform: 'Google',
+    date: 'May 2024'
   },
   {
     id: 'f7',
@@ -84,6 +90,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Social Media',
     platform: 'Fiverr',
+    date: 'July 2024'
   },
   {
     id: 'f8',
@@ -92,9 +99,10 @@ const FALLBACK = [
     initials: 'OB',
     color: '#f59e0b',
     text: "Our bakery's social content calendar from CreatifyBD noticeably increased foot traffic from Instagram alone. Worth every penny.",
-    stars: 5,
+    stars: 4,
     tag: 'Social Media',
     platform: 'Upwork',
+    date: 'March 2024'
   },
   {
     id: 'f9',
@@ -106,6 +114,7 @@ const FALLBACK = [
     stars: 5,
     tag: 'Packaging Design',
     platform: 'Google',
+    date: 'June 2024'
   },
 ];
 

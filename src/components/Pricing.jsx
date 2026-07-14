@@ -36,7 +36,7 @@ const tabLabels = {
 
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
-  const [activeTab, setActiveTab] = useState('social');
+  const [activeTab, setActiveTab] = useState(fullPage ? 'social' : 'social');
   const [billing, setBilling] = useState('monthly');
 
   useEffect(() => {

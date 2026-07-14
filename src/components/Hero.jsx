@@ -8,17 +8,13 @@ import { useSettings } from '../context/SettingsContext';
 const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const TRUST_PILLS = [
-  { icon: <RefreshCw size={13} />, label: 'Global Team' },
   { icon: <Clock size={13} />,     label: '24h Response' },
   { icon: <Shield size={13} />,    label: 'Fixed Pricing' },
-  { icon: <CheckCircle2 size={13} />, label: 'Satisfaction Guarantee' },
 ];
 
 const STATS = [
-  { value: '24/7', label: 'Support' },
   { value: '40%', label: 'Cost Savings' },
   { value: '5+', label: 'Years Experience' },
-  { value: 'Global', label: 'Reach' },
 ];
 
 /* Portfolio preview images for the visual grid */

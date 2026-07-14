@@ -11,36 +11,30 @@ const defaultServices = [
     icon: <BarChart3 size={28} />,
     title: 'Strategic Social Media Management',
     desc: 'Data-driven content strategies that increase engagement and drive conversions. Full-service management from strategy to execution.',
-    price: 'From $299/mo',
-    badge: 'Most requested'
+    price: '$299/mo',
+    badge: 'Most requested',
+    featured: true
   },
   {
     id: 'graphic-design',
     icon: <Palette size={28} />,
     title: 'Brand Design Systems',
     desc: 'Comprehensive visual identity that communicates your unique value proposition. From brand strategy to execution-ready assets.',
-    price: 'From $45'
+    price: '$45'
   },
   {
     id: 'video-editing',
     icon: <Clapperboard size={28} />,
     title: 'Professional Video Production',
     desc: 'Strategic video content that tells your brand story and drives action. From concept to final delivery with platform optimization.',
-    price: 'From $60'
-  },
-  {
-    id: 'digital-marketing',
-    icon: <Megaphone size={28} />,
-    title: 'Performance Marketing',
-    desc: 'Data-driven campaigns that generate qualified leads and measurable ROI. Strategic planning with continuous optimization.',
-    price: 'Custom quote'
+    price: '$60'
   },
   {
     id: 'website-design',
     icon: <Code2 size={28} />,
     title: 'Conversion-Focused Web Design',
     desc: 'Strategic websites that turn visitors into customers. User experience design with business goals at the center.',
-    price: 'From $249'
+    price: '$249'
   }
 ];
 
