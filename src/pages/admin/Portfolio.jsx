@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getData, addData, deleteData, logActivity } from '../../firebase/services';
-import { doc, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore';
+import { addData, deleteData, logActivity } from '../../firebase/services';
+import { doc, serverTimestamp, setDoc, writeBatch, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Plus, Trash2, X, Loader2, Search, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -34,13 +34,13 @@ const PortfolioManager = () => {
     let storedItems = [];
     let storedById = new Map();
 
-    // Step 1: Fetch from Firestore (best-effort, don't crash if it fails)
+    // Step 1: Fetch from Firestore directly (no toast on failure)
     try {
-      const data = await getData('portfolio');
-      storedItems = data || [];
+      const querySnapshot = await getDocs(collection(db, 'portfolio'));
+      storedItems = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
       storedById = new Map(storedItems.map(item => [item.id, item]));
     } catch (_err) {
-      // If Firestore read fails, we'll fall back to local items only
+      // Firestore read failed — UI will use local CURATED_PORTFOLIO data only
     }
 
     // Step 2: Always build the UI list using local CURATED_PORTFOLIO + Firestore images/hidden
