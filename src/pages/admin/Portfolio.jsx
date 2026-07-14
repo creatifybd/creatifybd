@@ -31,30 +31,39 @@ const PortfolioManager = () => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchItems = async () => {
+    let storedItems = [];
+    let storedById = new Map();
+
+    // Step 1: Fetch from Firestore (best-effort, don't crash if it fails)
     try {
       const data = await getData('portfolio');
-      const storedItems = data || [];
-      const storedById = new Map(storedItems.map(item => [item.id, item]));
-      
-      const syncedCurated = CURATED_PORTFOLIO.map(item => {
-        const override = storedById.get(item.id);
-        return {
-          ...item,
-          imageUrl: override?.imageUrl || override?.image || item.image,
-          hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
-          isCurated: true
-        };
-      });
+      storedItems = data || [];
+      storedById = new Map(storedItems.map(item => [item.id, item]));
+    } catch (_err) {
+      // If Firestore read fails, we'll fall back to local items only
+    }
 
-      const customItems = storedItems
-        .filter(item => !curatedIds.has(item.id))
-        .map(item => ({ ...item, imageUrl: item.imageUrl || item.image }));
-      
-      setItems([...syncedCurated, ...customItems]);
+    // Step 2: Always build the UI list using local CURATED_PORTFOLIO + Firestore images/hidden
+    const syncedCurated = CURATED_PORTFOLIO.map(item => {
+      const override = storedById.get(item.id);
+      return {
+        ...item,
+        imageUrl: override?.imageUrl || override?.image || item.image,
+        hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
+        isCurated: true
+      };
+    });
 
-      // Unconditionally sync local curated titles, descriptions, categories to Firestore (preserving image & hidden status, removing old text fields)
+    const customItems = storedItems
+      .filter(item => !curatedIds.has(item.id))
+      .map(item => ({ ...item, imageUrl: item.imageUrl || item.image }));
+
+    setItems([...syncedCurated, ...customItems]);
+    setLoading(false);
+
+    // Step 3: Best-effort sync — overwrite Firestore documents with local texts, preserving images & hidden
+    try {
       const batch = writeBatch(db);
-      let needsCommit = false;
       CURATED_PORTFOLIO.forEach(item => {
         const override = storedById.get(item.id);
         batch.set(doc(db, 'portfolio', item.id), {
@@ -71,15 +80,10 @@ const PortfolioManager = () => {
           isCurated: true,
           updatedAt: serverTimestamp()
         });
-        needsCommit = true;
       });
-      if (needsCommit) {
-        await batch.commit();
-      }
-    } catch (err) {
-      setItems(CURATED_PORTFOLIO.map(item => ({ ...item, imageUrl: item.image, isCurated: true })));
-    } finally {
-      setLoading(false);
+      await batch.commit();
+    } catch (_syncErr) {
+      // Sync failed silently — UI still shows correct local data
     }
   };
 
