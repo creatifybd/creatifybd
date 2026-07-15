@@ -68,7 +68,9 @@ const pageVariants = {
 
 const PageWrapper = ({ children }) => (
   <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-    {children}
+    <ErrorBoundary level="section">
+      {children}
+    </ErrorBoundary>
   </motion.div>
 );
 

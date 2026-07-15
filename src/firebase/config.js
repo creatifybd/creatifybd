@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { getAnalytics, isSupported } from "firebase/analytics";
-import { getFirestore, initializeFirestore, persistentLocalCache, persistentSingleTabManager } from "firebase/firestore";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
@@ -55,15 +55,34 @@ try {
 }
 
 // Initialize Services
+// NOTE: persistentSingleTabManager() previously used here throws an ASYNC error (not caught by this
+// try/catch, which only catches sync init errors) whenever the site is open in more than one tab —
+// the second tab fails to acquire the persistence lease, and that error was surfacing as an unhandled
+// exception that crashed the whole React tree via the global ErrorBoundary. persistentMultipleTabManager()
+// is safe with any number of open tabs.
 let db;
 try {
   db = initializeFirestore(app, {
     localCache: persistentLocalCache({
-      tabManager: persistentSingleTabManager()
+      tabManager: persistentMultipleTabManager()
     })
   });
 } catch (error) {
+  if (import.meta.env.DEV) console.warn('Firestore persistent cache init failed, falling back to default:', error);
   db = getFirestore(app);
+}
+
+// Belt-and-suspenders: catch any async/unhandled promise rejections coming from the Firestore SDK
+// (e.g. IndexedDB access issues in private browsing, storage quota, etc.) so they're logged instead of
+// silently crashing an unrelated part of the UI via the global ErrorBoundary.
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    const message = event?.reason?.message || '';
+    if (typeof message === 'string' && (message.includes('firestore') || message.includes('Firestore') || message.includes('IndexedDB'))) {
+      console.error('Unhandled Firestore-related promise rejection (non-fatal):', event.reason);
+      event.preventDefault();
+    }
+  });
 }
 const auth = getAuth(app);
 const storage = getStorage(app);

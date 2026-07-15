@@ -306,11 +306,18 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
     const unsub = onSnapshot(
       collection(db, 'portfolio'),
       (snap) => {
-        const allItems = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        // Sort in JS instead of Firestore query to avoid index requirements
-        const sorted = allItems.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        setItems(sorted);
-        setLoading(false);
+        try {
+          const docs = Array.isArray(snap?.docs) ? snap.docs : [];
+          const allItems = docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          // Sort in JS instead of Firestore query to avoid index requirements
+          const sorted = allItems.sort((a, b) => String(a?.title || '').localeCompare(String(b?.title || '')));
+          setItems(sorted);
+        } catch (err) {
+          console.error('Portfolio: failed to process snapshot, keeping curated fallback', err);
+          setItems([]);
+        } finally {
+          setLoading(false);
+        }
       },
       () => setLoading(false)
     );

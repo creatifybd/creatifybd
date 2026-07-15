@@ -62,9 +62,15 @@ const Services = ({ highlight = false, fullPage = false }) => {
     const unsub = onSnapshot(
       collection(db, 'services'),
       (snap) => {
-        const all = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        const sorted = all.sort((a, b) => (a.order || 0) - (b.order || 0));
-        setServices(sorted.filter((s) => !s.hidden));
+        try {
+          const docs = Array.isArray(snap?.docs) ? snap.docs : [];
+          const all = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          const sorted = all.sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
+          setServices(sorted.filter((s) => !s?.hidden));
+        } catch (err) {
+          console.error('Services: failed to process snapshot, using defaults', err);
+          setServices([]);
+        }
       },
       () => setServices([])
     );

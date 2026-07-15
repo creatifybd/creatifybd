@@ -1,6 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * Reusable error boundary.
+ *
+ * Usage:
+ *   <ErrorBoundary>...</ErrorBoundary>                 -> full-page fallback (use ONCE, at the app root)
+ *   <ErrorBoundary level="section" label="Portfolio">   -> compact inline fallback (use around individual
+ *     ...                                                   routes/sections so one broken part doesn't take
+ *   </ErrorBoundary>                                       down the whole site)
+ *
+ * Every caught error is logged with console.error (unconditionally, not just in DEV) so it shows up in
+ * production DevTools consoles too. If window.reportError exists (e.g. wired up to Sentry or another
+ * error-tracking service) it is also called, so remote error tracking works automatically once such a
+ * service is added — no changes needed here.
+ */
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -13,16 +27,97 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     this.setState({ error, errorInfo });
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+
+    const label = this.props.label ? ` [${this.props.label}]` : '';
+    // Intentionally NOT gated behind import.meta.env.DEV — we want this visible in production too.
+    console.error(`ErrorBoundary caught an error${label}:`, error, errorInfo);
+
+    // Optional hook for a remote error-tracking service (e.g. Sentry), if one is ever wired up.
+    if (typeof window !== 'undefined' && typeof window.reportError === 'function') {
+      try {
+        window.reportError(error);
+      } catch (_) {
+        // never let error reporting itself crash the boundary
+      }
+    }
+
+    if (typeof this.props.onError === 'function') {
+      try {
+        this.props.onError(error, errorInfo);
+      } catch (_) {
+        // ignore
+      }
+    }
   }
 
   handleReset = () => {
     this.setState({ hasError: false, error: null, errorInfo: null });
+    if (this.props.level === 'section') {
+      // Section-level: just retry rendering the children, no full reload needed.
+      return;
+    }
     window.location.reload();
   };
 
   render() {
     if (this.state.hasError) {
+      if (this.props.level === 'section') {
+        return (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
+              minHeight: '160px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(232,25,44,0.04)',
+              border: '1px solid rgba(232,25,44,0.15)',
+              borderRadius: '16px',
+              padding: '2rem',
+              margin: '1rem 0'
+            }}
+          >
+            <div style={{ maxWidth: '420px', textAlign: 'center', color: 'rgba(255,255,255,0.85)' }}>
+              <p style={{ marginBottom: '1rem', lineHeight: 1.6, fontSize: '0.95rem' }}>
+                {this.props.label ? `${this.props.label} section` : 'This section'} couldn't load right now.
+                The rest of the page is unaffected.
+              </p>
+              <button
+                onClick={this.handleReset}
+                style={{
+                  background: 'transparent',
+                  color: '#E8192C',
+                  border: '1px solid rgba(232,25,44,0.4)',
+                  padding: '0.6rem 1.5rem',
+                  borderRadius: '10px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  fontSize: '0.875rem'
+                }}
+              >
+                Try again
+              </button>
+              {import.meta.env.DEV && this.state.error && (
+                <div style={{
+                  marginTop: '1.5rem',
+                  padding: '0.75rem',
+                  background: 'rgba(255,255,255,0.05)',
+                  borderRadius: '8px',
+                  textAlign: 'left',
+                  fontSize: '0.7rem',
+                  fontFamily: 'monospace',
+                  color: 'rgba(255,255,255,0.5)',
+                  overflow: 'auto'
+                }}>
+                  <strong>Error:</strong> {this.state.error.toString()}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        );
+      }
+
       return (
         <motion.div 
           initial={{ opacity: 0 }}

@@ -52,13 +52,19 @@ const CaseStudies = () => {
     const unsubCases = onSnapshot(
       collection(db, 'case_studies'),
       (snap) => {
-        const data = snap.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .sort((a, b) =>
-            (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0) -
-            (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0)
-          );
-        setRemoteCases(data.slice(0, 3));
+        try {
+          const docs = Array.isArray(snap?.docs) ? snap.docs : [];
+          const data = docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .sort((a, b) =>
+              (typeof b?.createdAt?.toMillis === 'function' ? b.createdAt.toMillis() : 0) -
+              (typeof a?.createdAt?.toMillis === 'function' ? a.createdAt.toMillis() : 0)
+            );
+          setRemoteCases(data.slice(0, 3));
+        } catch (err) {
+          console.error('CaseStudies: failed to process case_studies snapshot, using fallback', err);
+          setRemoteCases([]);
+        }
       },
       () => setRemoteCases([])
     );
@@ -66,9 +72,15 @@ const CaseStudies = () => {
     const unsubImages = onSnapshot(
       collection(db, 'case_study_images'),
       (snap) => {
-        const imgMap = {};
-        snap.docs.forEach(doc => { imgMap[doc.id] = doc.data(); });
-        setImages(imgMap);
+        try {
+          const imgMap = {};
+          const docs = Array.isArray(snap?.docs) ? snap.docs : [];
+          docs.forEach(doc => { imgMap[doc.id] = doc.data(); });
+          setImages(imgMap);
+        } catch (err) {
+          console.error('CaseStudies: failed to process case_study_images snapshot', err);
+          setImages({});
+        }
       },
       () => setImages({})
     );

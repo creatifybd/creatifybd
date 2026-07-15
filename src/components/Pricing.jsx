@@ -43,15 +43,21 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     const unsub = onSnapshot(
       collection(db, 'pricing'),
       (snap) => {
-        const data = { social: [], branding: [], web: [], video: [] };
-        snap.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .filter(item => item.hidden !== true)
-          .sort((a, b) => (a.order || 0) - (b.order || 0))
-          .forEach(item => {
-            if (data[item.category]) data[item.category].push(item);
-          });
-        setPricingData(data);
+        try {
+          const data = { social: [], branding: [], web: [], video: [] };
+          const docs = Array.isArray(snap?.docs) ? snap.docs : [];
+          docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(item => item?.hidden !== true)
+            .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0))
+            .forEach(item => {
+              if (item?.category && data[item.category]) data[item.category].push(item);
+            });
+          setPricingData(data);
+        } catch (err) {
+          console.error('Pricing: failed to process snapshot, using empty defaults', err);
+          setPricingData({ social: [], branding: [], web: [], video: [] });
+        }
       },
       () => setPricingData({ social: [], branding: [], web: [], video: [] })
     );
