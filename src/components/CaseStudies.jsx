@@ -123,7 +123,24 @@ const CaseStudies = () => {
               || project.fallbackImage
               || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
             const isReverse = index % 2 !== 0;
-            const result    = project.results || ['—', ''];
+            // `results` can come in two shapes depending on where the data was written:
+            //  - legacy/fallback: a flat 2-item array like ['+280%', 'Instagram reach']
+            //  - admin panel (CaseStudiesManager.jsx): an array of { val, label } objects
+            // Normalize both into a single { value, label } pair here so we never accidentally
+            // render a raw object as a React child.
+            const rawResults = project.results;
+            let resultValue = null;
+            let resultLabel = null;
+            if (Array.isArray(rawResults) && rawResults.length > 0) {
+              const first = rawResults[0];
+              if (first && typeof first === 'object') {
+                resultValue = first.val ?? null;
+                resultLabel = first.label ?? null;
+              } else if (typeof first === 'string' || typeof first === 'number') {
+                resultValue = rawResults[0];
+                resultLabel = typeof rawResults[1] === 'string' || typeof rawResults[1] === 'number' ? rawResults[1] : '';
+              }
+            }
 
             return (
               <article
@@ -140,11 +157,11 @@ const CaseStudies = () => {
                   <p className="cs-item-desc">{project.tagline}</p>
 
                   {/* Result metric */}
-                  {Array.isArray(result) && result[0] && (
+                  {resultValue != null && resultValue !== '' && (
                     <div className="cs-result">
                       <TrendingUp size={14} />
-                      <strong>{result[0]}</strong>
-                      <span>{result[1]}</span>
+                      <strong>{resultValue}</strong>
+                      <span>{resultLabel}</span>
                     </div>
                   )}
 
