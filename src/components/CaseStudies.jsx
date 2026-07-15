@@ -179,10 +179,10 @@ const CaseStudies = () => {
                       <OptimizedImage src={heroImg} alt={project.title} objectFit="cover" />
                     </ImageReveal>
                     {/* Floating stat badge */}
-                    {Array.isArray(result) && result[0] && (
+                    {resultValue != null && resultValue !== '' && (
                       <div className="cs-float-stat">
-                        <strong>{result[0]}</strong>
-                        <span>{result[1]}</span>
+                        <strong>{resultValue}</strong>
+                        <span>{resultLabel}</span>
                       </div>
                     )}
                   </div>
