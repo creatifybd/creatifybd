@@ -15,8 +15,15 @@ nav {
   align-items: center;
   justify-content: center;
   transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 0 4rem;
+  padding: 0 var(--container-margin-lg);
   background: transparent;
+}
+
+@media (max-width: 1440px) {
+  nav { padding: 0 var(--container-margin-md); }
+}
+@media (max-width: 1024px) {
+  nav { padding: 0 var(--container-margin-sm); }
 }
 
 /* Floating pill nav on scroll — like Duck Design */

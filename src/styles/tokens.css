@@ -150,10 +150,28 @@
   --section-subtext: var(--muted);
 
   /* ═══════════════════════════════════════════════════════════════
-     LAYOUT TOKENS
+     LAYOUT TOKENS — Duck Design inspired responsive margins
      ═══════════════════════════════════════════════════════════════ */
   --nav-height:        90px;
   --nav-height-scroll: 64px;
-  --section-padding:   clamp(4.5rem, 7vw, 7rem);
+  
+  /* Responsive container margins based on screen size */
+  --container-margin-sm:   1.5rem;  /* Mobile (< 768px) */
+  --container-margin-md:   2.5rem;  /* Tablet (768px - 1024px) */
+  --container-margin-lg:   3.5rem;  /* Small desktop (1024px - 1440px) - 19in */
+  --container-margin-xl:   5rem;    /* Large desktop (1440px - 1920px) - 24in */
+  --container-margin-2xl:  7rem;    /* Extra large (> 1920px) */
+  
+  /* Section padding with responsive behavior */
+  --section-padding:   clamp(4rem, 6vw, 7rem);
+  --section-padding-sm: clamp(3rem, 5vw, 5rem);
+  
+  /* Container max widths */
+  --container-max-sm:   100%;
+  --container-max-md:   960px;
+  --container-max-lg:   1200px;
+  --container-max-xl:   1400px;
+  --container-max-2xl:  1600px;
+  
   --hero-bg:           var(--surface);
 }

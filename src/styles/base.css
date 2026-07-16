@@ -88,12 +88,37 @@ a:hover { color: var(--brand-red); }
 .skip-to-content:focus { top: 0; }
 :focus-visible { outline: 2px solid var(--brand-red); outline-offset: 4px; }
 
-/* ─── Container ─── */
+/* ─── Container — Duck Design inspired responsive margins ─── */
 .container {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--container-max-lg);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--container-margin-lg);
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: var(--container-max-xl);
+    padding: 0 var(--container-margin-xl);
+  }
+}
+@media (min-width: 1920px) {
+  .container {
+    max-width: var(--container-max-2xl);
+    padding: 0 var(--container-margin-2xl);
+  }
+}
+@media (max-width: 1024px) {
+  .container {
+    max-width: var(--container-max-md);
+    padding: 0 var(--container-margin-md);
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    max-width: var(--container-max-sm);
+    padding: 0 var(--container-margin-sm);
+  }
 }
 
 /* ─── Utility Classes ─── */
