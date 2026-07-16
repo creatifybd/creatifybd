@@ -393,95 +393,133 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
       <section className={`wk-section agency-work-section ${fullPage ? 'full-page-section agency-work-page' : ''}`} id="portfolio">
 
         {!fullPage && <div className="wk-grain" aria-hidden="true" />}
-        <div className="wk-inner">
-          {fullPage && (
-            <div className="agency-work-page-header">
-              <div>
+        
+        {highlight ? (
+          <>
+            <div className="wk-inner">
+              <div className="wk-header">
                 <FadeReveal>
-                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />Selected work</div>
+                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
                 </FadeReveal>
                 <TextReveal className="wk-heading">
-                  CreatifyBD Portfolio
+                  {lang === 'bn' ? (
+                    'আমাদের কাজ'
+                  ) : (
+                    <>Our <span className="text-red">Works</span></>
+                  )}
                 </TextReveal>
                 <FadeReveal delay={0.2}>
-                  <p>
-                    Visual work, brand systems, campaigns, videos, and web experiences built for ambitious brands.
+                  <p className="wk-header-copy">
+                    Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.
                   </p>
                 </FadeReveal>
+                <FadeReveal delay={0.4}>
+                  <div className="wk-stats-row">
+                    <div className="wk-stat"><strong><Counter target={portfolioItems.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
+                    <div className="wk-stat-div" />
+                    <div className="wk-stat"><strong><Counter target={40} />%</strong><span>{lang === 'bn' ? 'খরচ সাশ্রয়' : 'Cost Savings'}</span></div>
+                    <div className="wk-stat-div" />
+                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'প্রতিক্রিয়া সময়' : 'Response Time'}</span></div>
+                  </div>
+                </FadeReveal>
               </div>
-              <FadeReveal delay={0.35}>
-                <div className="agency-work-page-stats">
-                  <div><strong><Counter target={portfolioItems.length} />+</strong><span>Projects</span></div>
-                  <div><strong><Counter target={40} />%</strong><span>Cost Savings</span></div>
-                  <div><strong><Counter target={24} />h</strong><span>Response Time</span></div>
-                </div>
-              </FadeReveal>
             </div>
-          )}
-          {!fullPage && (
-            <div className="wk-header">
-              <FadeReveal>
-                <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
-              </FadeReveal>
-              <TextReveal className="wk-heading">
-                {lang === 'bn' ? (
-                  'আমাদের কাজ'
-                ) : (
-                  <>Our <span className="text-red">Works</span></>
-                )}
-              </TextReveal>
-              <FadeReveal delay={0.2}>
-                <p className="wk-header-copy">
-                  Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.
-                </p>
-              </FadeReveal>
-              <FadeReveal delay={0.4}>
-                <div className="wk-stats-row">
-                  <div className="wk-stat"><strong><Counter target={portfolioItems.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
-                  <div className="wk-stat-div" />
-                  <div className="wk-stat"><strong><Counter target={40} />%</strong><span>{lang === 'bn' ? 'খরচ সাশ্রয়' : 'Cost Savings'}</span></div>
-                  <div className="wk-stat-div" />
-                  <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'প্রতিক্রিয়া সময়' : 'Response Time'}</span></div>
-                </div>
-              </FadeReveal>
-            </div>
-          )}
-
-          {!highlight && (
-            <FadeReveal delay={0.2}>
-              <div className="wk-filter-bar" role="tablist">
-                {availableCats.map(cat => (
-                  <button
-                    key={cat.key}
-                    role="tab"
-                    aria-selected={activeFilter === cat.key}
-                    className={`wk-filter-btn${activeFilter === cat.key ? ' wk-filter-btn--active' : ''}`}
-                    onClick={() => handleFilterChange(cat.key)}
-                  >
-                    {lang === 'bn' ? cat.label_bn : cat.label}
-                    {activeFilter === cat.key && (
-                      <motion.span layoutId="filter-count" className="wk-filter-count">
-                        {cat.key === 'all' ? portfolioItems.length : portfolioItems.filter(i => i.category === cat.key).length}
-                      </motion.span>
-                    )}
-                  </button>
-                ))}
-                {fullPage && (
-                  <button
-                    className="wk-layout-toggle"
-                    onClick={() => setLayoutMode(layoutMode === 'masonry' ? 'grid' : 'masonry')}
-                    title={layoutMode === 'masonry' ? 'Switch to Grid' : 'Switch to Masonry'}
-                  >
-                    {layoutMode === 'masonry' ? 'Grid' : 'Masonry'}
-                  </button>
-                )}
-              </div>
-            </FadeReveal>
-          )}
-
-          {highlight ? (
             <PortfolioMarquee items={displayItems} onOpen={openLightbox} />
-          ) : (
+            <div className="wk-inner">
+              <FadeReveal delay={0.4}>
+                <div className="wk-footer" style={{ marginTop: '4rem', textAlign: 'center' }}>
+                  <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'See All Our Works →'}</Link>
+                </div>
+              </FadeReveal>
+            </div>
+          </>
+        ) : (
+          <div className="wk-inner">
+            {fullPage && (
+              <div className="agency-work-page-header">
+                <div>
+                  <FadeReveal>
+                    <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />Selected work</div>
+                  </FadeReveal>
+                  <TextReveal className="wk-heading">
+                    CreatifyBD Portfolio
+                  </TextReveal>
+                  <FadeReveal delay={0.2}>
+                    <p>
+                      Visual work, brand systems, campaigns, videos, and web experiences built for ambitious brands.
+                    </p>
+                  </FadeReveal>
+                </div>
+                <FadeReveal delay={0.35}>
+                  <div className="agency-work-page-stats">
+                    <div><strong><Counter target={portfolioItems.length} />+</strong><span>Projects</span></div>
+                    <div><strong><Counter target={40} />%</strong><span>Cost Savings</span></div>
+                    <div><strong><Counter target={24} />h</strong><span>Response Time</span></div>
+                  </div>
+                </FadeReveal>
+              </div>
+            )}
+            {!fullPage && (
+              <div className="wk-header">
+                <FadeReveal>
+                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
+                </FadeReveal>
+                <TextReveal className="wk-heading">
+                  {lang === 'bn' ? (
+                    'আমাদের কাজ'
+                  ) : (
+                    <>Our <span className="text-red">Works</span></>
+                  )}
+                </TextReveal>
+                <FadeReveal delay={0.2}>
+                  <p className="wk-header-copy">
+                    Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.
+                  </p>
+                </FadeReveal>
+                <FadeReveal delay={0.4}>
+                  <div className="wk-stats-row">
+                    <div className="wk-stat"><strong><Counter target={portfolioItems.length} />+</strong><span>{lang === 'bn' ? 'প্রজেক্ট' : 'Projects'}</span></div>
+                    <div className="wk-stat-div" />
+                    <div className="wk-stat"><strong><Counter target={40} />%</strong><span>{lang === 'bn' ? 'খরচ সাশ্রয়' : 'Cost Savings'}</span></div>
+                    <div className="wk-stat-div" />
+                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'প্রতিক্রিয়া সময়' : 'Response Time'}</span></div>
+                  </div>
+                </FadeReveal>
+              </div>
+            )}
+
+            {!highlight && (
+              <FadeReveal delay={0.2}>
+                <div className="wk-filter-bar" role="tablist">
+                  {availableCats.map(cat => (
+                    <button
+                      key={cat.key}
+                      role="tab"
+                      aria-selected={activeFilter === cat.key}
+                      className={`wk-filter-btn${activeFilter === cat.key ? ' wk-filter-btn--active' : ''}`}
+                      onClick={() => handleFilterChange(cat.key)}
+                    >
+                      {lang === 'bn' ? cat.label_bn : cat.label}
+                      {activeFilter === cat.key && (
+                        <motion.span layoutId="filter-count" className="wk-filter-count">
+                          {cat.key === 'all' ? portfolioItems.length : portfolioItems.filter(i => i.category === cat.key).length}
+                        </motion.span>
+                      )}
+                    </button>
+                  ))}
+                  {fullPage && (
+                    <button
+                      className="wk-layout-toggle"
+                      onClick={() => setLayoutMode(layoutMode === 'masonry' ? 'grid' : 'masonry')}
+                      title={layoutMode === 'masonry' ? 'Switch to Grid' : 'Switch to Masonry'}
+                    >
+                      {layoutMode === 'masonry' ? 'Grid' : 'Masonry'}
+                    </button>
+                  )}
+                </div>
+              </FadeReveal>
+            )}
+
             <div className="duck-work-gallery-wrap">
               <StaggerReveal>
                 <motion.div layout className={`duck-work-gallery duck-work-gallery--${layoutMode}`}>
@@ -507,16 +545,8 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                 </FadeReveal>
               )}
             </div>
-          )}
-
-          {highlight && (
-            <FadeReveal delay={0.4}>
-              <div className="wk-footer" style={{ marginTop: '4rem', textAlign: 'center' }}>
-                <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ দেখুন →' : 'See All Our Works →'}</Link>
-              </div>
-            </FadeReveal>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       <AnimatePresence>

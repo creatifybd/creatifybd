@@ -184,9 +184,9 @@ const Services = ({ highlight = false, fullPage = false }) => {
                   {hoveredIdx === idx && (
                     <motion.div
                       className="svc-preview"
-                      initial={{ opacity: 0, scale: 0.88, x: 16 }}
-                      animate={{ opacity: 1, scale: 1, x: 0 }}
-                      exit={{ opacity: 0, scale: 0.88, x: 16 }}
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: '1rem' }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
                       transition={{ duration: 0.32, ease: EASE }}
                     >
                       <img
@@ -377,26 +377,24 @@ const Services = ({ highlight = false, fullPage = false }) => {
 
         /* Preview image */
         .svc-preview {
-          position: absolute;
-          right: -220px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 200px;
-          height: 150px;
+          position: relative;
+          width: 100%;
+          max-width: 400px;
           border-radius: 14px;
           overflow: hidden;
           box-shadow: 0 20px 60px rgba(0,0,0,0.14);
-          z-index: 10;
           pointer-events: none;
         }
         .svc-preview img {
-          width: 100%; height: 100%;
+          width: 100%;
+          height: auto;
+          max-height: 300px;
           object-fit: cover;
           display: block;
         }
 
         /* Responsive */
-        @media (max-width: 1200px) {
+        @media (max-width: 768px) {
           .svc-preview { display: none; }
         }
         @media (max-width: 900px) {

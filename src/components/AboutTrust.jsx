@@ -66,65 +66,8 @@ const AboutTrust = () => {
             </Link>
           </div>
 
-          {/* Right Column: Creative Asymmetrical Visual Grid */}
+          {/* Right Column: Delivery Model & Stats */}
           <div className="ab-visual-col">
-            {/* Main Portfolio Image with overlay reveal */}
-            <div className="ab-media-frame main-frame">
-              <img
-                src={aboutContent.office_image || fallbackOfficeImage}
-                alt="Logo design and branding portfolio work"
-                className="ab-img-zoom"
-                loading="lazy"
-              />
-              <div className="ab-media-overlay">
-                <div className="ab-media-info">
-                  <Building2 size={32} className="ab-overlay-icon" />
-                  <span className="ab-overlay-kicker">CREATIVE OPERATIONS</span>
-                  <h3 className="ab-overlay-title">
-                    {aboutContent.office_caption || 'Brand identity and logo design projects'}
-                  </h3>
-                </div>
-              </div>
-            </div>
-
-            {/* Split gallery frames */}
-            <div className="ab-split-gallery">
-              <div className="ab-media-frame">
-                <img
-                  src={aboutContent.team_image || fallbackTeamImage}
-                  alt="Brand identity design portfolio"
-                  className="ab-img-zoom"
-                  loading="lazy"
-                />
-                <div className="ab-media-overlay">
-                  <div className="ab-media-info">
-                    <UsersRound size={28} className="ab-overlay-icon" />
-                    <span className="ab-overlay-kicker">PRODUCTION SPRINT</span>
-                    <h3 className="ab-overlay-title sm">
-                      {aboutContent.team_caption || 'Visual design deliverables'}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <div className="ab-media-frame">
-                <img
-                  src={aboutContent.meeting_image || fallbackMeetingImage}
-                  alt="Digital marketing and content portfolio"
-                  className="ab-img-zoom"
-                  loading="lazy"
-                />
-                <div className="ab-media-overlay">
-                  <div className="ab-media-info">
-                    <Video size={28} className="ab-overlay-icon" />
-                    <span className="ab-overlay-kicker">CLIENT CONNECT</span>
-                    <h3 className="ab-overlay-title sm">
-                      {aboutContent.meeting_caption || 'Social media content creation'}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Delivery model tags */}
             <div className="ab-model-card">
               <div className="ab-model-header">
