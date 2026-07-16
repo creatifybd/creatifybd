@@ -229,9 +229,38 @@ const Hero = () => {
           grid-template-columns: 1fr 1fr;
           align-items: center;
           gap: clamp(3rem, 5vw, 7rem);
-          max-width: 1300px;
+          max-width: var(--container-max-xl);
           margin: 0 auto;
-          padding: clamp(4rem, 7vw, 7rem) 2rem clamp(4rem, 6vw, 6rem);
+          padding: clamp(4rem, 7vw, 7rem) var(--container-margin-lg) clamp(4rem, 6vw, 6rem);
+        }
+
+        @media (min-width: 1440px) {
+          .hero-agency-inner {
+            max-width: var(--container-max-2xl);
+            padding: clamp(4rem, 7vw, 7rem) var(--container-margin-xl) clamp(4rem, 6vw, 6rem);
+          }
+        }
+
+        @media (min-width: 1920px) {
+          .hero-agency-inner {
+            padding: clamp(4rem, 7vw, 7rem) var(--container-margin-2xl) clamp(4rem, 6vw, 6rem);
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .hero-agency-inner {
+            max-width: var(--container-max-md);
+            padding: clamp(3rem, 6vw, 5rem) var(--container-margin-md) clamp(3rem, 5vw, 4rem);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero-agency-inner {
+            max-width: var(--container-max-sm);
+            padding: clamp(2.5rem, 5vw, 4rem) var(--container-margin-sm) clamp(2.5rem, 5vw, 3.5rem);
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+          }
         }
 
         /* ── Copy ── */
