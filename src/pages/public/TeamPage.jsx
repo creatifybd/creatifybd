@@ -11,14 +11,6 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 const TeamPage = () => {
   const teamMembers = [
     {
-      name: 'B. I. N. Shad',
-      role: 'Founder & Creative Lead',
-      bio: 'Pioneering custom workflow pipelines connecting global brands with specialized creative assets.',
-      skills: ['Strategy', 'Creative Direction', 'Operations'],
-      email: 'binashad7@gmail.com',
-      image: ''
-    },
-    {
       name: 'Social Media Manager',
       role: 'Lead Social Strategist',
       bio: 'Designing targeted content strategies and hashtag funnels for US/CA/AU audiences.',

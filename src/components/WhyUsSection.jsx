@@ -9,51 +9,44 @@ const FEATURES = [
     num: '01',
     icon: <UserCheck size={22} />,
     title: 'Senior-Level Creatives',
-    desc: 'Every design is crafted by senior creative experts, ensuring top-tier global standards — not templates or juniors.',
+    desc: 'Our team delivers design work with professional standards and attention to detail, not template-based outputs.',
     accent: '#E8192C',
   },
   {
     num: '02',
     icon: <Zap size={22} />,
     title: 'Async Efficiency',
-    desc: 'We coordinate asynchronously via shared dashboards, eliminating useless meetings to save you hours every week.',
+    desc: 'We coordinate asynchronously via shared dashboards, eliminating unnecessary meetings to save you time.',
     accent: '#F59E0B',
   },
   {
     num: '03',
     icon: <LayoutGrid size={22} />,
-    title: 'Up to 50% Lower Cost',
-    desc: 'No heavy agency markup, no physical office overhead, no admin bloat. We pass 100% of these operational savings directly to you.',
+    title: 'Transparent Pricing',
+    desc: 'No hidden fees or surprise charges. You know exactly what you are paying for before we start.',
     accent: '#22C55E',
   },
   {
     num: '04',
     icon: <Repeat size={22} />,
     title: 'Unlimited Revisions',
-    desc: 'We iterate and refine until the design perfectly matches your expectations — no extra fees, no arguments.',
+    desc: 'We iterate and refine until the design meets your expectations — no extra fees for revisions.',
     accent: '#6366F1',
   },
   {
     num: '05',
     icon: <FileCode size={22} />,
     title: 'Source Files Included',
-    desc: 'All Figma, PSD, AI, or project files are delivered on completion. You own 100% of your assets, always.',
+    desc: 'All design files are delivered on completion. You own 100% of your assets, always.',
     accent: '#EC4899',
   },
   {
     num: '06',
     icon: <RotateCcw size={22} />,
-    title: 'Zero Lock-in',
-    desc: 'No complex agency contracts or commitments. Pause, cancel, or resume your subscription anytime — no questions.',
+    title: 'Flexible Commitment',
+    desc: 'No long-term contracts. Pause, cancel, or resume your project anytime — no questions.',
     accent: '#14B8A6',
   },
-];
-
-const TRUST_STATS = [
-  { val: 'No',   label: 'Lock-in contracts'     },
-  { val: '24h',  label: 'Response guarantee'    },
-  { val: '100%', label: 'Scope transparency'    },
-  { val: '7-day',label: 'Money-back window'     },
 ];
 
 const WhyUsSection = () => (
@@ -102,27 +95,6 @@ const WhyUsSection = () => (
           </motion.article>
         ))}
       </div>
-
-      {/* Trust strip */}
-      <motion.div
-        className="why-trust-strip"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: EASE, delay: 0.35 }}
-      >
-        {TRUST_STATS.map((s, i) => (
-          <React.Fragment key={s.label}>
-            <div className="why-trust-item">
-              <strong>{s.val}</strong>
-              <span>{s.label}</span>
-            </div>
-            {i < TRUST_STATS.length - 1 && (
-              <div className="why-trust-div" aria-hidden="true" />
-            )}
-          </React.Fragment>
-        ))}
-      </motion.div>
     </div>
 
     <style>{`

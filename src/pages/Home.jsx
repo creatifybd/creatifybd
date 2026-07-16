@@ -6,12 +6,10 @@ import Hero from '../components/Hero';
 import InfiniteMarquee from '../components/InfiniteMarquee';
 import SEO from '../components/SEO';
 import StatsCounter from '../components/StatsCounter';
-import FeaturedIn from '../components/FeaturedIn';
 
 import { useSettings } from '../context/SettingsContext';
 import usePageSEO from '../hooks/usePageSEO';
 
-const Clients    = lazy(() => import('../components/Clients'));
 const Portfolio  = lazy(() => import('../components/Portfolio'));
 const Services   = lazy(() => import('../components/Services'));
 const WhyUsSection = lazy(() => import('../components/WhyUsSection'));

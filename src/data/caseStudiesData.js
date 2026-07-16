@@ -1,87 +1,60 @@
 export const detailedCaseStudies = {
-  "graphic-design-apex": {
-    id: "graphic-design-apex",
-    category: "Graphic Design",
-    client: "Sample: Streetwear Brand",
-    title: "Brand Identity System Design",
-    year: "2024",
-    industry: "Fashion / Retail",
-    duration: "Sample Project",
-    about: "This is a sample concept demonstrating our brand identity design capabilities. The project showcases a complete visual system including logo variations, typography, color palette, and brand guidelines.",
-    challenge: "Sample challenge: Creating a cohesive visual identity that works across digital and print media while maintaining brand consistency.",
-    solution: "We developed a modular brand system with variable logo marks, a refined typography hierarchy, and a flexible color palette suitable for various applications.",
+  "logo-design-branding": {
+    id: "logo-design-branding",
+    category: "Logo Design & Branding",
+    client: "Multiple International Clients",
+    title: "Brand Identity & Logo Design",
+    year: "2021-2024",
+    industry: "Various Industries",
+    duration: "Ongoing Service",
+    about: "A collection of logo design and branding projects delivered for clients across USA, Germany, UK, Australia, Malaysia, and other countries. Each project focuses on creating memorable visual identities that communicate the client's brand values clearly.",
+    challenge: "Clients needed distinctive logos that would stand out in their respective markets while remaining versatile enough for use across digital platforms, print materials, and various applications.",
+    solution: "We developed custom logo concepts through iterative design processes, delivering multiple options per client with refined typography, balanced color schemes, and scalable vector formats suitable for any application.",
     results: [
-      { val: "Sample", label: "Brand System" },
-      { val: "Concept", label: "Design Work" },
-      { val: "Demo", label: "Portfolio Piece" }
+      { val: "30+", label: "Logo Designs" },
+      { val: "10+", label: "Countries Served" },
+      { val: "5.0", label: "Average Rating" }
     ],
     testimonial: {
-      text: "This is a sample project demonstrating our design capabilities. Contact us to discuss your actual brand identity needs.",
-      author: "CreatifyBD Team",
-      position: "Design Team"
+      text: "Creatify delivered exactly what I had in mind. He met all my requirements and made sure that I am happy with the final result. I can highly recommend him.",
+      author: "janvamberg",
+      position: "Iceland"
     },
     gallery: [
-      { type: "hero", url: "", caption: "Brand Identity Concept" },
-      { type: "mobile", url: "", caption: "Digital Application" },
-      { type: "desktop", url: "", caption: "Brand Guidelines" },
-      { type: "branding", url: "", caption: "Stationery Design" }
+      { type: "hero", url: "/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg", caption: "Logo Design Collection" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-02.jpg", caption: "Brand Identity Concept" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg", caption: "Logo Variations" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-04.jpg", caption: "Typography & Color" }
     ],
     color: "#000000"
   },
-  "marketing-luxe": {
-    id: "marketing-luxe",
+  "digital-marketing": {
+    id: "digital-marketing",
     category: "Digital Marketing",
-    client: "Sample: Real Estate",
-    title: "Social Media Marketing Strategy",
-    year: "2023",
-    industry: "Real Estate / Luxury",
-    duration: "Sample Project",
-    about: "This is a sample concept demonstrating our social media marketing capabilities. The project showcases content strategy, ad creative design, and campaign planning.",
-    challenge: "Sample challenge: Creating engaging social content that resonates with a luxury audience while maintaining brand sophistication.",
-    solution: "We developed a content calendar with high-quality visuals, strategic posting schedules, and engagement-focused community management.",
+    client: "E-commerce & Service Businesses",
+    title: "Social Media Content & Marketing",
+    year: "2022-2024",
+    industry: "Digital Marketing",
+    duration: "Ongoing Service",
+    about: "Digital marketing and social media content creation projects focused on helping businesses improve their online presence through strategic content planning and visual creative.",
+    challenge: "Clients needed consistent, engaging social media content that would build brand awareness and drive engagement across multiple platforms.",
+    solution: "We developed content strategies with visually appealing posts, maintaining brand consistency while adapting content for different social platforms and audience preferences.",
     results: [
-      { val: "Sample", label: "Content Strategy" },
-      { val: "Concept", label: "Marketing Work" },
-      { val: "Demo", label: "Portfolio Piece" }
+      { val: "10+", label: "Marketing Projects" },
+      { val: "Multi-platform", label: "Content Delivery" },
+      { val: "Fast", label: "Turnaround Time" }
     ],
     testimonial: {
-      text: "This is a sample project demonstrating our marketing capabilities. Contact us to discuss your actual marketing needs.",
-      author: "CreatifyBD Team",
-      position: "Marketing Team"
+      text: "Great work! Very reliable and quick responses!",
+      author: "brianwojtravel",
+      position: "USA"
     },
     gallery: [
-      { type: "hero", url: "", caption: "Content Strategy Concept" },
-      { type: "mobile", url: "", caption: "Social Media Posts" },
-      { type: "desktop", url: "", caption: "Campaign Planning" }
+      { type: "hero", url: "/assets/portfolio/digital-marketing/digital-marketing-01.jpg", caption: "Social Media Content" },
+      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-02.jpg", caption: "Marketing Creative" },
+      { type: "desktop", url: "/assets/portfolio/digital-marketing/digital-marketing-03.jpg", caption: "Content Strategy" },
+      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-04.jpg", caption: "Brand Campaign" }
     ],
     color: "#D4AF37"
-  },
-  "web-design-finflow": {
-    id: "web-design-finflow",
-    category: "Website Design",
-    client: "Sample: SaaS Platform",
-    title: "Website UI/UX Design",
-    year: "2024",
-    industry: "FinTech / SaaS",
-    duration: "Sample Project",
-    about: "This is a sample concept demonstrating our website design capabilities. The project showcases UI/UX design, responsive layouts, and modern web aesthetics.",
-    challenge: "Sample challenge: Creating an intuitive user interface for a complex data-driven platform.",
-    solution: "We implemented a clean, card-based architecture with clear information hierarchy and smooth micro-interactions.",
-    results: [
-      { val: "Sample", label: "UI/UX Design" },
-      { val: "Concept", label: "Web Design Work" },
-      { val: "Demo", label: "Portfolio Piece" }
-    ],
-    testimonial: {
-      text: "This is a sample project demonstrating our web design capabilities. Contact us to discuss your actual website needs.",
-      author: "CreatifyBD Team",
-      position: "Design Team"
-    },
-    gallery: [
-      { type: "hero", url: "", caption: "Dashboard Design Concept" },
-      { type: "desktop", url: "", caption: "UI Components" },
-      { type: "mobile", url: "", caption: "Responsive Design" }
-    ],
-    color: "#6366F1"
   }
 };

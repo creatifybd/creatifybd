@@ -11,7 +11,7 @@ const CTABand = () => {
   const cta = content?.cta_band || {};
 
   const headline = cta.headline || 'Know what you want? Great.\u00a0 Got questions? Even better.';
-  const subtext  = cta.subtext  || "Tell me about your project and I'll get back to you within 24\u00a0hours.";
+  const subtext  = cta.subtext  || "Tell us about your project and we'll get back to you within 24\u00a0hours.";
   const ctaLabel = cta.cta_label || "Start a Project";
 
   return (

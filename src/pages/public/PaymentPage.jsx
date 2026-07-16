@@ -221,34 +221,48 @@ const PaymentPage = () => {
                   <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'rgba(76,175,80,0.15)', color: '#4caf50', padding: '0.2rem 0.6rem', borderRadius: '20px', fontWeight: 700 }}>Recommended</span>
                 </div>
 
-                <div className="payment-details">
-                  <div className="payment-detail-row">
-                    <span className="payment-label">Recipient</span>
-                    <span className="payment-value">{siteConfig.payoneer.accountName}</span>
+                {siteConfig.payoneer.placeholder ? (
+                  <div className="payment-placeholder-warning">
+                    <AlertCircle size={20} style={{ marginRight: '0.5rem' }} />
+                    <p>Payment details will be shared after order confirmation. Please contact us for payment information.</p>
+                    <Link to="/contact" className="btn-red" style={{ marginTop: '1rem', display: 'inline-block' }}>Contact for Payment Details</Link>
                   </div>
-                  <div className="payment-detail-row">
-                    <span className="payment-label">Currency</span>
-                    <span className="payment-value">{siteConfig.payoneer.currency}</span>
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="payment-details">
+                      <div className="payment-detail-row">
+                        <span className="payment-label">Recipient</span>
+                        <span className="payment-value">{siteConfig.payoneer.accountName || 'Contact for details'}</span>
+                      </div>
+                      <div className="payment-detail-row">
+                        <span className="payment-label">Currency</span>
+                        <span className="payment-value">{siteConfig.payoneer.currency}</span>
+                      </div>
+                    </div>
 
-                <div className="payment-note" style={{ marginTop: '1rem' }}>
-                  <AlertCircle size={16} style={{ marginRight: '0.5rem', flexShrink: 0 }} />
-                  <span>{siteConfig.payoneer.note}</span>
-                </div>
+                    <div className="payment-note" style={{ marginTop: '1rem' }}>
+                      <AlertCircle size={16} style={{ marginRight: '0.5rem', flexShrink: 0 }} />
+                      <span>{siteConfig.payoneer.note}</span>
+                    </div>
 
-                <a
-                  href={siteConfig.payoneer.paymentLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-red"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem', width: '100%', padding: '0.9rem', borderRadius: '10px', fontSize: '1rem', fontWeight: 700, textDecoration: 'none' }}
-                >
-                  Pay with Payoneer →
-                </a>
-                <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--section-subtext, #888)', marginTop: '0.75rem' }}>
-                  Opens Payoneer secure checkout. Enter your exact order amount.
-                </p>
+                    {siteConfig.payoneer.paymentLink && (
+                      <>
+                        <a
+                          href={siteConfig.payoneer.paymentLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-red"
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem', width: '100%', padding: '0.9rem', borderRadius: '10px', fontSize: '1rem', fontWeight: 700, textDecoration: 'none' }}
+                        >
+                          Pay with Payoneer →
+                        </a>
+                        <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--section-subtext, #888)', marginTop: '0.75rem' }}>
+                          Opens Payoneer secure checkout. Enter your exact order amount.
+                        </p>
+                      </>
+                    )}
+                  </>
+                )}
               </div>
 
               {/* DBBL Bank Transfer */}
@@ -687,6 +701,24 @@ const PaymentPage = () => {
           margin-top: 1rem;
           font-size: 0.85rem;
           color: var(--section-subtext, #888);
+        }
+
+        .payment-placeholder-warning {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          padding: 2rem;
+          background: rgba(255, 193, 7, 0.05);
+          border: 1px solid rgba(255, 193, 7, 0.2);
+          border-radius: 8px;
+          text-align: center;
+          color: var(--section-subtext, #888);
+        }
+
+        .payment-placeholder-warning p {
+          margin: 0;
+          font-size: 0.9rem;
         }
 
         .payment-faq {

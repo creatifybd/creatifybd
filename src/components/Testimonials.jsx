@@ -2,19 +2,39 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import { CLIENT_REVIEWS } from '../data/clientReviews';
 
 const EASE = [0.16, 1, 0.3, 1];
 
-const FALLBACK_TESTIMONIALS = [
-  { id:'t1', name:'Emily Carter',    role:'Founder, Aurevia Skincare',    initials:'EC', color:'#c084fc', stars:5, tag:'Branding',         text:'CreatifyBD gave Aurevia a complete brand identity that finally matches our product quality. The logo direction and packaging mockups impressed every retail buyer we pitched to.' },
-  { id:'t2', name:'Daniel Osei',     role:'Co-Founder, NexoPay',          initials:'DO', color:'#3b82f6', stars:5, tag:'Brand Identity',    text:'The brand system CreatifyBD built for NexoPay felt instantly credible to investors. Clean, professional, and exactly the fintech identity we needed.' },
-  { id:'t3', name:'Marco Ruiz',      role:'Owner, Brasa Fire Restaurant',  initials:'MR', color:'#f97316', stars:5, tag:'Brand & Print',     text:'Our restaurant branding needed personality and warmth. CreatifyBD nailed it — the new identity is on every menu, sign, and social post now.' },
-  { id:'t4', name:'Claire Whitman',  role:'GM, Harbor & Pine Hotels',      initials:'CW', color:'#0d9488', stars:5, tag:'Branding',          text:'Guests comment on our new branding constantly. CreatifyBD understood exactly the boutique hospitality feel we were going for.' },
-  { id:'t5', name:'Priya Nair',      role:'Head of Marketing, NovaGrid',   initials:'PN', color:'#e8192c', stars:5, tag:'Website Design',    text:'Our SaaS landing page and brand kit from CreatifyBD helped us close bigger enterprise deals. First impressions matter, and now ours is strong.' },
-  { id:'t6', name:'Isabelle Moreau', role:'Creative Director, Solenne',    initials:'IM', color:'#ec4899', stars:5, tag:'Brand Identity',    text:'Our fashion identity needed to feel luxury without being cold. CreatifyBD delivered exactly that balance — refined, warm, and unmistakably us.' },
-  { id:'t7', name:'Marcus Reed',     role:'Director, BrightNest Academy',  initials:'MR', color:'#22c55e', stars:5, tag:'Social Media',      text:'Enrollment inquiries went up noticeably after CreatifyBD rebuilt our brand and social presence. Parents trust us more because we look more professional.' },
-  { id:'t8', name:'Olivia Bennett',  role:'Owner, Crumb & Hearth Bakery',  initials:'OB', color:'#f59e0b', stars:5, tag:'Packaging Design',  text:'The packaging CreatifyBD designed for our artisan bakery has become our strongest marketing tool. Every order drives compliments and Instagram shares.' },
-];
+const getInitials = (name) => {
+  return (name || 'Client')
+    .split(/[_\s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0]?.toUpperCase())
+    .join('') || 'C';
+};
+
+const getColor = (name) => {
+  const palette = ['#c084fc', '#3b82f6', '#f97316', '#0d9488', '#e8192c', '#ec4899', '#22c55e', '#f59e0b'];
+  const index = (name || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) % palette.length;
+  return palette[index];
+};
+
+const transformReviews = (reviews) => {
+  return reviews.map(review => ({
+    id: review.id,
+    name: review.clientName,
+    role: review.country,
+    initials: getInitials(review.clientName),
+    color: getColor(review.clientName),
+    stars: Math.round(review.rating),
+    tag: review.gigTitle,
+    text: review.reviewText
+  }));
+};
+
+const REAL_TESTIMONIALS = transformReviews(CLIENT_REVIEWS);
 
 const Stars = ({ count = 5 }) => (
   <div className="testi-stars" aria-label={`${count} out of 5 stars`}>
@@ -51,9 +71,9 @@ const MarqueeRow = ({ items, reverse = false }) => (
 );
 
 const Testimonials = () => {
-  const half = Math.ceil(FALLBACK_TESTIMONIALS.length / 2);
-  const row1 = FALLBACK_TESTIMONIALS.slice(0, half);
-  const row2 = FALLBACK_TESTIMONIALS.slice(half);
+  const half = Math.ceil(REAL_TESTIMONIALS.length / 2);
+  const row1 = REAL_TESTIMONIALS.slice(0, half);
+  const row2 = REAL_TESTIMONIALS.slice(half);
 
   return (
     <section className="testi-section section" id="testimonials">

@@ -8,28 +8,22 @@ import { useSettings } from '../../context/SettingsContext';
 
 const teamMembers = [
   {
-    name: 'B. I. N. Shad',
-    role: 'Founder & CEO',
-    bio: 'Leads creative strategy, client success, and the operating system behind CreatifyBD.',
-    image: ''
-  },
-  {
     name: 'Social Media Strategy Team',
     role: 'Content Planning',
     bio: 'Builds monthly calendars, captions, content pillars, and performance reports.',
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=700&auto=format&fit=crop'
+    image: ''
   },
   {
     name: 'Design Studio',
     role: 'Graphic Design',
     bio: 'Creates brand assets, post designs, ad creatives, logos, and campaign visuals.',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=700&auto=format&fit=crop'
+    image: ''
   },
   {
     name: 'Video & Web Team',
     role: 'Production',
     bio: 'Edits short-form videos and builds conversion-focused websites and landing pages.',
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=700&auto=format&fit=crop'
+    image: ''
   }
 ];
 
@@ -37,30 +31,30 @@ const agencyMoments = [
   {
     icon: <Building2 size={17} />,
     title: 'Creative operations hub',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop'
+    image: ''
   },
   {
     icon: <Users size={17} />,
     title: 'Team production sprint',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop'
+    image: ''
   },
   {
     icon: <Video size={17} />,
     title: 'Online client review',
-    image: 'https://images.unsplash.com/photo-1616587894289-86480e533129?q=80&w=1200&auto=format&fit=crop'
+    image: ''
   },
   {
     icon: <MonitorPlay size={17} />,
     title: 'Delivery quality review',
-    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop'
+    image: ''
   }
 ];
 
 const AboutPage = () => {
   const { content } = useSettings();
   const aboutContent = content?.about_trust || {};
-  const ceoName = aboutContent.ceo_name || 'B. I. N. Shad';
-  const ceoRole = aboutContent.ceo_role || 'Founder & CEO';
+  const ceoName = aboutContent.ceo_name || 'CreatifyBD Team';
+  const ceoRole = aboutContent.ceo_role || 'Creative Team';
   const ceoInitials = ceoName.split(' ').map(part => part[0]).join('').slice(0, 2) || 'BS';
   const displayTeamMembers = teamMembers.map((member, index) => (
     index === 0

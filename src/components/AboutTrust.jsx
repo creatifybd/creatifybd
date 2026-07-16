@@ -5,11 +5,11 @@ import { useSettings } from '../context/SettingsContext';
 import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 
 const defaultRoles = [
-  'Social strategist',
-  'Graphic designer',
-  'Video editor',
-  'Web designer',
-  'Client success'
+  'Brand Strategy',
+  'Visual Design',
+  'Motion & Video',
+  'Web Development',
+  'Client Success'
 ];
 
 const defaultStats = [
@@ -18,9 +18,9 @@ const defaultStats = [
   { value: '100%', label: 'Scope clarity' }
 ];
 
-const fallbackOfficeImage = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop';
-const fallbackTeamImage = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=900&auto=format&fit=crop';
-const fallbackMeetingImage = 'https://images.unsplash.com/photo-1616587894289-86480e533129?q=80&w=900&auto=format&fit=crop';
+const fallbackOfficeImage = '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg';
+const fallbackTeamImage = '/assets/portfolio/logo-design-branding/logo-design-branding-02.jpg';
+const fallbackMeetingImage = '/assets/portfolio/digital-marketing/digital-marketing-01.jpg';
 
 const AboutTrust = () => {
   const { content } = useSettings();
@@ -47,24 +47,15 @@ const AboutTrust = () => {
             <h2 className="ab-title">{renderRichTitle(title)}</h2>
             <p className="ab-subtitle">{subtitle}</p>
 
-            {/* Quote Block */}
+            {/* Our Approach Statement */}
             <div className="ab-ceo-card">
-              <div className="ab-ceo-portrait">
-                {aboutContent.ceo_image ? (
-                  <img src={aboutContent.ceo_image} alt={aboutContent.ceo_name || 'Founder'} loading="lazy" />
-                ) : (
-                  <div className="ab-ceo-avatar-placeholder">BS</div>
-                )}
-              </div>
               <div className="ab-ceo-quote-body">
                 <Quote size={20} className="ab-quote-icon" />
                 <p className="ab-quote-text">
                   "{aboutContent.ceo_quote || 'Our responsibility is simple: make every brand look credible, consistent, and ready for international customers.'}"
                 </p>
                 <div className="ab-ceo-meta">
-                  <span className="ab-ceo-name">{aboutContent.ceo_name || 'B. I. N. Shad'}</span>
-                  <span className="ab-ceo-sep">/</span>
-                  <span className="ab-ceo-role">{aboutContent.ceo_role || 'Founder & CEO'}</span>
+                  <span className="ab-ceo-name">CreatifyBD Team</span>
                 </div>
               </div>
             </div>
@@ -77,11 +68,11 @@ const AboutTrust = () => {
 
           {/* Right Column: Creative Asymmetrical Visual Grid */}
           <div className="ab-visual-col">
-            {/* Main Office Image with overlay reveal */}
+            {/* Main Portfolio Image with overlay reveal */}
             <div className="ab-media-frame main-frame">
               <img
                 src={aboutContent.office_image || fallbackOfficeImage}
-                alt="CreatifyBD collaborative production office"
+                alt="Logo design and branding portfolio work"
                 className="ab-img-zoom"
                 loading="lazy"
               />
@@ -90,7 +81,7 @@ const AboutTrust = () => {
                   <Building2 size={32} className="ab-overlay-icon" />
                   <span className="ab-overlay-kicker">CREATIVE OPERATIONS</span>
                   <h3 className="ab-overlay-title">
-                    {aboutContent.office_caption || 'Remote-ready creative operations for international clients'}
+                    {aboutContent.office_caption || 'Brand identity and logo design projects'}
                   </h3>
                 </div>
               </div>
@@ -101,7 +92,7 @@ const AboutTrust = () => {
               <div className="ab-media-frame">
                 <img
                   src={aboutContent.team_image || fallbackTeamImage}
-                  alt="CreatifyBD team planning creative deliverables"
+                  alt="Brand identity design portfolio"
                   className="ab-img-zoom"
                   loading="lazy"
                 />
@@ -110,7 +101,7 @@ const AboutTrust = () => {
                     <UsersRound size={28} className="ab-overlay-icon" />
                     <span className="ab-overlay-kicker">PRODUCTION SPRINT</span>
                     <h3 className="ab-overlay-title sm">
-                      {aboutContent.team_caption || 'Team production sprint'}
+                      {aboutContent.team_caption || 'Visual design deliverables'}
                     </h3>
                   </div>
                 </div>
@@ -118,7 +109,7 @@ const AboutTrust = () => {
               <div className="ab-media-frame">
                 <img
                   src={aboutContent.meeting_image || fallbackMeetingImage}
-                  alt="Online client review meeting"
+                  alt="Digital marketing and content portfolio"
                   className="ab-img-zoom"
                   loading="lazy"
                 />
@@ -127,7 +118,7 @@ const AboutTrust = () => {
                     <Video size={28} className="ab-overlay-icon" />
                     <span className="ab-overlay-kicker">CLIENT CONNECT</span>
                     <h3 className="ab-overlay-title sm">
-                      {aboutContent.meeting_caption || 'Online client review'}
+                      {aboutContent.meeting_caption || 'Social media content creation'}
                     </h3>
                   </div>
                 </div>

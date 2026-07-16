@@ -10,8 +10,8 @@ const EASE = [0.16, 1, 0.3, 1];
 const defaultSteps = [
   {
     num: '01',
-    title: 'Tell me about your brand',
-    desc: 'Tell me about your brand, your goals, and the kind of design you need. The more you share, the better the outcome.',
+    title: 'Tell us about your brand',
+    desc: 'Tell us about your brand, your goals, and the kind of design you need. The more you share, the better the outcome.',
   },
   {
     num: '02',
@@ -21,7 +21,7 @@ const defaultSteps = [
   {
     num: '03',
     title: 'Concept Development',
-    desc: 'I start with rough concepts and directions so you can see the ideas before final artwork begins. No surprises, just progress.',
+    desc: 'We start with rough concepts and directions so you can see the ideas before final artwork begins. No surprises, just progress.',
   },
   {
     num: '04',
@@ -31,7 +31,7 @@ const defaultSteps = [
   {
     num: '05',
     title: 'Feedback & Revisions',
-    desc: 'Share your feedback and I refine the design until it truly represents your brand. Revisions are structured and transparent.',
+    desc: 'Share your feedback and we refine the design until it truly represents your brand. Revisions are structured and transparent.',
   },
 ];
 
