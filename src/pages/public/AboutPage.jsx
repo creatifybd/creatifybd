@@ -27,29 +27,6 @@ const teamMembers = [
   }
 ];
 
-const agencyMoments = [
-  {
-    icon: <Building2 size={17} />,
-    title: 'Creative operations hub',
-    image: ''
-  },
-  {
-    icon: <Users size={17} />,
-    title: 'Team production sprint',
-    image: ''
-  },
-  {
-    icon: <Video size={17} />,
-    title: 'Online client review',
-    image: ''
-  },
-  {
-    icon: <MonitorPlay size={17} />,
-    title: 'Delivery quality review',
-    image: ''
-  }
-];
-
 const AboutPage = () => {
   const { content } = useSettings();
   const aboutContent = content?.about_trust || {};
@@ -66,25 +43,6 @@ const AboutPage = () => {
         }
       : member
   ));
-  const displayAgencyMoments = agencyMoments.map((moment, index) => {
-    const cmsImage = [
-      aboutContent.office_image,
-      aboutContent.team_image,
-      aboutContent.meeting_image,
-      aboutContent.office_image
-    ][index];
-    const cmsTitle = [
-      aboutContent.office_caption,
-      aboutContent.team_caption,
-      aboutContent.meeting_caption,
-      'Delivery quality review'
-    ][index];
-    return {
-      ...moment,
-      title: cmsTitle || moment.title,
-      image: cmsImage || moment.image
-    };
-  });
 
   const seo = usePageSEO('about', {
     title: "About Best Creative Agency | Social Media Management & Digital Marketing Team | CreatifyBD",
@@ -144,26 +102,6 @@ const AboutPage = () => {
               <div><ShieldCheck size={22} /><strong>Clear scope</strong><span>Packages, milestones, and revisions upfront.</span></div>
               <div><Award size={22} /><strong>Quality review</strong><span>Deliverables checked before handoff.</span></div>
               <div><Users size={22} /><strong>Specialist team</strong><span>Strategy, design, video, web, and support.</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="about-office-section">
-          <div className="container">
-            <div className="section-header text-center">
-              <span className="eyebrow">Our Office</span>
-              <h2 className="section-h">Structured production for global clients</h2>
-              <p className="section-sub">
-                Our remote-ready production workflow keeps projects organized, quality controlled, and cost-efficient for international clients.
-              </p>
-            </div>
-            <div className="office-gallery-grid agency-moments-grid">
-              {displayAgencyMoments.map((moment, index) => (
-                <figure key={moment.title} className={index === 0 ? 'moment-large' : ''}>
-                  <img src={moment.image} alt={`CreatifyBD ${moment.title.toLowerCase()}`} />
-                  <figcaption>{moment.icon} {moment.title}</figcaption>
-                </figure>
-              ))}
             </div>
           </div>
         </section>

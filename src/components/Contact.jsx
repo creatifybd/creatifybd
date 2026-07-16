@@ -221,19 +221,6 @@ const Contact = () => {
                 💬 Chat on WhatsApp
               </a>
             </FadeReveal>
-
-            {cContent.office_image && (
-              <FadeReveal delay={0.6}>
-                <div style={{ marginTop: '2.5rem' }}>
-                  <img
-                    src={cContent.office_image}
-                    alt="CreatifyBD office"
-                    style={{ width: '100%', maxWidth: '400px', borderRadius: '16px', objectFit: 'cover' }}
-                    loading="lazy"
-                  />
-                </div>
-              </FadeReveal>
-            )}
           </div>
 
           {/* ── Form card ── */}
