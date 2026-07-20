@@ -40,6 +40,12 @@ export const uploadAsset = async (file, onProgress, options = {}) => {
   body.append('file', uploadFile);
   body.append('upload_preset', uploadPreset);
   body.append('folder', options.folder || 'creatifybd');
+  
+  // Preserve PNG format - don't convert to JPG
+  if (file.type === 'image/png') {
+    body.append('format', 'png');
+    body.append('quality', 'auto');
+  }
 
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();

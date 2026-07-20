@@ -10,7 +10,6 @@ import { useSettings } from '../context/SettingsContext';
 import usePageSEO from '../hooks/usePageSEO';
 
 const IntroBand  = lazy(() => import('../components/IntroBand'));
-const Clients    = lazy(() => import('../components/Clients'));
 const SmmHighlight = lazy(() => import('../components/SmmHighlight'));
 const Portfolio  = lazy(() => import('../components/Portfolio'));
 const Services   = lazy(() => import('../components/Services'));
@@ -97,8 +96,6 @@ const Home = () => {
           <Portfolio highlight={true} theme={content?.portfolio?.theme} />
         )}
 
-        {/* 4b — Clients — real client names/logos, off until populated via admin */}
-        {content?.visibility?.clients === true && <Clients />}
 
         {/* 4c — SMM spotlight — optional deep-dive on one service, off by default
              to keep the four service lines equally weighted; admin can enable

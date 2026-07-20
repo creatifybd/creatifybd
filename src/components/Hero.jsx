@@ -31,7 +31,7 @@ const Hero = () => {
     'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.';
   const cta1Label    = heroContent.cta1     || 'See Our Work';
   const cta2Label    = heroContent.cta2     || 'Get a Custom Quote';
-  const previewImages = heroContent.preview_images || PREVIEW_IMAGES;
+  const heroImage    = heroContent.hero_image || '/assets/hero-visual.png';
 
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 600], [0, -60]);
@@ -118,7 +118,7 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* ── RIGHT VISUAL GRID ── */}
+        {/* ── RIGHT VISUAL ── */}
         <motion.div
           className="hero-agency-visual"
           initial={{ opacity: 0, x: 40, scale: 0.96 }}
@@ -126,55 +126,14 @@ const Hero = () => {
           transition={{ duration: 1.1, ease: EASE_EXPO, delay: 0.15 }}
           style={{ y: y1 }}
         >
-          <div className="hero-img-grid">
-            {/* Main large image */}
-            <motion.div className="hero-img-main" style={{ y: y2 }}>
+          <div className="hero-img-single">
+            <motion.div style={{ y: y2 }}>
               <img
-                src={previewImages[0]}
-                alt="Brand identity design"
+                src={heroImage}
+                alt="Creative work showcase"
                 loading="eager"
                 fetchPriority="high"
               />
-            </motion.div>
-
-            {/* Tall side stack */}
-            <div className="hero-img-col">
-              <motion.div className="hero-img-sm" style={{ y: y1 }}>
-                <img src={previewImages[1]} alt="Logo design" loading="eager" />
-              </motion.div>
-              <motion.div className="hero-img-sm" style={{ y: y2 }}>
-                <img src={previewImages[2]} alt="Packaging design" loading="lazy" />
-              </motion.div>
-              <motion.div className="hero-img-sm" style={{ y: y1 }}>
-                <img src={previewImages[3]} alt="Brand mark" loading="lazy" />
-              </motion.div>
-            </div>
-
-            {/* Bottom strip */}
-            <motion.div className="hero-img-wide" style={{ y: y1 }}>
-              <img src={previewImages[4]} alt="Creative design" loading="lazy" />
-            </motion.div>
-
-            {/* Floating badge top */}
-            <motion.div
-              className="hero-badge hero-badge--tr"
-              initial={{ opacity: 0, scale: 0.7, y: -12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.1 }}
-            >
-              <span className="hero-badge-star">★</span>
-              4.9 Rated on Fiverr
-            </motion.div>
-
-            {/* Floating badge bottom */}
-            <motion.div
-              className="hero-badge hero-badge--bl"
-              initial={{ opacity: 0, scale: 0.7, y: 12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: EASE_EXPO, delay: 1.25 }}
-            >
-              <span className="hero-badge-dot" />
-              Available for new projects
             </motion.div>
           </div>
         </motion.div>
@@ -197,18 +156,10 @@ const Hero = () => {
           z-index: 0;
         }
         .hero-agency-glow-a {
-          position: absolute;
-          width: 900px; height: 900px;
-          top: -300px; right: -200px;
-          background: radial-gradient(circle, rgba(232,25,44,0.07) 0%, transparent 60%);
-          border-radius: 50%;
+          display: none;
         }
         .hero-agency-glow-b {
-          position: absolute;
-          width: 400px; height: 400px;
-          bottom: -100px; left: -80px;
-          background: radial-gradient(circle, rgba(232,25,44,0.04) 0%, transparent 60%);
-          border-radius: 50%;
+          display: none;
         }
         .hero-agency-grid {
           position: absolute;
@@ -426,85 +377,23 @@ const Hero = () => {
         .hero-agency-visual {
           position: relative;
         }
-        .hero-img-grid {
+        .hero-img-single {
           position: relative;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto;
-          gap: 0.7rem;
-        }
-
-        /* Images */
-        .hero-img-main {
-          grid-column: 1;
-          grid-row: 1;
           border-radius: 18px;
           overflow: hidden;
           aspect-ratio: 4/3;
           background: var(--surface-soft);
+          box-shadow: none;
         }
-        .hero-img-col {
-          grid-column: 2;
-          grid-row: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.7rem;
-        }
-        .hero-img-sm {
-          border-radius: 14px;
-          overflow: hidden;
-          flex: 1;
-          background: var(--surface-soft);
-          min-height: 100px;
-        }
-        .hero-img-wide {
-          grid-column: 1 / -1;
-          grid-row: 2;
-          border-radius: 14px;
-          overflow: hidden;
-          aspect-ratio: 16/5;
-          background: var(--surface-soft);
-        }
-        .hero-img-main img,
-        .hero-img-sm img,
-        .hero-img-wide img {
-          width: 100%; height: 100%;
-          object-fit: cover;
+        .hero-img-single img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
           display: block;
           transition: transform 0.55s cubic-bezier(0.25,0.8,0.25,1);
+          box-shadow: none;
         }
-        .hero-img-main:hover img,
-        .hero-img-sm:hover img,
-        .hero-img-wide:hover img { transform: scale(1.05); }
-
-        /* Floating badges */
-        .hero-badge {
-          position: absolute;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.45rem;
-          background: #fff;
-          border: 1px solid rgba(0,0,0,0.07);
-          border-radius: 100px;
-          padding: 0.5rem 1.1rem;
-          font-family: var(--font-body);
-          font-size: 0.75rem;
-          font-weight: 700;
-          color: var(--ink);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
-          white-space: nowrap;
-          z-index: 5;
-        }
-        .hero-badge--tr { top: -14px; right: -14px; }
-        .hero-badge--bl { bottom: 62px; left: -14px; }
-        .hero-badge-star { color: #f59e0b; font-size: 0.85rem; }
-        .hero-badge-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: #22c55e;
-          flex-shrink: 0;
-          animation: heroPulse 2.5s ease-in-out infinite;
-        }
+        .hero-img-single:hover img { transform: scale(1.05); }
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {
@@ -518,8 +407,6 @@ const Hero = () => {
           .hero-agency-ctas { justify-content: center; }
           .hero-agency-stats { align-self: center; }
           .hero-agency-visual { max-width: 640px; margin: 0 auto; width: 100%; }
-          .hero-badge--tr { top: -10px; right: 10px; }
-          .hero-badge--bl { bottom: 48px; left: 10px; }
         }
         @media (max-width: 640px) {
           .hero-agency-h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
@@ -527,18 +414,12 @@ const Hero = () => {
           .hero-agency-stats { padding: 1rem; }
           .hero-stat-item { padding: 0 0.85rem; }
           .hero-stat-item strong { font-size: 1.2rem; }
-          .hero-img-wide { display: none; }
-          .hero-badge { font-size: 0.68rem; padding: 0.4rem 0.8rem; }
-          .hero-badge--tr { top: -8px; right: 8px; }
-          .hero-badge--bl { bottom: 12px; left: 8px; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .hero-agency-pulse, .hero-badge-dot { animation: none; }
+          .hero-agency-pulse { animation: none; }
           .hero-cta-primary:hover,
           .hero-cta-ghost:hover { transform: none; }
-          .hero-img-main img,
-          .hero-img-sm img,
-          .hero-img-wide img { transition: none; }
+          .hero-img-single img { transition: none; }
         }
       `}</style>
     </section>
