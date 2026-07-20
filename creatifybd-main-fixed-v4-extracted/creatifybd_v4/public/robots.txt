@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin
+Disallow: /login/
+Disallow: /login
+Disallow: /client/
+Disallow: /client
+Disallow: /order/
+Disallow: /order
+Disallow: /payment/
+Disallow: /payment
+
+Sitemap: https://creatifybd.com/sitemap.xml
