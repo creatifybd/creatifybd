@@ -65,12 +65,13 @@ const PortfolioManager = () => {
     setItems([...syncedCurated, ...customItems]);
     setLoading(false);
 
-    // Step 3: Best-effort sync — overwrite Firestore documents with local texts, preserving images & hidden/featured
+    // Step 3: Force sync — overwrite all Firestore documents with project file data, only preserving images & hidden/featured
     try {
       const batch = writeBatch(db);
       CURATED_PORTFOLIO.forEach(item => {
         const override = storedById.get(item.id);
         batch.set(doc(db, 'portfolio', item.id), {
+          // Always use project file data for text fields
           title: item.title,
           description: item.description,
           category: item.category,
@@ -79,13 +80,14 @@ const PortfolioManager = () => {
           tags: item.tags,
           seoTitle: item.seoTitle,
           seoDescription: item.seoDescription,
+          // Preserve custom uploads and visibility settings from Firestore
           imageUrl: override?.imageUrl || override?.image || item.image,
           hidden: override?.hidden !== undefined ? override.hidden : false,
           featured: override?.featured !== undefined ? override.featured : false,
           featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : 0,
           isCurated: true,
           updatedAt: serverTimestamp()
-        });
+        }, { merge: false }); // Use set without merge to completely replace document
       });
       await batch.commit();
     } catch (_syncErr) {
