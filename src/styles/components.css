@@ -178,6 +178,9 @@
   letter-spacing: -0.02em;
   position: relative;
   display: inline-block;
+}
+
+.eyebrow {
   background: linear-gradient(
     120deg,
     var(--ink) 0%,
@@ -191,10 +194,9 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 4s ease-in-out infinite;
-  text-shadow: none;
 }
 
-.section-h:hover {
+.eyebrow:hover {
   background: linear-gradient(
     120deg,
     var(--ink) 0%,
