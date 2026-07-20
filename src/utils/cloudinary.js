@@ -45,12 +45,6 @@ export const uploadAsset = async (file, onProgress, options = {}) => {
   if (options.folder && options.folder.trim()) {
     body.append('folder', options.folder.trim());
   }
-  
-  // Preserve PNG format - don't convert to JPG
-  if (file.type === 'image/png') {
-    body.append('format', 'png');
-    body.append('quality', 'auto');
-  }
 
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
