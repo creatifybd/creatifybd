@@ -31,7 +31,7 @@ const Hero = () => {
     'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.';
   const cta1Label    = heroContent.cta1     || 'See Our Work';
   const cta2Label    = heroContent.cta2     || 'Get a Custom Quote';
-  const heroImage    = heroContent.hero_image || '/assets/hero-visual.png';
+  const heroImage    = heroContent.mockup_primary || heroContent.hero_image || '/assets/hero-visual.png';
 
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 600], [0, -60]);
