@@ -39,7 +39,12 @@ export const uploadAsset = async (file, onProgress, options = {}) => {
   const body = new FormData();
   body.append('file', uploadFile);
   body.append('upload_preset', uploadPreset);
-  body.append('folder', options.folder || 'creatifybd');
+  
+  // Only add folder parameter if it's provided and not empty
+  // Some upload presets don't support folder organization
+  if (options.folder && options.folder.trim()) {
+    body.append('folder', options.folder.trim());
+  }
   
   // Preserve PNG format - don't convert to JPG
   if (file.type === 'image/png') {
