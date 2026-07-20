@@ -379,19 +379,19 @@ const Hero = () => {
         }
         .hero-img-single {
           position: relative;
-          border-radius: 18px;
-          overflow: hidden;
-          aspect-ratio: 4/3;
-          background: var(--surface-soft);
+          border-radius: 0;
+          overflow: visible;
+          background: transparent;
           box-shadow: none;
         }
         .hero-img-single img {
           width: 100%;
-          height: 100%;
+          height: auto;
           object-fit: contain;
           display: block;
           transition: transform 0.55s cubic-bezier(0.25,0.8,0.25,1);
           box-shadow: none;
+          border-radius: 0;
         }
         .hero-img-single:hover img { transform: scale(1.05); }
 
