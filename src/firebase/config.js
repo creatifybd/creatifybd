@@ -52,6 +52,7 @@ try {
   });
 } catch (error) {
   if (import.meta.env.DEV) console.warn('App Check failed to initialize:', error);
+  // App Check is optional - app will still work without it
 }
 
 // Initialize Services
