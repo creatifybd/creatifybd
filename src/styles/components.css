@@ -176,6 +176,52 @@
   color: var(--ink);
   line-height: 1.1;
   letter-spacing: -0.02em;
+  position: relative;
+  display: inline-block;
+  text-shadow: 
+    0 0 20px rgba(232, 25, 44, 0.15),
+    0 0 40px rgba(232, 25, 44, 0.1);
+  transition: text-shadow 0.3s ease;
+}
+
+.section-h::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(232, 25, 44, 0.4) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-h:hover {
+  text-shadow: 
+    0 0 30px rgba(232, 25, 44, 0.25),
+    0 0 60px rgba(232, 25, 44, 0.15),
+    0 0 80px rgba(232, 25, 44, 0.1);
+}
+
+@keyframes shine {
+  0%, 100% {
+    background-position: 200% center;
+  }
+  50% {
+    background-position: -200% center;
+  }
 }
 
 /* ─── Brand red inline text accent — used in section headings ─── */

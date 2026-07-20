@@ -332,7 +332,9 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
       return {
         ...item,
         image: override?.imageUrl || override?.image || item.image,
-        hidden: override?.hidden !== undefined ? override.hidden : item.hidden
+        hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
+        featured: override?.featured !== undefined ? override.featured : item.featured || false,
+        featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : item.featuredOrder || 0
       };
     })
     .filter(item => item.hidden !== true);
@@ -345,8 +347,13 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   ).flat();
   const portfolioItems = [...interleavedCuratedItems, ...adminItems];
 
+  // Filter by featured status when in highlight mode (homepage)
+  const featuredItems = portfolioItems
+    .filter(item => item.featured === true)
+    .sort((a, b) => (a.featuredOrder || 0) - (b.featuredOrder || 0));
+
   const filteredItems = activeFilter === 'all'
-    ? portfolioItems
+    ? (highlight ? featuredItems : portfolioItems)
     : portfolioItems.filter(i => i.category === activeFilter);
 
   const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems.slice(0, visibleCount);

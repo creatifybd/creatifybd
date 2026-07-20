@@ -16,7 +16,9 @@ const emptyForm = {
   description: '',
   service: '',
   industry: '',
-  hidden: false
+  hidden: false,
+  featured: false,
+  featuredOrder: 0
 };
 
 const PortfolioManager = () => {
@@ -43,13 +45,15 @@ const PortfolioManager = () => {
       // Firestore read failed — UI will use local CURATED_PORTFOLIO data only
     }
 
-    // Step 2: Always build the UI list using local CURATED_PORTFOLIO + Firestore images/hidden
+    // Step 2: Always build the UI list using local CURATED_PORTFOLIO + Firestore images/hidden/featured
     const syncedCurated = CURATED_PORTFOLIO.map(item => {
       const override = storedById.get(item.id);
       return {
         ...item,
         imageUrl: override?.imageUrl || override?.image || item.image,
         hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
+        featured: override?.featured !== undefined ? override.featured : item.featured || false,
+        featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : item.featuredOrder || 0,
         isCurated: true
       };
     });
@@ -61,7 +65,7 @@ const PortfolioManager = () => {
     setItems([...syncedCurated, ...customItems]);
     setLoading(false);
 
-    // Step 3: Best-effort sync — overwrite Firestore documents with local texts, preserving images & hidden
+    // Step 3: Best-effort sync — overwrite Firestore documents with local texts, preserving images & hidden/featured
     try {
       const batch = writeBatch(db);
       CURATED_PORTFOLIO.forEach(item => {
@@ -77,6 +81,8 @@ const PortfolioManager = () => {
           seoDescription: item.seoDescription,
           imageUrl: override?.imageUrl || override?.image || item.image,
           hidden: override?.hidden !== undefined ? override.hidden : false,
+          featured: override?.featured !== undefined ? override.featured : false,
+          featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : 0,
           isCurated: true,
           updatedAt: serverTimestamp()
         });
@@ -162,6 +168,26 @@ const PortfolioManager = () => {
     } catch (err) {
       console.error(err);
       toast.error('Failed to update visibility');
+    }
+  };
+
+  const toggleFeatured = async (item) => {
+    try {
+      await setDoc(doc(db, 'portfolio', item.id), { featured: !item.featured, featuredOrder: !item.featured ? Date.now() : 0, updatedAt: serverTimestamp() }, { merge: true });
+      fetchItems();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to update featured status');
+    }
+  };
+
+  const updateFeaturedOrder = async (item, newOrder) => {
+    try {
+      await setDoc(doc(db, 'portfolio', item.id), { featuredOrder: newOrder, updatedAt: serverTimestamp() }, { merge: true });
+      fetchItems();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to update featured order');
     }
   };
 
@@ -258,6 +284,21 @@ const PortfolioManager = () => {
               <div style={{ padding: '1.25rem' }}>
                 <div style={{ fontSize: '0.7rem', color: '#E8192C', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{item.category}</div>
                 <h4 style={{ fontWeight: '700', marginBottom: '1rem' }}>{item.title}</h4>
+                <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <input type="checkbox" checked={item.featured || false} onChange={() => toggleFeatured(item)} />
+                    Featured
+                  </label>
+                  {item.featured && (
+                    <input
+                      type="number"
+                      value={item.featuredOrder || 0}
+                      onChange={(e) => updateFeaturedOrder(item, parseInt(e.target.value) || 0)}
+                      style={{ width: '60px', padding: '0.25rem', fontSize: '0.75rem', border: '1px solid var(--border)', borderRadius: '4px' }}
+                      title="Featured order (lower number = higher priority)"
+                    />
+                  )}
+                </div>
                 <div style={{ display: 'flex', gap: '0.6rem' }}>
                   <button onClick={() => { setEditingId(item.id); setFormData({ ...emptyForm, ...item, imageUrl: item.imageUrl || item.image }); setIsModalOpen(true); }} className="admin-btn-secondary" style={{ flex: 1, justifyContent: 'center' }}>Edit</button>
                   <button className="admin-icon-btn" onClick={() => toggleHidden(item)} title={item.hidden ? 'Show' : 'Hide'}>
@@ -267,6 +308,7 @@ const PortfolioManager = () => {
                 </div>
               </div>
               {item.hidden && <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.6rem' }}>HIDDEN</div>}
+              {item.featured && <div style={{ position: 'absolute', top: '10px', right: item.hidden ? '70px' : '10px', background: '#E8192C', color: '#fff', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.6rem', fontWeight: '700' }}>★ FEATURED</div>}
             </div>
           ))}
           {filteredItems.length === 0 && <p style={{ color: 'var(--adm-dim)' }}>No portfolio items found.</p>}
