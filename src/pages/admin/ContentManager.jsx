@@ -32,7 +32,7 @@ const defaultContent = {
     contact: true
   },
   hero: {
-    title: 'Your Brand Shouldn\u2019t Need Five Different Freelancers',
+    title: 'Grow Your Brand with a Trusted Creative Partner',
     desc: 'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.',
     cta1: 'See Our Work',
     cta2: 'Get a Custom Quote',
