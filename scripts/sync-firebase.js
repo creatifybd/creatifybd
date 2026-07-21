@@ -9,8 +9,9 @@
  * This script:
  * 1. Reads default content from ContentManager.jsx
  * 2. Reads default settings from siteConfig.js
- * 3. Syncs these defaults to Firestore (settings/content, settings/site, settings/payment)
- * 4. Preserves existing data in Firestore (only updates missing fields)
+ * 3. Reads default pricing from PricingManager.jsx
+ * 4. Syncs these defaults to Firestore (settings/content, settings/site, settings/payment, settings/pricing)
+ * 5. Preserves existing data in Firestore (only updates missing fields)
  * 
  * Prerequisites:
  * - Install firebase-admin: npm install firebase-admin --save-dev
@@ -95,6 +96,21 @@ function extractDefaultSettings() {
     secondary_color: '#C0142A',
     favicon_url: ''
   };
+}
+
+// Read default pricing from PricingManager.jsx
+function extractDefaultPricing() {
+  const pricingManagerPath = path.join(__dirname, '../src/pages/admin/PricingManager.jsx');
+  const pricingManagerContent = fs.readFileSync(pricingManagerPath, 'utf8');
+  
+  // Extract fallbackPricing object
+  const match = pricingManagerContent.match(/const fallbackPricing = ({[\s\S]*?});/);
+  if (!match) {
+    throw new Error('Could not find fallbackPricing in PricingManager.jsx');
+  }
+  
+  const fallbackPricing = eval(`(${match[1]})`);
+  return fallbackPricing;
 }
 
 // Default payment settings
@@ -187,12 +203,28 @@ async function syncToFirestore() {
       await paymentRef.set(defaultPayment);
       console.log('   ✅ Payment settings initialized with defaults');
     }
+
+    // 4. Sync pricing
+    console.log('\n💰 Syncing pricing to settings/pricing...');
+    const pricingRef = db.collection('settings').doc('pricing');
+    const pricingSnap = await pricingRef.get();
+    const defaultPricing = extractDefaultPricing();
+    
+    if (pricingSnap.exists) {
+      const mergedPricing = mergeData(pricingSnap.data(), defaultPricing);
+      await pricingRef.set(mergedPricing, { merge: true });
+      console.log('   ✅ Pricing merged with existing data');
+    } else {
+      await pricingRef.set(defaultPricing);
+      console.log('   ✅ Pricing initialized with defaults');
+    }
     
     console.log('\n✨ Firebase sync completed successfully!\n');
     console.log('📋 Summary:');
     console.log('   - settings/content: synced');
     console.log('   - settings/site: synced');
     console.log('   - settings/payment: synced');
+    console.log('   - settings/pricing: synced');
     console.log('\n💡 Note: Existing data in Firestore was preserved.');
     console.log('   Only missing fields were updated with defaults from codebase.\n');
     
