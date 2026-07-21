@@ -186,9 +186,10 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         }
         .pricing-service-tabs {
           display: flex;
-          gap: 0.5rem;
+          gap: 16px;
           flex-wrap: wrap;
           justify-content: center;
+          margin-bottom: 32px;
         }
         .pricing-service-tab {
           padding: 0.75rem 1.5rem;
@@ -215,6 +216,8 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           justify-content: center;
           gap: 2rem;
           flex-wrap: wrap;
+          margin-bottom: 48px;
+          text-align: center;
         }
         .pricing-service-group {
           text-align: center;
