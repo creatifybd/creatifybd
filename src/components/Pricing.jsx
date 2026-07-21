@@ -120,25 +120,28 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
 
         <FadeReveal delay={0.2}>
           <div className="pricing-tabs">
-            {Object.entries(serviceGroups).map(([groupKey, group]) => (
-              <div key={groupKey} className="pricing-tab-group">
-                <div className="pricing-group-header">
-                  <h3 className="pricing-group-title">{group.label}</h3>
-                  <p className="pricing-group-desc">{group.description}</p>
-                </div>
-                <div className="pricing-tab-buttons">
-                  {group.categories.map(catKey => (
-                    <button 
-                      key={catKey} 
-                      className={`ptab ${activeTab === catKey ? 'active' : ''}`} 
-                      onClick={() => setActiveTab(catKey)}
-                    >
-                      {tabLabels[catKey]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
+            <div className="pricing-service-tabs">
+              {Object.entries(tabLabels).map(([catKey, label]) => (
+                <button
+                  key={catKey}
+                  className={`pricing-service-tab ${activeTab === catKey ? 'active' : ''}`}
+                  onClick={() => setActiveTab(catKey)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="pricing-service-info">
+              {Object.entries(serviceGroups).map(([groupKey, group]) => {
+                const isActive = group.categories.includes(activeTab);
+                return (
+                  <div key={groupKey} className={`pricing-service-group ${isActive ? 'active' : ''}`}>
+                    <h4 className="pricing-service-group-title">{group.label}</h4>
+                    <p className="pricing-service-group-desc">{group.description}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </FadeReveal>
 
@@ -175,38 +178,72 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
       </div>
       
       <style>{`
-        .pricing-tab-group {
-          margin-bottom: 2rem;
-        }
-        .pricing-group-header {
-          margin-bottom: 1rem;
-        }
-        .pricing-group-title {
-          font-size: 1.1rem;
-          font-weight: 700;
-          color: var(--ink);
-          margin: 0 0 0.35rem 0;
-          letter-spacing: -0.02em;
-        }
-        .pricing-group-desc {
-          font-size: 0.85rem;
-          color: var(--muted);
-          margin: 0;
-          line-height: 1.5;
-        }
-        .pricing-tab-buttons {
-          display: flex;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
         .pricing-tabs {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+        .pricing-service-tabs {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .pricing-service-tab {
+          padding: 0.75rem 1.5rem;
+          border: 2px solid var(--border);
+          background: white;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--muted);
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .pricing-service-tab:hover {
+          border-color: var(--red);
+          color: var(--red);
+        }
+        .pricing-service-tab.active {
+          background: var(--red);
+          border-color: var(--red);
+          color: white;
+        }
+        .pricing-service-info {
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+        .pricing-service-group {
+          text-align: center;
+          opacity: 0.4;
+          transition: opacity 0.3s ease;
+        }
+        .pricing-service-group.active {
+          opacity: 1;
+        }
+        .pricing-service-group-title {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: var(--ink);
+          margin: 0 0 0.25rem 0;
+          letter-spacing: -0.02em;
+        }
+        .pricing-service-group-desc {
+          font-size: 0.8rem;
+          color: var(--muted);
+          margin: 0;
+          line-height: 1.4;
         }
         @media (max-width: 768px) {
-          .pricing-tab-buttons {
+          .pricing-service-tabs {
             flex-direction: column;
+          }
+          .pricing-service-info {
+            flex-direction: column;
+            gap: 1rem;
           }
         }
       `}</style>
