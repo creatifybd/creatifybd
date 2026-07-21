@@ -12,7 +12,10 @@ import {
   Loader2,
   Save,
   Settings,
-  Upload
+  Upload,
+  Code,
+  Check,
+  X
 } from 'lucide-react';
 
 const defaultContent = {
@@ -179,6 +182,9 @@ const ContentManager = () => {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('control');
   const [uploading, setUploading] = useState('');
+  const [showJsonEditor, setShowJsonEditor] = useState(false);
+  const [jsonEditorValue, setJsonEditorValue] = useState('');
+  const [jsonError, setJsonError] = useState('');
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -267,6 +273,28 @@ const ContentManager = () => {
     }
   };
 
+  const openJsonEditor = () => {
+    setJsonEditorValue(JSON.stringify(content, null, 2));
+    setJsonError('');
+    setShowJsonEditor(true);
+  };
+
+  const handleJsonSave = () => {
+    try {
+      const parsed = JSON.parse(jsonEditorValue);
+      setContent(parsed);
+      setShowJsonEditor(false);
+      toast.success('JSON applied successfully. Click Save to publish.');
+    } catch (err) {
+      setJsonError('Invalid JSON: ' + err.message);
+    }
+  };
+
+  const handleJsonCancel = () => {
+    setShowJsonEditor(false);
+    setJsonError('');
+  };
+
   if (loading) return <div className="admin-loading">Loading Site Control...</div>;
 
   return (
@@ -278,6 +306,7 @@ const ContentManager = () => {
           <p>Manage homepage copy, visibility, trust visuals, global modules, and route managers from one dashboard.</p>
         </div>
         <div className="admin-toolbar-actions">
+          <button type="button" onClick={openJsonEditor} className="admin-btn-secondary"><Code size={16} /> Edit JSON</button>
           <Link to="/" target="_blank" className="admin-btn-secondary"><Eye size={16} /> Preview Site</Link>
           <button type="button" onClick={handleSave} disabled={saving} className="admin-btn-primary">
             {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
@@ -442,6 +471,33 @@ const ContentManager = () => {
           {saving ? 'Saving...' : 'Publish Site Content'}
         </button>
       </div>
+
+      {showJsonEditor && (
+        <div className="admin-modal-overlay" onClick={handleJsonCancel}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>Edit Content JSON</h3>
+              <button type="button" onClick={handleJsonCancel} className="admin-modal-close"><X size={18} /></button>
+            </div>
+            <div className="admin-modal-body">
+              <p className="admin-modal-desc">Edit the entire content structure as JSON. Changes will be applied locally after validation.</p>
+              {jsonError && <div className="admin-error-banner">{jsonError}</div>}
+              <textarea
+                className="admin-json-editor"
+                value={jsonEditorValue}
+                onChange={(e) => setJsonEditorValue(e.target.value)}
+                spellCheck={false}
+              />
+            </div>
+            <div className="admin-modal-footer">
+              <button type="button" onClick={handleJsonCancel} className="admin-btn-secondary">Cancel</button>
+              <button type="button" onClick={handleJsonSave} className="admin-btn-primary">
+                <Check size={16} /> Apply JSON
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

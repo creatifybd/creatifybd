@@ -1042,3 +1042,102 @@
   border-top: 4px solid var(--adm-dim);
   pointer-events: none;
 }
+
+/* ── JSON Editor Modal ─────────────────────────────────────── */
+.admin-modal {
+  background: #fff;
+  border-radius: var(--adm-radius-lg);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  box-shadow: var(--adm-shadow-lg);
+  border: 1px solid var(--adm-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--adm-border);
+}
+
+.admin-modal-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--adm-txt);
+  margin: 0;
+}
+
+.admin-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--adm-soft);
+  border: none;
+  color: var(--adm-dim);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-modal-close:hover {
+  background: var(--adm-hover);
+  color: var(--adm-txt);
+}
+
+.admin-modal-body {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-modal-desc {
+  font-size: 0.88rem;
+  color: var(--adm-dim);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.admin-error-banner {
+  background: var(--adm-danger-soft);
+  color: var(--adm-danger);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--adm-danger);
+}
+
+.admin-json-editor {
+  width: 100%;
+  min-height: 400px;
+  max-height: 500px;
+  padding: 1rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  background: var(--adm-page-bg);
+  border: 1px solid var(--adm-border);
+  border-radius: var(--adm-radius-md);
+  resize: vertical;
+  color: var(--adm-txt);
+}
+
+.admin-json-editor:focus {
+  outline: none;
+  border-color: var(--adm-red);
+  box-shadow: 0 0 0 3px var(--adm-red-soft);
+}
+
+.admin-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--adm-border);
+}
