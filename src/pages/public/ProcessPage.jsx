@@ -25,16 +25,6 @@ const ProcessPage = () => {
 
       <div className="page-header page-header-light">
         <div className="container">
-          <motion.div
-            className="eyebrow"
-            style={{ marginBottom: '1rem' }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: EASE_EXPO, delay: 0 }}
-          >
-            Our Workflow
-          </motion.div>
-
           <motion.h1
             className="page-title"
             initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}

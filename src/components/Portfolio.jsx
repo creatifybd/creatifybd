@@ -405,9 +405,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
           <>
             <div className="wk-inner">
               <div className="wk-header">
-                <FadeReveal>
-                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
-                </FadeReveal>
                 <TextReveal className="wk-heading">
                   {lang === 'bn' ? (
                     'আমাদের কাজ'
@@ -445,9 +442,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             {fullPage && (
               <div className="agency-work-page-header">
                 <div>
-                  <FadeReveal>
-                    <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />Selected work</div>
-                  </FadeReveal>
                   <TextReveal className="wk-heading">
                     CreatifyBD Portfolio
                   </TextReveal>
@@ -468,9 +462,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             )}
             {!fullPage && (
               <div className="wk-header">
-                <FadeReveal>
-                  <div className="wk-eyebrow"><span className="wk-eyebrow-dot" />{lang === 'bn' ? 'নির্বাচিত প্রজেক্টস' : 'FEATURED PROJECTS'}</div>
-                </FadeReveal>
                 <TextReveal className="wk-heading">
                   {lang === 'bn' ? (
                     'আমাদের কাজ'

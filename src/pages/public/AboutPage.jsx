@@ -27,7 +27,6 @@ const AboutPage = () => {
 
       <div className="page-header page-header-light">
         <div className="container">
-          <span className="eyebrow">Our Story</span>
           <h1 className="page-title">A dependable creative partner for <span className="red">international</span> brands</h1>
           <p className="page-subtitle">
             CreatifyBD combines full-service creative production with clear, custom-quoted pricing for growing businesses that need consistent execution without long contracts.
@@ -66,7 +65,6 @@ const AboutPage = () => {
         <section className="about-team-section">
           <div className="container" style={{ textAlign: 'center' }}>
             <div className="section-header text-center">
-              <span className="eyebrow">The Team</span>
               <h2 className="section-h">Meet the people behind the work</h2>
               <p className="section-sub" style={{ maxWidth: '560px', margin: '0 auto 2rem' }}>
                 Real names, real roles \u2014 see who's actually working on projects like yours.

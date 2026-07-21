@@ -97,9 +97,6 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
       <div className="container">
         {!fullPage && (
           <div className="pricing-header text-center">
-            <FadeReveal>
-              <div className="eyebrow">Pricing</div>
-            </FadeReveal>
             <h2 className="section-h">Premium agency execution without the markup</h2>
             <p className="section-sub">Value-driven pricing with transparent packages. Get enterprise quality for growing businesses. Cancel or pause anytime.</p>
           </div>

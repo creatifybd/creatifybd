@@ -26,7 +26,6 @@ const Hero = () => {
   const heroContent = content?.hero || {};
 
   const headline     = heroContent.title    || 'Your Brand Shouldn\u2019t Need Five Different Freelancers';
-  const eyebrow      = heroContent.eyebrow  || 'One Team. Every Discipline You Need.';
   const description  = heroContent.desc     ||
     'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.';
   const cta1Label    = heroContent.cta1     || 'See Our Work';
@@ -51,17 +50,6 @@ const Hero = () => {
       <div className="hero-agency-inner">
         {/* ── LEFT COPY ── */}
         <div className="hero-agency-copy">
-          {/* Eyebrow */}
-          <motion.div
-            className="hero-agency-eyebrow"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: EASE_EXPO }}
-          >
-            <span className="hero-agency-pulse" />
-            {eyebrow}
-          </motion.div>
-
           {/* Headline */}
           <motion.h1
             className="hero-agency-h1"
@@ -222,28 +210,7 @@ const Hero = () => {
           gap: 0;
         }
 
-        /* Eyebrow */
-        .hero-agency-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-family: var(--font-body);
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: var(--brand-red);
-          background: rgba(232,25,44,0.06);
-          border: 1px solid rgba(232,25,44,0.16);
-          border-radius: 100px;
-          padding: 0.45rem 1.1rem;
-          margin-bottom: 2rem;
-        }
         .hero-agency-pulse {
-          width: 6px; height: 6px;
-          border-radius: 50%;
-          background: var(--brand-red);
-          flex-shrink: 0;
           animation: heroPulse 2s ease-in-out infinite;
         }
         @keyframes heroPulse {

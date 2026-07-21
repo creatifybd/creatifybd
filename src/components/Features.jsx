@@ -63,9 +63,6 @@ const Features = () => {
         <div className="features-grid">
           <SlideReveal from="left">
             <div>
-              <FadeReveal>
-                <div className="eyebrow">{featuresContent.eyebrow || 'Why CreatifyBD'}</div>
-              </FadeReveal>
               <FadeReveal delay={0.1}>
                 <h2 className="section-h">{renderRichTitle(title)}</h2>
               </FadeReveal>

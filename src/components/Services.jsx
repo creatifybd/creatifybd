@@ -88,15 +88,6 @@ const Services = ({ highlight = false, fullPage = false }) => {
         <div className="svc-layout">
           {/* Left sticky header */}
           <div className="svc-header">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: EASE }}
-            >
-              <div className="eyebrow">Our services</div>
-            </motion.div>
-
             <motion.h2
               className="section-h svc-heading"
               initial={{ opacity: 0, y: 24 }}

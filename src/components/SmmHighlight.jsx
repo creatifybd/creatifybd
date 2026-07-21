@@ -54,9 +54,6 @@ const SmmHighlight = () => {
         <div className="smm-grid">
           <SlideReveal from="left">
             <div>
-              <FadeReveal>
-                <span className="eyebrow">{smmContent.eyebrow || 'Managed Social Media'}</span>
-              </FadeReveal>
               <FadeReveal delay={0.1}>
                 <h2>{renderRichTitle(title)}</h2>
               </FadeReveal>

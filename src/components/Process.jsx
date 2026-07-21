@@ -60,15 +60,6 @@ const Process = ({ highlight = false, fullPage = false }) => {
         {/* Header */}
         {!fullPage && (
           <div className="process-new-header">
-            <motion.div
-              className="eyebrow"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE }}
-            >
-              {processContent.eyebrow || 'How it works'}
-            </motion.div>
             <motion.h2
               className="section-h"
               initial={{ opacity: 0, y: 20 }}

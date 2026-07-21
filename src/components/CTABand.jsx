@@ -16,7 +16,6 @@ const CTABand = () => {
   const ctaLink  = cta.primary_link || "/contact";
   const secondaryLabel = cta.secondary_btn || "hello@creatifybd.com";
   const secondaryLink  = cta.secondary_link || "mailto:hello@creatifybd.com";
-  const eyebrow  = cta.eyebrow || 'Ready to start?';
 
   return (
     <section className="ctaband-section" aria-labelledby="ctaband-heading">
@@ -31,17 +30,6 @@ const CTABand = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: EASE }}
         >
-          <motion.div
-            className="ctaband-eyebrow"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: EASE, delay: 0.05 }}
-          >
-            <span className="ctaband-pulse" />
-            {eyebrow}
-          </motion.div>
-
           <motion.h2
             id="ctaband-heading"
             className="ctaband-heading"
@@ -112,21 +100,6 @@ const CTABand = () => {
           flex-direction: column;
           align-items: center;
           gap: 1.5rem;
-        }
-
-        .ctaband-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: var(--brand-red);
-          background: rgba(232,25,44,0.12);
-          border: 1px solid rgba(232,25,44,0.22);
-          border-radius: 100px;
-          padding: 0.4rem 1rem;
         }
 
         .ctaband-pulse {

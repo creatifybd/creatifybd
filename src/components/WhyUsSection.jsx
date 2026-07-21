@@ -60,7 +60,6 @@ const WhyUsSection = () => (
         viewport={{ once: true }}
         transition={{ duration: 0.65, ease: EASE }}
       >
-        <div className="eyebrow">Why CreatifyBD</div>
         <h2 id="why-heading" className="section-h">
           Elite creative operations<br />
           <span className="text-red">without the agency markup</span>

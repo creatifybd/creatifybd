@@ -48,7 +48,6 @@ const AboutTrust = () => {
         <div className="ab-grid">
           {/* Left Column: Content */}
           <div className="ab-content-col">
-            <span className="ab-eyebrow">{aboutContent.eyebrow || 'About CreatifyBD'}</span>
             <h2 className="ab-title">{renderRichTitle(title)}</h2>
             <p className="ab-subtitle">{subtitle}</p>
 
@@ -114,15 +113,6 @@ const AboutTrust = () => {
         }
         
         /* Left Col */
-        .ab-eyebrow {
-          display: inline-block;
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: var(--brand-red, #E8192C);
-          margin-bottom: 1.25rem;
-        }
         .ab-title {
           font-size: clamp(2.25rem, 4vw, 3.25rem);
           font-weight: 900;

@@ -86,7 +86,6 @@ const Testimonials = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.65, ease: EASE }}
         >
-          <div className="eyebrow">Client testimonials</div>
           <h2 className="section-h">
             Trusted by brands <span className="text-red">worldwide</span>
           </h2>

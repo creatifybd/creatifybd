@@ -98,9 +98,6 @@ const CaseStudies = () => {
       <div className="container">
         {/* Header */}
         <div className="cs-header">
-          <FadeReveal>
-            <div className="eyebrow">Selected Work</div>
-          </FadeReveal>
           <FadeReveal delay={0.1}>
             <h2 className="section-h cs-title">
               Creative work tied to<br />

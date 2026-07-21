@@ -32,7 +32,6 @@ const defaultContent = {
     contact: true
   },
   hero: {
-    eyebrow: 'One Team. Every Discipline You Need.',
     title: 'Your Brand Shouldn\u2019t Need Five Different Freelancers',
     desc: 'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.',
     cta1: 'See Our Work',
@@ -52,7 +51,6 @@ const defaultContent = {
     list: 'Maple & Co, Northstar Dental, Harbor Cafe, Green Eats, Nova Clothing, EduBridge, HealthPlus, CraftNest, ShopLocal, ByteWave, Riverside Resto, Summit Fitness'
   },
   smm_highlight: {
-    eyebrow: 'Managed Social Media',
     title: 'Monthly social media management for international brands',
     lead: 'A dedicated creative workflow for founders who need consistent, polished social media without hiring a full in-house team. We plan, design, write, schedule, and report, so your business stays active and trustworthy every week.',
     cta_label: 'Explore SMM Packages',
@@ -74,7 +72,6 @@ const defaultContent = {
     ]
   },
   features: {
-    eyebrow: 'Why CreatifyBD',
     title: 'A reliable creative team without agency overhead',
     subtitle: 'We combine structured creative operations with international service standards, giving brands dependable creative output at practical monthly pricing.',
     visual_title: 'Creative operations built for recurring growth',
@@ -92,7 +89,6 @@ const defaultContent = {
     ]
   },
   process: {
-    eyebrow: 'Our Workflow',
     title: 'A clear process from first brief to final delivery',
     subtitle: 'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.',
     steps: [
@@ -103,7 +99,6 @@ const defaultContent = {
     ]
   },
   about_trust: {
-    eyebrow: 'About CreatifyBD',
     title: 'A Real Team, Built for Businesses Ready to Grow',
     subtitle: 'CreatifyBD gives founders and marketing teams dependable creative execution without the cost or complexity of a full in-house department.',
     ceo_quote: 'Every brand we touch should look like it\u2019s already competing at the level it wants to reach \u2014 that\u2019s the standard we hold every project to.',
@@ -117,7 +112,6 @@ const defaultContent = {
     ]
   },
   cta_band: {
-    eyebrow: 'Ready to start?',
     title: 'Most Projects Start With One Message',
     subtitle: "No lengthy onboarding, no sales calls you don't need \u2014 tell us what you're building and get a real quote back fast.",
     primary_btn: 'Start a Project',
@@ -342,7 +336,6 @@ const ContentManager = () => {
 
         {activeTab === 'hero' && (
           <FieldGroup>
-            <CMSField label="Eyebrow" value={content.hero.eyebrow} onChange={(v) => updateSection('hero', 'eyebrow', v)} />
             <CMSField label="Headline HTML" value={content.hero.title} onChange={(v) => updateSection('hero', 'title', v)} textarea />
             <CMSField label="Description" value={content.hero.desc} onChange={(v) => updateSection('hero', 'desc', v)} textarea />
             <TwoCols>
@@ -369,10 +362,7 @@ const ContentManager = () => {
 
         {activeTab === 'smm_highlight' && (
           <FieldGroup>
-            <TwoCols>
-              <CMSField label="Eyebrow" value={content.smm_highlight.eyebrow} onChange={(v) => updateSection('smm_highlight', 'eyebrow', v)} />
-              <CMSField label="CTA Label" value={content.smm_highlight.cta_label} onChange={(v) => updateSection('smm_highlight', 'cta_label', v)} />
-            </TwoCols>
+            <CMSField label="CTA Label" value={content.smm_highlight.cta_label} onChange={(v) => updateSection('smm_highlight', 'cta_label', v)} />
             <CMSField label="Title" value={content.smm_highlight.title} onChange={(v) => updateSection('smm_highlight', 'title', v)} />
             <CMSField label="Lead Copy" value={content.smm_highlight.lead} onChange={(v) => updateSection('smm_highlight', 'lead', v)} textarea />
             <TwoCols>
@@ -390,10 +380,7 @@ const ContentManager = () => {
 
         {activeTab === 'features' && (
           <FieldGroup>
-            <TwoCols>
-              <CMSField label="Eyebrow" value={content.features.eyebrow} onChange={(v) => updateSection('features', 'eyebrow', v)} />
-              <CMSField label="Visual Title" value={content.features.visual_title} onChange={(v) => updateSection('features', 'visual_title', v)} />
-            </TwoCols>
+            <CMSField label="Visual Title" value={content.features.visual_title} onChange={(v) => updateSection('features', 'visual_title', v)} />
             <CMSField label="Title" value={content.features.title} onChange={(v) => updateSection('features', 'title', v)} />
             <CMSField label="Subtitle" value={content.features.subtitle} onChange={(v) => updateSection('features', 'subtitle', v)} textarea />
             <CMSField label="Badges (comma separated)" value={content.features.badges.join(', ')} onChange={(v) => updateCsvArray('features', 'badges', v)} />
@@ -404,7 +391,6 @@ const ContentManager = () => {
 
         {activeTab === 'process' && (
           <FieldGroup>
-            <CMSField label="Eyebrow" value={content.process.eyebrow} onChange={(v) => updateSection('process', 'eyebrow', v)} />
             <CMSField label="Title" value={content.process.title} onChange={(v) => updateSection('process', 'title', v)} />
             <CMSField label="Subtitle" value={content.process.subtitle} onChange={(v) => updateSection('process', 'subtitle', v)} textarea />
             <ArrayEditor section="process" field="steps" items={content.process.steps} updateArrayItem={updateArrayItem} addArrayItem={addArrayItem} removeArrayItem={removeArrayItem} fields={['num', 'title', 'desc']} />
@@ -413,10 +399,7 @@ const ContentManager = () => {
 
         {activeTab === 'about_trust' && (
           <FieldGroup>
-            <TwoCols>
-              <CMSField label="Eyebrow" value={content.about_trust.eyebrow} onChange={(v) => updateSection('about_trust', 'eyebrow', v)} />
-              <CMSField label="CTA Label" value={content.about_trust.cta_label} onChange={(v) => updateSection('about_trust', 'cta_label', v)} />
-            </TwoCols>
+            <CMSField label="CTA Label" value={content.about_trust.cta_label} onChange={(v) => updateSection('about_trust', 'cta_label', v)} />
             <CMSField label="Title" value={content.about_trust.title} onChange={(v) => updateSection('about_trust', 'title', v)} />
             <CMSField label="Subtitle" value={content.about_trust.subtitle} onChange={(v) => updateSection('about_trust', 'subtitle', v)} textarea />
             <CMSField label="Our Approach Quote" value={content.about_trust.ceo_quote} onChange={(v) => updateSection('about_trust', 'ceo_quote', v)} textarea />
@@ -427,7 +410,6 @@ const ContentManager = () => {
 
         {activeTab === 'cta_band' && (
           <FieldGroup>
-            <CMSField label="Eyebrow" value={content.cta_band.eyebrow} onChange={(v) => updateSection('cta_band', 'eyebrow', v)} />
             <CMSField label="Title" value={content.cta_band.title} onChange={(v) => updateSection('cta_band', 'title', v)} />
             <CMSField label="Subtitle" value={content.cta_band.subtitle} onChange={(v) => updateSection('cta_band', 'subtitle', v)} textarea />
             <TwoCols>

@@ -284,8 +284,6 @@
   .tm-subtext {
     color: var(--muted) !important;
   }
-  .tm-eyebrow { color: var(--brand-red) !important; }
-  .tm-eyebrow-dot { background: var(--brand-red) !important; }
 
   /* Featured quote box */
   .tm-featured {
@@ -415,7 +413,7 @@
     color: var(--ink) !important;
   }
   .dark-section:not(.admin-layout) p,
-  .dark-section:not(.admin-layout) span:not(.badge):not(.tag):not(.eyebrow) {
+  .dark-section:not(.admin-layout) span:not(.badge):not(.tag) {
     color: var(--muted) !important;
   }
 
@@ -2145,12 +2143,6 @@
     z-index: 1 !important;
   }
 
-  body:not(.admin-body) .about-trust-section .eyebrow {
-    font-size: 0.7rem !important;
-    letter-spacing: 0.12em !important;
-    margin-bottom: 1rem !important;
-  }
-
   body:not(.admin-body) .about-trust-section .section-h {
     font-size: clamp(2rem, 4vw, 2.8rem) !important;
     margin-bottom: 1.25rem !important;
@@ -2488,8 +2480,7 @@
     opacity: 1 !important;
   }
 
-  body:not(.admin-body) .cta-section p,
-  body:not(.admin-body) .cta-section .eyebrow {
+  body:not(.admin-body) .cta-section p {
     color: var(--muted) !important;
     opacity: 1 !important;
   }
@@ -4089,9 +4080,6 @@ body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-header {
   text-align: center !important;
 }
 
-body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-eyebrow {
-  justify-content: center !important;
-}
 
 body:not(.admin-body) .agency-work-section:not(.agency-work-page) .wk-heading {
   margin: 0 !important;

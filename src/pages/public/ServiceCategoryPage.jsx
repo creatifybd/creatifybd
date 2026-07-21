@@ -231,8 +231,7 @@ const ServiceCategoryPage = () => {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.65, ease: EASE_EXPO }}
           >
-            <span className="eyebrow" style={{ color: 'var(--brand-red)' }}>Browse Services</span>
-            <h2 className="section-h" style={{ marginTop: '0.5rem' }}>
+            <h2 className="section-h">
               Available <span className="red">{category.name}</span> Plans
             </h2>
             <p className="section-sub">

@@ -168,12 +168,6 @@ const Contact = () => {
 
           {/* ── Info panel ── */}
           <div className="contact-info-panel">
-            <FadeReveal>
-              <div className="eyebrow" style={{ color: 'var(--red)', marginBottom: '1.5rem' }}>
-                {lang === 'bn' ? 'যোগাযোগ করুন' : 'Get In Touch'}
-              </div>
-            </FadeReveal>
-
             <TextReveal className="contact-h1">
               {safeHeading ? (
                 <span dangerouslySetInnerHTML={{ __html: safeHeading }} />

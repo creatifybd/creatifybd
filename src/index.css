@@ -299,21 +299,6 @@ nav.scrolled .nav-active-pill {
   text-align: left;
 }
 
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: var(--red-light);
-  color: var(--red);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.5rem 1.25rem;
-  border-radius: 100px;
-  margin-bottom: 2rem;
-  border: 1px solid var(--red-mid);
-}
 .pulse-dot {
   width: 8px; height: 8px;
   background: var(--red);
@@ -583,30 +568,6 @@ nav.scrolled .nav-active-pill {
 .section-sm { padding: 5rem 3rem; }
 .container { max-width: 1140px; margin: 0 auto; }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--red);
-  background: rgba(232, 25, 44, 0.08);
-  border: 1px solid rgba(232, 25, 44, 0.18);
-  border-radius: 100px;
-  padding: 0.4rem 1rem;
-  margin-bottom: 1.5rem;
-}
-.eyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--red);
-}
-
 h2.section-h {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 5vw, 4rem);
@@ -826,23 +787,6 @@ h2.section-h .red { color: var(--red); }
 .wk-header {
   max-width: 700px;
   margin-bottom: 3.5rem;
-}
-.wk-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gray-600);
-  margin-bottom: 1.5rem;
-}
-.wk-eyebrow-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--red);
-  animation: glowPulse 2s ease-in-out infinite;
 }
 .wk-heading {
   font-family: var(--font-display);
@@ -2799,14 +2743,6 @@ html, body {
     gap: 1.25rem !important;
   }
 
-  .hero-eyebrow {
-    font-size: 0.68rem !important;
-    letter-spacing: 0.08em !important;
-    padding: 0.45rem 0.8rem !important;
-    margin-bottom: 1.1rem !important;
-    max-width: 100% !important;
-  }
-
   .hero h1 {
     font-size: 2.4rem !important;
     line-height: 1.02 !important;
@@ -3607,10 +3543,6 @@ html, body {
   color: var(--white);
 }
 
-.dark-section .hero-eyebrow {
-  color: rgba(255, 255, 255, 0.7);
-}
-
 .dark-section .hero-sub {
   color: rgba(255, 255, 255, 0.7) !important;
 }
@@ -3626,11 +3558,6 @@ html, body {
 }
 
 /* Dark section fixes for service cards - removed (white theme only) */
-
-/* Dark section testimonials fix */
-.dark-section .editorial-header .eyebrow {
-  color: var(--red) !important;
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
      INNER-PAGE NAV — LIGHT ROSE THEME
@@ -3744,26 +3671,6 @@ html, body {
 }
 
 /* ─── Left Panel ─────────────────────────────────────────────────── */
-.tm-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: var(--red);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-.tm-eyebrow-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--red);
-  animation: pulse-dot 1.5s infinite;
-}
-
 .tm-heading {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 4vw, 4rem);
@@ -4964,12 +4871,6 @@ body:not(.admin-body) .tab-btn.active {
   text-align: center;
 }
 
-.cta-section .eyebrow {
-  justify-content: center;
-  margin-bottom: var(--space-md);
-}
-.cta-section .eyebrow::before { display: none; }
-
 .cta-section h2 {
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 900;
@@ -5129,7 +5030,6 @@ body:not(.admin-body) .tab-btn.active {
 }
 .cta-section h2 { color: var(--white) !important; }
 .cta-section p  { color: rgba(255,255,255,0.82) !important; }
-.cta-section .eyebrow { color: rgba(255,255,255,0.85) !important; }
 
 /* White button in CTA */
 .btn-white {
@@ -5389,9 +5289,9 @@ body::before, body::after {
   }
 
 
-  /* ── 2. Eyebrow / Badge shimmer ───────────────────────────────────────────── */
+  /* ── 2. Badge shimmer ───────────────────────────────────────────── */
 
-  .eyebrow {
+  .badge {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -5399,7 +5299,7 @@ body::before, body::after {
     animation: fade-up-in 0.7s var(--ease-expo, cubic-bezier(0.16,1,0.3,1)) both;
   }
 
-  .eyebrow::after {
+  .badge::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -5929,10 +5829,6 @@ body::before, body::after {
     top: 120px !important;
     padding-left: clamp(1rem, 2vw, 1.5rem) !important;
     border-left: 6px solid var(--brand-red) !important;
-  }
-
-  body:not(.admin-body) .duck-services-intro .eyebrow {
-    color: #111318 !important;
   }
 
   body:not(.admin-body) .duck-services-intro .section-h {
