@@ -117,6 +117,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
       whileInView={{ opacity: 1, y: 0, skewY: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.9, ease: EASE_EXPO, delay }}
+      style={{ willChange: 'transform, opacity' }}
     >
       {children}
     </motion.div>
@@ -137,6 +138,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
         whileInView={{ x: 0, y: 0, opacity: 1 }}
         viewport={{ once: true, margin: '-50px' }}
         transition={{ duration: 1, ease: EASE_EXPO, delay }}
+        style={{ willChange: 'transform, opacity' }}
       >
         {children}
       </motion.div>
@@ -181,6 +183,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
         hidden:  { opacity: 0, y: 40 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_EXPO } },
       }}
+      style={{ willChange: 'transform, opacity' }}
     >
       {children}
     </motion.div>
@@ -194,6 +197,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 1.1, ease: EASE_EXPO, delay }}
+      style={{ willChange: 'transform, opacity' }}
     >
       {children}
     </motion.div>
