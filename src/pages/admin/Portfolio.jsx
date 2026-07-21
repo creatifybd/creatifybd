@@ -90,8 +90,9 @@ const PortfolioManager = () => {
         }, { merge: false }); // Use set without merge to completely replace document
       });
       await batch.commit();
+      console.log('✅ Portfolio synced to Firestore successfully');
     } catch (_syncErr) {
-      // Sync failed silently — UI still shows correct local data
+      console.error('❌ Portfolio sync failed:', _syncErr);
     }
   };
 
