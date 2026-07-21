@@ -35,4 +35,5 @@ creatifybd-1/
 
 # Firebase service account (contains sensitive credentials)
 service-account.json
+firebase-service-account.json
 *.key
