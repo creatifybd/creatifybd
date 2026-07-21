@@ -1929,7 +1929,7 @@
     position: relative !important;
   }
 
-  body:not(.admin-body) .App > section:not(.hero-section)::before {
+  body:not(.admin-body) .App > section:not(.hero-section):not(.pricing-section)::before {
     content: '' !important;
     position: absolute !important;
     top: 0 !important;
