@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { addData, deleteData, logActivity } from '../../firebase/services';
 import { doc, serverTimestamp, setDoc, writeBatch, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Plus, Trash2, X, Loader2, Search, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, X, Loader2, Search, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
 import { CURATED_PORTFOLIO } from '../../data/portfolioItems';
@@ -211,6 +211,43 @@ const PortfolioManager = () => {
     }
   };
 
+  const handleSyncToFirestore = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'portfolio'));
+      const storedById = new Map();
+      querySnapshot.forEach(doc => {
+        storedById.set(doc.id, doc.data());
+      });
+
+      const batch = writeBatch(db);
+      CURATED_PORTFOLIO.forEach(item => {
+        const override = storedById.get(item.id);
+        batch.set(doc(db, 'portfolio', item.id), {
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          service: item.service,
+          industry: item.industry,
+          tags: item.tags,
+          seoTitle: item.seoTitle,
+          seoDescription: item.seoDescription,
+          imageUrl: override?.imageUrl || override?.image || item.image,
+          hidden: override?.hidden !== undefined ? override.hidden : false,
+          featured: override?.featured !== undefined ? override.featured : false,
+          featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : 0,
+          isCurated: true,
+          updatedAt: serverTimestamp()
+        }, { merge: false });
+      });
+      await batch.commit();
+      toast.success('Portfolio synced to Firestore successfully');
+      fetchItems();
+    } catch (err) {
+      console.error('Sync failed:', err);
+      toast.error('Failed to sync portfolio to Firestore');
+    }
+  };
+
   const handleBulkDelete = async () => {
     const customSelected = selectedIds.filter(id => !curatedIds.has(id));
     if (customSelected.length === 0) {
@@ -244,9 +281,14 @@ const PortfolioManager = () => {
           <h1 className="adm-page-title">Manage Portfolio</h1>
           <p className="adm-page-desc">Manage every portfolio item shown on the public website.</p>
         </div>
-        <button className="admin-btn-primary" onClick={() => { setEditingId(null); setFormData(emptyForm); setIsModalOpen(true); }}>
-          <Plus size={18} /> Add New Item
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <button className="admin-btn-secondary" onClick={handleSyncToFirestore}>
+            <RefreshCw size={18} /> Sync to Firestore
+          </button>
+          <button className="admin-btn-primary" onClick={() => { setEditingId(null); setFormData(emptyForm); setIsModalOpen(true); }}>
+            <Plus size={18} /> Add New Item
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
