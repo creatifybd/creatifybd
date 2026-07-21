@@ -189,11 +189,27 @@ const Services = ({ highlight = false, fullPage = false }) => {
                       exit={{ opacity: 0, height: 0, marginTop: 0 }}
                       transition={{ duration: 0.32, ease: EASE }}
                     >
-                      <img
-                        src={svc.imageUrl || serviceImages[idx % serviceImages.length]}
-                        alt=""
-                        loading="lazy"
-                      />
+                      <div className="svc-preview-content">
+                        <img
+                          src={svc.imageUrl || serviceImages[idx % serviceImages.length]}
+                          alt=""
+                          loading="lazy"
+                        />
+                        {(svc.hoverDetails || svc.deliverables) && (
+                          <div className="svc-preview-overlay">
+                            {svc.hoverDetails && (
+                              <p className="svc-preview-details">{svc.hoverDetails}</p>
+                            )}
+                            {svc.deliverables && Array.isArray(svc.deliverables) && svc.deliverables.length > 0 && (
+                              <ul className="svc-preview-deliverables">
+                                {svc.deliverables.map((item, i) => (
+                                  <li key={i}>{item}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -385,12 +401,46 @@ const Services = ({ highlight = false, fullPage = false }) => {
           box-shadow: 0 20px 60px rgba(0,0,0,0.14);
           pointer-events: none;
         }
+        .svc-preview-content {
+          position: relative;
+          width: 100%;
+        }
         .svc-preview img {
           width: 100%;
           height: auto;
           max-height: 300px;
           object-fit: cover;
           display: block;
+        }
+        .svc-preview-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 70%, transparent 100%);
+          padding: 1.5rem;
+          color: #fff;
+        }
+        .svc-preview-details {
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin: 0 0 0.75rem 0;
+          line-height: 1.4;
+        }
+        .svc-preview-deliverables {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        .svc-preview-deliverables li {
+          font-size: 0.75rem;
+          background: rgba(255,255,255,0.15);
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+          backdrop-filter: blur(4px);
         }
 
         /* Responsive */

@@ -34,6 +34,19 @@ const tabLabels = {
   web: 'Website Design'
 };
 
+const serviceGroups = {
+  retainers: {
+    label: 'Monthly Retainers',
+    description: 'Ongoing creative support with predictable monthly pricing',
+    categories: ['social']
+  },
+  projectBased: {
+    label: 'Project-Based Services',
+    description: 'One-time deliverables with clear scope and fixed quote',
+    categories: ['branding', 'video', 'web']
+  }
+};
+
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
   const [activeTab, setActiveTab] = useState(fullPage ? 'social' : 'social');
@@ -87,8 +100,8 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
             <FadeReveal>
               <div className="eyebrow">Pricing</div>
             </FadeReveal>
-            <h2 className="section-h">Elite creative services at <span className="text-red">50% lower pricing</span></h2>
-            <p className="section-sub">Start with a transparent, cost-effective package. Get senior agency quality without the premium price tag. Cancel or pause anytime.</p>
+            <h2 className="section-h">Premium agency execution without the markup</h2>
+            <p className="section-sub">Value-driven pricing with transparent packages. Get enterprise quality for growing businesses. Cancel or pause anytime.</p>
           </div>
         )}
 
@@ -110,10 +123,24 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
 
         <FadeReveal delay={0.2}>
           <div className="pricing-tabs">
-            {Object.entries(tabLabels).map(([key, label]) => (
-              <button key={key} className={`ptab ${activeTab === key ? 'active' : ''}`} onClick={() => setActiveTab(key)}>
-                {label}
-              </button>
+            {Object.entries(serviceGroups).map(([groupKey, group]) => (
+              <div key={groupKey} className="pricing-tab-group">
+                <div className="pricing-group-header">
+                  <h3 className="pricing-group-title">{group.label}</h3>
+                  <p className="pricing-group-desc">{group.description}</p>
+                </div>
+                <div className="pricing-tab-buttons">
+                  {group.categories.map(catKey => (
+                    <button 
+                      key={catKey} 
+                      className={`ptab ${activeTab === catKey ? 'active' : ''}`} 
+                      onClick={() => setActiveTab(catKey)}
+                    >
+                      {tabLabels[catKey]}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </FadeReveal>
@@ -122,7 +149,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           {displayPlans.map((plan) => (
             <FadeReveal key={plan.id || plan.tier}>
               <article className={`price-card ${plan.featured ? 'featured' : ''}`}>
-                {plan.featured && <div className="popular-badge">Most Popular</div>}
+                {plan.featured && activeTab === 'web' && <div className="popular-badge">Most Popular</div>}
                 <div className="price-tier">{plan.tier}</div>
                 <div className="price-amount">
                   <span className="currency">$</span>{plan._displayPrice}
@@ -149,6 +176,43 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           </FadeReveal>
         )}
       </div>
+      
+      <style>{`
+        .pricing-tab-group {
+          margin-bottom: 2rem;
+        }
+        .pricing-group-header {
+          margin-bottom: 1rem;
+        }
+        .pricing-group-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--ink);
+          margin: 0 0 0.35rem 0;
+          letter-spacing: -0.02em;
+        }
+        .pricing-group-desc {
+          font-size: 0.85rem;
+          color: var(--muted);
+          margin: 0;
+          line-height: 1.5;
+        }
+        .pricing-tab-buttons {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+        .pricing-tabs {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+          .pricing-tab-buttons {
+            flex-direction: column;
+          }
+        }
+      `}</style>
     </section>
   );
 };
