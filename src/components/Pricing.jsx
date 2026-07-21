@@ -134,8 +134,9 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
             <div className="pricing-service-info">
               {Object.entries(serviceGroups).map(([groupKey, group]) => {
                 const isActive = group.categories.includes(activeTab);
+                if (!isActive) return null;
                 return (
-                  <div key={groupKey} className={`pricing-service-group ${isActive ? 'active' : ''}`}>
+                  <div key={groupKey} className="pricing-service-group active">
                     <h4 className="pricing-service-group-title">{group.label}</h4>
                     <p className="pricing-service-group-desc">{group.description}</p>
                   </div>
@@ -214,18 +215,11 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         .pricing-service-info {
           display: flex;
           justify-content: center;
-          gap: 2rem;
-          flex-wrap: wrap;
           margin-bottom: 48px;
           text-align: center;
         }
         .pricing-service-group {
           text-align: center;
-          opacity: 0.4;
-          transition: opacity 0.3s ease;
-        }
-        .pricing-service-group.active {
-          opacity: 1;
         }
         .pricing-service-group-title {
           font-size: 0.95rem;
@@ -243,10 +237,6 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         @media (max-width: 768px) {
           .pricing-service-tabs {
             flex-direction: column;
-          }
-          .pricing-service-info {
-            flex-direction: column;
-            gap: 1rem;
           }
         }
       `}</style>
