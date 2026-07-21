@@ -220,9 +220,21 @@ const PortfolioManager = () => {
       });
 
       const batch = writeBatch(db);
+      let syncCount = 0;
+      
       CURATED_PORTFOLIO.forEach(item => {
         const override = storedById.get(item.id);
-        batch.set(doc(db, 'portfolio', item.id), {
+        const docRef = doc(db, 'portfolio', item.id);
+        
+        // Log what we're syncing
+        console.log(`Syncing ${item.id}:`, {
+          title: item.title,
+          description: item.description,
+          currentFirestoreTitle: override?.title,
+          currentFirestoreDesc: override?.description
+        });
+        
+        batch.set(docRef, {
           title: item.title,
           description: item.description,
           category: item.category,
@@ -238,9 +250,13 @@ const PortfolioManager = () => {
           isCurated: true,
           updatedAt: serverTimestamp()
         }, { merge: false });
+        
+        syncCount++;
       });
+      
       await batch.commit();
-      toast.success('Portfolio synced to Firestore successfully');
+      console.log(`Synced ${syncCount} items to Firestore`);
+      toast.success(`Portfolio synced to Firestore successfully (${syncCount} items)`);
       fetchItems();
     } catch (err) {
       console.error('Sync failed:', err);
