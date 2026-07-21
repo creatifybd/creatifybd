@@ -98,8 +98,8 @@ const PricingFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               </select>
             </div>
             <div>
-              <label className="setting-label">Price (৳)</label>
-              <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="admin-input" required placeholder="e.g. 15,000" />
+              <label className="setting-label">Price ($)</label>
+              <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="admin-input" required placeholder="e.g. 150" />
             </div>
             <div>
               <label className="setting-label">Order / Position</label>

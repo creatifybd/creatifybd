@@ -449,19 +449,19 @@ const Overview = () => {
                 tick={{ fontSize: 11, fill: 'var(--adm-dim)' }}
                 axisLine={{ stroke: 'var(--adm-border)' }}
               />
-              <YAxis 
+              <YAxis
                 tick={{ fontSize: 11, fill: 'var(--adm-dim)' }}
                 axisLine={{ stroke: 'var(--adm-border)' }}
-                tickFormatter={(value) => `৳${(value / 1000)}k`}
+                tickFormatter={(value) => `$${(value / 1000)}k`}
               />
-              <Tooltip 
-                contentStyle={{ 
-                  background: 'var(--adm-card)', 
+              <Tooltip
+                contentStyle={{
+                  background: 'var(--adm-card)',
                   border: '1px solid var(--adm-border)',
                   borderRadius: '8px',
                   color: 'var(--adm-text)'
                 }}
-                formatter={(value) => `৳${value.toLocaleString()}`}
+                formatter={(value) => `$${value.toLocaleString()}`}
               />
               <Bar dataKey="revenue" fill="#E8192C" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -497,7 +497,7 @@ const Overview = () => {
           </div>
           <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>
             <DollarSign size={20} style={{ color: '#22c55e', marginBottom: '0.5rem' }} />
-            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>৳{todaySummary.todayRevenue.toLocaleString()}</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--adm-text)' }}>${todaySummary.todayRevenue.toLocaleString()}</div>
             <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue</div>
           </div>
           <div style={{ background: 'var(--adm-soft)', padding: '1rem', borderRadius: '12px', textAlign: 'center' }}>

@@ -171,7 +171,7 @@ const PaymentPage = () => {
         selectedService: '',
         paymentMethod: 'payoneer',
         paidAmount: '',
-        currency: 'BDT',
+        currency: 'USD',
         transactionId: '',
         paymentDate: '',
         proofFile: null,
@@ -526,7 +526,6 @@ const PaymentPage = () => {
                         value={formData.currency}
                         onChange={e => setFormData({ ...formData, currency: e.target.value })}
                       >
-                        <option value="BDT">BDT</option>
                         <option value="USD">USD</option>
                       </select>
                     </div>
