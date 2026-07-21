@@ -137,7 +137,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
                 if (!isActive) return null;
                 return (
                   <div key={groupKey} className="pricing-service-group active">
-                    <h4 className="pricing-service-group-title">{group.label}</h4>
+                    <span className="pricing-service-badge">{group.label}</span>
                     <p className="pricing-service-group-desc">{group.description}</p>
                   </div>
                 );
@@ -182,63 +182,78 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         .pricing-tabs {
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 2rem;
           margin-bottom: 2rem;
-          padding-bottom: 2rem;
         }
         .pricing-service-tabs {
           display: flex;
-          gap: 16px;
+          gap: 12px;
           flex-wrap: wrap;
           justify-content: center;
-          margin-bottom: 32px;
+          margin-bottom: 24px;
         }
         .pricing-service-tab {
-          padding: 0.75rem 1.5rem;
-          border: 2px solid var(--border);
+          padding: 0.6rem 1.25rem;
+          border: 1.5px solid var(--border);
           background: white;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--muted);
+          border-radius: 6px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--gray-600);
           cursor: pointer;
           transition: all 0.2s ease;
+          white-space: nowrap;
         }
         .pricing-service-tab:hover {
           border-color: var(--red);
           color: var(--red);
+          background: #fff5f5;
         }
         .pricing-service-tab.active {
           background: var(--red);
           border-color: var(--red);
           color: white;
+          font-weight: 600;
         }
         .pricing-service-info {
           display: flex;
           justify-content: center;
-          margin-bottom: 48px;
-          text-align: center;
-          padding: 0 2rem;
+          margin-bottom: 40px;
         }
         .pricing-service-group {
           text-align: center;
+          max-width: 500px;
         }
-        .pricing-service-group-title {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: var(--ink);
-          margin: 0 0 0.25rem 0;
-          letter-spacing: -0.02em;
+        .pricing-service-badge {
+          display: inline-block;
+          padding: 0.3rem 0.8rem;
+          background: var(--gray-100);
+          color: var(--gray-700);
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.5rem;
         }
         .pricing-service-group-desc {
-          font-size: 0.8rem;
-          color: var(--muted);
-          margin: 0 0 40px 0;
-          line-height: 1.4;
+          font-size: 0.9rem;
+          color: var(--gray-600);
+          margin: 0;
+          line-height: 1.5;
+          font-weight: 400;
         }
         @media (max-width: 768px) {
           .pricing-service-tabs {
-            flex-direction: column;
+            gap: 8px;
+          }
+          .pricing-service-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+          }
+          .pricing-service-group {
+            max-width: 100%;
+            padding: 0 1rem;
           }
         }
       `}</style>
