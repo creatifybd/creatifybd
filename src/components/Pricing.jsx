@@ -184,6 +184,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           flex-direction: column;
           gap: 1.5rem;
           margin-bottom: 2rem;
+          padding-bottom: 2rem;
         }
         .pricing-service-tabs {
           display: flex;
@@ -217,6 +218,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           justify-content: center;
           margin-bottom: 48px;
           text-align: center;
+          padding: 0 2rem;
         }
         .pricing-service-group {
           text-align: center;
@@ -231,7 +233,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         .pricing-service-group-desc {
           font-size: 0.8rem;
           color: var(--muted);
-          margin: 0;
+          margin: 0 0 40px 0;
           line-height: 1.4;
         }
         @media (max-width: 768px) {
