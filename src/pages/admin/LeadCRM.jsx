@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Users, Search, Filter, Globe, Phone, Mail, ExternalLink, 
   Sparkles, MessageCircle, Send, CheckCircle2, Clock, 
