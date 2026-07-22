@@ -286,13 +286,15 @@ Perform an in-depth audit & business study for the following prospect:
 Deliver a comprehensive audit covering:
 1. **Strengths** (2-3): What makes this business competitive in its local market?
 2. **Lackings / Pain Points** (3): Specific gaps in their digital presence — e.g. weak branding, no reels, poor website UX, no email capture.
-3. **WhatsApp Outreach** (1): A friendly, personalised, non-spammy message offering CreatifyBD's free visual mockup.
-4. **Cold Email** (1): Professional proposal with subject line and body.
+3. **AI Image Generation Prompt** (1): A highly detailed, ready-to-copy Midjourney / DALL-E 3 / ChatGPT prompt to generate a bespoke visual concept mockup (e.g., modern landing page hero section, social media instagram carousel poster, or brand identity concept) tailored to this specific niche and city. Include lighting, color aesthetic, aspect ratio (--ar 16:9 or --ar 4:5), and high resolution keywords.
+4. **WhatsApp Outreach** (1): A friendly, personalised, non-spammy message offering CreatifyBD's free visual teaser concept.
+5. **Cold Email** (1): Professional proposal with subject line and body mentioning the visual concept idea.
 
 Respond in valid JSON only (no markdown fences, no text outside JSON):
 {
   "strengths": ["strength 1", "strength 2"],
   "lackings": ["lacking 1", "lacking 2", "lacking 3"],
+  "imagePrompt": "Ultra-detailed Midjourney/ChatGPT prompt tailored to this prospect...",
   "whatsappMessage": "...",
   "emailSubject": "...",
   "emailBody": "..."
@@ -315,6 +317,7 @@ Respond in valid JSON only (no markdown fences, no text outside JSON):
         'Website lacks mobile conversion optimisation',
         'Missing short-form video reels for social growth',
       ],
+      imagePrompt: `High-converting modern luxury brand concept for ${lead.business_name || 'local business'} in ${lead.city || 'local area'}, minimalist aesthetic, premium typography, vibrant brand accents, 8k resolution, photorealistic studio lighting --ar 16:9`,
       whatsappMessage: `Hi ${lead.business_name || 'there'} team! I came across your brand while reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your area'}.\n\nOur team at CreatifyBD put together 2 custom social media graphics & a quick mobile layout for you.\n\nCould I share them for free? No pitch — just want to show you the concept!`,
       emailSubject: `Quick design idea for ${lead.business_name || 'your business'}`,
       emailBody: `Hi ${lead.business_name || 'Team'},\n\nWhile reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your city'}, our team at CreatifyBD spotted a chance to enhance your online presence.\n\nWe created a few complimentary mockups — would you be open to seeing them?\n\nBest,\nCreatifyBD\nhttps://creatifybd.com`,

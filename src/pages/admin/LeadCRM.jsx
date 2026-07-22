@@ -69,6 +69,7 @@ const LeadCRM = () => {
   const [editedEmailBody, setEditedEmailBody] = useState('');
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
 
   // Save statuses to localStorage
   useEffect(() => {
@@ -805,6 +806,37 @@ const LeadCRM = () => {
                         </ul>
                       </div>
                     </div>
+
+                    {/* AI Image Generation Prompt Card */}
+                    {aiResult.imagePrompt && (
+                      <div style={{ background: 'linear-gradient(135deg, #FAF5FF, #F3E8FF)', border: '1px solid #D8B4FE', borderRadius: '14px', padding: '1.2rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                          <h4 style={{ margin: 0, color: '#7E22CE', fontSize: '0.88rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <Sparkles size={16} /> AI Image Prompt (Midjourney / ChatGPT / Gemini)
+                          </h4>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(aiResult.imagePrompt);
+                              setCopiedPrompt(true);
+                              setTimeout(() => setCopiedPrompt(false), 2000);
+                            }}
+                            style={{ background: '#9333EA', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                          >
+                            {copiedPrompt ? <Check size={12} /> : <Copy size={12} />}
+                            {copiedPrompt ? 'Copied Prompt!' : 'Copy Prompt'}
+                          </button>
+                        </div>
+                        <p style={{ margin: '0 0 0.6rem', fontSize: '0.78rem', color: '#6B21A8' }}>
+                          Use this AI prompt to generate custom visual teaser mockups for this client before outreach:
+                        </p>
+                        <div style={{
+                          background: '#fff', border: '1px solid #E9D5FF', borderRadius: '10px', padding: '0.75rem 0.9rem',
+                          fontSize: '0.82rem', fontFamily: 'monospace', color: '#4C1D95', lineHeight: '1.4', wordBreak: 'break-word'
+                        }}>
+                          {aiResult.imagePrompt}
+                        </div>
+                      </div>
+                    )}
 
                     {/* WhatsApp Message Editor */}
                     <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '14px', padding: '1.2rem' }}>
