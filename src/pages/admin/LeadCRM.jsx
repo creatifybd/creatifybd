@@ -19,10 +19,12 @@ const STATUS_OPTIONS = [
 ];
 
 const ITEMS_PER_PAGE = 25;
+const HARDCODED_CHUNKS = ['leads_1.json', 'leads_2.json', 'leads_3.json', 'leads_4.json', 'leads_5.json'];
 
 const LeadCRM = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadedChunkCount, setLoadedChunkCount] = useState(0);
   const [error, setError] = useState('');
   
   // Local storage lead status & audits tracker
@@ -81,34 +83,60 @@ const LeadCRM = () => {
     }
   }, [leadAudits]);
 
-  // Fetch chunked leads JSON
+  // Progressive Chunk Loading (Instant first chunk, then append background chunks)
   useEffect(() => {
+    let isMounted = true;
     setLoading(true);
-    fetch('/data/manifest.json')
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
-      })
-      .then(manifest => {
-        const chunkPromises = (manifest.chunks || []).map(file => 
-          fetch(`/data/${file}`).then(r => r.json())
-        );
-        return Promise.all(chunkPromises);
-      })
-      .then(chunks => {
-        const allLeads = chunks.flat();
-        setLeads(allLeads || []);
-        setError('');
-      })
-      .catch(err => {
-        console.error('Failed to load chunked leads dataset:', err);
-        // Fallback single file fetch
-        fetch('/data/leads.json')
-          .then(res => res.json())
-          .then(data => { setLeads(data || []); setError(''); })
-          .catch(() => setError('Failed to load leads dataset. Please ensure dataset files are available.'));
-      })
-      .finally(() => setLoading(false));
+
+    const loadDataset = async () => {
+      let chunksToFetch = HARDCODED_CHUNKS;
+      try {
+        const manifestRes = await fetch('/data/manifest.json?v=' + Date.now());
+        if (manifestRes.ok) {
+          const manifest = await manifestRes.json();
+          if (Array.isArray(manifest.chunks) && manifest.chunks.length > 0) {
+            chunksToFetch = manifest.chunks;
+          }
+        }
+      } catch (e) {
+        console.warn('Manifest fetch skipped, using default chunks');
+      }
+
+      let allAccumulated = [];
+      let successCount = 0;
+
+      for (let i = 0; i < chunksToFetch.length; i++) {
+        const chunkFile = chunksToFetch[i];
+        try {
+          const res = await fetch(`/data/${chunkFile}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (isMounted && Array.isArray(data)) {
+              allAccumulated = [...allAccumulated, ...data];
+              setLeads([...allAccumulated]);
+              successCount++;
+              setLoadedChunkCount(successCount);
+              if (i === 0) setLoading(false); // First chunk ready! Hide main spinner
+            }
+          }
+        } catch (err) {
+          console.error(`Failed loading chunk ${chunkFile}:`, err);
+        }
+      }
+
+      if (isMounted) {
+        setLoading(false);
+        if (allAccumulated.length === 0) {
+          setError('Failed to load leads dataset. Please refresh or check connection.');
+        } else {
+          setError('');
+        }
+      }
+    };
+
+    loadDataset();
+
+    return () => { isMounted = false; };
   }, []);
 
   // Filter lists
@@ -260,12 +288,12 @@ const LeadCRM = () => {
     }
   };
 
-  if (loading) {
+  if (loading && leads.length === 0) {
     return (
       <div style={{ padding: '3rem', textAlign: 'center', color: '#64748B' }}>
         <RefreshCw size={32} className="animate-spin" style={{ margin: '0 auto 1rem', color: '#E8192C' }} />
         <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#0F172A' }}>Loading International Leads Dataset...</h3>
-        <p style={{ fontSize: '0.9rem' }}>Preparing 51,090 verified leads for Lead CRM...</p>
+        <p style={{ fontSize: '0.9rem' }}>Streaming 51,090 verified leads progressively...</p>
       </div>
     );
   }
@@ -291,15 +319,22 @@ const LeadCRM = () => {
           </div>
         </div>
 
-        {/* API Key Rotation Status Badge */}
-        <div style={{ 
-          display: 'flex', alignItems: 'center', gap: '0.75rem', 
-          background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '0.5rem 1rem', borderRadius: '12px' 
-        }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
-          <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#334155' }}>
-            Gemini Rotator: <strong style={{ color: '#E8192C' }}>11 API Keys Active</strong> (Auto Switch)
-          </span>
+        {/* API Key Rotation & Load Indicator */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {loadedChunkCount < 5 && (
+            <div style={{ background: '#FEF3C7', border: '1px solid #FCD34D', padding: '0.4rem 0.8rem', borderRadius: '10px', fontSize: '0.75rem', fontWeight: '700', color: '#92400E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <RefreshCw size={12} className="animate-spin" /> Loading Chunks: {loadedChunkCount}/5 ({leads.length.toLocaleString()} leads)
+            </div>
+          )}
+          <div style={{ 
+            display: 'flex', alignItems: 'center', gap: '0.75rem', 
+            background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '0.5rem 1rem', borderRadius: '12px' 
+          }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#334155' }}>
+              Gemini Rotator: <strong style={{ color: '#E8192C' }}>11 API Keys Active</strong> (Auto Switch)
+            </span>
+          </div>
         </div>
       </div>
 
@@ -313,7 +348,7 @@ const LeadCRM = () => {
       {/* ── METRICS SUMMARY CARDS ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
         <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Total Database</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Loaded Leads</span>
           <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0F172A', margin: '0.2rem 0 0' }}>{leads.length.toLocaleString()}</h2>
           <span style={{ fontSize: '0.75rem', color: '#22C55E', fontWeight: '600' }}>100% Validated Leads</span>
         </div>
