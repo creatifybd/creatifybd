@@ -83,7 +83,7 @@ const LeadCRM = () => {
     }
   }, [leadAudits]);
 
-  // Progressive Chunk Loading (Instant first chunk, then append background chunks)
+  // Progressive Chunk Loading (Instant first chunk, then append background chunks, with NaN sanitizer)
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -91,7 +91,8 @@ const LeadCRM = () => {
     const loadDataset = async () => {
       let chunksToFetch = HARDCODED_CHUNKS;
       try {
-        const manifestRes = await fetch('/data/manifest.json?v=' + Date.now());
+        const cacheBuster = '?v=' + Date.now();
+        const manifestRes = await fetch('/data/manifest.json' + cacheBuster);
         if (manifestRes.ok) {
           const manifest = await manifestRes.json();
           if (Array.isArray(manifest.chunks) && manifest.chunks.length > 0) {
@@ -108,9 +109,14 @@ const LeadCRM = () => {
       for (let i = 0; i < chunksToFetch.length; i++) {
         const chunkFile = chunksToFetch[i];
         try {
-          const res = await fetch(`/data/${chunkFile}`);
+          const cacheBuster = '?v=' + Date.now();
+          const res = await fetch(`/data/${chunkFile}` + cacheBuster);
           if (res.ok) {
-            const data = await res.json();
+            const rawText = await res.text();
+            // Bulletproof: Replace any invalid float NaN values with empty string
+            const sanitizedText = rawText.replace(/:\s*NaN\b/g, ':""');
+            const data = JSON.parse(sanitizedText);
+            
             if (isMounted && Array.isArray(data)) {
               allAccumulated = [...allAccumulated, ...data];
               setLeads([...allAccumulated]);
