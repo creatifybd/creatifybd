@@ -1,6 +1,8 @@
 /**
  * Gemini API Key Rotator & Business Study Generator
- * Smart rotation: per-key cooldown tracking, exponential backoff, no simultaneous hammering.
+ * Uses ONLY gemini-1.5-flash (free-tier safe).
+ * gemini-2.0-flash requires billing → causes 400 on free keys → REMOVED.
+ * Features: per-key cooldown, 200ms delay between attempts, auto-wait when all keys busy.
  */
 
 const GEMINI_KEYS = [
@@ -17,153 +19,136 @@ const GEMINI_KEYS = [
   'AIzaSyCoLyzuh_5rFumCwtNHKNsK7HBN8-qB18w',
 ];
 
-// Only use free-tier reliable models
-const GEMINI_MODELS = [
-  'gemini-1.5-flash',
-  'gemini-2.0-flash',
-];
+// ONLY gemini-1.5-flash — stable, free-tier, no billing required
+const MODEL = 'gemini-1.5-flash';
 
-// Per-key cooldown tracking: keyIndex -> timestamp when it's safe to retry
+// Per-key cooldown: keyIndex → timestamp when safe to use again
 const keyCooldowns = new Array(GEMINI_KEYS.length).fill(0);
 
-// Which key to start from (persists across calls in session)
+// Round-robin pointer
 let activeKeyIndex = 0;
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/**
- * Find the next available key that is not in cooldown.
- * Returns the key index, or -1 if all are in cooldown.
- */
+/** Returns index of next available key, or -1 if all in cooldown. */
 function findAvailableKey() {
   const now = Date.now();
-  // Try from activeKeyIndex first (round-robin with cooldown awareness)
-  for (let offset = 0; offset < GEMINI_KEYS.length; offset++) {
-    const idx = (activeKeyIndex + offset) % GEMINI_KEYS.length;
-    if (keyCooldowns[idx] <= now) {
-      return idx;
-    }
+  for (let i = 0; i < GEMINI_KEYS.length; i++) {
+    const idx = (activeKeyIndex + i) % GEMINI_KEYS.length;
+    if (keyCooldowns[idx] <= now) return idx;
   }
-  return -1; // all in cooldown
+  return -1;
 }
 
-/**
- * Get the minimum wait time until any key becomes available.
- */
+/** Milliseconds until earliest cooling key recovers. */
 function getMinWaitMs() {
-  const now = Date.now();
-  const minCooldown = Math.min(...keyCooldowns);
-  return Math.max(0, minCooldown - now);
+  return Math.max(0, Math.min(...keyCooldowns) - Date.now());
 }
 
 /**
- * Call Gemini API with smart key rotation — cooldown tracking + backoff.
+ * Call Gemini API with smart key rotation.
+ *
+ * Status behaviour:
+ *  429 / 403  → 65s rate-limit cooldown (free RPM reset)
+ *  400        → 10min cooldown (model not enabled for this key)
+ *  other err  → 15s soft cooldown
+ *  network    → 5s soft cooldown
+ *
+ * 200ms pause between each key attempt (no simultaneous hammering).
  */
 export async function generateContentWithRotation(promptText, onKeySwitch = null) {
-  const COOLDOWN_MS = 65_000; // 65 seconds (Gemini free tier: 15 RPM, resets each minute)
-  const MAX_WAIT_MS = 130_000; // max 2 mins total wait before giving up
+  const RATE_COOLDOWN   = 65_000;   // 65s  — free tier RPM resets
+  const PERM_COOLDOWN   = 600_000;  // 10m  — 400 means model/billing blocked
+  const SOFT_COOLDOWN   = 15_000;   // 15s  — other HTTP errors
+  const NET_COOLDOWN    = 5_000;    // 5s   — network failures
+  const ATTEMPT_DELAY   = 200;      // ms   — gap between key attempts
+  const MAX_WAIT        = 130_000;  // give up if cooldown > 2min
 
-  for (let round = 0; round < 3; round++) {
-    // Try every key once per round
+  // Two passes: first try all keys, then wait & retry
+  for (let pass = 0; pass < 2; pass++) {
     for (let attempt = 0; attempt < GEMINI_KEYS.length; attempt++) {
       const keyIdx = findAvailableKey();
 
       if (keyIdx === -1) {
-        // All keys in cooldown — wait for the earliest one to recover
         const waitMs = getMinWaitMs();
-        if (waitMs > MAX_WAIT_MS) {
+        if (waitMs > MAX_WAIT) {
           throw new Error(
-            'All 11 Gemini API keys are in cooldown. Please wait ~1 minute and try again.'
+            `All Gemini keys are rate-limited. Please wait ${Math.ceil(waitMs / 1000)}s and try again.`
           );
         }
-        console.warn(`[Gemini Rotator] All keys cooling down. Waiting ${Math.ceil(waitMs / 1000)}s...`);
-        if (onKeySwitch) onKeySwitch(-1); // signal: waiting
+        console.warn(`[Gemini] All keys cooling. Waiting ${Math.ceil(waitMs / 1000)}s...`);
+        if (onKeySwitch) onKeySwitch(-1); // signal UI: waiting
         await sleep(waitMs + 500);
-        continue;
+        break; // restart pass after wait
       }
 
       activeKeyIndex = keyIdx;
-      const currentKey = GEMINI_KEYS[keyIdx];
-      // Alternate model each attempt for variety
-      const currentModel = GEMINI_MODELS[attempt % GEMINI_MODELS.length];
-
       if (onKeySwitch) onKeySwitch(keyIdx + 1);
+      if (attempt > 0) await sleep(ATTEMPT_DELAY); // pace requests
 
       try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${currentKey}`;
-
-        const response = await fetch(endpoint, {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_KEYS[keyIdx]}`;
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 1800,
-            },
+            generationConfig: { temperature: 0.7, maxOutputTokens: 1800 },
           }),
         });
 
-        if (response.status === 429 || response.status === 403) {
-          // Rate limited — put this key into cooldown
-          console.warn(`[Gemini Rotator] Key ${keyIdx + 1} (${currentModel}) rate limited (${response.status}). Cooling down for 65s.`);
-          keyCooldowns[keyIdx] = Date.now() + COOLDOWN_MS;
-          // Move to next key
+        if (res.status === 429 || res.status === 403) {
+          console.warn(`[Gemini] Key ${keyIdx + 1} rate-limited (${res.status}). Cooling 65s.`);
+          keyCooldowns[keyIdx] = Date.now() + RATE_COOLDOWN;
           activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
           continue;
         }
 
-        if (response.status === 400) {
-          // Bad request — try next model, not a rate limit issue
-          console.warn(`[Gemini Rotator] Key ${keyIdx + 1} model ${currentModel} returned 400. Trying next model.`);
+        if (res.status === 400) {
+          const body = await res.json().catch(() => ({}));
+          console.warn(`[Gemini] Key ${keyIdx + 1} → 400 (model not available/billing). Cooling 10min.`, body?.error?.message || '');
+          keyCooldowns[keyIdx] = Date.now() + PERM_COOLDOWN;
           activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
           continue;
         }
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          console.warn(`[Gemini Rotator] API Error on key ${keyIdx + 1}:`, errorData);
-          keyCooldowns[keyIdx] = Date.now() + 10_000; // 10s soft cooldown
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          console.warn(`[Gemini] Key ${keyIdx + 1} HTTP ${res.status}.`, body?.error?.message || '');
+          keyCooldowns[keyIdx] = Date.now() + SOFT_COOLDOWN;
           activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
           continue;
         }
 
-        const data = await response.json();
-        const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (candidateText) {
-          // Success — move to next key for next call (distribute load)
-          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-          return {
-            text: candidateText,
-            keyUsed: keyIdx + 1,
-            modelUsed: currentModel,
-          };
+        const data = await res.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length; // advance for next call
+          return { text, keyUsed: keyIdx + 1, modelUsed: MODEL };
         }
 
-        // Empty response
-        console.warn(`[Gemini Rotator] Key ${keyIdx + 1} returned empty response.`);
+        console.warn(`[Gemini] Key ${keyIdx + 1} returned empty response.`);
         activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-        continue;
 
       } catch (err) {
-        console.warn(`[Gemini Rotator] Network error on key ${keyIdx + 1}:`, err.message);
-        keyCooldowns[keyIdx] = Date.now() + 5_000; // 5s soft cooldown on network err
+        console.warn(`[Gemini] Network error on key ${keyIdx + 1}:`, err.message);
+        keyCooldowns[keyIdx] = Date.now() + NET_COOLDOWN;
         activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-        continue;
       }
     }
   }
 
-  const waitMs = getMinWaitMs();
+  const waitSec = Math.ceil(getMinWaitMs() / 1000);
   throw new Error(
-    waitMs > 0
-      ? `All Gemini API keys are rate-limited. Please wait ${Math.ceil(waitMs / 1000)} seconds and try again.`
-      : 'All Gemini API keys failed. Please try again in a moment.'
+    waitSec > 5
+      ? `All API keys are rate-limited. Please wait ${waitSec} seconds and try again.`
+      : 'AI study failed after all retries. Please try again.'
   );
 }
 
 /**
- * Conducts a deep AI business study for a given lead.
+ * Deep AI business study for a lead — returns JSON with strengths, lackings,
+ * a WhatsApp message and a cold email proposal.
  */
 export async function analyzeLeadBusiness(lead, onProgress = null) {
   const prompt = `You are a Senior Growth Strategist and Creative Director at CreatifyBD (an international agency providing Branding, Social Media Management, Video Editing, and Web Design).
@@ -196,28 +181,24 @@ Respond strictly in valid JSON format matching this exact structure (no markdown
   const result = await generateContentWithRotation(prompt, onProgress);
 
   try {
-    let cleanJson = result.text.trim();
-    // Strip markdown code fences if present
-    cleanJson = cleanJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
-    const parsed = JSON.parse(cleanJson);
-    return {
-      ...parsed,
-      keyUsed: result.keyUsed,
-      modelUsed: result.modelUsed,
-    };
-  } catch (err) {
-    console.error('[Gemini Rotator] Failed to parse JSON response:', result.text);
-    // Fallback with generic content
+    let clean = result.text.trim()
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim();
+    const parsed = JSON.parse(clean);
+    return { ...parsed, keyUsed: result.keyUsed, modelUsed: result.modelUsed };
+  } catch {
+    // Fallback on JSON parse failure
     return {
       strengths: [`Established ${lead.type || 'business'} in ${lead.city || 'local market'}`],
       lackings: [
         'Inconsistent visual branding across platforms',
-        'Website lacks mobile conversion optimization',
-        'Opportunity to capture more leads with short-form video reels',
+        'Website lacks mobile conversion optimisation',
+        'Missing short-form video reels for social growth',
       ],
-      whatsappMessage: `Hi ${lead.business_name || 'there'} team! I was looking at top ${lead.type || 'businesses'} in ${lead.city || 'your area'} and noticed your brand. Loved your reviews!\n\nOur design team at CreatifyBD put together 2 custom social media graphics & a quick mobile layout idea tailored for your brand.\n\nCould I drop them here for you to review for free? No pitch, just wanted to share the visual concepts!`,
+      whatsappMessage: `Hi ${lead.business_name || 'there'} team! I came across your brand while looking at top ${lead.type || 'businesses'} in ${lead.city || 'your area'}.\n\nOur team at CreatifyBD put together 2 custom social media graphics & a quick mobile layout idea for your brand.\n\nCould I share them here for free? No pitch — just wanted to show you the concept!`,
       emailSubject: `Quick visual design idea for ${lead.business_name || 'your business'}`,
-      emailBody: `Hi ${lead.business_name || 'Team'},\n\nI hope this email finds you well.\n\nWhile reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your city'}, our creative team at CreatifyBD noticed an opportunity to enhance your online visual presence and conversion flow.\n\nWe've created a few complimentary visual design mockups showing how a refreshed social feed and landing layout could increase your monthly client inquiries.\n\nWould you be open to taking a look at the concepts? I'd be happy to send them over.\n\nBest regards,\nCreatifyBD Agency Team\nhttps://creatifybd.com`,
+      emailBody: `Hi ${lead.business_name || 'Team'},\n\nI hope this finds you well.\n\nWhile reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your city'}, our creative team at CreatifyBD spotted an opportunity to enhance your online visual presence.\n\nWe've created a few complimentary design mockups — would you be open to a look?\n\nBest regards,\nCreatifyBD Agency\nhttps://creatifybd.com`,
       keyUsed: result.keyUsed,
       modelUsed: result.modelUsed,
     };
