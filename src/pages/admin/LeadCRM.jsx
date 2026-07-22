@@ -58,6 +58,8 @@ const LeadCRM = () => {
   const [activeLead, setActiveLead] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [activeKeyNum, setActiveKeyNum] = useState(1);
+  const [keyWaiting, setKeyWaiting] = useState(false);
+  const [aiError, setAiError] = useState('');
   const [aiResult, setAiResult] = useState(null);
   const [editedWhatsapp, setEditedWhatsapp] = useState('');
   const [editedEmailSubject, setEditedEmailSubject] = useState('');
@@ -233,10 +235,19 @@ const LeadCRM = () => {
   const runAiStudy = async () => {
     if (!activeLead) return;
     setAnalyzing(true);
+    setAiError('');
+    setKeyWaiting(false);
     try {
       const res = await analyzeLeadBusiness(activeLead, (keyNum) => {
-        setActiveKeyNum(keyNum);
+        if (keyNum === -1) {
+          setKeyWaiting(true);
+          setActiveKeyNum('⏳');
+        } else {
+          setKeyWaiting(false);
+          setActiveKeyNum(keyNum);
+        }
       });
+      setKeyWaiting(false);
       setActiveKeyNum(res.keyUsed || 1);
       setAiResult(res);
       setEditedWhatsapp(res.whatsappMessage || '');
@@ -251,9 +262,10 @@ const LeadCRM = () => {
       }
     } catch (err) {
       console.error('AI Analysis failed:', err);
-      alert(err.message || 'AI Business Study failed. Please try again.');
+      setAiError(err.message || 'AI Business Study failed. Please try again.');
     } finally {
       setAnalyzing(false);
+      setKeyWaiting(false);
     }
   };
 
@@ -338,7 +350,7 @@ const LeadCRM = () => {
           }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
             <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#334155' }}>
-              Gemini Rotator: <strong style={{ color: '#E8192C' }}>11 API Keys Active</strong> (Auto Switch)
+              Gemini Rotator: <strong style={{ color: '#E8192C' }}>11 Keys</strong> · Smart Cooldown (65s/key)
             </span>
           </div>
         </div>
@@ -719,7 +731,10 @@ const LeadCRM = () => {
                     {analyzing ? (
                       <>
                         <RefreshCw size={18} className="animate-spin" />
-                        AI is Studying Business &amp; Rotating Keys...
+                        {keyWaiting
+                          ? 'Keys Cooling Down — Auto-Resuming...'
+                          : `AI is Studying Business · Key #${activeKeyNum} Active...`
+                        }
                       </>
                     ) : (
                       <>
@@ -728,6 +743,21 @@ const LeadCRM = () => {
                       </>
                     )}
                   </button>
+
+                  {/* Inline error — no alert() popup */}
+                  {aiError && (
+                    <div style={{
+                      marginTop: '0.75rem', padding: '0.75rem 1rem', background: '#FEF3C7',
+                      border: '1px solid #FCD34D', borderRadius: '10px', fontSize: '0.82rem',
+                      color: '#92400E', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
+                    }}>
+                      <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
+                      <span>
+                        <strong>Rate Limit Hit:</strong> {aiError}<br />
+                        <span style={{ opacity: 0.8 }}>Keys auto-recover after ~1 minute. Click the button again to retry.</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* AI Output Section */}
