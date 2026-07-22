@@ -10,20 +10,20 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 const pillars = [
   {
     icon: <BarChart3 size={22} />,
-    title: 'Done-for-you social content',
-    desc: 'Full-service monthly management — strategy, design, captions, and scheduling — so your brand stays active and building audiences while you run your business.',
+    title: 'Monthly social media management',
+    desc: 'Consistent calendars, post design, captions, scheduling, and reporting for growing brands.',
     color: '#E8192C'
   },
   {
     icon: <Palette size={22} />,
-    title: 'Brand identity that commands respect',
-    desc: 'Visual identity that makes your business look established from day one — whether pitching investors, launching a product, or competing for international clients.',
+    title: 'Brand-ready creative assets',
+    desc: 'Graphic design, campaign visuals, ad creatives, and templates that keep your business polished.',
     color: '#7C3AED'
   },
   {
     icon: <Video size={22} />,
-    title: 'Video + web that converts',
-    desc: 'High-impact video content and conversion-focused websites that turn first impressions into leads, and leads into loyal customers.',
+    title: 'Video, marketing, and websites',
+    desc: 'Short-form video edits, digital marketing support, and conversion-focused website design.',
     color: '#0EA5E9'
   }
 ];
@@ -33,7 +33,7 @@ const IntroBand = () => {
   const introContent = content?.intro_band || {};
   const introTitle = stripLegacyMarkup(globalizeCopy(
     introContent.title,
-    'The creative team serious brands keep on retainer.'
+    'The creative services ambitious brands ask for most, packaged for reliable monthly execution'
   ));
   const editablePillars = Array.isArray(introContent.pillars) && introContent.pillars.length
     ? introContent.pillars.map((item, index) => ({

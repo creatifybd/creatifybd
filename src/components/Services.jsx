@@ -24,37 +24,37 @@ const defaultServices = [
   {
     id: 'social-media',
     icon: <BarChart3 size={22} />,
-    title: 'Turn silence into a loyal following',
-    desc: 'We handle everything — strategy, design, captions, scheduling — so your brand stays active and building trust while you run your business.',
+    title: 'Strategic Social Media Management',
+    desc: 'Data-driven content strategies that increase engagement and drive conversions. Full-service management from strategy to execution.',
     price: '$299/mo',
     badge: 'Most Popular',
   },
   {
     id: 'graphic-design',
     icon: <Palette size={22} />,
-    title: 'Look like the leader you’re becoming',
-    desc: 'A brand identity that makes your business impossible to forget — whether you’re pitching investors, launching a product, or winning international clients.',
+    title: 'Brand Identity & Logo Design',
+    desc: 'Comprehensive visual identity that communicates your unique value proposition. From brand strategy to execution-ready assets.',
     price: 'From $45',
   },
   {
     id: 'video-editing',
     icon: <Clapperboard size={22} />,
-    title: 'Content that makes people stop scrolling',
-    desc: 'Short-form reels, promos, and edits that capture attention in the first 3 seconds — and convert viewers into followers, customers, and buyers.',
+    title: 'Professional Video Production',
+    desc: 'Strategic video content that tells your brand story and drives action. From concept to final delivery with platform optimisation.',
     price: 'From $60',
   },
   {
     id: 'digital-marketing',
     icon: <Megaphone size={22} />,
-    title: 'Put your offer in front of the right people',
-    desc: 'Ads, funnels, and campaigns built around conversions — not just clicks. Every campaign is built to grow revenue, not just impressions.',
+    title: 'Digital Marketing & Ads',
+    desc: 'Campaign planning, ad creative and landing-page funnels built to convert. Performance-focused from day one.',
     price: 'From $99',
   },
   {
     id: 'website-design',
     icon: <Code2 size={22} />,
-    title: 'A website that works while you sleep',
-    desc: 'Clean, fast, and conversion-focused — designed to build instant trust and capture leads 24/7, without you having to say a word.',
+    title: 'Conversion-Focused Web Design',
+    desc: 'Responsive business websites that turn visitors into customers. UX design with business goals at the centre.',
     price: 'From $249',
   },
 ];
@@ -109,15 +109,9 @@ const Services = ({ highlight = false, fullPage = false }) => {
               transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
             >
               {fullPage ? (
-                <>
-                  Pick your growth lever.
-                  {' '}<span className="text-red">Every service is built to move your business forward.</span>
-                </>
+                <>Strategic creative services that <span className="text-red">drive business results.</span></>
               ) : (
-                <>
-                  Five ways we grow your business.
-                  {' '}<span className="text-red">Pick the one you need most.</span>
-                </>
+                <>Professional creative support for <span className="text-red">growing businesses.</span></>
               )}
             </motion.h2>
 
@@ -128,7 +122,7 @@ const Services = ({ highlight = false, fullPage = false }) => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: EASE, delay: 0.16 }}
             >
-              Whether you need one service or all five, each one is built around the same goal: making your business look better, reach more people, and convert more customers.
+              A dedicated creative partner that understands your business goals. From strategy to execution, we deliver measurable results without the agency overhead.
             </motion.p>
 
             <motion.div
