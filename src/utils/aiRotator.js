@@ -342,39 +342,54 @@ ${liveWebsiteContent ? `--- LIVE WEBSITE SCRAPED CONTENT & MARKDOWN ---
 ${liveWebsiteContent}
 ---------------------------------------------------` : '(Note: Live website scan unavailable or website not provided; perform deep diagnostic audit based on niche, location, ratings, and industry benchmark standards.)'}
 
-Deliver an authentic, non-generic audit covering:
-1. **Strengths** (2-3): Specific strengths based on their real business model, products, or headline offerings.
-2. **Lackings / Revenue Leaks** (3): Specific gaps in their visual branding, website conversion flow, mobile presentation, or short-form video content.
-3. **AI Image Generation Prompt** (1 ultra-detailed prompt):
-   This is the most important field. The output MUST look like it was designed by a world-class senior designer at an elite creative agency. It must be completely indistinguishable from expensive human-made professional work. Follow all of these rules:
+CRITICAL AUDIT RULES:
+1. **Strengths** (2-3): Genuine strengths derived strictly from their actual business data or scraped website. DO NOT invent false praise.
+2. **Lackings / Revenue Leaks** (3): MUST BE 100% REAL & VERIFIABLE. Never claim missing phone/email if present. Base findings on real visual gaps, website UX hierarchy, mobile conversion bottlenecks, or missing short-form video reels.
+3. **3-4 AI Image Generation Prompts ('imagePrompts')**:
+   Generate exactly 3 to 4 distinct, ultra-detailed prompts (180-250 words each) corresponding to each identified lacking.
+   Each item in 'imagePrompts' must be an object with:
+   - 'title': Clear concept title (e.g., "1. Website Hero & Mobile UX Redesign", "2. Instagram Carousel Teaser", "3. Short-Form Reel Cover Concept", "4. Promotional Package Banner")
+   - 'targetsLacking': Which specific identified lacking this design solves.
+   - 'valueAddition': Concrete explanation of how this visual design adds business value / revenue for the client.
+   - 'prompt': Ultra-detailed Midjourney / ChatGPT prompt following top-agency standards:
+     * Awwwards / Dribbble Top Shot style references
+     * Exact camera/render setup (Hasselblad, Sony A7R V 85mm f/1.4, Octane Render)
+     * Exact HSL / Hex color palette
+     * Typography rules (serif/sans display font, px, tracking, line-height)
+     * Composition & 3-point studio lighting
+     * Canvas dimensions & Midjourney params (--ar 16:9 or --ar 4:5 --q 2 --s 750 --v 6)
 
-   QUALITY STANDARDS:
-   - Reference real design aesthetics: Awwwards Site of the Day, Dribbble Top Shot, Apple.com product page, Airbnb brand, Stripe landing page, Notion homepage, Linear.app — pick the most relevant to this business.
-   - Specify a real photography/rendering style: "Hasselblad H6D-400c studio product photography", "Sony A7R V lifestyle photography with Sigma Art 35mm f/1.4", "rendered in Cinema 4D with Octane Render", "Figma UI mockup on Apple M3 MacBook Pro clay device"
-   - Include precise color palette: NOT generic colors. Use exact values: "HSL(210, 40%, 8%) deep midnight navy, #F7F2EC warm cream off-white, #C9A96E warm antique gold accent"
-   - Typography: "PP Editorial New serif display headline, 72px, weight 700, tracking -0.04em, line-height 1.0" + "Inter or DM Sans body at 16px, weight 400, tracking 0.01em"
-   - Composition: rule of thirds, generous negative space, depth of field bokeh, golden ratio layout
-   - Lighting: "3-point studio lighting, key light at 45° from top-left, soft fill light from right, subtle rim light giving depth, no harsh shadows"
-   - Format: specify canvas size (e.g., "1440px × 900px hero section, 1080px × 1080px Instagram carousel slide 1 of 6, or 1080px × 1920px vertical reel cover")
-   - Output quality: "ultra-HD 8K", "photorealistic", "print quality 300dpi", "--q 2 --s 750 --v 6" for Midjourney
-   - Mood/Style: describe the emotional feeling ("aspirational luxury", "warm approachable professionalism", "bold energetic Gen-Z streetwear")
-   - Specific elements tailored to this exact business niche and scraped content
-
-   The imagePrompt should be 180-250 words minimum — dense, technical, and hyper-specific to this business.
-
-4. **WhatsApp Outreach** (1): A friendly, highly personalized message referencing an exact detail from their business/website and offering CreatifyBD's free visual teaser concept. Max 3 short paragraphs. Conversational tone.
-5. **Cold Email Proposal** (1): A professional proposal with a high-CTR subject line and clear, value-first body. Must mention a specific observation about their current brand/website.
+4. **WhatsApp Outreach** (1): Personalized, non-spammy outreach mentioning the 3-4 custom visual concepts we designed for their business.
+5. **Cold Email Proposal** (1): High-converting proposal with subject line and body offering to share the 3-4 complimentary visual concepts.
 
 Respond strictly in valid JSON format only (no markdown fences, no text outside JSON):
 {
   "strengths": ["strength 1", "strength 2"],
   "lackings": ["lacking 1", "lacking 2", "lacking 3"],
-  "imagePrompt": "...",
+  "imagePrompts": [
+    {
+      "title": "...",
+      "targetsLacking": "...",
+      "valueAddition": "...",
+      "prompt": "..."
+    },
+    {
+      "title": "...",
+      "targetsLacking": "...",
+      "valueAddition": "...",
+      "prompt": "..."
+    },
+    {
+      "title": "...",
+      "targetsLacking": "...",
+      "valueAddition": "...",
+      "prompt": "..."
+    }
+  ],
   "whatsappMessage": "...",
   "emailSubject": "...",
   "emailBody": "..."
 }`;
-
 
   const result = await generateWithAI(prompt, onProgress);
 
@@ -384,6 +399,19 @@ Respond strictly in valid JSON format only (no markdown fences, no text outside 
       .replace(/\s*```$/i, '')
       .trim();
     const parsed = JSON.parse(clean);
+
+    // Fallback if imagePrompt single field returned
+    if (!parsed.imagePrompts && parsed.imagePrompt) {
+      parsed.imagePrompts = [
+        {
+          title: "1. Brand Identity & Visual Concept",
+          targetsLacking: parsed.lackings?.[0] || "Inconsistent visual branding",
+          valueAddition: "Elevates visual positioning to compete with top international agencies.",
+          prompt: parsed.imagePrompt
+        }
+      ];
+    }
+
     return { ...parsed, provider: result.provider, model: result.model, keyNum: result.keyNum };
   } catch {
     return {
@@ -393,10 +421,29 @@ Respond strictly in valid JSON format only (no markdown fences, no text outside 
         'Website lacks mobile conversion optimisation',
         'Missing short-form video reels for social growth',
       ],
-      imagePrompt: `High-converting modern luxury brand concept for ${lead.business_name || 'local business'} in ${lead.city || 'local area'}, minimalist aesthetic, premium typography, vibrant brand accents, 8k resolution, photorealistic studio lighting --ar 16:9`,
-      whatsappMessage: `Hi ${lead.business_name || 'there'} team! I came across your brand while reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your area'}.\n\nOur team at CreatifyBD put together 2 custom social media graphics & a quick mobile layout for you.\n\nCould I share them for free? No pitch — just want to show you the concept!`,
-      emailSubject: `Quick design idea for ${lead.business_name || 'your business'}`,
-      emailBody: `Hi ${lead.business_name || 'Team'},\n\nWhile reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your city'}, our team at CreatifyBD spotted a chance to enhance your online presence.\n\nWe created a few complimentary mockups — would you be open to seeing them?\n\nBest,\nCreatifyBD\nhttps://creatifybd.com`,
+      imagePrompts: [
+        {
+          title: "1. Website Hero & Mobile UX Redesign",
+          targetsLacking: "Website lacks mobile conversion hierarchy",
+          valueAddition: "Increases visitor-to-lead conversion by creating a high-impact visual first impression.",
+          prompt: `Awwwards Site of the Day level modern luxury web hero section for ${lead.business_name || 'local business'} in ${lead.city || 'local area'}, Hasselblad product photography, HSL(210, 40%, 8%) navy background, warm cream accents, crisp typography, 1440x900px canvas, ultra-HD 8K --ar 16:9 --q 2 --v 6`
+        },
+        {
+          title: "2. Instagram Carousel Teaser Slide",
+          targetsLacking: "Inconsistent visual branding across social media",
+          valueAddition: "Establishes visual brand authority and boosts organic engagement.",
+          prompt: `Dribbble Top Shot level 1080x1080px Instagram carousel slide 1 of 5 for ${lead.business_name || 'local business'}, minimalist luxury grid layout, 3D clay device mockup, soft studio lighting --ar 1:1 --v 6`
+        },
+        {
+          title: "3. Short-Form Reel Cover & Motion Teaser",
+          targetsLacking: "Missing short-form video reels for social growth",
+          valueAddition: "Captures viewer attention in the first 2 seconds of Instagram Reels & TikTok.",
+          prompt: `1080x1920px vertical Reel cover design for ${lead.business_name || 'local business'}, bold kinetic typography, dark modern gradient background, high contrast --ar 9:16 --v 6`
+        }
+      ],
+      whatsappMessage: `Hi ${lead.business_name || 'there'} team! I came across your brand while reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your area'}.\n\nOur team at CreatifyBD put together 3 custom visual concepts (website redesign, social carousel & reel cover) specifically for your business.\n\nCould I share them for free? No pitch — just want to show you the concepts!`,
+      emailSubject: `3 custom design concepts for ${lead.business_name || 'your business'}`,
+      emailBody: `Hi ${lead.business_name || 'Team'},\n\nWhile reviewing top ${lead.type || 'businesses'} in ${lead.city || 'your city'}, our team at CreatifyBD spotted a few key visual opportunities for your brand.\n\nWe created 3 complimentary design concepts tailored to your niche — would you be open to seeing them?\n\nBest,\nCreatifyBD\nhttps://creatifybd.com`,
       provider: result.provider,
       model: result.model,
       keyNum: result.keyNum,

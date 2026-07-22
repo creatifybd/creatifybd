@@ -69,7 +69,7 @@ const LeadCRM = () => {
   const [editedEmailBody, setEditedEmailBody] = useState('');
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [copiedPromptIndex, setCopiedPromptIndex] = useState(null);
   const [isScraping, setIsScraping] = useState(false);
 
   // Save statuses to localStorage
@@ -819,33 +819,68 @@ const LeadCRM = () => {
                       </div>
                     </div>
 
-                    {/* AI Image Generation Prompt Card */}
-                    {aiResult.imagePrompt && (
+                    {/* AI Image Generation Prompts (3-4 Prompts tailored to specific lackings) */}
+                    {((aiResult.imagePrompts && aiResult.imagePrompts.length > 0) || aiResult.imagePrompt) && (
                       <div style={{ background: 'linear-gradient(135deg, #FAF5FF, #F3E8FF)', border: '1px solid #D8B4FE', borderRadius: '14px', padding: '1.2rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                          <h4 style={{ margin: 0, color: '#7E22CE', fontSize: '0.88rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            <Sparkles size={16} /> AI Image Prompt (Midjourney / ChatGPT / Gemini)
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                          <h4 style={{ margin: 0, color: '#7E22CE', fontSize: '0.92rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <Sparkles size={18} /> 🎨 3-4 AI Image Prompts (Midjourney / ChatGPT / Gemini)
                           </h4>
-                          <button
-                            onClick={() => {
-                              navigator.clipboard.writeText(aiResult.imagePrompt);
-                              setCopiedPrompt(true);
-                              setTimeout(() => setCopiedPrompt(false), 2000);
-                            }}
-                            style={{ background: '#9333EA', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                          >
-                            {copiedPrompt ? <Check size={12} /> : <Copy size={12} />}
-                            {copiedPrompt ? 'Copied Prompt!' : 'Copy Prompt'}
-                          </button>
+                          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#9333EA', background: '#fff', padding: '2px 8px', borderRadius: '12px', border: '1px solid #E9D5FF' }}>
+                            {aiResult.imagePrompts?.length || 1} Custom Design Concepts
+                          </span>
                         </div>
-                        <p style={{ margin: '0 0 0.6rem', fontSize: '0.78rem', color: '#6B21A8' }}>
-                          Use this AI prompt to generate custom visual teaser mockups for this client before outreach:
+                        <p style={{ margin: '0 0 1rem', fontSize: '0.8rem', color: '#6B21A8', lineHeight: '1.4' }}>
+                          These 3-4 prompts are specifically engineered to generate visual mockups that fix the client's identified revenue leaks. Generate images in Midjourney/ChatGPT and send them to the client to demonstrate value!
                         </p>
-                        <div style={{
-                          background: '#fff', border: '1px solid #E9D5FF', borderRadius: '10px', padding: '0.75rem 0.9rem',
-                          fontSize: '0.82rem', fontFamily: 'monospace', color: '#4C1D95', lineHeight: '1.4', wordBreak: 'break-word'
-                        }}>
-                          {aiResult.imagePrompt}
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+                          {(aiResult.imagePrompts || [{ title: 'Brand Concept', targetsLacking: aiResult.lackings?.[0], prompt: aiResult.imagePrompt }]).map((p, idx) => (
+                            <div key={idx} style={{ background: '#fff', border: '1px solid #E9D5FF', borderRadius: '12px', padding: '0.9rem' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem', gap: '0.5rem' }}>
+                                <div>
+                                  <div style={{ fontWeight: '800', fontSize: '0.85rem', color: '#5B21B6' }}>
+                                    {p.title || `Concept #${idx + 1}`}
+                                  </div>
+                                  {p.targetsLacking && (
+                                    <div style={{ fontSize: '0.75rem', color: '#991B1B', marginTop: '2px', fontWeight: '600' }}>
+                                      🎯 Solves Lacking: {p.targetsLacking}
+                                    </div>
+                                  )}
+                                  {p.valueAddition && (
+                                    <div style={{ fontSize: '0.75rem', color: '#15803D', marginTop: '2px', fontWeight: '600' }}>
+                                      💡 Business Value: {p.valueAddition}
+                                    </div>
+                                  )}
+                                </div>
+
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(p.prompt);
+                                    setCopiedPromptIndex(idx);
+                                    setTimeout(() => setCopiedPromptIndex(null), 2000);
+                                  }}
+                                  style={{
+                                    background: copiedPromptIndex === idx ? '#16A34A' : '#9333EA',
+                                    color: '#fff', border: 'none', padding: '4px 10px', borderRadius: '8px',
+                                    fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
+                                    display: 'inline-flex', alignItems: 'center', gap: '4px', flexShrink: 0
+                                  }}
+                                >
+                                  {copiedPromptIndex === idx ? <Check size={12} /> : <Copy size={12} />}
+                                  {copiedPromptIndex === idx ? 'Copied!' : 'Copy Prompt'}
+                                </button>
+                              </div>
+
+                              <div style={{
+                                background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px',
+                                padding: '0.6rem 0.75rem', fontSize: '0.8rem', fontFamily: 'monospace',
+                                color: '#334155', lineHeight: '1.4', wordBreak: 'break-word', marginTop: '0.4rem'
+                              }}>
+                                {p.prompt}
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
