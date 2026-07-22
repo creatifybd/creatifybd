@@ -63,7 +63,7 @@ const Footer = () => {
               <span>{brandBase}<em>BD</em></span>
             </Link>
             <p className="footer-brand-desc">
-              Brand identity, logo design, vector illustration and packaging design for growing businesses worldwide.
+              Full-service creative partner — social media, branding, video editing, and website design for growing businesses worldwide.
             </p>
             {/* Social links */}
             <div className="footer-socials">

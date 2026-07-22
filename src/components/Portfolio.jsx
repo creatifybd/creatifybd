@@ -10,20 +10,6 @@ import OptimizedImage from './OptimizedImage';
 import { ArrowUpRight } from 'lucide-react';
 import { CURATED_PORTFOLIO } from '../data/portfolioItems';
 
-const CATS = [
-  { key: 'all', label: 'All Work', label_bn: 'সব কাজ' },
-  { key: 'graphic', label: 'Graphic Design', label_bn: 'গ্রাফিক ডিজাইন' },
-  { key: 'branding', label: 'Branding', label_bn: 'ব্র্যান্ডিং' },
-  { key: 'web', label: 'Web Design', label_bn: 'ওয়েব ডিজাইন' },
-  { key: 'video', label: 'Video', label_bn: 'ভিডিও' },
-];
-
-const CAT_DISPLAY = {
-  graphic: 'Graphic Design',
-  branding: 'Branding',
-  web: 'Web Design',
-  video: 'Video',
-};
 
 const PORTFOLIO_CATS = [
   { key: 'all', label: 'All Work', label_bn: 'All Work' },

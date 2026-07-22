@@ -847,6 +847,13 @@ const Navbar = () => {
           .agency-hamburger  { display: inline-flex; }
         }
         @media (max-width: 480px) {
+          .agency-nav-cta {
+            padding: 0.55rem 0.85rem;
+            font-size: 0.78rem;
+          }
+          .agency-nav-cta-text { display: none; }
+        }
+        @media (max-width: 360px) {
           .agency-nav-cta { display: none; }
         }
 

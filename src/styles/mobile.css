@@ -159,5 +159,17 @@ textarea {
     font-size: 0.7rem !important;
     display: none; /* Hide description on mobile to keep it clean */
   }
+
+  /* Pricing section mobile hardening */
+  .pricing-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .price-card.featured {
+    transform: none !important;
+    order: -1;
+  }
+  .pricing-service-tabs {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }
 

@@ -160,6 +160,9 @@ const Testimonials = () => {
           animation-direction: reverse;
           animation-duration: 45s;
         }
+        .testi-marquee-wrap:hover .testi-marquee-track {
+          animation-play-state: paused;
+        }
 
         @keyframes testiScroll {
           from { transform: translateX(0); }

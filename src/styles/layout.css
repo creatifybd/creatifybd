@@ -255,7 +255,7 @@ nav.scrolled .nav-center {
     font-size: 0.78rem !important;
     border-radius: 8px !important;
   }
-  .desktop-cta-label { display: none !important; }
+  /* Keep CTA label visible on mobile — just shorten it via content substitution */
 }
 
 /* Mobile hamburger */
@@ -265,7 +265,7 @@ nav.scrolled .nav-center {
   gap: 5px;
   background: none;
   border: none;
-  cursor: none;
+  cursor: pointer;
   grid-column: 1;
   padding: 0.5rem;
 }
@@ -341,7 +341,7 @@ nav.scrolled .nav-center {
   width: 38px; height: 38px; border-radius: var(--radius-pill);
   border: 0; background: transparent; color: var(--muted);
   display: inline-flex; align-items: center; justify-content: center;
-  cursor: none;
+  cursor: pointer;
 }
 
 .mobile-menu-list {

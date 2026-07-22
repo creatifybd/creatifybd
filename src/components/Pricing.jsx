@@ -3,6 +3,7 @@ import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { FadeReveal, StaggerReveal } from './MotionReveal';
+import { BarChart2, Palette, Video, Globe2, ArrowRight, Check, Star } from 'lucide-react';
 
 const fallbackPricing = {
   social: [
@@ -27,12 +28,12 @@ const fallbackPricing = {
   ]
 };
 
-const tabLabels = {
-  social: 'Social Media',
-  branding: 'Graphic Design',
-  video: 'Video Editing',
-  web: 'Website Design'
-};
+const tabConfig = [
+  { key: 'social',    label: 'Social Media',    Icon: BarChart2, color: '#3B82F6' },
+  { key: 'branding',  label: 'Graphic Design',  Icon: Palette,   color: '#8B5CF6' },
+  { key: 'video',     label: 'Video Editing',   Icon: Video,     color: '#EC4899' },
+  { key: 'web',       label: 'Website Design',  Icon: Globe2,    color: '#10B981' },
+];
 
 const serviceGroups = {
   retainers: {
@@ -49,7 +50,7 @@ const serviceGroups = {
 
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
-  const [activeTab, setActiveTab] = useState(fullPage ? 'social' : 'social');
+  const [activeTab, setActiveTab] = useState('social');
   const [billing, setBilling] = useState('monthly');
 
   useEffect(() => {
@@ -81,7 +82,6 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     const remotePlans = pricingData[activeTab] || [];
     const source = remotePlans.length > 0 ? remotePlans : fallbackPricing[activeTab];
     const plans = highlight ? source.slice(0, 3) : source;
-    // Apply yearly discount (20% off) to monthly prices
     if (billing === 'yearly') {
       return plans.map(p => ({
         ...p,
@@ -92,15 +92,8 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     return plans.map(p => ({ ...p, _displayPrice: p.price }));
   }, [activeTab, highlight, pricingData, billing]);
 
-  const getTabIcon = (catKey) => {
-    const icons = {
-      social: '📱',
-      branding: '🎨',
-      video: '🎬',
-      web: '💻'
-    };
-    return icons[catKey] || '✨';
-  };
+  const activeGroup = Object.values(serviceGroups).find(g => g.categories.includes(activeTab));
+  const activeTabConfig = tabConfig.find(t => t.key === activeTab);
 
   return (
     <section className={`section pricing-section ${fullPage ? 'full-page-section' : ''}`} id="pricing">
@@ -112,6 +105,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           </div>
         )}
 
+        {/* Billing Toggle */}
         <FadeReveal delay={0.15}>
           <div className="pricing-billing-toggle">
             <button
@@ -128,45 +122,52 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           </div>
         </FadeReveal>
 
+        {/* Service Tabs */}
         <FadeReveal delay={0.2}>
-          <div className="pricing-tabs">
-            <div className="pricing-service-tabs">
-              {Object.entries(tabLabels).map(([catKey, label]) => (
+          <div className="pricing-tabs-wrapper">
+            <div className="pricing-service-tabs" role="tablist" aria-label="Service categories">
+              {tabConfig.map(({ key, label, Icon, color }) => (
                 <button
-                  key={catKey}
-                  className={`pricing-service-tab ${activeTab === catKey ? 'active' : ''}`}
-                  onClick={() => setActiveTab(catKey)}
+                  key={key}
+                  role="tab"
+                  aria-selected={activeTab === key}
+                  className={`pricing-service-tab ${activeTab === key ? 'active' : ''}`}
+                  onClick={() => setActiveTab(key)}
+                  style={{ '--tab-color': color }}
                 >
-                  <span className="tab-icon">{getTabIcon(catKey)}</span>
+                  <span className="tab-icon-wrap">
+                    <Icon size={18} strokeWidth={2} />
+                  </span>
                   <span className="tab-label">{label}</span>
                 </button>
               ))}
             </div>
-            <div className="pricing-service-info">
-              {Object.entries(serviceGroups).map(([groupKey, group]) => {
-                const isActive = group.categories.includes(activeTab);
-                if (!isActive) return null;
-                return (
-                  <div key={groupKey} className="pricing-service-group active">
-                    <div className="service-info-header">
-                      <span className="service-tag">{group.label}</span>
-                    </div>
-                    <p className="service-info-desc">{group.description}</p>
-                  </div>
-                );
-              })}
-            </div>
+
+            {/* Service Info Strip */}
+            {activeGroup && (
+              <div className="pricing-service-info">
+                <span className="service-tag">{activeGroup.label}</span>
+                <p className="service-info-desc">{activeGroup.description}</p>
+              </div>
+            )}
           </div>
         </FadeReveal>
 
+        {/* Pricing Cards */}
         <StaggerReveal delay={0.3} className="pricing-grid active">
           {displayPlans.map((plan) => (
             <FadeReveal key={plan.id || plan.tier}>
               <article className={`price-card ${plan.featured ? 'featured' : ''}`}>
-                {plan.featured && activeTab === 'web' && <div className="popular-badge">Most Popular</div>}
+                {plan.featured && (
+                  <div className="popular-badge">
+                    <Star size={12} strokeWidth={2.5} />
+                    Most Popular
+                  </div>
+                )}
                 <div className="price-tier">{plan.tier}</div>
                 <div className="price-amount">
-                  <span className="currency">$</span>{plan._displayPrice}
+                  <span className="currency">$</span>
+                  {plan._displayPrice}
                   {plan._yearly && !isNaN(plan.price) && (
                     <span className="price-original">${plan.price}</span>
                   )}
@@ -174,9 +175,17 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
                 <div className="price-desc">{plan.desc}</div>
                 <div className="price-divider" />
                 <ul className="price-features">
-                  {plan.features?.map((feat) => <li key={feat}>{feat}</li>)}
+                  {plan.features?.map((feat) => (
+                    <li key={feat}>
+                      <Check size={14} strokeWidth={2.5} />
+                      {feat}
+                    </li>
+                  ))}
                 </ul>
-                <Link to="/contact" className="btn-red price-cta">Get Started -&gt;</Link>
+                <Link to="/contact" className="btn-red price-cta">
+                  Get Started
+                  <ArrowRight size={15} strokeWidth={2.5} />
+                </Link>
               </article>
             </FadeReveal>
           ))}
@@ -190,107 +199,353 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           </FadeReveal>
         )}
       </div>
-      
+
       <style>{`
-        .pricing-tabs {
-          display: flex;
-          flex-direction: column;
-          gap: 2.5rem;
-          margin-bottom: 2rem;
-        }
-        .pricing-service-tabs {
-          display: flex;
-          gap: 16px;
-          flex-wrap: wrap;
-          justify-content: center;
-          margin-bottom: 32px;
-        }
-        .pricing-service-tab {
+        /* ══ PRICING ════════════════════════════════════════════════ */
+
+        /* Billing toggle */
+        .pricing-billing-toggle {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 1rem 1.5rem;
-          border: 2px solid var(--border);
-          background: white;
-          border-radius: 12px;
-          font-size: 0.95rem;
+          gap: 4px;
+          background: var(--surface-soft);
+          border: 1px solid var(--border);
+          border-radius: 100px;
+          padding: 4px;
+          width: fit-content;
+          margin: 0 auto 2.5rem;
+        }
+        .pbt-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0.55rem 1.4rem;
+          border-radius: 100px;
+          border: none;
+          background: transparent;
+          font-size: 0.875rem;
           font-weight: 600;
-          color: var(--gray-700);
+          color: var(--muted);
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.22s ease;
           white-space: nowrap;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .pbt-btn.active {
+          background: var(--brand-red);
+          color: #fff;
+          box-shadow: 0 4px 12px rgba(232,25,44,0.28);
+        }
+        .pbt-save {
+          font-size: 0.7rem;
+          font-weight: 700;
+          background: rgba(255,255,255,0.25);
+          padding: 0.1rem 0.45rem;
+          border-radius: 100px;
+          letter-spacing: 0.02em;
+        }
+        .pbt-btn:not(.active) .pbt-save {
+          background: rgba(34,197,94,0.12);
+          color: #16a34a;
+        }
+
+        /* Tabs wrapper */
+        .pricing-tabs-wrapper {
+          margin-bottom: 2.5rem;
+        }
+
+        /* Service tabs row */
+        .pricing-service-tabs {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-bottom: 1.5rem;
+        }
+        .pricing-service-tab {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 0.7rem 1.35rem;
+          border: 1.5px solid var(--border);
+          background: var(--surface-card);
+          border-radius: 12px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--muted);
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          white-space: nowrap;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+          position: relative;
         }
         .pricing-service-tab:hover {
-          border-color: var(--red);
-          color: var(--red);
-          background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+          border-color: var(--tab-color, var(--brand-red));
+          color: var(--tab-color, var(--brand-red));
+          background: rgba(232,25,44,0.05);
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(232, 25, 44, 0.15);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
         }
         .pricing-service-tab.active {
-          background: linear-gradient(135deg, var(--red) 0%, #d61527 100%);
-          border-color: var(--red);
-          color: white;
+          background: var(--tab-color, var(--brand-red));
+          border-color: var(--tab-color, var(--brand-red));
+          color: #fff;
           font-weight: 700;
-          box-shadow: 0 8px 24px rgba(232, 25, 44, 0.3);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.18);
           transform: translateY(-2px);
         }
-        .tab-icon {
-          font-size: 1.4rem;
+        .tab-icon-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           line-height: 1;
+          flex-shrink: 0;
         }
-        .tab-label {
-          line-height: 1;
-        }
+        .tab-label { line-height: 1; }
+
+        /* Service info strip */
         .pricing-service-info {
           display: flex;
+          align-items: center;
           justify-content: center;
-          margin-bottom: 48px;
-        }
-        .pricing-service-group {
-          text-align: center;
-          max-width: 600px;
-        }
-        .service-info-header {
-          margin-bottom: 1rem;
+          gap: 1rem;
+          padding: 0.85rem 1.5rem;
+          background: var(--surface-soft);
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          flex-wrap: wrap;
         }
         .service-tag {
-          display: inline-block;
-          padding: 0.5rem 1.2rem;
-          background: linear-gradient(135deg, var(--gray-100) 0%, #f0f0f0 100%);
-          color: var(--gray-800);
-          border-radius: 8px;
-          font-size: 0.8rem;
-          font-weight: 700;
+          display: inline-flex;
+          align-items: center;
+          padding: 0.3rem 0.9rem;
+          background: var(--surface-card);
+          color: var(--ink);
+          border-radius: 100px;
+          font-size: 0.72rem;
+          font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.1em;
           border: 1px solid var(--border);
+          white-space: nowrap;
+          flex-shrink: 0;
         }
         .service-info-desc {
-          font-size: 1.1rem;
-          color: var(--gray-700);
+          font-size: 0.9rem;
+          color: var(--muted);
           margin: 0;
-          line-height: 1.6;
+          line-height: 1.5;
           font-weight: 500;
         }
-        @media (max-width: 768px) {
+
+        /* Cards Grid */
+        .pricing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.25rem;
+          align-items: start;
+        }
+
+        /* Price Card */
+        .price-card {
+          background: var(--surface-card);
+          border: 1.5px solid var(--border);
+          border-radius: 20px;
+          padding: 2rem 1.75rem;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .price-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 48px rgba(0,0,0,0.09);
+          border-color: rgba(16,24,40,0.14);
+        }
+        .price-card.featured {
+          border-color: var(--brand-red);
+          background: linear-gradient(160deg, #fff 60%, rgba(232,25,44,0.025) 100%);
+          box-shadow: 0 8px 32px rgba(232,25,44,0.12), 0 2px 8px rgba(0,0,0,0.04);
+          transform: translateY(-4px) scale(1.02);
+        }
+        .price-card.featured:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 20px 56px rgba(232,25,44,0.18);
+        }
+
+        /* Popular badge */
+        .popular-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          position: absolute;
+          top: -13px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--brand-red);
+          color: #fff;
+          font-size: 0.7rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          padding: 0.3rem 0.9rem;
+          border-radius: 100px;
+          white-space: nowrap;
+          box-shadow: 0 4px 14px rgba(232,25,44,0.35);
+        }
+
+        /* Tier name */
+        .price-tier {
+          font-family: var(--font-display);
+          font-size: 0.78rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--muted);
+          margin-bottom: 0.85rem;
+        }
+
+        /* Price amount */
+        .price-amount {
+          display: flex;
+          align-items: baseline;
+          gap: 2px;
+          font-family: var(--font-display);
+          font-size: 2.8rem;
+          font-weight: 900;
+          color: var(--ink);
+          letter-spacing: -0.04em;
+          line-height: 1;
+          margin-bottom: 0.5rem;
+        }
+        .currency {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: var(--muted);
+          align-self: flex-start;
+          padding-top: 0.35rem;
+        }
+        .price-original {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--muted);
+          text-decoration: line-through;
+          margin-left: 6px;
+          opacity: 0.6;
+        }
+
+        /* Description */
+        .price-desc {
+          font-size: 0.875rem;
+          color: var(--muted);
+          line-height: 1.55;
+          margin-bottom: 1.25rem;
+        }
+
+        /* Divider */
+        .price-divider {
+          height: 1px;
+          background: var(--border);
+          margin-bottom: 1.25rem;
+        }
+
+        /* Features list */
+        .price-features {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 1.75rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.7rem;
+          flex: 1;
+        }
+        .price-features li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.6rem;
+          font-size: 0.875rem;
+          color: var(--ink-soft);
+          line-height: 1.45;
+        }
+        .price-features li svg {
+          color: var(--brand-red);
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .price-card.featured .price-features li svg {
+          color: var(--brand-red);
+        }
+
+        /* CTA button */
+        .price-cta {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.85rem 1.5rem;
+          font-size: 0.875rem;
+          font-weight: 700;
+          width: 100%;
+          border-radius: 12px;
+          text-decoration: none;
+          transition: all 0.22s ease;
+          margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+          .pricing-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .price-card.featured {
+            transform: none;
+          }
+          .price-card.featured:hover {
+            transform: translateY(-4px);
+          }
+        }
+
+        @media (max-width: 640px) {
           .pricing-service-tabs {
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            justify-items: stretch;
           }
           .pricing-service-tab {
-            padding: 0.8rem 1.2rem;
-            font-size: 0.85rem;
+            justify-content: center;
+            padding: 0.65rem 1rem;
+            font-size: 0.82rem;
           }
-          .tab-icon {
-            font-size: 1.2rem;
+          .pricing-service-info {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
           }
-          .pricing-service-group {
-            max-width: 100%;
-            padding: 0 1rem;
+          .pricing-grid {
+            grid-template-columns: 1fr;
           }
-          .service-info-desc {
-            font-size: 1rem;
+          .price-card.featured {
+            order: -1;
+          }
+          .price-amount {
+            font-size: 2.4rem;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .pricing-service-tab {
+            padding: 0.6rem 0.75rem;
+            font-size: 0.78rem;
+            gap: 6px;
+          }
+          .tab-icon-wrap svg {
+            width: 15px;
+            height: 15px;
+          }
+          .pbt-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.82rem;
           }
         }
       `}</style>
