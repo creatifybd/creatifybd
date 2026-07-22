@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import OptimizedImage from './OptimizedImage';
 import { useSettings } from '../context/SettingsContext';
 
 const EASE_EXPO = [0.16, 1, 0.3, 1];
@@ -116,14 +117,16 @@ const Hero = () => {
         >
           <div className="hero-img-single">
             <motion.div style={{ y: y2 }}>
-              <img
+              <OptimizedImage
                 src={heroImage}
                 alt="Creative work showcase"
-                loading="eager"
-                fetchPriority="high"
+                priority={true}
+                objectFit="contain"
+                fallbackSrc="/assets/hero-visual.png"
               />
             </motion.div>
           </div>
+
         </motion.div>
       </div>
 

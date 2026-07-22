@@ -754,19 +754,33 @@
 
 /* ─── SHIMMER SKELETON ──────────────────────────────────────── */
 
+@keyframes shimmerPulse {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .opt-img-skeleton {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(
     90deg,
-    var(--surface-muted) 25%,
-    var(--surface-soft) 50%,
-    var(--surface-muted) 75%
+    rgba(241, 243, 245, 0.9) 0%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(241, 243, 245, 0.9) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.8s infinite linear;
+  animation: shimmerPulse 1.6s infinite ease-in-out;
 }
+
+/* Hide native broken image icon/alt outline while loading or broken */
+img:-moz-broken,
+img:-moz-suppress,
+img[src=""],
+img:not([src]) {
+  opacity: 0 !important;
+}
+
 
 /* ─── INTRO BAND ────────────────────────────────────────────── */
 

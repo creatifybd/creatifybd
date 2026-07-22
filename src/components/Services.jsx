@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
+import OptimizedImage from './OptimizedImage';
 import { ArrowUpRight, BarChart3, Clapperboard, Code2, Megaphone, Palette } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -196,11 +197,12 @@ const Services = ({ highlight = false, fullPage = false }) => {
                       transition={{ duration: 0.32, ease: EASE }}
                     >
                       <div className="svc-preview-content">
-                        <img
+                        <OptimizedImage
                           src={svc.imageUrl || serviceImages[idx % serviceImages.length]}
-                          alt=""
-                          loading="lazy"
+                          alt={svc.title}
+                          objectFit="cover"
                         />
+
                         {(svc.hoverDetails || svc.deliverables) && (
                           <div className="svc-preview-overlay">
                             {svc.hoverDetails && (

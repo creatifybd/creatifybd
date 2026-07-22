@@ -2,22 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
- * OptimizedImage: A high-performance image component with loading states,
- * skeleton placeholders, and smooth transitions.
+ * OptimizedImage: High-performance image component with animated skeleton placeholder,
+ * automatic fallback on error, and smooth fade-in transition.
  */
 const OptimizedImage = ({ 
   src, 
-  alt, 
+  alt = '', 
   className = '', 
   aspectRatio = 'auto',
   priority = false,
-  objectFit = 'cover'
+  objectFit = 'cover',
+  fallbackSrc = '/assets/hero-visual.png'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(src);
 
-  // If priority is true, we want to load it immediately
-  const loadingStrategy = priority ? 'eager' : 'lazy';
+  useEffect(() => {
+    setIsLoaded(false);
+    setHasError(false);
+    setCurrentSrc(src);
+  }, [src]);
+
+  const handleError = () => {
+    if (fallbackSrc && currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+    } else {
+      setHasError(true);
+    }
+  };
 
   return (
     <div 
@@ -28,65 +41,45 @@ const OptimizedImage = ({
         width: '100%', 
         height: '100%',
         aspectRatio: aspectRatio,
-        background: 'rgba(255, 255, 255, 0.03)' // Subtle background for loading
+        background: 'var(--surface-soft, #f8f9fa)',
+        borderRadius: 'inherit'
       }}
     >
-      {/* Skeleton / Placeholder */}
+      {/* Animated Skeleton Placeholder */}
       <AnimatePresence>
-        {!isLoaded && !error && (
+        {!isLoaded && !hasError && (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.35 }}
             className="opt-img-skeleton"
           />
         )}
       </AnimatePresence>
 
-      {/* Error State */}
-      {error && (
-        <div className="opt-img-error" style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'rgba(255,255,255,0.05)',
-          color: 'rgba(255,255,255,0.2)',
-          fontSize: '0.8rem'
-        }}>
-          Failed to load image
-        </div>
+      {/* Actual Image */}
+      {currentSrc && !hasError && (
+        <motion.img
+          src={currentSrc}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          onError={handleError}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isLoaded ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: objectFit,
+            display: 'block',
+            borderRadius: 'inherit'
+          }}
+        />
       )}
-
-      {/* The Actual Image */}
-      <motion.img
-        src={src}
-        alt={alt}
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setError(true)}
-        loading={loadingStrategy}
-        fetchPriority={priority ? 'high' : 'auto'}
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ 
-          opacity: isLoaded ? 1 : 0, 
-          scale: isLoaded ? 1 : 1.05 
-        }}
-        transition={{ 
-          duration: 0.5, 
-          ease: [0.16, 1, 0.3, 1] 
-        }}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: objectFit,
-          display: 'block',
-          willChange: 'transform, opacity'
-        }}
-      />
     </div>
   );
 };
-
 
 export default OptimizedImage;
