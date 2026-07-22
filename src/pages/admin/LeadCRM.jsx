@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Users, Search, Filter, Globe, Phone, Mail, ExternalLink, 
   Sparkles, MessageCircle, Send, CheckCircle2, Clock, 
   Building2, MapPin, RefreshCw, ChevronLeft, ChevronRight,
-  AlertCircle, Copy, FileText, Check, ShieldAlert, Award
+  AlertCircle, Copy, FileText, Check, ShieldAlert, Award, Key, Zap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { analyzeLeadBusiness } from '../../utils/geminiRotator';
+import { Link } from 'react-router-dom';
+import { analyzeLeadBusiness } from '../../utils/aiRotator';
 
 const STATUS_OPTIONS = [
   { id: 'New', label: 'New Lead', color: '#64748B', bg: '#F1F5F9' },
@@ -58,6 +58,8 @@ const LeadCRM = () => {
   const [activeLead, setActiveLead] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [activeKeyNum, setActiveKeyNum] = useState(1);
+  const [activeProvider, setActiveProvider] = useState('AI');
+  const [activeModel, setActiveModel] = useState('');
   const [keyWaiting, setKeyWaiting] = useState(false);
   const [aiError, setAiError] = useState('');
   const [aiResult, setAiResult] = useState(null);
@@ -238,17 +240,20 @@ const LeadCRM = () => {
     setAiError('');
     setKeyWaiting(false);
     try {
-      const res = await analyzeLeadBusiness(activeLead, (keyNum) => {
-        if (keyNum === -1) {
-          setKeyWaiting(true);
-          setActiveKeyNum('⏳');
-        } else {
+      const res = await analyzeLeadBusiness(activeLead, (prog) => {
+        if (prog.status === 'failed') {
           setKeyWaiting(false);
-          setActiveKeyNum(keyNum);
+        } else if (prog.status === 'trying' || prog.status === 'calling') {
+          setActiveProvider(prog.provider || 'AI');
+          setActiveModel(prog.model || '');
+          setActiveKeyNum(prog.keyNum || 1);
+          setKeyWaiting(false);
         }
       });
       setKeyWaiting(false);
-      setActiveKeyNum(res.keyUsed || 1);
+      setActiveProvider(res.provider || 'AI');
+      setActiveModel(res.model || '');
+      setActiveKeyNum(res.keyNum || 1);
       setAiResult(res);
       setEditedWhatsapp(res.whatsappMessage || '');
       setEditedEmailSubject(res.emailSubject || '');
@@ -344,15 +349,17 @@ const LeadCRM = () => {
               <RefreshCw size={12} className="animate-spin" /> Loading Chunks: {loadedChunkCount}/5 ({leads.length.toLocaleString()} leads)
             </div>
           )}
-          <div style={{ 
-            display: 'flex', alignItems: 'center', gap: '0.75rem', 
-            background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '0.5rem 1rem', borderRadius: '12px' 
-          }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }} />
-            <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#334155' }}>
-              Gemini Rotator: <strong style={{ color: '#E8192C' }}>11 Keys</strong> · Smart Cooldown (65s/key)
-            </span>
-          </div>
+          <Link to="/admin/ai-keys" style={{ textDecoration: 'none' }}>
+            <div style={{ 
+              display: 'flex', alignItems: 'center', gap: '0.6rem', 
+              background: '#F97316', color: '#fff', padding: '0.5rem 1rem', borderRadius: '12px',
+              fontWeight: '700', fontSize: '0.8rem', boxShadow: '0 2px 8px rgba(249,115,22,0.3)',
+              cursor: 'pointer'
+            }}>
+              <Zap size={15} />
+              <span>Configure AI Keys (Groq / OpenRouter)</span>
+            </div>
+          </Link>
         </div>
       </div>
 
@@ -733,7 +740,7 @@ const LeadCRM = () => {
                         <RefreshCw size={18} className="animate-spin" />
                         {keyWaiting
                           ? 'Keys Cooling Down — Auto-Resuming...'
-                          : `AI is Studying Business · Key #${activeKeyNum} Active...`
+                          : `${activeProvider} (${activeModel || 'AI'}) is Studying Business · Key #${activeKeyNum}...`
                         }
                       </>
                     ) : (
@@ -748,21 +755,24 @@ const LeadCRM = () => {
                   {aiError && (
                     <div style={{
                       marginTop: '0.75rem', padding: '0.75rem 1rem',
-                      background: aiError.includes('daily') || aiError.includes('tomorrow') ? '#FEE2E2' : '#FEF3C7',
-                      border: aiError.includes('daily') || aiError.includes('tomorrow') ? '1px solid #FCA5A5' : '1px solid #FCD34D',
+                      background: '#FEF3C7', border: '1px solid #FCD34D',
                       borderRadius: '10px', fontSize: '0.82rem',
-                      color: aiError.includes('daily') || aiError.includes('tomorrow') ? '#991B1B' : '#92400E',
-                      display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
+                      color: '#92400E', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
                     }}>
                       <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
-                      <span>
-                        <strong>{aiError.includes('daily') || aiError.includes('tomorrow') ? 'Daily Quota Exhausted:' : 'Rate Limit Hit:'}</strong> {aiError}<br />
-                        <span style={{ opacity: 0.8 }}>
-                          {aiError.includes('daily') || aiError.includes('tomorrow')
-                            ? 'Free Gemini keys have a daily limit. Resets at midnight UTC.'
-                            : 'Keys auto-recover after ~1 minute. Click the button again to retry.'}
-                        </span>
-                      </span>
+                      <div style={{ flex: 1 }}>
+                        <strong>AI Limit / Notice:</strong> {aiError}<br />
+                        <div style={{ marginTop: '0.4rem', opacity: 0.9 }}>
+                          💡 <strong>Solution:</strong> Add a free <strong>Groq API key</strong> (14,400 requests/day per key, no credit card required).
+                        </div>
+                        <Link to="/admin/ai-keys" style={{
+                          display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '0.5rem',
+                          background: '#F97316', color: '#fff', padding: '0.35rem 0.75rem', borderRadius: '6px',
+                          fontWeight: '700', fontSize: '0.75rem', textDecoration: 'none'
+                        }}>
+                          <Key size={12} /> Add Groq API Key in Admin Keys
+                        </Link>
+                      </div>
                     </div>
                   )}
                 </div>

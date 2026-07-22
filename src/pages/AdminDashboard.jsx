@@ -30,7 +30,8 @@ import {
   History,
   Check,
   ChevronDown,
-  Info
+  Info,
+  Key
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
@@ -55,6 +56,7 @@ import MediaLibrary from './admin/MediaLibrary';
 import AdminUsers from './admin/AdminUsers';
 import ActivityLog from './admin/ActivityLog';
 import LeadCRM from './admin/LeadCRM';
+import AIKeysManager from './admin/AIKeysManager';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -164,6 +166,7 @@ const AdminDashboard = () => {
     { path: '/admin/pricing', label: 'Pricing Plans', icon: <CreditCard size={18} />, group: 'content' },
     { path: '/admin/testimonials', label: 'Testimonials', icon: <Star size={18} />, group: 'content' },
     { path: '/admin/messages', label: 'Messages', icon: <MessageSquare size={18} />, group: 'communication' },
+    { path: '/admin/ai-keys', label: 'AI Keys', icon: <Key size={18} />, group: 'settings' },
     { path: '/admin/settings', label: 'Branding & SEO', icon: <Settings size={18} />, group: 'settings' },
     { path: '/admin/users', label: 'Admin Users', icon: <UserCog size={18} />, ownerOnly: true, group: 'admin' },
     { path: '/admin/activity-log', label: 'Activity Log', icon: <History size={18} />, ownerOnly: true, group: 'admin' },
@@ -583,6 +586,7 @@ const AdminDashboard = () => {
                 <Route path="users" element={isOwner ? <AdminUsers /> : <Navigate to="/admin" />} />
                 <Route path="activity-log" element={isOwner ? <ActivityLog /> : <Navigate to="/admin" />} />
                 <Route path="leads" element={<LeadCRM />} />
+                <Route path="ai-keys" element={<AIKeysManager />} />
                 <Route path="bot" element={<Navigate to="/admin/leads" replace />} />
               </Routes>
             </motion.div>
