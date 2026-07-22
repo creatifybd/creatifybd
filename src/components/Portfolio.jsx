@@ -285,7 +285,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   const [lightboxItem, setLightboxItem] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [layoutMode, setLayoutMode] = useState('masonry'); // 'masonry' or 'grid'
-  const [visibleCount, setVisibleCount] = useState(12);
   const { lang } = useLanguage();
 
   useEffect(() => {
@@ -331,19 +330,21 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
   const interleavedCuratedItems = Array.from({ length: longestGroup }, (_, index) =>
     curatedGroups.map(group => group[index]).filter(Boolean)
   ).flat();
-  const portfolioItems = [...interleavedCuratedItems, ...adminItems];
-
-  // Filter by featured status when in highlight mode (homepage)
-  const featuredItems = portfolioItems
+  // Featured items (marked in admin dashboard) come first, sorted by featuredOrder
+  const featuredItems = [...interleavedCuratedItems, ...adminItems]
     .filter(item => item.featured === true)
     .sort((a, b) => (a.featuredOrder || 0) - (b.featuredOrder || 0));
+  const nonFeaturedItems = [...interleavedCuratedItems, ...adminItems]
+    .filter(item => item.featured !== true);
+  // All items: featured first, then the rest
+  const portfolioItems = [...featuredItems, ...nonFeaturedItems];
 
   const filteredItems = activeFilter === 'all'
     ? (highlight ? featuredItems : portfolioItems)
     : portfolioItems.filter(i => i.category === activeFilter);
 
-  const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems.slice(0, visibleCount);
-  const hasMoreItems = filteredItems.length > visibleCount && !highlight;
+  // Show all items — no pagination
+  const displayItems = highlight ? filteredItems.slice(0, 24) : filteredItems;
 
   const availableCats = PORTFOLIO_CATS.filter(c => {
     if (c.key === 'all') return true;
@@ -352,11 +353,6 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
 
   const handleFilterChange = (key) => {
     setActiveFilter(key);
-    setVisibleCount(12); // Reset pagination on filter change
-  };
-
-  const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 12);
   };
   const openLightbox = useCallback((item) => {
     const idx = displayItems.findIndex(i => i.id === item.id);
@@ -519,15 +515,7 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                   </AnimatePresence>
                 </motion.div>
               </StaggerReveal>
-              {hasMoreItems && (
-                <FadeReveal delay={0.3}>
-                  <div className="wk-load-more">
-                    <button onClick={handleLoadMore} className="btn-outline-white">
-                      Load More Projects ({filteredItems.length - visibleCount} remaining)
-                    </button>
-                  </div>
-                </FadeReveal>
-              )}
+
             </div>
           </div>
         )}
