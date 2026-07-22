@@ -879,6 +879,38 @@ const LeadCRM = () => {
                               }}>
                                 {p.prompt}
                               </div>
+
+                              {/* 100% Free Live AI Generated Image Mockup Preview (Pollinations.ai / Flux Model) */}
+                              <div style={{ marginTop: '0.75rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                                  <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#7E22CE', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    🖼️ Auto Generated Mockup (Flux Model):
+                                  </span>
+                                  <a
+                                    href={`https://image.pollinations.ai/prompt/${encodeURIComponent(p.prompt)}?width=1280&height=720&nologo=true&seed=${idx + 1}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ fontSize: '0.72rem', fontWeight: '700', color: '#9333EA', textDecoration: 'underline' }}
+                                  >
+                                    Open Full HD Image ↗
+                                  </a>
+                                </div>
+                                <div style={{
+                                  borderRadius: '8px', overflow: 'hidden', border: '1px solid #E9D5FF',
+                                  background: '#0F172A', minHeight: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}>
+                                  <img
+                                    src={`https://image.pollinations.ai/prompt/${encodeURIComponent(p.prompt)}?width=800&height=450&nologo=true&seed=${idx + 1}`}
+                                    alt={p.title || 'AI Generated Design Mockup'}
+                                    loading="lazy"
+                                    style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '320px', objectFit: 'cover' }}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
