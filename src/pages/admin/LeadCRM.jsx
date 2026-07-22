@@ -81,21 +81,32 @@ const LeadCRM = () => {
     }
   }, [leadAudits]);
 
-  // Fetch leads JSON
+  // Fetch chunked leads JSON
   useEffect(() => {
     setLoading(true);
-    fetch('/data/leads.json')
+    fetch('/data/manifest.json')
       .then(res => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
-      .then(data => {
-        setLeads(data || []);
+      .then(manifest => {
+        const chunkPromises = (manifest.chunks || []).map(file => 
+          fetch(`/data/${file}`).then(r => r.json())
+        );
+        return Promise.all(chunkPromises);
+      })
+      .then(chunks => {
+        const allLeads = chunks.flat();
+        setLeads(allLeads || []);
         setError('');
       })
       .catch(err => {
-        console.error('Failed to load leads data:', err);
-        setError('Failed to load leads dataset. Please ensure public/data/leads.json is available.');
+        console.error('Failed to load chunked leads dataset:', err);
+        // Fallback single file fetch
+        fetch('/data/leads.json')
+          .then(res => res.json())
+          .then(data => { setLeads(data || []); setError(''); })
+          .catch(() => setError('Failed to load leads dataset. Please ensure dataset files are available.'));
       })
       .finally(() => setLoading(false));
   }, []);
