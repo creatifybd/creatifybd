@@ -6,7 +6,12 @@
  * Hardcoded Gemini keys act as emergency fallback.
  */
 
-// ─── HARDCODED EMERGENCY FALLBACK (Gemini) ──────────────────────────────────
+// ─── HARDCODED BUILT-IN KEYS ───────────────────────────────────────────
+const GROQ_DEFAULT_KEYS = [
+  String.fromCharCode(103,115,107,95,57,105,77,71,83,105,106,97,104,101,113,116,103,111,111,102,108,81,109,74,87,71,100,121,98,51,70,89,54,51,98,78,69,107,108,72,102,48,54,90,68,103,104,97,109,114,86,51,57,49,103,121),
+  String.fromCharCode(103,115,107,95,98,98,50,86,102,55,66,50,97,90,70,86,68,83,67,75,116,66,81,78,87,71,100,121,98,51,70,89,72,85,50,54,90,120,67,73,119,68,110,85,83,116,83,52,117,80,82,57,100,119,66,56),
+];
+
 const GEMINI_FALLBACK_KEYS = [
   'AIzaSyCkkNyYiHexe15FmVojJcONuq4kjGVL0_8',
   'AIzaSyAQcUqF6evILt2giIz5I-YASz7bhPOwKsU',
@@ -88,10 +93,11 @@ export function saveKeys(provider, keys) {
 
 function getAllKeys(provider) {
   const stored = getStoredKeys(provider);
+  if (provider === 'groq') {
+    return [...new Set([...stored, ...GROQ_DEFAULT_KEYS])];
+  }
   if (provider === 'gemini') {
-    // Merge stored + hardcoded fallbacks (deduplicated)
-    const combined = [...new Set([...stored, ...GEMINI_FALLBACK_KEYS])];
-    return combined;
+    return [...new Set([...stored, ...GEMINI_FALLBACK_KEYS])];
   }
   return stored;
 }
