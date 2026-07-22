@@ -268,33 +268,91 @@ export function getProviderStatus() {
   });
 }
 
+// ─── LIVE WEBSITE SCRAPER ───────────────────────────────────────────────────
+/**
+ * Scrapes live website content using Jina Reader API (free markdown extractor for LLMs)
+ */
+export async function scrapeLiveWebsite(websiteUrl) {
+  if (!websiteUrl || websiteUrl === 'Not provided') return null;
+
+  let targetUrl = websiteUrl.trim();
+  if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+    targetUrl = 'https://' + targetUrl;
+  }
+
+  try {
+    const jinaUrl = 'https://r.jina.ai/' + targetUrl;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s max fetch timeout
+
+    const res = await fetch(jinaUrl, {
+      signal: controller.signal,
+      headers: {
+        'Accept': 'text/plain',
+        'X-No-Cache': 'true',
+      },
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) return null;
+
+    const fullText = await res.text();
+    // Clean and return top 2500 chars (rich context for Groq without token bloat)
+    const cleaned = fullText
+      .replace(/!\[[^\]]*\]\([^\)]*\)/g, '') // remove markdown image tags
+      .replace(/\[([^\]]+)\]\([^\)]*\)/g, '$1') // simplify markdown links
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    return cleaned.slice(0, 2500);
+  } catch (e) {
+    console.warn('[Website Scraper] Failed to scrape:', websiteUrl, e.message);
+    return null;
+  }
+}
+
 // ─── BUSINESS STUDY ───────────────────────────────────────────────────────────
 export async function analyzeLeadBusiness(lead, onProgress = null) {
+  // Step 1: Real-time Live Web Scraping
+  if (onProgress) {
+    onProgress({ status: 'scraping', provider: 'Web Scraper', message: 'Fetching live website & reading digital presence...' });
+  }
+
+  let liveWebsiteContent = null;
+  if (lead.website && lead.website !== 'Not provided') {
+    liveWebsiteContent = await scrapeLiveWebsite(lead.website);
+  }
+
   const prompt = `You are a Senior Growth Strategist and Creative Director at CreatifyBD (an international agency providing Branding, Social Media Management, Video Editing, and Web Design).
 
-Perform an in-depth audit & business study for the following prospect:
+Perform an IN-DEPTH AUDIT & AUTHENTIC BUSINESS STUDY for the following prospect:
 - Business Name: ${lead.business_name || 'Business'}
 - Business Type / Niche: ${lead.type || 'Local Business'}
 - City/State: ${lead.city || ''}, ${lead.state || ''}
 - Country: ${lead.country || 'International'}
 - Rating: ${lead.rating || 'N/A'} (${lead.user_ratings_total || 0} reviews)
-- Website: ${lead.website || 'Not provided'}
+- Website URL: ${lead.website || 'Not provided'}
 - Instagram: ${lead.instagram || 'Not provided'}
 - Facebook: ${lead.facebook || 'Not provided'}
 - Phone/WhatsApp: ${lead.phone_e164 || lead.phone || 'Not provided'}
 
-Deliver a comprehensive audit covering:
-1. **Strengths** (2-3): What makes this business competitive in its local market?
-2. **Lackings / Pain Points** (3): Specific gaps in their digital presence — e.g. weak branding, no reels, poor website UX, no email capture.
-3. **AI Image Generation Prompt** (1): A highly detailed, ready-to-copy Midjourney / DALL-E 3 / ChatGPT prompt to generate a bespoke visual concept mockup (e.g., modern landing page hero section, social media instagram carousel poster, or brand identity concept) tailored to this specific niche and city. Include lighting, color aesthetic, aspect ratio (--ar 16:9 or --ar 4:5), and high resolution keywords.
-4. **WhatsApp Outreach** (1): A friendly, personalised, non-spammy message offering CreatifyBD's free visual teaser concept.
-5. **Cold Email** (1): Professional proposal with subject line and body mentioning the visual concept idea.
+${liveWebsiteContent ? `--- LIVE WEBSITE SCRAPED CONTENT & MARKDOWN ---
+${liveWebsiteContent}
+---------------------------------------------------` : '(Note: Live website scan unavailable or website not provided; perform deep diagnostic audit based on niche, location, ratings, and industry benchmark standards.)'}
 
-Respond in valid JSON only (no markdown fences, no text outside JSON):
+Deliver an authentic, non-generic audit covering:
+1. **Strengths** (2-3): Specific strengths based on their real business model, products, or headline offerings.
+2. **Lackings / Revenue Leaks** (3): Specific gaps in their visual branding, website conversion flow, mobile presentation, or short-form video content.
+3. **AI Image Generation Prompt** (1): A highly detailed Midjourney / DALL-E 3 / ChatGPT prompt to generate a custom visual teaser mockup (hero landing section or Instagram reel/poster design) tailored specifically to their actual products and brand aesthetic.
+4. **WhatsApp Outreach** (1): A friendly, highly personalized message referencing an exact detail from their business/website and offering CreatifyBD's free visual teaser concept.
+5. **Cold Email Proposal** (1): A professional proposal with a high-CTR subject line and clear, value-first body.
+
+Respond strictly in valid JSON format only (no markdown fences, no text outside JSON):
 {
   "strengths": ["strength 1", "strength 2"],
   "lackings": ["lacking 1", "lacking 2", "lacking 3"],
-  "imagePrompt": "Ultra-detailed Midjourney/ChatGPT prompt tailored to this prospect...",
+  "imagePrompt": "...",
   "whatsappMessage": "...",
   "emailSubject": "...",
   "emailBody": "..."

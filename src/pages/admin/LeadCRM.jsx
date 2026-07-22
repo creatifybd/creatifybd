@@ -70,6 +70,7 @@ const LeadCRM = () => {
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
 
   // Save statuses to localStorage
   useEffect(() => {
@@ -239,19 +240,27 @@ const LeadCRM = () => {
   const runAiStudy = async () => {
     if (!activeLead) return;
     setAnalyzing(true);
+    setIsScraping(false);
     setAiError('');
     setKeyWaiting(false);
     try {
       const res = await analyzeLeadBusiness(activeLead, (prog) => {
-        if (prog.status === 'failed') {
+        if (prog.status === 'scraping') {
+          setIsScraping(true);
+          setActiveProvider('Web Scraper');
+          setActiveModel('Jina Reader');
+        } else if (prog.status === 'failed') {
+          setIsScraping(false);
           setKeyWaiting(false);
         } else if (prog.status === 'trying' || prog.status === 'calling') {
+          setIsScraping(false);
           setActiveProvider(prog.provider || 'AI');
           setActiveModel(prog.model || '');
           setActiveKeyNum(prog.keyNum || 1);
           setKeyWaiting(false);
         }
       });
+      setIsScraping(false);
       setKeyWaiting(false);
       setActiveProvider(res.provider || 'AI');
       setActiveModel(res.model || '');
@@ -272,6 +281,7 @@ const LeadCRM = () => {
       setAiError(err.message || 'AI Business Study failed. Please try again.');
     } finally {
       setAnalyzing(false);
+      setIsScraping(false);
       setKeyWaiting(false);
     }
   };
@@ -740,9 +750,11 @@ const LeadCRM = () => {
                     {analyzing ? (
                       <>
                         <RefreshCw size={18} className="animate-spin" />
-                        {keyWaiting
+                        {isScraping
+                          ? `🌐 Reading Live Website: ${activeLead?.website || '...'}`
+                          : keyWaiting
                           ? 'Keys Cooling Down — Auto-Resuming...'
-                          : `${activeProvider} (${activeModel || 'AI'}) is Studying Business · Key #${activeKeyNum}...`
+                          : `🧠 ${activeProvider} (${activeModel || 'AI'}) Analyzing Business · Key #${activeKeyNum}...`
                         }
                       </>
                     ) : (
