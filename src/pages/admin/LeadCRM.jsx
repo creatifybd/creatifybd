@@ -1027,36 +1027,65 @@ const LeadCRM = () => {
                                 {p.prompt}
                               </div>
 
-                              {/* 100% Free Live AI Generated Image Mockup Preview (Pollinations.ai / Flux Model) */}
-                              <div style={{ marginTop: '0.75rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                                  <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#7E22CE', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    🖼️ Auto Generated Mockup (Flux Model):
-                                  </span>
+                              {/* 🎨 1-Click Professional Image Generation — ChatGPT DALL-E 3 / Midjourney / Ideogram */}
+                              <div style={{ marginTop: '0.75rem', background: 'linear-gradient(135deg, #0F172A, #1E1B4B)', borderRadius: '10px', padding: '0.85rem 1rem' }}>
+                                <div style={{ fontSize: '0.78rem', fontWeight: '800', color: '#E2E8F0', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  🎨 Generate Top-Quality Image — 1 Click:
+                                </div>
+                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+
+                                  {/* ChatGPT DALL-E 3 — Highest Quality */}
                                   <a
-                                    href={`https://image.pollinations.ai/prompt/${encodeURIComponent(p.prompt)}?width=1280&height=720&nologo=true&seed=${idx + 1}`}
+                                    href={`https://chatgpt.com/?q=${encodeURIComponent(`Create a professional marketing design mockup image based on this brief:\n\n${p.prompt}\n\nIMPORTANT: Make it look like world-class agency work. Ultra-realistic, professional, photographic quality. No watermarks.`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    style={{ fontSize: '0.72rem', fontWeight: '700', color: '#9333EA', textDecoration: 'underline' }}
-                                  >
-                                    Open Full HD Image ↗
-                                  </a>
-                                </div>
-                                <div style={{
-                                  borderRadius: '8px', overflow: 'hidden', border: '1px solid #E9D5FF',
-                                  background: '#0F172A', minHeight: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                }}>
-                                  <img
-                                    src={`https://image.pollinations.ai/prompt/${encodeURIComponent(p.prompt)}?width=800&height=450&nologo=true&seed=${idx + 1}`}
-                                    alt={p.title || 'AI Generated Design Mockup'}
-                                    loading="lazy"
-                                    style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '320px', objectFit: 'cover' }}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.style.display = 'none';
+                                    style={{
+                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                      background: 'linear-gradient(135deg, #10A37F, #0D9373)',
+                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
+                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
+                                      boxShadow: '0 2px 10px rgba(16,163,127,0.4)'
                                     }}
-                                  />
+                                  >
+                                    <span>✨</span> Open in ChatGPT (DALL-E 3)
+                                  </a>
+
+                                  {/* Midjourney via Discord */}
+                                  <a
+                                    href={`https://www.midjourney.com/imagine?q=${encodeURIComponent(p.prompt + ' --ar 16:9 --q 2 --s 750 --v 6.1')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                      background: 'linear-gradient(135deg, #5865F2, #4752C4)',
+                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
+                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
+                                      boxShadow: '0 2px 10px rgba(88,101,242,0.4)'
+                                    }}
+                                  >
+                                    <span>🎨</span> Midjourney v6.1
+                                  </a>
+
+                                  {/* Ideogram — Best for Text in Images */}
+                                  <a
+                                    href={`https://ideogram.ai/t/explore?q=${encodeURIComponent(p.prompt)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                      background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
+                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
+                                      boxShadow: '0 2px 10px rgba(245,158,11,0.4)'
+                                    }}
+                                  >
+                                    <span>🖼️</span> Ideogram (Free)
+                                  </a>
+
                                 </div>
+                                <p style={{ margin: '0.5rem 0 0', fontSize: '0.7rem', color: '#94A3B8', lineHeight: '1.4' }}>
+                                  💡 <strong style={{ color: '#60A5FA' }}>Best Workflow:</strong> Click "Open in ChatGPT" → ChatGPT auto-reads the prompt → DALL-E 3 generates 4 professional-grade images → right-click save → send to client.
+                                </p>
                               </div>
                             </div>
                           ))}
