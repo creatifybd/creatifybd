@@ -41,9 +41,10 @@ const OptimizedImage = ({
         width: '100%', 
         height: '100%',
         aspectRatio: aspectRatio,
-        background: 'var(--surface-soft, #f8f9fa)',
+        background: 'transparent',
         borderRadius: 'inherit'
       }}
+
     >
       {/* Animated Skeleton Placeholder */}
       <AnimatePresence>

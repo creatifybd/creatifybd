@@ -117,15 +117,20 @@ const Hero = () => {
         >
           <div className="hero-img-single">
             <motion.div style={{ y: y2 }}>
-              <OptimizedImage
+              <img
                 src={heroImage}
                 alt="Creative work showcase"
-                priority={true}
-                objectFit="contain"
-                fallbackSrc="/assets/hero-visual.png"
+                loading="eager"
+                fetchPriority="high"
+                onError={(e) => {
+                  if (e.target.src !== '/assets/hero-visual.png') {
+                    e.target.src = '/assets/hero-visual.png';
+                  }
+                }}
               />
             </motion.div>
           </div>
+
 
         </motion.div>
       </div>
