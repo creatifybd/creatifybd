@@ -54,7 +54,7 @@ import AdminReviews from './admin/AdminReviews';
 import MediaLibrary from './admin/MediaLibrary';
 import AdminUsers from './admin/AdminUsers';
 import ActivityLog from './admin/ActivityLog';
-import BotDashboard from './admin/BotDashboard';
+import LeadCRM from './admin/LeadCRM';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
 
   const navItems = [
     { path: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} />, group: 'main' },
-    { path: '/admin/bot', label: 'Marketing Bot', icon: <Bot size={18} />, group: 'main' },
+    { path: '/admin/leads', label: 'Lead CRM', icon: <Users size={18} />, group: 'main' },
     {path: '/admin/orders', label: 'Orders', icon: <ClipboardList size={18} />, badge: true, group: 'sales'},
     {path: '/admin/reviews', label: 'Reviews', icon: <MessageCircle size={18} />, group: 'sales'},
     { path: '/admin/payments', label: 'Payments', icon: <CreditCard size={18} />, group: 'sales' },
@@ -582,7 +582,8 @@ const AdminDashboard = () => {
                 <Route path="settings" element={<SettingsManager />} />
                 <Route path="users" element={isOwner ? <AdminUsers /> : <Navigate to="/admin" />} />
                 <Route path="activity-log" element={isOwner ? <ActivityLog /> : <Navigate to="/admin" />} />
-                <Route path="bot" element={<BotDashboard />} />
+                <Route path="leads" element={<LeadCRM />} />
+                <Route path="bot" element={<Navigate to="/admin/leads" replace />} />
               </Routes>
             </motion.div>
           </AnimatePresence>
