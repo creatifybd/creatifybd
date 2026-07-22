@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
 
 /**
- * OptimizedImage: High-performance image component with animated skeleton placeholder,
- * automatic fallback on error, and smooth fade-in transition.
+ * OptimizedImage: High-performance, bulletproof image component.
+ * Handles cached image detection, instant load recognition, skeleton placeholders,
+ * and smooth fade-in transitions without staying blank.
  */
 const OptimizedImage = ({ 
   src, 
@@ -12,17 +12,27 @@ const OptimizedImage = ({
   aspectRatio = 'auto',
   priority = false,
   objectFit = 'cover',
-  fallbackSrc = '/assets/hero-visual.png'
+  fallbackSrc = ''
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     setIsLoaded(false);
     setHasError(false);
     setCurrentSrc(src);
   }, [src]);
+
+  // Handle cached images that load before React mounts or attaches onLoad
+  useEffect(() => {
+    if (imgRef.current) {
+      if (imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+        setIsLoaded(true);
+      }
+    }
+  }, [currentSrc]);
 
   const handleError = () => {
     if (fallbackSrc && currentSrc !== fallbackSrc) {
@@ -44,38 +54,40 @@ const OptimizedImage = ({
         background: 'transparent',
         borderRadius: 'inherit'
       }}
-
     >
       {/* Animated Skeleton Placeholder */}
-      <AnimatePresence>
-        {!isLoaded && !hasError && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="opt-img-skeleton"
-          />
-        )}
-      </AnimatePresence>
+      {!isLoaded && !hasError && (
+        <div 
+          className="opt-img-skeleton"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            borderRadius: 'inherit'
+          }}
+        />
+      )}
 
       {/* Actual Image */}
       {currentSrc && !hasError && (
-        <motion.img
+        <img
+          ref={imgRef}
           src={currentSrc}
           alt={alt}
           onLoad={() => setIsLoaded(true)}
           onError={handleError}
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : 'auto'}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoaded ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           style={{
             width: '100%',
             height: '100%',
             objectFit: objectFit,
             display: 'block',
-            borderRadius: 'inherit'
+            borderRadius: 'inherit',
+            opacity: isLoaded ? 1 : 0,
+            transition: 'opacity 0.35s ease-in-out',
+            position: 'relative',
+            zIndex: 2
           }}
         />
       )}
