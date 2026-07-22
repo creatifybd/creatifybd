@@ -18,118 +18,8 @@ import {
   X
 } from 'lucide-react';
 
-const defaultContent = {
-  visibility: {
-    hero: true,
-    intro_band: true,
-    clients: false,
-    smm_highlight: false,
-    services: true,
-    features: true,
-    about_trust: true,
-    portfolio: true,
-    process: true,
-    pricing: true,
-    testimonials: true,
-    cta_band: true,
-    contact: true
-  },
-  hero: {
-    title: 'Grow Your Brand with a Trusted Creative Partner',
-    desc: 'CreatifyBD is a full-service creative team — branding, social media, video, and web — working together instead of scattered across freelancers who\u2019ve never spoken to each other. Real people, real turnaround times, and pricing built around your actual project.',
-    cta1: 'See Our Work',
-    cta2: 'Get a Custom Quote',
-    mockup_primary: ''
-  },
-  intro_band: {
-    title: 'The creative services ambitious brands ask for most, packaged for reliable monthly execution',
-    pillars: [
-      { title: 'Monthly social media management', desc: 'Consistent calendars, post design, captions, scheduling, and reporting for growing brands.', color: '#E8192C' },
-      { title: 'Brand-ready creative assets', desc: 'Graphic design, campaign visuals, ad creatives, and templates that keep your business polished.', color: '#7C3AED' },
-      { title: 'Video, marketing, and websites', desc: 'Short-form video edits, digital marketing support, and conversion-focused website design.', color: '#0EA5E9' }
-    ]
-  },
-  clients: {
-    label: 'Trusted by brands in global markets',
-    list: 'Maple & Co, Northstar Dental, Harbor Cafe, Green Eats, Nova Clothing, EduBridge, HealthPlus, CraftNest, ShopLocal, ByteWave, Riverside Resto, Summit Fitness'
-  },
-  smm_highlight: {
-    title: 'Monthly social media management for international brands',
-    lead: 'A dedicated creative workflow for founders who need consistent, polished social media without hiring a full in-house team. We plan, design, write, schedule, and report, so your business stays active and trustworthy every week.',
-    cta_label: 'Explore SMM Packages',
-    board_title: 'Monthly Growth Board',
-    status: 'Ready for Review',
-    included: 'content calendar, branded templates, short-form video direction, caption writing, scheduling support, and analytics.',
-    metrics: {
-      left_label: 'Content pieces',
-      left_value: '30',
-      left_note: 'Posts, stories, reels',
-      right_label: 'Platforms',
-      right_value: '3',
-      right_note: 'Instagram, Facebook, LinkedIn'
-    },
-    benefits: [
-      { title: 'Done-for-you monthly calendar', desc: 'Post ideas, designs, captions, hashtags, and scheduling prepared before the month starts.' },
-      { title: 'Brand voice and community support', desc: 'Professional captions, customer-facing replies guidance, and consistent visual tone.' },
-      { title: 'Performance reporting', desc: 'Monthly reach, engagement, content winners, and next-step recommendations.' }
-    ]
-  },
-  features: {
-    title: 'A reliable creative team without agency overhead',
-    subtitle: 'We combine structured creative operations with international service standards, giving brands dependable creative output at practical monthly pricing.',
-    visual_title: 'Creative operations built for recurring growth',
-    badges: ['Social Media Management', 'Graphic Design', 'Video Editing', 'Digital Marketing', 'Website Design'],
-    stats: [
-      { value: '100+', label: 'Projects delivered' },
-      { value: '5.0*', label: 'Client rating target' },
-      { value: '24h', label: 'Typical response window' }
-    ],
-    items: [
-      { title: 'Built for international buyers', desc: 'Copy, visuals, formats, and offers are shaped for global audiences.' },
-      { title: 'Agency process, gig-style clarity', desc: 'Clear scope, milestones, revisions, and deliverables before work begins.' },
-      { title: 'Timezone-friendly production', desc: 'Async updates, organized reviews, and steady weekly progress without meetings overload.' },
-      { title: 'Creative tied to business outcomes', desc: 'Content and design decisions are made around leads, trust, reach, and conversion.' }
-    ]
-  },
-  process: {
-    title: 'A clear process from first brief to final delivery',
-    subtitle: 'Every project follows a visible workflow, so you know what is happening, what needs approval, and when deliverables are due.',
-    steps: [
-      { num: '01', title: 'Audit and brief', desc: 'We review your current brand, competitors, audience, goals, and existing assets before proposing scope.' },
-      { num: '02', title: 'Strategy and calendar', desc: 'We map the service plan, creative direction, content calendar, milestones, and approval process.' },
-      { num: '03', title: 'Creative production', desc: 'Designers, editors, writers, and web specialists produce drafts with organized review checkpoints.' },
-      { num: '04', title: 'Launch and improve', desc: 'Final assets are delivered, scheduled, or launched with performance notes and next-step recommendations.' }
-    ]
-  },
-  about_trust: {
-    title: 'A Real Team, Built for Businesses Ready to Grow',
-    subtitle: 'CreatifyBD gives founders and marketing teams dependable creative execution without the cost or complexity of a full in-house department.',
-    ceo_quote: 'Every brand we touch should look like it\u2019s already competing at the level it wants to reach \u2014 that\u2019s the standard we hold every project to.',
-    cta_label: 'Read Our Story',
-    team_heading: 'Specialist delivery model',
-    team_roles: ['Brand Strategy', 'Visual Design', 'Motion & Video', 'Web Development', 'Client Success'],
-    stats: [
-      { value: '11+', label: 'Countries reached' },
-      { value: '4-7', label: 'Person expert team' },
-      { value: '39+', label: 'Verified client reviews' }
-    ]
-  },
-  cta_band: {
-    title: 'Most Projects Start With One Message',
-    subtitle: "No lengthy onboarding, no sales calls you don't need \u2014 tell us what you're building and get a real quote back fast.",
-    primary_btn: 'Start a Project',
-    primary_link: '/contact',
-    secondary_btn: 'hello@creatifybd.com',
-    secondary_link: 'mailto:hello@creatifybd.com'
-  },
-  contact: {
-    heading: "Let's build something great.",
-    sub: 'Tell us about your brand, target market, and the kind of creative support you need.',
-    address: 'Serving clients globally',
-    working_hours: 'Saturday - Thursday, 10 AM - 8 PM',
-    office_image: ''
-  }
-};
+import { defaultContent } from '../../data/defaultContent';
+
 
 const managerLinks = [
   { to: '/admin/settings', label: 'Branding, SEO, logos, contact details' },
@@ -263,7 +153,13 @@ const ContentManager = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await setDoc(doc(db, 'settings', 'content'), content, { merge: true });
+      const payload = {
+        ...content,
+        version: Date.now(),
+        updated_at: new Date().toISOString()
+      };
+      await setDoc(doc(db, 'settings', 'content'), payload, { merge: true });
+      setContent(payload);
       toast.success('Website content updated.');
     } catch (err) {
       console.error(err);
@@ -272,6 +168,7 @@ const ContentManager = () => {
       setSaving(false);
     }
   };
+
 
   const openJsonEditor = () => {
     setJsonEditorValue(JSON.stringify(content, null, 2));

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
 const CustomCursor = () => {
-  const dotRef  = useRef(null);
-  const ringRef = useRef(null);
+  const dotRef   = useRef(null);
+  const ringRef  = useRef(null);
   const labelRef = useRef(null);
 
   useEffect(() => {
@@ -15,22 +15,37 @@ const CustomCursor = () => {
     const mouse = { x: -200, y: -200 };
     const follower = { x: -200, y: -200 };
     let visible = false;
-    let raf;
+    let isMoving = false;
+    let rafId = null;
 
     const lerp = (a, b, t) => a + (b - a) * t;
 
-    const tick = () => {
-      follower.x = lerp(follower.x, mouse.x, 0.1);
-      follower.y = lerp(follower.y, mouse.y, 0.1);
-      dot.style.transform  = `translate(${mouse.x}px,${mouse.y}px) translate(-50%,-50%)`;
-      ring.style.transform = `translate(${follower.x}px,${follower.y}px) translate(-50%,-50%)`;
-      raf = requestAnimationFrame(tick);
+    const updatePosition = () => {
+      follower.x = lerp(follower.x, mouse.x, 0.15);
+      follower.y = lerp(follower.y, mouse.y, 0.15);
+
+      dot.style.transform  = `translate3d(${mouse.x}px, ${mouse.y}px, 0) translate(-50%, -50%)`;
+      ring.style.transform = `translate3d(${follower.x}px, ${follower.y}px, 0) translate(-50%, -50%)`;
+
+      const dist = Math.hypot(mouse.x - follower.x, mouse.y - follower.y);
+      if (dist > 0.1 || isMoving) {
+        rafId = requestAnimationFrame(updatePosition);
+      } else {
+        rafId = null;
+      }
     };
-    raf = requestAnimationFrame(tick);
+
+    const startAnimation = () => {
+      if (!rafId) {
+        rafId = requestAnimationFrame(updatePosition);
+      }
+    };
 
     const onMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
+      isMoving = true;
+
       if (!visible) {
         visible = true;
         follower.x = e.clientX;
@@ -38,35 +53,46 @@ const CustomCursor = () => {
         dot.style.opacity  = '1';
         ring.style.opacity = '1';
       }
+
+      startAnimation();
+      clearTimeout(onMove.stopTimeout);
+      onMove.stopTimeout = setTimeout(() => {
+        isMoving = false;
+      }, 100);
     };
 
+    // Debounced mouseover check using event delegation for performance
+    let hoverTimeout = null;
     const onOver = (e) => {
-      const t = e.target;
-      const isInput = t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT';
-      if (isInput) {
-        dot.style.opacity  = '0';
-        ring.style.opacity = '0';
-        return;
-      }
-      dot.style.opacity  = visible ? '1' : '0';
-      ring.style.opacity = visible ? '1' : '0';
+      if (hoverTimeout) return;
+      hoverTimeout = setTimeout(() => {
+        hoverTimeout = null;
+        const t = e.target;
+        if (!t) return;
+        const isInput = t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT';
+        if (isInput) {
+          dot.style.opacity  = '0';
+          ring.style.opacity = '0';
+          return;
+        }
 
-      const isLink = t.tagName === 'A' || !!t.closest('a');
-      const isBtn  = t.tagName === 'BUTTON' || !!t.closest('button') || t.getAttribute('role') === 'button';
-      if (isLink || isBtn) {
-        ring.classList.add('cc-ring--hover');
-        dot.classList.add('cc-dot--hover');
-        const lbl = t.getAttribute('data-cursor') || t.closest('[data-cursor]')?.getAttribute('data-cursor') || '';
-        if (label) label.textContent = lbl;
-      } else {
-        ring.classList.remove('cc-ring--hover');
-        dot.classList.remove('cc-dot--hover');
-        if (label) label.textContent = '';
-      }
+        const isInteractive = t.closest('a, button, [role="button"], input, select, textarea');
+        if (isInteractive) {
+          ring.classList.add('cc-ring--hover');
+          dot.classList.add('cc-dot--hover');
+          const lbl = isInteractive.getAttribute('data-cursor') || '';
+          if (label) label.textContent = lbl;
+        } else {
+          ring.classList.remove('cc-ring--hover');
+          dot.classList.remove('cc-dot--hover');
+          if (label) label.textContent = '';
+        }
+      }, 16);
     };
 
     const onLeave = () => {
       visible = false;
+      isMoving = false;
       dot.style.opacity  = '0';
       ring.style.opacity = '0';
     };
@@ -82,13 +108,15 @@ const CustomCursor = () => {
     };
 
     window.addEventListener('mousemove', onMove, { passive: true });
-    window.addEventListener('mouseover', onOver);
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
-    document.documentElement.addEventListener('mouseleave', onLeave);
+    window.addEventListener('mouseover', onOver, { passive: true });
+    window.addEventListener('mousedown', onDown, { passive: true });
+    window.addEventListener('mouseup', onUp, { passive: true });
+    document.documentElement.addEventListener('mouseleave', onLeave, { passive: true });
 
     return () => {
-      cancelAnimationFrame(raf);
+      if (rafId) cancelAnimationFrame(rafId);
+      if (hoverTimeout) clearTimeout(hoverTimeout);
+      if (onMove.stopTimeout) clearTimeout(onMove.stopTimeout);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseover', onOver);
       window.removeEventListener('mousedown', onDown);
@@ -101,10 +129,7 @@ const CustomCursor = () => {
 
   return (
     <>
-      {/* Primary dot — exact mouse position */}
       <div ref={dotRef} className="cc-dot" aria-hidden="true" />
-
-      {/* Follower ring — lags behind with lerp */}
       <div ref={ringRef} className="cc-ring" aria-hidden="true">
         <span ref={labelRef} className="cc-label" />
       </div>
@@ -114,7 +139,6 @@ const CustomCursor = () => {
           *, *::before, *::after { cursor: none !important; }
         }
 
-        /* ── Primary dot ── */
         .cc-dot {
           position: fixed;
           top: 0; left: 0;
@@ -125,9 +149,7 @@ const CustomCursor = () => {
           z-index: 999999;
           opacity: 0;
           will-change: transform;
-          transition: opacity .15s, width .25s cubic-bezier(.16,1,.3,1),
-                      height .25s cubic-bezier(.16,1,.3,1),
-                      background .2s;
+          transition: opacity .15s, width .2s ease, height .2s ease, background .2s;
         }
         .cc-dot--hover {
           width: 4px !important;
@@ -137,10 +159,8 @@ const CustomCursor = () => {
         .cc-dot--click {
           width: 3px !important;
           height: 3px !important;
-          transform: translate(-50%, -50%) scale(0.8) !important;
         }
 
-        /* ── Follower ring ── */
         .cc-ring {
           position: fixed;
           top: 0; left: 0;
@@ -154,33 +174,26 @@ const CustomCursor = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: opacity .15s,
-                      width .35s cubic-bezier(.16,1,.3,1),
-                      height .35s cubic-bezier(.16,1,.3,1),
-                      background .35s,
-                      border-color .35s;
+          transition: opacity .15s, width .25s ease, height .25s ease, background .25s, border-color .25s;
         }
         .cc-ring--hover {
-          width: 68px !important;
-          height: 68px !important;
+          width: 64px !important;
+          height: 64px !important;
           background: rgba(232,25,44,.07) !important;
           border-color: #E8192C !important;
-          border-width: 1.5px !important;
         }
         .cc-ring--click {
-          width: 60px !important;
-          height: 60px !important;
-          transform: translate(-50%, -50%) scale(0.9) !important;
+          width: 54px !important;
+          height: 54px !important;
         }
 
-        /* ── Label inside ring ── */
         .cc-label {
           font-size: 0.58rem;
           font-weight: 800;
           letter-spacing: .6px;
           text-transform: uppercase;
           color: #E8192C;
-          font-family: 'DM Sans', sans-serif;
+          font-family: var(--font-body);
           opacity: 0;
           pointer-events: none;
           white-space: nowrap;
@@ -188,7 +201,6 @@ const CustomCursor = () => {
         }
         .cc-ring--hover .cc-label { opacity: 1; }
 
-        /* Hide on touch devices */
         @media (hover: none), (pointer: coarse) {
           .cc-dot, .cc-ring { display: none !important; }
           *, *::before, *::after { cursor: auto !important; }

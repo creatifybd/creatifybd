@@ -7,6 +7,18 @@ import { Link } from 'react-router-dom';
 
 const EASE = [0.16, 1, 0.3, 1];
 
+const formatUSDPrice = (priceStr) => {
+  if (!priceStr) return 'Custom quote';
+  let cleaned = String(priceStr)
+    .replace(/[৳Tk]/g, '$')
+    .replace(/BDT/gi, 'USD')
+    .trim();
+  if (/^\d/.test(cleaned)) {
+    cleaned = '$' + cleaned;
+  }
+  return cleaned;
+};
+
 const defaultServices = [
   {
     id: 'social-media',
@@ -163,11 +175,14 @@ const Services = ({ highlight = false, fullPage = false }) => {
 
                   {/* Price + Arrow */}
                   <div className="svc-action">
-                    <span className="svc-price">{svc.price || 'Custom quote'}</span>
+                    <span className="svc-price">
+                      {formatUSDPrice(svc.price)}
+                    </span>
                     <a href="/contact" className="svc-arrow" aria-label={`Discuss ${svc.title}`}>
                       <ArrowUpRight size={20} />
                     </a>
                   </div>
+
                 </div>
 
                 {/* Hover preview image */}

@@ -1,12 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from '../firebase/config';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { defaultContent, CONTENT_VERSION } from '../data/defaultContent';
 
 const SettingsContext = createContext();
 
+const deepMerge = (target, source) => {
+  if (!source) return { ...target };
+  const output = { ...target };
+  Object.keys(source).forEach((key) => {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      output[key] = deepMerge(target[key] || {}, source[key]);
+    } else if (source[key] !== undefined && source[key] !== null) {
+      output[key] = source[key];
+    }
+  });
+  return output;
+};
+
 export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState(defaultContent);
   const [paymentSettings, setPaymentSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +36,7 @@ export const SettingsProvider = ({ children }) => {
       if (settingsLoaded && contentLoaded && paymentLoaded) setLoading(false);
     };
 
-    // Read from settings/public/site (new path) with fallback to legacy settings/site
+    // Read from settings/site
     const unsubSettings = onSnapshot(doc(db, 'settings', 'site'), (snap) => {
       if (snap.exists()) {
         const data = snap.data();
@@ -49,19 +63,36 @@ export const SettingsProvider = ({ children }) => {
       checkDone();
     });
 
+    // Content settings with codebase version auto-sync
     const unsubContent = onSnapshot(doc(db, 'settings', 'content'), (snap) => {
-      if (snap.exists()) setContent(snap.data());
+      if (snap.exists()) {
+        const remoteData = snap.data();
+        const merged = deepMerge(defaultContent, remoteData);
+        
+        // If Firestore version is missing or older than codebase CONTENT_VERSION,
+        // automatically sync updated codebase content to Firestore
+        if (!remoteData.version || Number(remoteData.version) < CONTENT_VERSION) {
+          const updatedPayload = { ...merged, version: CONTENT_VERSION, updated_at: Date.now() };
+          setDoc(doc(db, 'settings', 'content'), updatedPayload, { merge: true }).catch(console.error);
+          setContent(updatedPayload);
+        } else {
+          setContent(merged);
+        }
+      } else {
+        // Seed Firestore if document doesn't exist
+        setDoc(doc(db, 'settings', 'content'), defaultContent, { merge: true }).catch(console.error);
+        setContent(defaultContent);
+      }
       contentLoaded = true;
       checkDone();
-    }, () => {
+    }, (err) => {
+      console.warn('Content fallback to codebase default:', err);
+      setContent(defaultContent);
       contentLoaded = true;
       checkDone();
     });
 
-    // Payment settings (Payoneer / DBBL bank details, trade license).
-    // Public-read like the other settings docs above — account numbers for
-    // receiving payment aren't secret (a client needs to see them to pay),
-    // only the ability to *change* them is restricted (see firestore.rules).
+    // Payment settings
     const unsubPayment = onSnapshot(doc(db, 'settings', 'payment'), (snap) => {
       if (snap.exists()) setPaymentSettings(snap.data());
       paymentLoaded = true;

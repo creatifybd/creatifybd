@@ -80,62 +80,54 @@ function AppContent() {
   useEffect(() => {
     if (location.pathname.startsWith('/admin') || location.pathname === '/login') return;
 
+    const handlersMap = new Map();
+
     const applyMagneticEffect = () => {
       const buttons = document.querySelectorAll('.btn-red, .btn-huge-red');
-      
+
       buttons.forEach(button => {
         if (button.dataset.magneticApplied) return;
-        
+
         button.dataset.magneticApplied = 'true';
-        button.style.transition = 'transform 0.15s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        button.style.willChange = 'transform';
-        
+        button.style.transition = 'transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
         const handleMouseMove = (e) => {
           const rect = button.getBoundingClientRect();
           const x = e.clientX - rect.left - rect.width / 2;
           const y = e.clientY - rect.top - rect.height / 2;
-          const strength = 0.15;
-          button.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+          button.style.transform = `translate3d(${x * 0.12}px, ${y * 0.12}px, 0)`;
         };
-        
+
         const handleMouseLeave = () => {
-          button.style.transform = 'translate(0, 0)';
+          button.style.transform = 'translate3d(0, 0, 0)';
         };
-        
+
         button.addEventListener('mousemove', handleMouseMove, { passive: true });
-        button.addEventListener('mouseleave', handleMouseLeave);
-        
-        // Store handlers for cleanup
-        button.dataset.magneticHandlers = JSON.stringify({ handleMouseMove, handleMouseLeave });
+        button.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+
+        handlersMap.set(button, { handleMouseMove, handleMouseLeave });
       });
     };
 
-    // Apply initially
     applyMagneticEffect();
-    
-    // Re-apply on DOM changes with debouncing
+
     let timeoutId;
     const observer = new MutationObserver(() => {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(applyMagneticEffect, 100);
+      timeoutId = setTimeout(applyMagneticEffect, 150);
     });
-    
+
     observer.observe(document.body, { childList: true, subtree: true });
-    
+
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
-      // Cleanup event listeners
-      const buttons = document.querySelectorAll('.btn-red, .btn-huge-red');
-      buttons.forEach(button => {
-        if (button.dataset.magneticHandlers) {
-          const { handleMouseMove, handleMouseLeave } = JSON.parse(button.dataset.magneticHandlers);
-          button.removeEventListener('mousemove', handleMouseMove);
-          button.removeEventListener('mouseleave', handleMouseLeave);
-          delete button.dataset.magneticApplied;
-          delete button.dataset.magneticHandlers;
-        }
+      handlersMap.forEach(({ handleMouseMove, handleMouseLeave }, button) => {
+        button.removeEventListener('mousemove', handleMouseMove);
+        button.removeEventListener('mouseleave', handleMouseLeave);
+        delete button.dataset.magneticApplied;
       });
+      handlersMap.clear();
     };
   }, [location.pathname]);
 
@@ -143,22 +135,18 @@ function AppContent() {
     if (location.pathname.startsWith('/admin') || location.pathname === '/login') return undefined;
 
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
+      wheelMultiplier: 0.9,
       smoothTouch: false,
-      touchMultiplier: 2,
-      lerp: 0.1,
+      touchMultiplier: 1.5,
     });
 
     let frameId;
-    let lastTime = 0;
     function raf(time) {
-      const deltaTime = time - lastTime;
-      lastTime = time;
       lenis.raf(time);
       frameId = requestAnimationFrame(raf);
     }
@@ -169,6 +157,7 @@ function AppContent() {
       lenis.destroy();
     };
   }, [location.pathname]);
+
 
   return (
     <>
