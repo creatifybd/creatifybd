@@ -747,14 +747,21 @@ const LeadCRM = () => {
                   {/* Inline error — no alert() popup */}
                   {aiError && (
                     <div style={{
-                      marginTop: '0.75rem', padding: '0.75rem 1rem', background: '#FEF3C7',
-                      border: '1px solid #FCD34D', borderRadius: '10px', fontSize: '0.82rem',
-                      color: '#92400E', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
+                      marginTop: '0.75rem', padding: '0.75rem 1rem',
+                      background: aiError.includes('daily') || aiError.includes('tomorrow') ? '#FEE2E2' : '#FEF3C7',
+                      border: aiError.includes('daily') || aiError.includes('tomorrow') ? '1px solid #FCA5A5' : '1px solid #FCD34D',
+                      borderRadius: '10px', fontSize: '0.82rem',
+                      color: aiError.includes('daily') || aiError.includes('tomorrow') ? '#991B1B' : '#92400E',
+                      display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
                     }}>
                       <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
                       <span>
-                        <strong>Rate Limit Hit:</strong> {aiError}<br />
-                        <span style={{ opacity: 0.8 }}>Keys auto-recover after ~1 minute. Click the button again to retry.</span>
+                        <strong>{aiError.includes('daily') || aiError.includes('tomorrow') ? 'Daily Quota Exhausted:' : 'Rate Limit Hit:'}</strong> {aiError}<br />
+                        <span style={{ opacity: 0.8 }}>
+                          {aiError.includes('daily') || aiError.includes('tomorrow')
+                            ? 'Free Gemini keys have a daily limit. Resets at midnight UTC.'
+                            : 'Keys auto-recover after ~1 minute. Click the button again to retry.'}
+                        </span>
                       </span>
                     </div>
                   )}

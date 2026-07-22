@@ -1,28 +1,39 @@
 /**
  * Gemini API Key Rotator & Business Study Generator
- * Uses ONLY gemini-1.5-flash (free-tier safe).
- * gemini-2.0-flash requires billing → causes 400 on free keys → REMOVED.
- * Features: per-key cooldown, 200ms delay between attempts, auto-wait when all keys busy.
+ *
+ * Model situation (tested 2026-07-22):
+ *  - gemini-1.5-flash / 1.5-flash-8b  → 404 (removed from v1beta)
+ *  - gemini-2.0-flash-lite             → 429 when quota exceeded, 200 when fresh
+ *  - gemini-2.0-flash                  → 429 when quota exceeded, 200 when fresh
+ *  - gemini-2.5-flash                  → 200 when available (newer keys)
+ *
+ * Free-tier daily quota: ~1500 req/day/key
+ * RPM limit: 15 req/min/key (resets each minute)
+ * Daily quota resets at midnight UTC.
+ *
+ * Strategy: try gemini-2.0-flash-lite first (cheapest), fall back to gemini-2.0-flash.
  */
 
+// Valid API keys (Key 2 was invalid — removed)
 const GEMINI_KEYS = [
-  'AIzaSyCkkNyYiHexe15FmVojJcONuq4kjGVL0_8',
-  'AIzaSyB562VLVXvmmagA2KeCnESJtzpc0cJSW5o',
-  'AIzaSyAQcUqF6evILt2giIz5I-YASz7bhPOwKsU',
-  'AIzaSyBiz9pkZolIhqay8OfeMXrTsv2VEiA-NVw',
-  'AIzaSyCmjPkvmoWH9JIgjolAVHqzgTX_uBFt3D0',
-  'AIzaSyAVJ7maopW0Z8dje4dSkiot7kSO7TPFn6A',
-  'AIzaSyDqh9mthWzl3paXjJP1NHvMnRzWz_Uv03k',
-  'AIzaSyASj0wR9bfuKJ0Z_NXmXkxOnVIwuKx0A5s',
-  'AIzaSyDonKE0LNJ18LJIdbjFIAeuHqUk1yRVQtU',
-  'AIzaSyA2RAmceCc5GZSO0wPUXjFxWIELBAxPglA',
-  'AIzaSyCoLyzuh_5rFumCwtNHKNsK7HBN8-qB18w',
+  'AIzaSyCkkNyYiHexe15FmVojJcONuq4kjGVL0_8', // Key 1
+  // Key 2 removed — "API key not valid"
+  'AIzaSyAQcUqF6evILt2giIz5I-YASz7bhPOwKsU', // Key 3
+  'AIzaSyBiz9pkZolIhqay8OfeMXrTsv2VEiA-NVw', // Key 4
+  'AIzaSyCmjPkvmoWH9JIgjolAVHqzgTX_uBFt3D0', // Key 5
+  'AIzaSyAVJ7maopW0Z8dje4dSkiot7kSO7TPFn6A', // Key 6
+  'AIzaSyDqh9mthWzl3paXjJP1NHvMnRzWz_Uv03k', // Key 7
+  'AIzaSyASj0wR9bfuKJ0Z_NXmXkxOnVIwuKx0A5s', // Key 8
+  'AIzaSyDonKE0LNJ18LJIdbjFIAeuHqUk1yRVQtU', // Key 9
+  'AIzaSyA2RAmceCc5GZSO0wPUXjFxWIELBAxPglA', // Key 10
+  'AIzaSyCoLyzuh_5rFumCwtNHKNsK7HBN8-qB18w', // Key 11
 ];
 
-// ONLY gemini-1.5-flash — stable, free-tier, no billing required
-const MODEL = 'gemini-1.5-flash';
+// Models in preference order — both are free-tier on AI Studio keys
+const MODELS = ['gemini-2.0-flash-lite', 'gemini-2.0-flash'];
+const API_VERSION = 'v1beta';
 
-// Per-key cooldown: keyIndex → timestamp when safe to use again
+// Per-key cooldown state
 const keyCooldowns = new Array(GEMINI_KEYS.length).fill(0);
 
 // Round-robin pointer
@@ -30,7 +41,6 @@ let activeKeyIndex = 0;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Returns index of next available key, or -1 if all in cooldown. */
 function findAvailableKey() {
   const now = Date.now();
   for (let i = 0; i < GEMINI_KEYS.length; i++) {
@@ -40,115 +50,145 @@ function findAvailableKey() {
   return -1;
 }
 
-/** Milliseconds until earliest cooling key recovers. */
 function getMinWaitMs() {
   return Math.max(0, Math.min(...keyCooldowns) - Date.now());
 }
 
 /**
- * Call Gemini API with smart key rotation.
+ * Call Gemini API with multi-model + multi-key rotation.
  *
- * Status behaviour:
- *  429 / 403  → 65s rate-limit cooldown (free RPM reset)
- *  400        → 10min cooldown (model not enabled for this key)
- *  other err  → 15s soft cooldown
- *  network    → 5s soft cooldown
- *
- * 200ms pause between each key attempt (no simultaneous hammering).
+ * Error handling:
+ *  429 (RPM exceeded) → 65s cooldown on this key (minute resets)
+ *  429 (daily quota)  → 24h cooldown on this key
+ *  400 (invalid key)  → permanent skip (set to year 2099)
+ *  404 (model gone)   → try next model immediately
+ *  other              → 15s soft cooldown
  */
 export async function generateContentWithRotation(promptText, onKeySwitch = null) {
-  const RATE_COOLDOWN   = 65_000;   // 65s  — free tier RPM resets
-  const PERM_COOLDOWN   = 600_000;  // 10m  — 400 means model/billing blocked
-  const SOFT_COOLDOWN   = 15_000;   // 15s  — other HTTP errors
-  const NET_COOLDOWN    = 5_000;    // 5s   — network failures
-  const ATTEMPT_DELAY   = 200;      // ms   — gap between key attempts
-  const MAX_WAIT        = 130_000;  // give up if cooldown > 2min
+  const RPM_COOLDOWN   = 65_000;          // 65s  — per-minute rate limit
+  const DAILY_COOLDOWN = 86_400_000;      // 24h  — daily quota exceeded
+  const PERM_COOLDOWN  = 99_999_999_999;  // permanent — invalid key
+  const SOFT_COOLDOWN  = 15_000;          // 15s  — other errors
+  const NET_COOLDOWN   = 5_000;           // 5s   — network errors
+  const ATTEMPT_DELAY  = 300;             // 300ms gap between attempts
+  const MAX_WAIT       = 130_000;         // give up if cooldown > 2 min
 
-  // Two passes: first try all keys, then wait & retry
+  // Two passes: try all keys with all models, then wait if needed
   for (let pass = 0; pass < 2; pass++) {
-    for (let attempt = 0; attempt < GEMINI_KEYS.length; attempt++) {
+    for (let keyAttempt = 0; keyAttempt < GEMINI_KEYS.length; keyAttempt++) {
       const keyIdx = findAvailableKey();
 
       if (keyIdx === -1) {
         const waitMs = getMinWaitMs();
         if (waitMs > MAX_WAIT) {
+          // All keys have hit daily quota — need to wait until tomorrow
+          const hours = Math.ceil(waitMs / 3_600_000);
           throw new Error(
-            `All Gemini keys are rate-limited. Please wait ${Math.ceil(waitMs / 1000)}s and try again.`
+            hours > 1
+              ? `Daily quota exhausted on all keys. Quota resets at midnight UTC (~${hours}h from now).`
+              : `All API keys are rate-limited. Please wait ~${Math.ceil(waitMs / 60_000)} minutes.`
           );
         }
         console.warn(`[Gemini] All keys cooling. Waiting ${Math.ceil(waitMs / 1000)}s...`);
-        if (onKeySwitch) onKeySwitch(-1); // signal UI: waiting
+        if (onKeySwitch) onKeySwitch(-1);
         await sleep(waitMs + 500);
-        break; // restart pass after wait
+        break;
       }
 
       activeKeyIndex = keyIdx;
-      if (onKeySwitch) onKeySwitch(keyIdx + 1);
-      if (attempt > 0) await sleep(ATTEMPT_DELAY); // pace requests
+      if (keyAttempt > 0) await sleep(ATTEMPT_DELAY);
 
-      try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_KEYS[keyIdx]}`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1800 },
-          }),
-        });
+      // Try each model for this key
+      for (const model of MODELS) {
+        if (onKeySwitch) onKeySwitch(keyIdx + 1);
 
-        if (res.status === 429 || res.status === 403) {
-          console.warn(`[Gemini] Key ${keyIdx + 1} rate-limited (${res.status}). Cooling 65s.`);
-          keyCooldowns[keyIdx] = Date.now() + RATE_COOLDOWN;
-          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-          continue;
-        }
+        try {
+          const url = `https://generativelanguage.googleapis.com/${API_VERSION}/models/${model}:generateContent?key=${GEMINI_KEYS[keyIdx]}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: promptText }] }],
+              generationConfig: { temperature: 0.7, maxOutputTokens: 1800 },
+            }),
+          });
 
-        if (res.status === 400) {
+          if (res.status === 200) {
+            const data = await res.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
+              return { text, keyUsed: keyIdx + 1, modelUsed: model };
+            }
+            console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: empty response.`);
+            continue; // try next model
+          }
+
           const body = await res.json().catch(() => ({}));
-          console.warn(`[Gemini] Key ${keyIdx + 1} → 400 (model not available/billing). Cooling 10min.`, body?.error?.message || '');
-          keyCooldowns[keyIdx] = Date.now() + PERM_COOLDOWN;
-          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-          continue;
-        }
+          const errMsg = body?.error?.message || '';
 
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          console.warn(`[Gemini] Key ${keyIdx + 1} HTTP ${res.status}.`, body?.error?.message || '');
+          if (res.status === 429) {
+            const isDaily = errMsg.toLowerCase().includes('quota') || errMsg.toLowerCase().includes('billing');
+            if (isDaily) {
+              console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: Daily quota exhausted. Cooling 24h.`);
+              keyCooldowns[keyIdx] = Date.now() + DAILY_COOLDOWN;
+            } else {
+              console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: RPM limited. Cooling 65s.`);
+              keyCooldowns[keyIdx] = Date.now() + RPM_COOLDOWN;
+            }
+            break; // move to next key (this key is exhausted regardless of model)
+          }
+
+          if (res.status === 400) {
+            if (errMsg.toLowerCase().includes('api key not valid') || errMsg.toLowerCase().includes('invalid')) {
+              console.warn(`[Gemini] Key ${keyIdx + 1}: Invalid key. Permanently skipping.`);
+              keyCooldowns[keyIdx] = Date.now() + PERM_COOLDOWN;
+              break; // move to next key
+            }
+            console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: 400 - ${errMsg}. Skipping model.`);
+            continue; // try next model
+          }
+
+          if (res.status === 404) {
+            console.warn(`[Gemini] ${model} not found (404). Trying next model.`);
+            continue; // try next model
+          }
+
+          if (res.status === 403) {
+            console.warn(`[Gemini] Key ${keyIdx + 1}: 403 - ${errMsg}. Permanently skipping.`);
+            keyCooldowns[keyIdx] = Date.now() + PERM_COOLDOWN;
+            break;
+          }
+
+          console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: HTTP ${res.status} - ${errMsg}`);
           keyCooldowns[keyIdx] = Date.now() + SOFT_COOLDOWN;
-          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-          continue;
+          break;
+
+        } catch (err) {
+          console.warn(`[Gemini] Key ${keyIdx + 1}/${model}: Network error -`, err.message);
+          keyCooldowns[keyIdx] = Date.now() + NET_COOLDOWN;
+          break;
         }
-
-        const data = await res.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length; // advance for next call
-          return { text, keyUsed: keyIdx + 1, modelUsed: MODEL };
-        }
-
-        console.warn(`[Gemini] Key ${keyIdx + 1} returned empty response.`);
-        activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
-
-      } catch (err) {
-        console.warn(`[Gemini] Network error on key ${keyIdx + 1}:`, err.message);
-        keyCooldowns[keyIdx] = Date.now() + NET_COOLDOWN;
-        activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
       }
+
+      // Move to next key
+      activeKeyIndex = (keyIdx + 1) % GEMINI_KEYS.length;
     }
   }
 
-  const waitSec = Math.ceil(getMinWaitMs() / 1000);
+  const waitMs = getMinWaitMs();
+  const isLong = waitMs > 3_600_000;
   throw new Error(
-    waitSec > 5
-      ? `All API keys are rate-limited. Please wait ${waitSec} seconds and try again.`
-      : 'AI study failed after all retries. Please try again.'
+    isLong
+      ? `Daily API quota exhausted. Resets at midnight UTC. Please try again tomorrow.`
+      : waitMs > 5_000
+        ? `All API keys rate-limited. Please wait ${Math.ceil(waitMs / 60_000)} min and try again.`
+        : 'AI study failed. Please try again.'
   );
 }
 
 /**
- * Deep AI business study for a lead — returns JSON with strengths, lackings,
- * a WhatsApp message and a cold email proposal.
+ * Deep AI business study for a lead.
  */
 export async function analyzeLeadBusiness(lead, onProgress = null) {
   const prompt = `You are a Senior Growth Strategist and Creative Director at CreatifyBD (an international agency providing Branding, Social Media Management, Video Editing, and Web Design).
@@ -188,7 +228,6 @@ Respond strictly in valid JSON format matching this exact structure (no markdown
     const parsed = JSON.parse(clean);
     return { ...parsed, keyUsed: result.keyUsed, modelUsed: result.modelUsed };
   } catch {
-    // Fallback on JSON parse failure
     return {
       strengths: [`Established ${lead.type || 'business'} in ${lead.city || 'local market'}`],
       lackings: [
