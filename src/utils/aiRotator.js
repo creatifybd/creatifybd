@@ -35,7 +35,8 @@ const PROVIDERS = {
   groq: {
     name: 'Groq',
     baseUrl: 'https://api.groq.com/openai/v1/chat/completions',
-    models: ['llama-3.1-8b-instant', 'llama-3.3-70b-versatile'],
+    // 70B first for high-quality creative outputs; 8B as speed fallback
+    models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'],
     rpmLimit: 30,
     rpd: 14400, // for 8B model
     authHeader: (key) => `Bearer ${key}`,
@@ -344,9 +345,25 @@ ${liveWebsiteContent}
 Deliver an authentic, non-generic audit covering:
 1. **Strengths** (2-3): Specific strengths based on their real business model, products, or headline offerings.
 2. **Lackings / Revenue Leaks** (3): Specific gaps in their visual branding, website conversion flow, mobile presentation, or short-form video content.
-3. **AI Image Generation Prompt** (1): A highly detailed Midjourney / DALL-E 3 / ChatGPT prompt to generate a custom visual teaser mockup (hero landing section or Instagram reel/poster design) tailored specifically to their actual products and brand aesthetic.
-4. **WhatsApp Outreach** (1): A friendly, highly personalized message referencing an exact detail from their business/website and offering CreatifyBD's free visual teaser concept.
-5. **Cold Email Proposal** (1): A professional proposal with a high-CTR subject line and clear, value-first body.
+3. **AI Image Generation Prompt** (1 ultra-detailed prompt):
+   This is the most important field. The output MUST look like it was designed by a world-class senior designer at an elite creative agency. It must be completely indistinguishable from expensive human-made professional work. Follow all of these rules:
+
+   QUALITY STANDARDS:
+   - Reference real design aesthetics: Awwwards Site of the Day, Dribbble Top Shot, Apple.com product page, Airbnb brand, Stripe landing page, Notion homepage, Linear.app — pick the most relevant to this business.
+   - Specify a real photography/rendering style: "Hasselblad H6D-400c studio product photography", "Sony A7R V lifestyle photography with Sigma Art 35mm f/1.4", "rendered in Cinema 4D with Octane Render", "Figma UI mockup on Apple M3 MacBook Pro clay device"
+   - Include precise color palette: NOT generic colors. Use exact values: "HSL(210, 40%, 8%) deep midnight navy, #F7F2EC warm cream off-white, #C9A96E warm antique gold accent"
+   - Typography: "PP Editorial New serif display headline, 72px, weight 700, tracking -0.04em, line-height 1.0" + "Inter or DM Sans body at 16px, weight 400, tracking 0.01em"
+   - Composition: rule of thirds, generous negative space, depth of field bokeh, golden ratio layout
+   - Lighting: "3-point studio lighting, key light at 45° from top-left, soft fill light from right, subtle rim light giving depth, no harsh shadows"
+   - Format: specify canvas size (e.g., "1440px × 900px hero section, 1080px × 1080px Instagram carousel slide 1 of 6, or 1080px × 1920px vertical reel cover")
+   - Output quality: "ultra-HD 8K", "photorealistic", "print quality 300dpi", "--q 2 --s 750 --v 6" for Midjourney
+   - Mood/Style: describe the emotional feeling ("aspirational luxury", "warm approachable professionalism", "bold energetic Gen-Z streetwear")
+   - Specific elements tailored to this exact business niche and scraped content
+
+   The imagePrompt should be 180-250 words minimum — dense, technical, and hyper-specific to this business.
+
+4. **WhatsApp Outreach** (1): A friendly, highly personalized message referencing an exact detail from their business/website and offering CreatifyBD's free visual teaser concept. Max 3 short paragraphs. Conversational tone.
+5. **Cold Email Proposal** (1): A professional proposal with a high-CTR subject line and clear, value-first body. Must mention a specific observation about their current brand/website.
 
 Respond strictly in valid JSON format only (no markdown fences, no text outside JSON):
 {
@@ -357,6 +374,7 @@ Respond strictly in valid JSON format only (no markdown fences, no text outside 
   "emailSubject": "...",
   "emailBody": "..."
 }`;
+
 
   const result = await generateWithAI(prompt, onProgress);
 
