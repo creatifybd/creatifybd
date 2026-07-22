@@ -10,11 +10,11 @@ const CTABand = () => {
   const { content } = useSettings();
   const cta = content?.cta_band || {};
 
-  const headline = cta.title || 'Most Projects Start With One Message';
-  const subtext  = cta.subtitle  || "No lengthy onboarding, no sales calls you don't need \u2014 tell us what you're building and get a real quote back fast.";
-  const ctaLabel = cta.primary_btn || "Start a Project";
+  const headline = cta.heading || 'What would your business look like with a real creative team behind it?';
+  const subtext  = cta.subheading  || "Most of our clients say the same thing after the first project: 'I wish I’d done this sooner.' Start with one project. See the difference.";
+  const ctaLabel = cta.btn_primary || "Start a Project";
   const ctaLink  = cta.primary_link || "/contact";
-  const secondaryLabel = cta.secondary_btn || "hello@creatifybd.com";
+  const secondaryLabel = cta.btn_secondary || "hello@creatifybd.com";
   const secondaryLink  = cta.secondary_link || "mailto:hello@creatifybd.com";
 
   return (

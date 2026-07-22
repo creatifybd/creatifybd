@@ -8,43 +8,43 @@ const FEATURES = [
   {
     num: '01',
     icon: <UserCheck size={22} />,
-    title: 'Every Brief Gets Full Attention',
-    desc: 'Real people reviewing your project, not a queue. Every piece of work gets a proper pass before it reaches you.',
+    title: "You'll always know what's happening",
+    desc: 'Live project dashboards, milestone updates, and real revision rounds — full visibility, zero chasing.',
     accent: '#E8192C',
   },
   {
     num: '02',
     icon: <Zap size={22} />,
-    title: 'Work Happens On Your Schedule',
-    desc: 'We coordinate asynchronously through shared dashboards, so you\u2019re not stuck waiting on a meeting to get an update.',
+    title: "Fast doesn't mean rushed",
+    desc: "Most deliverables within 48–72h. We're quick because we're experienced, not because we're cutting corners.",
     accent: '#F59E0B',
   },
   {
     num: '03',
     icon: <LayoutGrid size={22} />,
-    title: 'No Surprise Costs',
-    desc: 'You get a clear quote before we start, and that\u2019s what you pay — no hidden fees added halfway through.',
+    title: 'What you see is what you pay',
+    desc: "We quote before we start. No surprise costs, no scope creep fees — what's in the proposal is what you get.",
     accent: '#22C55E',
   },
   {
     num: '04',
     icon: <Repeat size={22} />,
-    title: 'We Revise Until It\u2019s Right',
-    desc: 'We keep refining the work until it actually matches what you had in mind — revisions are part of the process, not an extra charge.',
+    title: "Revisions until it's actually right",
+    desc: "We keep refining the work until it matches your vision — revisions are part of the process, not an extra charge.",
     accent: '#6366F1',
   },
   {
     num: '05',
     icon: <FileCode size={22} />,
-    title: 'You Own Every File',
-    desc: 'Every source file gets handed over at completion. What we build for you is fully yours, always.',
+    title: 'Every file is yours, forever',
+    desc: "Source files, brand assets, website code — everything we build for you is handed over at completion. It's yours, no strings attached.",
     accent: '#EC4899',
   },
   {
     num: '06',
     icon: <RotateCcw size={22} />,
-    title: 'No Long-Term Contracts Required',
-    desc: 'Start a project, pause it, or come back later — there\u2019s no lock-in keeping you here.',
+    title: 'Stay because you want to, not because you signed something',
+    desc: 'No 6-month minimums. No exit penalties. Start a project, pause it, or come back whenever — completely on your terms.',
     accent: '#14B8A6',
   },
 ];
@@ -61,11 +61,11 @@ const WhyUsSection = () => (
         transition={{ duration: 0.65, ease: EASE }}
       >
         <h2 id="why-heading" className="section-h">
-          Elite creative operations<br />
-          <span className="text-red">without the agency markup</span>
+          The agency experience.<br />
+          <span className="text-red">Without the agency games.</span>
         </h2>
         <p className="section-sub">
-          Senior-level talent, async project management, and transparent pricing — premium results at a fraction of standard agency rates.
+          No retainer traps. No vague timelines. No &ldquo;we&rsquo;ll add that in the next phase.&rdquo; Just senior-level creative work, delivered transparently — at a price that actually makes sense for growing businesses.
         </p>
       </motion.div>
 

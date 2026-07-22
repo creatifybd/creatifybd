@@ -10,28 +10,28 @@ const EASE = [0.16, 1, 0.3, 1];
 const defaultSteps = [
   {
     num: '01',
-    title: 'Tell us about your brand',
-    desc: 'Tell us about your brand, your goals, and the kind of design you need. The more you share, the better the outcome.',
+    title: 'You share the vision',
+    desc: 'Tell us about your business, goals, and what you need. No lengthy forms or sales calls — just a message is enough to get started.',
   },
   {
     num: '02',
-    title: 'Brief & Confirm',
-    desc: 'Once you confirm, we go over the details together to make sure nothing gets lost in translation. Scope, timeline, and expectations are set clearly.',
+    title: 'We map the roadmap',
+    desc: 'We send a clear proposal: timeline, deliverables, revision rounds, and pricing — everything agreed before any work begins.',
   },
   {
     num: '03',
-    title: 'Concept Development',
-    desc: 'We start with rough concepts and directions so you can see the ideas before final artwork begins. No surprises, just progress.',
+    title: 'We make it',
+    desc: "Your dedicated creative team gets to work. Regular updates at every milestone so you're never left wondering.",
   },
   {
     num: '04',
-    title: 'First Draft Delivery',
-    desc: 'You receive the first design draft, ready for your feedback. Every deliverable is organised and clearly labelled.',
+    title: 'You shape it',
+    desc: "Structured review rounds where your feedback becomes the next version — clean and organized, not a back-and-forth email chain.",
   },
   {
     num: '05',
-    title: 'Feedback & Revisions',
-    desc: 'Share your feedback and we refine the design until it truly represents your brand. Revisions are structured and transparent.',
+    title: 'You own it',
+    desc: 'Final files delivered, organized, and ready to use. Source files, brand assets, web code — everything is yours, forever.',
   },
 ];
 
@@ -47,11 +47,11 @@ const Process = ({ highlight = false, fullPage = false }) => {
 
   const titleText = globalizeCopy(
     processContent.title,
-    'A clear process from first brief to <span class="text-red">final delivery</span>'
+    'Starting a project feels like this — <span class="text-red">not like pulling teeth.</span>'
   );
   const subtitleText = globalizeCopy(
     processContent.subtitle,
-    'Every project follows a visible workflow so you always know what is happening, what needs approval, and when deliverables are due.'
+    "Five clear steps from first message to final delivery. You'll always know where things stand, what's next, and when to expect it."
   );
 
   return (

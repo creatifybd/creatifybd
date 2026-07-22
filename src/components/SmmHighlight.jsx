@@ -8,18 +8,18 @@ import { globalizeCopy, renderRichTitle } from '../utils/contentText';
 const benefits = [
   {
     icon: <CalendarCheck size={20} />,
-    title: 'Done-for-you monthly calendar',
-    desc: 'Post ideas, designs, captions, hashtags, and scheduling prepared before the month starts.'
+    title: 'A full month of content — before the month starts',
+    desc: "Post ideas, branded designs, captions, hashtags, and scheduling prepared ahead of time so your feed never goes dark."
   },
   {
     icon: <MessageSquareText size={20} />,
-    title: 'Brand voice and community support',
-    desc: 'Professional captions, customer-facing replies guidance, and consistent visual tone.'
+    title: 'Your brand voice, consistently',
+    desc: "Professional captions that sound like you, community engagement guidance, and a visual style that stays on-brand across every post."
   },
   {
     icon: <LineChart size={20} />,
-    title: 'Performance reporting',
-    desc: 'Monthly reach, engagement, content winners, and next-step recommendations.'
+    title: 'Monthly results, not just activity',
+    desc: "Reach, engagement, content winners, and what we're doing next — so you always know what's working and why."
   }
 ];
 
@@ -42,10 +42,10 @@ const SmmHighlight = () => {
       }))
     : benefits;
   const metrics = smmContent.metrics || {};
-  const title = globalizeCopy(smmContent.title, 'Monthly social media management for international brands');
+  const title = globalizeCopy(smmContent.title, 'Your brand, posting consistently — without you lifting a finger.');
   const lead = globalizeCopy(
     smmContent.lead,
-    'A dedicated creative workflow for brands that need consistent, polished social media without hiring a full in-house team.'
+    "Most founders know they should be posting consistently. Most don't, because creating quality content takes hours every week. We handle everything — strategy, design, captions, scheduling, and reporting — so your business stays visible, professional, and growing every single week."
   );
 
   return (
