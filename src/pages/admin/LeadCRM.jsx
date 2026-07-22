@@ -72,6 +72,14 @@ const LeadCRM = () => {
   const [copiedPromptIndex, setCopiedPromptIndex] = useState(null);
   const [isScraping, setIsScraping] = useState(false);
 
+  // Autonomous Batch Queue Engine State
+  const [batchRunning, setBatchRunning] = useState(false);
+  const [batchTotal, setBatchTotal] = useState(0);
+  const [batchCurrentIndex, setBatchCurrentIndex] = useState(0);
+  const [batchCurrentLead, setBatchCurrentLead] = useState(null);
+  const [batchStepMsg, setBatchStepMsg] = useState('');
+  const [batchStopRequested, setBatchStopRequested] = useState(false);
+
   // Save statuses to localStorage
   useEffect(() => {
     try {
@@ -286,6 +294,48 @@ const LeadCRM = () => {
     }
   };
 
+  // Autonomous Batch Audit Handler
+  const startBatchAudit = async (count = 50) => {
+    if (batchRunning) return;
+    const targetLeads = filteredLeads.slice(0, count);
+    if (targetLeads.length === 0) return;
+
+    setBatchRunning(true);
+    setBatchStopRequested(false);
+    setBatchTotal(targetLeads.length);
+    setBatchCurrentIndex(0);
+
+    for (let i = 0; i < targetLeads.length; i++) {
+      const lead = targetLeads[i];
+      setBatchCurrentIndex(i + 1);
+      setBatchCurrentLead(lead);
+      setBatchStepMsg(`🌐 Reading live site: ${lead.website || lead.business_name}...`);
+
+      try {
+        const res = await analyzeLeadBusiness(lead, (prog) => {
+          if (prog.status === 'scraping') {
+            setBatchStepMsg(`🌐 Live site read! Extracting digital footprint...`);
+          } else if (prog.status === 'trying' || prog.status === 'calling') {
+            setBatchStepMsg(`🧠 Groq 70B (${prog.model || 'AI'}) Analyzing & generating 4 Flux Prompts...`);
+          }
+        });
+
+        setLeadAudits(prev => ({ ...prev, [lead.id]: res }));
+        if ((leadStatuses[lead.id] || 'New') === 'New') {
+          updateLeadStatus(lead.id, 'Audited');
+        }
+
+        setBatchStepMsg(`✅ Audit & Flux Mockup Images complete for ${lead.business_name}!`);
+        await new Promise(r => setTimeout(r, 1200));
+      } catch (err) {
+        console.error(`Batch audit failed for lead ${lead.id}:`, err);
+      }
+    }
+
+    setBatchRunning(false);
+    setBatchCurrentLead(null);
+  };
+
   // WhatsApp Trigger
   const handleSendWhatsApp = () => {
     if (!activeLead) return;
@@ -494,6 +544,103 @@ const LeadCRM = () => {
           >
             Reset Filters
           </button>
+        )}
+      </div>
+
+      {/* ── AUTONOMOUS BATCH AI ENGINE CONTROL PANEL ── */}
+      <div style={{
+        background: 'linear-gradient(135deg, #0F172A, #1E293B)',
+        border: '1px solid #334155', borderRadius: '16px', padding: '1.25rem 1.5rem',
+        marginBottom: '1.5rem', color: '#fff', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+              <span style={{ fontSize: '1.2rem' }}>⚡</span>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#fff' }}>
+                Autonomous AI Outreach Engine (100% Free Stack)
+              </h3>
+              <span style={{ background: '#22C55E', color: '#fff', fontSize: '0.65rem', fontWeight: '800', padding: '2px 8px', borderRadius: '20px' }}>
+                PRODUCTION READY
+              </span>
+            </div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: '#94A3B8' }}>
+              Jina Live Scraper &bull; Groq 70B Rotator &bull; Flux AI Image Generator &bull; Auto-Audit Queue
+            </p>
+          </div>
+
+          {!batchRunning ? (
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => startBatchAudit(10)}
+                style={{
+                  background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '10px', padding: '0.5rem 1rem', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: '4px'
+                }}
+              >
+                <Zap size={14} color="#F97316" /> Run 10 Leads Queue
+              </button>
+
+              <button
+                onClick={() => startBatchAudit(25)}
+                style={{
+                  background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '10px', padding: '0.5rem 1rem', fontSize: '0.82rem', fontWeight: '700', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: '4px'
+                }}
+              >
+                <Zap size={14} color="#60A5FA" /> Run 25 Leads Queue
+              </button>
+
+              <button
+                onClick={() => startBatchAudit(50)}
+                style={{
+                  background: 'linear-gradient(135deg, #E8192C, #991B1B)', color: '#fff', border: 'none',
+                  borderRadius: '10px', padding: '0.55rem 1.25rem', fontSize: '0.85rem', fontWeight: '800', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 14px rgba(232,25,44,0.4)'
+                }}
+              >
+                <Sparkles size={16} /> Run 50 Leads Autonomous Queue
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span style={{ fontSize: '0.82rem', color: '#FCD34D', fontWeight: '700' }}>
+                Queue Progress: {batchCurrentIndex} / {batchTotal}
+              </span>
+              <button
+                onClick={() => setBatchStopRequested(true)}
+                style={{ background: '#EF4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.4rem 0.8rem', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}
+              >
+                Stop Queue
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Live Batch Progress Indicator */}
+        {batchRunning && (
+          <div style={{ marginTop: '1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '0.8rem 1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '6px' }}>
+              <span>
+                Processing: <strong style={{ color: '#38BDF8' }}>{batchCurrentLead?.business_name}</strong> ({batchCurrentLead?.city || 'Local'})
+              </span>
+              <span style={{ color: '#A7F3D0', fontWeight: '700' }}>
+                {Math.round((batchCurrentIndex / batchTotal) * 100)}%
+              </span>
+            </div>
+
+            {/* Progress bar */}
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '6px', height: '6px', overflow: 'hidden', marginBottom: '8px' }}>
+              <div style={{ background: 'linear-gradient(90deg, #38BDF8, #22C55E)', height: '100%', width: `${(batchCurrentIndex / batchTotal) * 100}%`, transition: 'width 0.3s ease' }} />
+            </div>
+
+            <div style={{ fontSize: '0.75rem', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <RefreshCw size={12} className="animate-spin" color="#38BDF8" />
+              {batchStepMsg}
+            </div>
+          </div>
         )}
       </div>
 
