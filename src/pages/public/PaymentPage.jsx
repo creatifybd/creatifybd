@@ -130,27 +130,22 @@ const PaymentPage = () => {
       return;
     }
 
+    if (!lemonSqueezy.testVariantId) {
+      toast.error('Product variant ID not configured');
+      return;
+    }
+
     setLoading(true);
     const toastId = toast.loading('Creating secure checkout...');
 
     try {
-      const amount = parseFloat(formData.paidAmount);
-      if (!amount || amount <= 0) {
-        throw new Error('Invalid payment amount');
-      }
+      // Use Lemon Squeezy direct checkout URL with variant ID
+      // Format: https://store.lemonsqueezy.com/checkout/buy/{variant_id}?checkout[email]={email}&checkout[name]={name}
+      const checkoutUrl = `${lemonSqueezy.checkoutUrl}/checkout/buy/${lemonSqueezy.testVariantId}?checkout[email]=${encodeURIComponent(formData.email)}&checkout[name]=${encodeURIComponent(formData.fullName)}`;
 
-      // Since Lemon Squeezy API requires backend for CORS, we'll use a different approach
-      // We'll create a payment link using the store's checkout functionality
-      // This requires creating at least one generic product in Lemon Squeezy
-
-      // For now, we'll use a direct approach: create a checkout link using URL parameters
-      // This works if you have a product set up in Lemon Squeezy
-
-      // Alternative: Use a serverless function or backend to proxy the API call
-      // For this static site, we'll inform the user about the limitation
-
-      toast.error('Custom payment amounts require backend integration. Please contact us at hello@creatifybd.com for a custom payment link.', { id: toastId, duration: 5000 });
-
+      // Open checkout in new tab
+      window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
+      toast.success('Checkout opened!', { id: toastId });
     } catch (error) {
       console.error('Lemon Squeezy checkout error:', error);
       toast.error(error.message || 'Failed to create checkout. Please try again.', { id: toastId });

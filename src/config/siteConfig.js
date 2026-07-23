@@ -33,6 +33,7 @@ export const siteConfig = {
     storeId: '437558',
     apiKey: '', // Add via admin settings for security
     checkoutUrl: 'https://creatifybd.lemonsqueezy.com',
+    testVariantId: '1942003', // Test product variant ID
     enabled: true
   },
   payoneer: {
