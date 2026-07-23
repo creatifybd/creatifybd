@@ -289,125 +289,122 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile overlay */}
+      {/* ── Mobile Full-Screen Drawer ── */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
-            className="agency-mobile-overlay"
+            className="mob-drawer-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setMobileOpen(false)}
           >
-            <button
-              type="button"
-              className="agency-mobile-backdrop"
-              onClick={() => setMobileOpen(false)}
-              aria-label="Close menu"
-            />
             <motion.aside
-              className="agency-mobile-panel"
+              className="mob-drawer"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ duration: 0.35, ease: EASE_EXPO }}
+              transition={{ duration: 0.38, ease: EASE_EXPO }}
+              onClick={(e) => e.stopPropagation()}
             >
-              {/* Panel header */}
-              <div className="agency-mobile-head">
-                <Link to="/" className="agency-nav-logo" onClick={() => setMobileOpen(false)}>
-                  <img src={settings?.logo_url || '/favicon.png'} alt="CreatifyBD" className="agency-nav-logo-img" />
-                  <span className="agency-nav-logo-text">{brandBase}<em>BD</em></span>
+              {/* Header */}
+              <div className="mob-drawer-head">
+                <Link to="/" className="mob-logo" onClick={() => setMobileOpen(false)}>
+                  <img src={settings?.logo_url || '/favicon.png'} alt="CreatifyBD" className="mob-logo-img" />
+                  <span className="mob-logo-text">{brandBase}<em>BD</em></span>
                 </Link>
-                <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close menu">
-                  <X size={20} />
+                <button type="button" className="mob-close-btn" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+                  <X size={22} />
                 </button>
               </div>
 
-              {/* Links */}
-              <motion.nav
-                className="agency-mobile-list"
-                variants={menuListVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                {mobileLinks.map((item) =>
-                  item.hasPanel ? (
-                    /* ── Mobile Services accordion ── */
-                    <motion.div key={item.to} variants={menuItemVariants}>
-                      <button
-                        type="button"
-                        className={`agency-mobile-link agency-mobile-accordion-trigger${isActive(item.to) ? ' active' : ''}`}
-                        onClick={() => setMobileServicesOpen((o) => !o)}
-                        aria-expanded={mobileServicesOpen}
-                      >
-                        <span>{item.label}</span>
-                        <ChevronDown
-                          size={16}
-                          style={{ transform: mobileServicesOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
-                        />
-                      </button>
+              {/* Nav Links */}
+              <nav className="mob-nav">
 
-                      <AnimatePresence>
-                        {mobileServicesOpen && (
-                          <motion.div
-                            className="mobile-services-sub"
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.28, ease: EASE_EXPO }}
-                            style={{ overflow: 'hidden' }}
+                {/* Home */}
+                <Link to="/" className={`mob-nav-item${pathname === '/' ? ' mob-active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <span>Home</span>
+                  <ArrowUpRight size={16} className="mob-arrow" />
+                </Link>
+
+                {/* Services Accordion */}
+                <div className="mob-accordion">
+                  <button
+                    type="button"
+                    className={`mob-nav-item mob-accordion-btn${isActive('/services') ? ' mob-active' : ''}`}
+                    onClick={() => setMobileServicesOpen((o) => !o)}
+                  >
+                    <span>Services</span>
+                    <ChevronDown size={18} className={`mob-chevron${mobileServicesOpen ? ' mob-chevron-open' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {mobileServicesOpen && (
+                      <motion.div
+                        className="mob-sub"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: EASE_EXPO }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <Link to="/services" className="mob-sub-all" onClick={() => setMobileOpen(false)}>
+                          All Services <ArrowUpRight size={13} />
+                        </Link>
+                        {SERVICE_ITEMS.map((svc) => (
+                          <Link
+                            key={svc.slug}
+                            to={`/services/${svc.slug}`}
+                            className="mob-sub-item"
+                            onClick={() => setMobileOpen(false)}
                           >
-                            {/* "All Services" top link */}
-                            <Link
-                              to="/services"
-                              className="mobile-sub-link mobile-sub-all"
-                              onClick={() => setMobileOpen(false)}
-                            >
-                              All Services <ArrowUpRight size={13} />
-                            </Link>
-                            {SERVICE_ITEMS.map((svc) => (
-                              <Link
-                                key={svc.slug}
-                                to={`/services/${svc.slug}`}
-                                className="mobile-sub-link"
-                                onClick={() => setMobileOpen(false)}
-                              >
-                                <span className="mobile-sub-icon">{svc.icon}</span>
-                                {svc.label}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  ) : (
-                    <motion.div key={item.to} variants={menuItemVariants}>
-                      <Link
-                        to={item.to}
-                        onClick={() => setMobileOpen(false)}
-                        className={`agency-mobile-link${isActive(item.to) ? ' active' : ''}`}
-                      >
-                        <span>{item.label}</span>
-                        <ArrowUpRight size={16} />
-                      </Link>
-                    </motion.div>
-                  )
-                )}
-              </motion.nav>
+                            <span className="mob-sub-icon">{svc.icon}</span>
+                            <div>
+                              <div className="mob-sub-name">{svc.label}</div>
+                              <div className="mob-sub-desc">{svc.desc}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
-              {/* Footer CTA */}
-              <motion.div
-                className="agency-mobile-footer"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45, duration: 0.4, ease: EASE_EXPO }}
-              >
-                <Link to="/contact" className="agency-nav-cta wide" onClick={() => setMobileOpen(false)}>
+                {/* Portfolio */}
+                <Link to="/portfolio" className={`mob-nav-item${isActive('/portfolio') ? ' mob-active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <span>Portfolio</span>
+                  <ArrowUpRight size={16} className="mob-arrow" />
+                </Link>
+
+                {/* Pricing */}
+                <Link to="/pricing" className={`mob-nav-item${isActive('/pricing') ? ' mob-active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <span>Pricing</span>
+                  <ArrowUpRight size={16} className="mob-arrow" />
+                </Link>
+
+                {/* About */}
+                <Link to="/about" className={`mob-nav-item${isActive('/about') ? ' mob-active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <span>About</span>
+                  <ArrowUpRight size={16} className="mob-arrow" />
+                </Link>
+
+                {/* Contact */}
+                <Link to="/contact" className={`mob-nav-item${isActive('/contact') ? ' mob-active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <span>Contact</span>
+                  <ArrowUpRight size={16} className="mob-arrow" />
+                </Link>
+
+              </nav>
+
+              {/* CTA */}
+              <div className="mob-drawer-footer">
+                <Link to="/contact" className="mob-cta" onClick={() => setMobileOpen(false)}>
                   Start a Project
                   <ArrowUpRight size={16} />
                 </Link>
-              </motion.div>
+                <p className="mob-tagline">Agency-grade quality · Competitive pricing</p>
+              </div>
+
             </motion.aside>
           </motion.div>
         )}
@@ -874,145 +871,251 @@ const Navbar = () => {
           .agency-nav-cta { display: none; }
         }
 
-        /* ── Mobile overlay & Drawer panel ── */
-        .agency-mobile-overlay {
+        /* ═══════════════════════════════════════════════════════
+           MOBILE DRAWER — complete redesign
+        ═══════════════════════════════════════════════════════ */
+        .mob-drawer-wrap {
           position: fixed;
           inset: 0;
-          z-index: 100000;
-          background: rgba(10,10,15,0.6);
-          backdrop-filter: blur(6px);
+          z-index: 999999;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
-        .agency-mobile-backdrop {
-          position: absolute;
-          inset: 0;
-          width: 100%; height: 100%;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-        }
-        .agency-mobile-panel {
-          position: absolute;
-          top: 0; left: 0;
-          width: min(320px, 86vw);
+        .mob-drawer {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: min(88vw, 340px);
           height: 100%;
-          height: 100dvh;
-          background: var(--surface);
+          height: 100svh;
+          background: #fff;
           display: flex;
           flex-direction: column;
-          padding: 1.25rem 1.25rem 1.75rem;
-          box-shadow: 8px 0 40px rgba(0,0,0,0.18);
           overflow-y: auto;
-          z-index: 100001;
+          overflow-x: hidden;
+          z-index: 1000000;
+          box-shadow: 4px 0 48px rgba(0,0,0,0.22);
         }
-        .agency-mobile-head {
+
+        /* ── Drawer header ── */
+        .mob-drawer-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--border-soft);
+          padding: 1.1rem 1.25rem;
+          border-bottom: 1px solid #f0f0f0;
+          flex-shrink: 0;
         }
-        .agency-mobile-head button {
-          background: transparent;
-          border: 1.5px solid var(--border);
-          border-radius: 8px;
-          width: 36px; height: 36px;
-          display: flex; align-items: center; justify-content: center;
-          cursor: pointer;
-          color: var(--ink);
-        }
-        .agency-mobile-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-          flex: 1;
-        }
-        .agency-mobile-link {
+        .mob-logo {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 0.85rem 0.85rem;
-          font-family: var(--font-display);
-          font-size: 1.2rem;
-          font-weight: 700;
-          color: var(--ink);
+          gap: 9px;
           text-decoration: none;
-          border-radius: 12px;
-          letter-spacing: -0.02em;
-          transition: all 0.2s ease;
-          width: 100%;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          text-align: left;
+          flex-shrink: 0;
+          min-width: 0;
         }
-        .agency-mobile-link:hover,
-        .agency-mobile-link.active {
-          color: var(--brand-red);
+        .mob-logo-img {
+          height: 32px;
+          width: auto;
+          max-width: 100px;
+          object-fit: contain;
+          flex-shrink: 0;
+          display: block;
+        }
+        .mob-logo-text {
+          font-size: 1.25rem;
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          color: #111;
+          line-height: 1;
+          white-space: nowrap;
+        }
+        .mob-logo-text em {
+          font-style: normal;
+          color: #e8192c;
+        }
+        .mob-close-btn {
+          flex-shrink: 0;
+          background: transparent;
+          border: 1.5px solid #e5e5e5;
+          border-radius: 10px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #111;
+          transition: all 0.18s;
+        }
+        .mob-close-btn:hover {
+          border-color: #e8192c;
+          color: #e8192c;
           background: rgba(232,25,44,0.06);
         }
 
-        /* Mobile services accordion trigger */
-        .agency-mobile-accordion-trigger {
-          font-family: var(--font-display);
-          font-size: 1.2rem;
-          font-weight: 700;
+        /* ── Nav links ── */
+        .mob-nav {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 0.75rem 1rem;
+          gap: 2px;
+          overflow-y: auto;
         }
-
-        /* Mobile services sub-menu */
-        .mobile-services-sub {
-          background: rgba(15,15,18,0.03);
-          border-radius: 14px;
-          margin: 0.35rem 0 0.65rem;
-          padding: 0.35rem;
-          border: 1px solid var(--border);
-        }
-        .mobile-sub-link {
+        .mob-nav-item {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.65rem 0.85rem;
-          font-family: var(--font-body);
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: var(--ink);
-          border-radius: 10px;
-          text-decoration: none;
-          transition: all 0.18s ease;
-        }
-        .mobile-sub-link:hover {
-          color: var(--brand-red);
-          background: rgba(232,25,44,0.08);
-        }
-        .mobile-sub-all {
-          font-size: 0.78rem;
-          font-weight: 800;
-          color: var(--brand-red);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
           justify-content: space-between;
-          background: rgba(232,25,44,0.05);
-          margin-bottom: 0.25rem;
+          padding: 0.9rem 1rem;
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: #111;
+          text-decoration: none;
+          border-radius: 12px;
+          letter-spacing: -0.02em;
+          transition: background 0.18s, color 0.18s;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
         }
-        .mobile-sub-icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--brand-red);
+        .mob-nav-item:hover {
+          background: #f7f7f7;
+          color: #111;
+        }
+        .mob-nav-item.mob-active {
+          color: #e8192c;
+          background: rgba(232,25,44,0.06);
+        }
+        .mob-arrow {
+          opacity: 0.4;
           flex-shrink: 0;
         }
 
-        .agency-mobile-footer {
-          padding-top: 1.25rem;
-          border-top: 1px solid var(--border-soft);
-          margin-top: 1rem;
+        /* ── Accordion ── */
+        .mob-accordion {
+          display: flex;
+          flex-direction: column;
+        }
+        .mob-accordion-btn {
+          font-family: inherit;
+        }
+        .mob-chevron {
+          transition: transform 0.28s ease;
+          opacity: 0.6;
+          flex-shrink: 0;
+        }
+        .mob-chevron-open {
+          transform: rotate(180deg);
+          opacity: 1;
+          color: #e8192c;
+        }
+
+        /* ── Services sub-menu ── */
+        .mob-sub {
+          margin: 0 0 0.5rem;
+          border-radius: 14px;
+          border: 1px solid #f0f0f0;
+          background: #fafafa;
+          overflow: hidden;
+        }
+        .mob-sub-all {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.65rem 1rem;
+          font-size: 0.72rem;
+          font-weight: 800;
+          color: #e8192c;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          text-decoration: none;
+          background: rgba(232,25,44,0.05);
+          border-bottom: 1px solid #f0f0f0;
+          transition: background 0.18s;
+        }
+        .mob-sub-all:hover {
+          background: rgba(232,25,44,0.1);
+        }
+        .mob-sub-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          text-decoration: none;
+          border-bottom: 1px solid #f5f5f5;
+          transition: background 0.18s;
+        }
+        .mob-sub-item:last-child {
+          border-bottom: none;
+        }
+        .mob-sub-item:hover {
+          background: #f0f0f0;
+        }
+        .mob-sub-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: rgba(232,25,44,0.08);
+          color: #e8192c;
+          flex-shrink: 0;
+        }
+        .mob-sub-name {
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: #111;
+          line-height: 1.2;
+        }
+        .mob-sub-desc {
+          font-size: 0.73rem;
+          color: #888;
+          margin-top: 1px;
+          line-height: 1.3;
+        }
+
+        /* ── Footer CTA ── */
+        .mob-drawer-footer {
+          padding: 1.25rem;
+          border-top: 1px solid #f0f0f0;
+          flex-shrink: 0;
+        }
+        .mob-cta {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          width: 100%;
+          padding: 0.9rem 1.5rem;
+          background: #e8192c;
+          color: #fff;
+          font-size: 0.95rem;
+          font-weight: 700;
+          border-radius: 14px;
+          text-decoration: none;
+          letter-spacing: -0.01em;
+          transition: opacity 0.18s, transform 0.18s;
+        }
+        .mob-cta:hover {
+          opacity: 0.9;
+          transform: translateY(-1px);
+        }
+        .mob-tagline {
+          text-align: center;
+          font-size: 0.7rem;
+          color: #aaa;
+          margin-top: 0.6rem;
+          margin-bottom: 0;
         }
 
         @media (max-width: 1024px) {
           .agency-nav { padding: 0 1.5rem; height: 76px; }
         }
-
-        /* Pill nav — panel clips under the pill boundary correctly */
         @media (min-width: 901px) {
           .agency-nav.scrolled .nav-services-panel {
             top: calc(100% + 10px);
