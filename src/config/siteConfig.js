@@ -29,6 +29,12 @@ export const siteConfig = {
   // Only the ability to CHANGE these values is restricted to admins.
   // DO NOT store real account numbers here in source control — this object
   // is only the fallback shown before Firestore data loads.
+  lemonSqueezy: {
+    storeId: '437558',
+    apiKey: '',
+    checkoutUrl: 'https://creatifybd.lemonsqueezy.com',
+    enabled: true
+  },
   payoneer: {
     currency: 'USD',
     note: 'Enter the exact amount from your order confirmation. Add your Order ID (e.g. CBD-1234567) in the payment note.',

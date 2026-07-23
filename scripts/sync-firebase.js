@@ -57,17 +57,21 @@ const app = initializeApp({
 
 const db = getFirestore(app);
 
-// Read default content from ContentManager.jsx
+// Read default content from defaultContent.js
 function extractDefaultContent() {
-  const contentManagerPath = path.join(__dirname, '../src/pages/admin/ContentManager.jsx');
-  const contentManagerContent = fs.readFileSync(contentManagerPath, 'utf8');
-  
+  const defaultContentPath = path.join(__dirname, '../src/data/defaultContent.js');
+  const defaultContentContent = fs.readFileSync(defaultContentPath, 'utf8');
+
+  // Extract CONTENT_VERSION first
+  const versionMatch = defaultContentContent.match(/export const CONTENT_VERSION = ([\d_]+);/);
+  const CONTENT_VERSION = versionMatch ? versionMatch[1] : '20260722_10';
+
   // Extract the defaultContent object using regex
-  const match = contentManagerContent.match(/const defaultContent = ({[\s\S]*?});/);
+  const match = defaultContentContent.match(/export const defaultContent = ({[\s\S]*?});/);
   if (!match) {
-    throw new Error('Could not find defaultContent in ContentManager.jsx');
+    throw new Error('Could not find defaultContent in defaultContent.js');
   }
-  
+
   // Use eval to parse the object (safe since it's our own code)
   const defaultContent = eval(`(${match[1]})`);
   return defaultContent;
