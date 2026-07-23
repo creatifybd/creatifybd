@@ -149,11 +149,7 @@ const PaymentPage = () => {
       // Alternative: Use a serverless function or backend to proxy the API call
       // For this static site, we'll inform the user about the limitation
 
-      toast.error('Custom payment amounts require backend integration. Please use Wise transfer or contact us for a custom payment link.', { id: toastId, duration: 5000 });
-
-      // Show Wise transfer option as alternative
-      setActiveTab('wise');
-      setFormData(prev => ({ ...prev, paymentMethod: 'wise_bank' }));
+      toast.error('Custom payment amounts require backend integration. Please contact us at hello@creatifybd.com for a custom payment link.', { id: toastId, duration: 5000 });
 
     } catch (error) {
       console.error('Lemon Squeezy checkout error:', error);
@@ -333,10 +329,11 @@ const PaymentPage = () => {
             </div>
 
             {/* Tab Switcher */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
               {[
                 { key: 'card', icon: <CreditCard size={20} />, label: 'Card & Wallets', sub: 'Visa · Mastercard · Apple Pay', method: 'lemonsqueezy' },
-                { key: 'wise', icon: <Globe size={20} />, label: 'Wise Wire Transfer', sub: 'USD · EUR · GBP', method: 'wise_bank' },
+                // Wise temporarily disabled until credentials are configured
+                // { key: 'wise', icon: <Globe size={20} />, label: 'Wise Wire Transfer', sub: 'USD · EUR · GBP', method: 'wise_bank' },
               ].map(tab => (
                 <button
                   key={tab.key}
