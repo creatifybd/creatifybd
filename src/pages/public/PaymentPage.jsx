@@ -135,6 +135,11 @@ const PaymentPage = () => {
       return;
     }
 
+    if (!formData.email || !formData.fullName) {
+      toast.error('Please fill in your name and email');
+      return;
+    }
+
     setLoading(true);
     const toastId = toast.loading('Creating secure checkout...');
 
@@ -163,6 +168,7 @@ const PaymentPage = () => {
       return;
     }
 
+    // For other payment methods, require all fields including amount
     const required = ['fullName', 'email', 'selectedService', 'paymentMethod', 'paidAmount', 'transactionId'];
     for (const f of required) {
       if (!formData[f]) { toast.error('Please fill in all required fields'); return; }
