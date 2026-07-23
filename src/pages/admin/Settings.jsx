@@ -7,7 +7,13 @@ import { Globe, Phone, Mail, Share2, AtSign, Search, Save, RefreshCw, Upload, Pa
 import { useConfirm } from '../../context/ConfirmContext';
 
 const defaultPaymentSettings = {
+  lemonSqueezy: { storeId: '', apiKey: '', checkoutUrl: '', enabled: true },
   payoneer: { accountName: '', currency: 'USD', note: '', paymentLink: '' },
+  wise: {
+    usd: { accountName: '', bankName: '', routingNumber: '', accountNumber: '', swift: '', address: '' },
+    eur: { accountName: '', iban: '', bicSwift: '', bankName: '' },
+    gbp: { accountName: '', sortCode: '', accountNumber: '', iban: '' }
+  },
   dbbl: { bankName: 'Dutch Bangla Bank Limited', accountName: '', accountNumber: '', branch: '', routingNumber: '', paymentReference: '' },
   tradeLicense: { number: '', issuedDate: '' }
 };
@@ -88,7 +94,13 @@ const SettingsManager = () => {
         const paymentData = await getSettings('payment');
         if (paymentData) {
           setPaymentSettings({
+            lemonSqueezy: { ...defaultPaymentSettings.lemonSqueezy, ...(paymentData.lemonSqueezy || {}) },
             payoneer: { ...defaultPaymentSettings.payoneer, ...(paymentData.payoneer || {}) },
+            wise: {
+              usd: { ...defaultPaymentSettings.wise.usd, ...(paymentData.wise?.usd || {}) },
+              eur: { ...defaultPaymentSettings.wise.eur, ...(paymentData.wise?.eur || {}) },
+              gbp: { ...defaultPaymentSettings.wise.gbp, ...(paymentData.wise?.gbp || {}) }
+            },
             dbbl: { ...defaultPaymentSettings.dbbl, ...(paymentData.dbbl || {}) },
             tradeLicense: { ...defaultPaymentSettings.tradeLicense, ...(paymentData.tradeLicense || {}) }
           });
@@ -106,6 +118,19 @@ const SettingsManager = () => {
     setPaymentSettings(prev => ({
       ...prev,
       [section]: { ...prev[section], [field]: value }
+    }));
+  };
+
+  const updateWiseField = (subCurrency, field, value) => {
+    setPaymentSettings(prev => ({
+      ...prev,
+      wise: {
+        ...prev.wise,
+        [subCurrency]: {
+          ...(prev.wise?.[subCurrency] || {}),
+          [field]: value
+        }
+      }
     }));
   };
 
@@ -285,6 +310,57 @@ const SettingsManager = () => {
         <p style={{ color: 'var(--adm-dim)', fontSize: '0.82rem', marginBottom: '1.5rem' }}>
           These details appear on the public Payment page so clients can pay you directly. Account numbers here are shown to visitors on purpose \u2014 that's how bank transfer payment works \u2014 only you can edit them.
         </p>
+
+        {/* Lemon Squeezy */}
+        <div style={{ background: 'rgba(255,193,7,0.06)', border: '1px solid rgba(255,193,7,0.25)', borderRadius: '12px', padding: '1.2rem', marginBottom: '2rem' }}>
+          <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--adm-text)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            🍋 Lemon Squeezy (Credit Card, Apple Pay, Google Pay)
+          </h3>
+          <p style={{ fontSize: '0.8rem', color: 'var(--adm-dim)', marginBottom: '1rem' }}>
+            Merchant of Record checkout for international credit/debit card processing. Enter credentials from your Lemon Squeezy Dashboard.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem' }}>
+            <SettingField label="Store ID" value={paymentSettings.lemonSqueezy?.storeId || ''} onChange={(e) => updatePaymentField('lemonSqueezy', 'storeId', e.target.value)} placeholder="e.g. 12345" />
+            <SettingField label="Default Checkout URL" value={paymentSettings.lemonSqueezy?.checkoutUrl || ''} onChange={(e) => updatePaymentField('lemonSqueezy', 'checkoutUrl', e.target.value)} placeholder="https://creatifybd.lemonsqueezy.com/buy/..." />
+            <SettingField label="API Key (optional)" value={paymentSettings.lemonSqueezy?.apiKey || ''} onChange={(e) => updatePaymentField('lemonSqueezy', 'apiKey', e.target.value)} placeholder="ls_api_..." />
+          </div>
+        </div>
+
+        {/* Wise Bank Transfer */}
+        <div style={{ background: 'rgba(37,99,235,0.05)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: '12px', padding: '1.2rem', marginBottom: '2rem' }}>
+          <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--adm-text)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            🌐 Wise International Bank Transfers (USD, EUR, GBP)
+          </h3>
+          <p style={{ fontSize: '0.8rem', color: 'var(--adm-dim)', marginBottom: '1rem' }}>
+            Local receiving bank accounts for US Wire/ACH, Eurozone IBAN, and UK Faster Payments.
+          </p>
+
+          {/* USD */}
+          <h4 style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--adm-text)', margin: '1rem 0 0.5rem' }}>🇺🇸 USD Bank Account (US ACH & Wire)</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.2rem' }}>
+            <SettingField label="Account Holder Name" value={paymentSettings.wise?.usd?.accountName || ''} onChange={(e) => updateWiseField('usd', 'accountName', e.target.value)} placeholder="CreatifyBD" />
+            <SettingField label="Bank Name" value={paymentSettings.wise?.usd?.bankName || ''} onChange={(e) => updateWiseField('usd', 'bankName', e.target.value)} placeholder="Evolve Bank & Trust" />
+            <SettingField label="ACH & Wire Routing Number" value={paymentSettings.wise?.usd?.routingNumber || ''} onChange={(e) => updateWiseField('usd', 'routingNumber', e.target.value)} placeholder="9-digit routing" />
+            <SettingField label="Account Number" value={paymentSettings.wise?.usd?.accountNumber || ''} onChange={(e) => updateWiseField('usd', 'accountNumber', e.target.value)} placeholder="Account number" />
+            <SettingField label="SWIFT / BIC Code" value={paymentSettings.wise?.usd?.swift || ''} onChange={(e) => updateWiseField('usd', 'swift', e.target.value)} placeholder="SWIFT code" />
+          </div>
+
+          {/* EUR */}
+          <h4 style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--adm-text)', margin: '1rem 0 0.5rem' }}>🇪🇺 EUR Bank Account (Eurozone SEPA IBAN)</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.2rem' }}>
+            <SettingField label="Account Holder Name" value={paymentSettings.wise?.eur?.accountName || ''} onChange={(e) => updateWiseField('eur', 'accountName', e.target.value)} placeholder="CreatifyBD" />
+            <SettingField label="IBAN Number" value={paymentSettings.wise?.eur?.iban || ''} onChange={(e) => updateWiseField('eur', 'iban', e.target.value)} placeholder="BE12 3456 7890 1234" />
+            <SettingField label="BIC / SWIFT" value={paymentSettings.wise?.eur?.bicSwift || ''} onChange={(e) => updateWiseField('eur', 'bicSwift', e.target.value)} placeholder="BIC / SWIFT code" />
+          </div>
+
+          {/* GBP */}
+          <h4 style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--adm-text)', margin: '1rem 0 0.5rem' }}>🇬🇧 GBP Bank Account (UK Faster Payments)</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <SettingField label="Account Holder Name" value={paymentSettings.wise?.gbp?.accountName || ''} onChange={(e) => updateWiseField('gbp', 'accountName', e.target.value)} placeholder="CreatifyBD" />
+            <SettingField label="Sort Code" value={paymentSettings.wise?.gbp?.sortCode || ''} onChange={(e) => updateWiseField('gbp', 'sortCode', e.target.value)} placeholder="12-34-56" />
+            <SettingField label="Account Number" value={paymentSettings.wise?.gbp?.accountNumber || ''} onChange={(e) => updateWiseField('gbp', 'accountNumber', e.target.value)} placeholder="8-digit account number" />
+          </div>
+        </div>
 
         <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--adm-text)', marginBottom: '1rem' }}>Payoneer</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem', marginBottom: '2rem' }}>
