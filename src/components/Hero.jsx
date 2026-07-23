@@ -33,11 +33,21 @@ const Hero = () => {
   const cta2Label    = heroContent.cta2     || 'Get a Custom Quote';
   const heroImage    = heroContent.mockup_primary || heroContent.hero_image || '/assets/hero-visual.png';
 
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 600], [0, -60]);
-  const y2 = useTransform(scrollY, [0, 600], [0, -100]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
+  const { scrollY } = useScroll();
+  const rawY1 = useTransform(scrollY, [0, 600], [0, -60]);
+  const rawY2 = useTransform(scrollY, [0, 600], [0, -100]);
+
+  // Disable parallax shifts on mobile screens to prevent overlap with copy/buttons
+  const y1 = isMobile ? 0 : rawY1;
+  const y2 = isMobile ? 0 : rawY2;
 
   return (
     <section className="hero-agency" id="hero">
@@ -130,7 +140,6 @@ const Hero = () => {
               />
             </motion.div>
           </div>
-
 
         </motion.div>
       </div>
@@ -374,21 +383,35 @@ const Hero = () => {
         @media (max-width: 1024px) {
           .hero-agency-inner {
             grid-template-columns: 1fr;
-            gap: 3.5rem;
-            padding-bottom: 4rem;
+            gap: 2.5rem;
+            padding-top: calc(var(--nav-height, 80px) + 1rem);
+            padding-bottom: 3.5rem;
           }
           .hero-agency-copy { align-items: center; text-align: center; }
-          .hero-agency-desc { max-width: 600px; }
-          .hero-agency-ctas { justify-content: center; }
-          .hero-agency-stats { align-self: center; }
-          .hero-agency-visual { max-width: 640px; margin: 0 auto; width: 100%; }
+          .hero-agency-h1 { text-align: center; justify-content: center; margin-bottom: 1.25rem; }
+          .hero-agency-desc { max-width: 580px; text-align: center; margin-bottom: 2rem; }
+          .hero-agency-ctas { justify-content: center; width: 100%; margin-bottom: 2rem; }
+          .hero-agency-stats { align-self: center; width: 100%; max-width: 480px; justify-content: space-around; margin-bottom: 1rem; }
+          .hero-agency-visual {
+            max-width: 540px;
+            margin: 1.5rem auto 0;
+            width: 100%;
+            transform: none !important;
+          }
+          .hero-img-single motion.div,
+          .hero-img-single div {
+            transform: none !important;
+          }
         }
         @media (max-width: 640px) {
-          .hero-agency-h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
-          .hero-agency-inner { padding: 2.5rem 1.25rem 3.5rem; }
-          .hero-agency-stats { padding: 1rem; }
-          .hero-stat-item { padding: 0 0.85rem; }
+          .hero-agency-h1 { font-size: clamp(2.1rem, 9vw, 3.2rem); }
+          .hero-agency-inner { padding: 2rem 1rem 3rem; }
+          .hero-agency-ctas { flex-direction: column; width: 100%; gap: 0.75rem; }
+          .hero-cta-primary, .hero-cta-ghost { width: 100%; justify-content: center; }
+          .hero-agency-stats { padding: 0.85rem; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+          .hero-stat-item { padding: 0 0.5rem; }
           .hero-stat-item strong { font-size: 1.2rem; }
+          .hero-stat-divider { height: 24px; }
         }
         @media (prefers-reduced-motion: reduce) {
           .hero-agency-pulse { animation: none; }
