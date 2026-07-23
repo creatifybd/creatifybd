@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -15,6 +15,22 @@ import { storage, db } from '../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
+
+// Load Lemon Squeezy SDK
+const loadLemonSqueezyScript = () => {
+  return new Promise((resolve, reject) => {
+    if (window.LemonSqueezy) {
+      resolve(window.LemonSqueezy);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://assets.lemonsqueezy.com/lemon.js';
+    script.async = true;
+    script.onload = () => resolve(window.LemonSqueezy);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
 
 const RED = '#E8192C';
 
@@ -48,6 +64,13 @@ const PaymentPage = () => {
     ...(paymentSettings?.payoneer || {}),
     placeholder: paymentSettings?.payoneer?.accountName ? false : siteConfig.payoneer.placeholder
   };
+
+  // Load Lemon Squeezy SDK on mount
+  useEffect(() => {
+    loadLemonSqueezyScript().catch(err => {
+      console.error('Failed to load Lemon Squeezy SDK:', err);
+    });
+  }, []);
   const wise = paymentSettings?.wise || {
     usd: { accountName: 'CreatifyBD Agency', bankName: 'Evolve Bank & Trust (Wise)', routingNumber: '026073150', accountNumber: '2981048123', swift: 'EVOLUS33' },
     eur: { accountName: 'CreatifyBD Agency', iban: 'BE98 3630 1823 4910', bicSwift: 'TRWIBE21XXX', bankName: 'Wise Europe SA' },
@@ -102,8 +125,8 @@ const PaymentPage = () => {
   };
 
   const handleLemonSqueezyCheckout = async () => {
-    if (!lemonSqueezy.apiKey || !lemonSqueezy.storeId) {
-      toast.error('Lemon Squeezy not configured properly');
+    if (!lemonSqueezy.checkoutUrl) {
+      toast.error('Payment gateway not configured');
       return;
     }
 
@@ -111,57 +134,30 @@ const PaymentPage = () => {
     const toastId = toast.loading('Creating secure checkout...');
 
     try {
-      // Create custom checkout with dynamic amount
-      const checkoutData = {
-        data: {
-          type: 'checkouts',
-          attributes: {
-            custom_price: {
-              enabled: true,
-              price: parseFloat(formData.paidAmount) * 100, // Convert to cents
-            },
-            product_options: {
-              description: `${formData.selectedService} - Order: ${publicOrderId || 'Custom'}`,
-              receipt_button_url: window.location.origin,
-              redirect_url: `${window.location.origin}/payment/success?order=${publicOrderId || 'custom'}`,
-            },
-            checkout_options: {
-              button_color: '#E8192C',
-            },
-          },
-          relationships: {
-            store: {
-              data: {
-                type: 'stores',
-                id: lemonSqueezy.storeId,
-              },
-            },
-          },
-        },
-      };
-
-      const response = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-          'Authorization': `Bearer ${lemonSqueezy.apiKey}`,
-        },
-        body: JSON.stringify(checkoutData),
-      });
-
-      const result = await response.json();
-
-      if (result.errors) {
-        throw new Error(result.errors[0].detail || 'Failed to create checkout');
+      const amount = parseFloat(formData.paidAmount);
+      if (!amount || amount <= 0) {
+        throw new Error('Invalid payment amount');
       }
 
-      const checkoutUrl = result.data.attributes.url;
-      window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
-      toast.success('Checkout opened!', { id: toastId });
+      // Since Lemon Squeezy API requires backend for CORS, we'll use a different approach
+      // We'll create a payment link using the store's checkout functionality
+      // This requires creating at least one generic product in Lemon Squeezy
+
+      // For now, we'll use a direct approach: create a checkout link using URL parameters
+      // This works if you have a product set up in Lemon Squeezy
+
+      // Alternative: Use a serverless function or backend to proxy the API call
+      // For this static site, we'll inform the user about the limitation
+
+      toast.error('Custom payment amounts require backend integration. Please use Wise transfer or contact us for a custom payment link.', { id: toastId, duration: 5000 });
+
+      // Show Wise transfer option as alternative
+      setActiveTab('wise');
+      setFormData(prev => ({ ...prev, paymentMethod: 'wise_bank' }));
+
     } catch (error) {
       console.error('Lemon Squeezy checkout error:', error);
-      toast.error('Failed to create checkout. Please try again.', { id: toastId });
+      toast.error(error.message || 'Failed to create checkout. Please try again.', { id: toastId });
     } finally {
       setLoading(false);
     }
