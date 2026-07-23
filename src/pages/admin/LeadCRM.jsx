@@ -8,6 +8,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { analyzeLeadBusiness } from '../../utils/aiRotator';
+import { generateImage, getHFToken, getIdeogramToken } from '../../utils/imageGenerator';
 
 const STATUS_OPTIONS = [
   { id: 'New', label: 'New Lead', color: '#64748B', bg: '#F1F5F9' },
@@ -71,6 +72,10 @@ const LeadCRM = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPromptIndex, setCopiedPromptIndex] = useState(null);
   const [isScraping, setIsScraping] = useState(false);
+
+  // In-dashboard image generation state — key: `${leadId}_${promptIdx}`
+  const [generatedImages, setGeneratedImages] = useState({});
+  const [generatingImages, setGeneratingImages] = useState({});
 
   // Autonomous Batch Queue Engine State
   const [batchRunning, setBatchRunning] = useState(false);
@@ -1027,66 +1032,137 @@ const LeadCRM = () => {
                                 {p.prompt}
                               </div>
 
-                              {/* 🎨 1-Click Professional Image Generation — ChatGPT DALL-E 3 / Midjourney / Ideogram */}
-                              <div style={{ marginTop: '0.75rem', background: 'linear-gradient(135deg, #0F172A, #1E1B4B)', borderRadius: '10px', padding: '0.85rem 1rem' }}>
-                                <div style={{ fontSize: '0.78rem', fontWeight: '800', color: '#E2E8F0', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                  🎨 Generate Top-Quality Image — 1 Click:
-                                </div>
-                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                              {/* ─── IN-DASHBOARD AI Image Generator ─────────────────── */}
+                              {(() => {
+                                const imgKey = `${activeLead?.id || activeLead?.name}_${idx}`;
+                                const isGen = generatingImages[imgKey];
+                                const imgResult = generatedImages[imgKey];
 
-                                  {/* ChatGPT DALL-E 3 — Highest Quality */}
-                                  <a
-                                    href={`https://chatgpt.com/?q=${encodeURIComponent(`Create a professional marketing design mockup image based on this brief:\n\n${p.prompt}\n\nIMPORTANT: Make it look like world-class agency work. Ultra-realistic, professional, photographic quality. No watermarks.`)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                      background: 'linear-gradient(135deg, #10A37F, #0D9373)',
-                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
-                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
-                                      boxShadow: '0 2px 10px rgba(16,163,127,0.4)'
-                                    }}
-                                  >
-                                    <span>✨</span> Open in ChatGPT (DALL-E 3)
-                                  </a>
+                                const handleGenerate = async (provider) => {
+                                  setGeneratingImages(prev => ({ ...prev, [imgKey]: provider }));
+                                  setGeneratedImages(prev => { const n = { ...prev }; delete n[imgKey]; return n; });
+                                  try {
+                                    const res = await generateImage(p.prompt, provider);
+                                    setGeneratedImages(prev => ({ ...prev, [imgKey]: res || { error: true } }));
+                                  } catch {
+                                    setGeneratedImages(prev => ({ ...prev, [imgKey]: { error: true } }));
+                                  } finally {
+                                    setGeneratingImages(prev => { const n = { ...prev }; delete n[imgKey]; return n; });
+                                  }
+                                };
 
-                                  {/* Midjourney via Discord */}
-                                  <a
-                                    href={`https://www.midjourney.com/imagine?q=${encodeURIComponent(p.prompt + ' --ar 16:9 --q 2 --s 750 --v 6.1')}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                      background: 'linear-gradient(135deg, #5865F2, #4752C4)',
-                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
-                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
-                                      boxShadow: '0 2px 10px rgba(88,101,242,0.4)'
-                                    }}
-                                  >
-                                    <span>🎨</span> Midjourney v6.1
-                                  </a>
+                                return (
+                                  <div style={{ marginTop: '0.75rem' }}>
+                                    {/* Buttons Panel */}
+                                    <div style={{
+                                      background: 'linear-gradient(135deg, #0F172A, #1E1B4B)',
+                                      borderRadius: '10px', padding: '0.85rem 1rem',
+                                      marginBottom: imgResult ? '0.5rem' : 0
+                                    }}>
+                                      <div style={{ fontSize: '0.73rem', fontWeight: '800', color: '#CBD5E1', marginBottom: '0.45rem' }}>
+                                        ⚡ Generate — Renders Here Automatically:
+                                      </div>
+                                      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
 
-                                  {/* Ideogram — Best for Text in Images */}
-                                  <a
-                                    href={`https://ideogram.ai/t/explore?q=${encodeURIComponent(p.prompt)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                                      background: 'linear-gradient(135deg, #F59E0B, #D97706)',
-                                      color: '#fff', padding: '0.45rem 0.85rem', borderRadius: '8px',
-                                      fontSize: '0.78rem', fontWeight: '800', textDecoration: 'none',
-                                      boxShadow: '0 2px 10px rgba(245,158,11,0.4)'
-                                    }}
-                                  >
-                                    <span>🖼️</span> Ideogram (Free)
-                                  </a>
+                                        {/* FLUX.1 free in-dashboard */}
+                                        <button
+                                          onClick={() => handleGenerate('hf')}
+                                          disabled={!!isGen}
+                                          style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                            background: isGen === 'hf' ? '#374151' : 'linear-gradient(135deg,#7C3AED,#6D28D9)',
+                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
+                                            fontSize: '0.73rem', fontWeight: '800', border: 'none',
+                                            cursor: isGen ? 'not-allowed' : 'pointer',
+                                            opacity: isGen && isGen !== 'hf' ? 0.55 : 1
+                                          }}
+                                        >
+                                          {isGen === 'hf'
+                                            ? <><span style={{ display:'inline-block',width:'9px',height:'9px',border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.7s linear infinite' }} /> Generating…</>
+                                            : <><span>⚡</span> FLUX.1 — Free</>
+                                          }
+                                        </button>
 
-                                </div>
-                                <p style={{ margin: '0.5rem 0 0', fontSize: '0.7rem', color: '#94A3B8', lineHeight: '1.4' }}>
-                                  💡 <strong style={{ color: '#60A5FA' }}>Best Workflow:</strong> Click "Open in ChatGPT" → ChatGPT auto-reads the prompt → DALL-E 3 generates 4 professional-grade images → right-click save → send to client.
-                                </p>
-                              </div>
+                                        {/* Ideogram in-dashboard */}
+                                        <button
+                                          onClick={() => {
+                                            const tok = getIdeogramToken();
+                                            tok ? handleGenerate('ideogram') : window.open('https://ideogram.ai/manage-api','_blank');
+                                          }}
+                                          disabled={!!isGen}
+                                          title={!getIdeogramToken() ? 'Get free Ideogram API key → add in Admin → AI Keys' : 'Generate via Ideogram v2 (renders here)'}
+                                          style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                            background: isGen === 'ideogram' ? '#374151'
+                                              : getIdeogramToken() ? 'linear-gradient(135deg,#D97706,#B45309)'
+                                              : 'linear-gradient(135deg,#4B5563,#374151)',
+                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
+                                            fontSize: '0.73rem', fontWeight: '800', border: 'none',
+                                            cursor: isGen ? 'not-allowed' : 'pointer',
+                                            opacity: isGen && isGen !== 'ideogram' ? 0.55 : 1
+                                          }}
+                                        >
+                                          {isGen === 'ideogram'
+                                            ? <><span style={{ display:'inline-block',width:'9px',height:'9px',border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.7s linear infinite' }} /> Generating…</>
+                                            : getIdeogramToken() ? <><span>🖼️</span> Ideogram v2</> : <><span>🔑</span> Get Ideogram Key</>
+                                          }
+                                        </button>
+
+                                        {/* ChatGPT — opens tab */}
+                                        <a
+                                          href={`https://chatgpt.com/?q=${encodeURIComponent('Create a professional marketing design mockup image. Brief:\n\n' + p.prompt + '\n\nIMPORTANT: Ultra-realistic, world-class creative agency quality. No watermarks.')}`}
+                                          target="_blank" rel="noopener noreferrer"
+                                          style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                            background: 'linear-gradient(135deg,#10A37F,#059669)',
+                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
+                                            fontSize: '0.73rem', fontWeight: '800', textDecoration: 'none'
+                                          }}
+                                        >
+                                          <span>✨</span> ChatGPT ↗
+                                        </a>
+                                      </div>
+
+                                      {isGen && (
+                                        <p style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', color: '#93C5FD' }}>
+                                          🧠 Generating via {isGen === 'hf' ? 'HuggingFace FLUX.1' : 'Ideogram v2'}… ~15–30s. Image will appear below.
+                                        </p>
+                                      )}
+                                      {!isGen && !imgResult && !getHFToken() && (
+                                        <p style={{ margin: '0.45rem 0 0', fontSize: '0.65rem', color: '#64748B', lineHeight: 1.4 }}>
+                                          💡 <Link to="/admin/ai-keys" style={{ color: '#A78BFA', fontWeight: '700' }}>Add free HuggingFace token</Link> for priority queue & better resolution.
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    {/* Generated Image */}
+                                    {imgResult && !imgResult.error && (
+                                      <div style={{ borderRadius: '10px', overflow: 'hidden', border: '2px solid #7C3AED', background: '#0F172A' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0.75rem', background: 'rgba(124,58,237,0.2)' }}>
+                                          <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#A78BFA' }}>✅ {imgResult.provider}</span>
+                                          <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <a
+                                              href={imgResult.url}
+                                              download={`concept-${idx+1}-${(activeLead?.name||'lead').replace(/\s+/g,'-')}.png`}
+                                              style={{ fontSize: '0.68rem', fontWeight: '700', color: '#34D399', textDecoration: 'none' }}
+                                            >⬇ Download</a>
+                                            <button onClick={() => handleGenerate('hf')} style={{ fontSize: '0.68rem', fontWeight: '700', color: '#93C5FD', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>🔄 Redo</button>
+                                          </div>
+                                        </div>
+                                        <img src={imgResult.url} alt={p.title || 'AI Design Concept'} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '380px', objectFit: 'cover' }} />
+                                      </div>
+                                    )}
+
+                                    {/* Error */}
+                                    {imgResult?.error && (
+                                      <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '8px', padding: '0.55rem 0.8rem', fontSize: '0.72rem', color: '#991B1B', marginTop: '0.3rem', display: 'flex', gap: '6px' }}>
+                                        ⚠️ Failed — HF may be busy.
+                                        <button onClick={() => handleGenerate('hf')} style={{ fontWeight: '700', color: '#7C3AED', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '0.72rem' }}>Try again ↺</button>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })()}
                             </div>
                           ))}
                         </div>
