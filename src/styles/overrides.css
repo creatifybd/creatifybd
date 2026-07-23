@@ -1542,10 +1542,9 @@
 
   /* ─── RESPONSIVE IMAGES ─── */
   @media (max-width: 768px) {
-    img {
-      max-width: 100% !important;
-      height: auto !important;
-      object-fit: cover !important;
+    img:not(.agency-nav-logo-img):not(.mob-logo-img):not(.mob-drawer-logo-img):not(.nav-logo-img) {
+      max-width: 100%;
+      height: auto;
     }
     
     .hero-split-mockup-img,

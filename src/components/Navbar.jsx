@@ -320,13 +320,16 @@ const Navbar = () => {
                 <Link
                   to="/"
                   onClick={() => setMobileOpen(false)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '9px', textDecoration: 'none' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
                 >
-                  <img
-                    src={settings?.logo_url || '/favicon.png'}
-                    alt="CreatifyBD"
-                    style={{ height: '34px', width: 'auto', maxWidth: '88px', objectFit: 'contain', display: 'block', flexShrink: 0 }}
-                  />
+                  <div style={{ width: '34px', height: '34px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <img
+                      src={settings?.logo_url || '/favicon.png'}
+                      alt="CreatifyBD"
+                      className="mob-drawer-logo-img mob-logo-img agency-nav-logo-img"
+                      style={{ height: '32px', width: 'auto', maxWidth: '32px', objectFit: 'contain', display: 'block', flexShrink: 0 }}
+                    />
+                  </div>
                   <span style={{ fontSize: '1.18rem', fontWeight: 800, letterSpacing: '-0.04em', color: '#111', lineHeight: 1, whiteSpace: 'nowrap' }}>
                     {brandBase}<em style={{ fontStyle: 'normal', color: RED }}>BD</em>
                   </span>

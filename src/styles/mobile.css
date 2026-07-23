@@ -14,15 +14,17 @@ iframe {
   height: auto;
 }
 
-/* 1a ── NAVBAR LOGO: prevent global img rule from enlarging the logo */
+/* 1a ── NAVBAR & DRAWER LOGO: prevent global img rule from enlarging the logo */
 #navbar img,
 .agency-nav img,
 .agency-nav-logo img,
-.agency-nav-logo-img {
-  height: 34px !important;
+.agency-nav-logo-img,
+.mob-drawer-logo-img,
+.mob-logo-img {
+  height: 32px !important;
+  max-height: 32px !important;
   width: auto !important;
-  max-width: 100px !important;
-  max-height: 34px !important;
+  max-width: 90px !important;
   object-fit: contain !important;
   flex-shrink: 0 !important;
 }
