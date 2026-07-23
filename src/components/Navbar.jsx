@@ -315,7 +315,7 @@ const Navbar = () => {
               {/* Panel header */}
               <div className="agency-mobile-head">
                 <Link to="/" className="agency-nav-logo" onClick={() => setMobileOpen(false)}>
-                  <img src={settings?.logo_url || '/favicon.png'} alt="" />
+                  <img src={settings?.logo_url || '/favicon.png'} alt="CreatifyBD" className="agency-nav-logo-img" />
                   <span className="agency-nav-logo-text">{brandBase}<em>BD</em></span>
                 </Link>
                 <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close menu">
@@ -462,11 +462,16 @@ const Navbar = () => {
           text-decoration: none;
           flex-shrink: 0;
         }
+        .agency-nav-logo img,
         .agency-nav-logo-img {
-          width: 32px;
-          height: 32px;
-          object-fit: contain;
-          border-radius: 8px;
+          width: auto !important;
+          max-width: 120px !important;
+          height: 30px !important;
+          max-height: 30px !important;
+          object-fit: contain !important;
+          border-radius: 6px;
+          flex-shrink: 0;
+          display: block;
         }
         .agency-nav-logo-text {
           font-family: var(--font-display);
