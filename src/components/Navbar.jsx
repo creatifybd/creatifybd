@@ -107,6 +107,7 @@ const Navbar = () => {
               src={settings?.logo_url || '/favicon.png'}
               alt=""
               className="agency-nav-logo-img"
+              style={{ height: '34px', width: 'auto', maxWidth: '100px', objectFit: 'contain', display: 'block', flexShrink: 0 }}
             />
             <span className="agency-nav-logo-text">
               {brandBase}<em>BD</em>

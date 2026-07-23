@@ -14,6 +14,19 @@ iframe {
   height: auto;
 }
 
+/* 1a ── NAVBAR LOGO: prevent global img rule from enlarging the logo */
+#navbar img,
+.agency-nav img,
+.agency-nav-logo img,
+.agency-nav-logo-img {
+  height: 34px !important;
+  width: auto !important;
+  max-width: 100px !important;
+  max-height: 34px !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+}
+
 /* 2 ── Long words / URLs / emails can't force horizontal scroll */
 p,
 li,
@@ -173,3 +186,20 @@ textarea {
   }
 }
 
+/* Hero visual image: max height on mobile so it doesn't dominate the screen */
+@media (max-width: 1024px) {
+  .hero-img-single img {
+    max-height: 380px;
+    width: auto !important;
+    margin: 0 auto;
+    display: block;
+  }
+  .hero-agency-visual {
+    overflow: hidden;
+  }
+}
+@media (max-width: 640px) {
+  .hero-img-single img {
+    max-height: 280px;
+  }
+}

@@ -383,9 +383,11 @@ const Hero = () => {
         @media (max-width: 1024px) {
           .hero-agency-inner {
             grid-template-columns: 1fr;
-            gap: 2.5rem;
-            padding-top: calc(var(--nav-height, 80px) + 1rem);
+            gap: 2rem;
+            padding-top: calc(66px + 2.5rem);
             padding-bottom: 3.5rem;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
           }
           .hero-agency-copy { align-items: center; text-align: center; }
           .hero-agency-h1 { text-align: center; justify-content: center; margin-bottom: 1.25rem; }
@@ -393,13 +395,12 @@ const Hero = () => {
           .hero-agency-ctas { justify-content: center; width: 100%; margin-bottom: 2rem; }
           .hero-agency-stats { align-self: center; width: 100%; max-width: 480px; justify-content: space-around; margin-bottom: 1rem; }
           .hero-agency-visual {
-            max-width: 540px;
-            margin: 1.5rem auto 0;
+            max-width: 440px;
+            margin: 0 auto;
             width: 100%;
-            transform: none !important;
           }
-          .hero-img-single motion.div,
-          .hero-img-single div {
+          .hero-img-single div,
+          .hero-img-single > * {
             transform: none !important;
           }
         }
