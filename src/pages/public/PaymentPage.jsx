@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  CreditCard,
-  Upload,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  Copy,
-  Check,
-  Globe,
-  ShieldCheck,
-  ArrowRight,
-  ExternalLink,
-  Zap
+  CreditCard, Globe, CheckCircle2, AlertCircle, Loader2,
+  Copy, Check, ArrowRight, ShieldCheck, Zap, ExternalLink,
+  Star, Clock, Lock, Upload, ChevronDown
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -25,9 +16,32 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 
+const RED = '#E8192C';
+
+const TRUST_BADGES = [
+  { icon: <ShieldCheck size={15} />, label: '256-bit SSL Encryption' },
+  { icon: <Star size={15} />, label: '200+ Global Clients' },
+  { icon: <Clock size={15} />, label: 'Verified Within 24h' },
+  { icon: <Lock size={15} />, label: 'PCI-DSS Secure Checkout' },
+];
+
+const CARD_BRANDS = [
+  { label: 'Visa', bg: '#1a1f71', color: '#fff', emoji: '💳' },
+  { label: 'Mastercard', bg: '#eb001b', color: '#fff', emoji: '💳' },
+  { label: 'AMEX', bg: '#007bc1', color: '#fff', emoji: '💳' },
+  { label: 'Apple Pay', bg: '#000000', color: '#fff', emoji: '🍎' },
+  { label: 'Google Pay', bg: '#4285f4', color: '#fff', emoji: '🌐' },
+  { label: 'Discover', bg: '#e65c00', color: '#fff', emoji: '💳' },
+];
+
+const WISE_CURRENCIES = [
+  { key: 'usd', flag: '🇺🇸', label: 'USD', sublabel: 'US ACH & Wire', color: '#0052B4' },
+  { key: 'eur', flag: '🇪🇺', label: 'EUR', sublabel: 'SEPA / IBAN', color: '#003399' },
+  { key: 'gbp', flag: '🇬🇧', label: 'GBP', sublabel: 'UK Sort Code', color: '#CF142B' },
+];
+
 const PaymentPage = () => {
   const { paymentSettings } = useSettings();
-
   const lemonSqueezy = paymentSettings?.lemonSqueezy || {};
   const payoneer = {
     ...siteConfig.payoneer,
@@ -39,11 +53,6 @@ const PaymentPage = () => {
     eur: { accountName: 'CreatifyBD Agency', iban: 'BE98 3630 1823 4910', bicSwift: 'TRWIBE21XXX', bankName: 'Wise Europe SA' },
     gbp: { accountName: 'CreatifyBD Agency', sortCode: '23-14-70', accountNumber: '84910283', iban: 'GB12 TRWI 2314 7084 9102 83' }
   };
-  const dbbl = {
-    ...siteConfig.dbbl,
-    ...(paymentSettings?.dbbl || {}),
-    placeholder: paymentSettings?.dbbl?.accountNumber ? false : siteConfig.dbbl.placeholder
-  };
 
   const [searchParams] = useSearchParams();
   const selectedService = searchParams.get('service') || '';
@@ -54,696 +63,678 @@ const PaymentPage = () => {
   const prefillCurrency = searchParams.get('currency') || 'USD';
   const expectedAmount = prefillAmount ? parseFloat(prefillAmount) : null;
 
-  const [activeTab, setActiveTab] = useState('card'); // 'card' | 'wise' | 'dbbl'
-  const [wiseCurrency, setWiseCurrency] = useState('usd'); // 'usd' | 'eur' | 'gbp'
+  const [activeTab, setActiveTab] = useState('card');
+  const [wiseCurrency, setWiseCurrency] = useState('usd');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copied, setCopied] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
   const [amountMismatch, setAmountMismatch] = useState(false);
-
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: prefillEmail,
-    phone: '',
-    companyName: '',
-    selectedService: selectedService,
-    paymentMethod: 'credit_card',
-    paidAmount: prefillAmount,
-    currency: prefillCurrency,
-    transactionId: '',
-    paymentDate: new Date().toISOString().split('T')[0],
-    proofFile: null,
-    message: '',
-    invoiceNumber: publicOrderId || ''
+    fullName: '', email: prefillEmail, phone: '', companyName: '',
+    selectedService: selectedService, paymentMethod: 'credit_card',
+    paidAmount: prefillAmount, currency: prefillCurrency,
+    transactionId: '', paymentDate: new Date().toISOString().split('T')[0],
+    proofFile: null, message: '', invoiceNumber: publicOrderId || ''
   });
 
-  const handleCopy = (text, field) => {
+  const handleCopy = (text, key) => {
     if (!text) return;
     navigator.clipboard.writeText(text);
-    setCopied(field);
-    toast.success('Copied to clipboard');
+    setCopied(key);
+    toast.success('Copied!', { duration: 1500 });
     setTimeout(() => setCopied(null), 2000);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
-      if (!validTypes.includes(file.type)) {
-        toast.error('Please upload a valid file (JPEG, PNG, WEBP, or PDF)');
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size must be less than 5MB');
-        return;
-      }
-      setFormData({ ...formData, proofFile: file });
-    }
+    if (!file) return;
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
+    if (!validTypes.includes(file.type)) { toast.error('Upload JPEG, PNG, WEBP or PDF'); return; }
+    if (file.size > 5 * 1024 * 1024) { toast.error('Max 5MB allowed'); return; }
+    setFormData({ ...formData, proofFile: file });
+    if (file.type.startsWith('image/')) setFilePreview(URL.createObjectURL(file));
   };
 
   const handleAmountChange = (val) => {
     setFormData(prev => ({ ...prev, paidAmount: val }));
-    if (expectedAmount !== null && val && parseFloat(val) !== expectedAmount) {
-      setAmountMismatch(true);
-    } else {
-      setAmountMismatch(false);
-    }
+    setAmountMismatch(expectedAmount !== null && val && parseFloat(val) !== expectedAmount);
   };
 
   const handleLemonSqueezyCheckout = () => {
-    const checkoutUrl = lemonSqueezy.checkoutUrl || 'https://lemonsqueezy.com';
-    if (window.LemonSqueezy && window.LemonSqueezy.Url) {
-      window.LemonSqueezy.Url.Open(checkoutUrl);
-    } else {
-      window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
-    }
+    const url = lemonSqueezy.checkoutUrl || 'https://lemonsqueezy.com';
+    if (window.LemonSqueezy?.Url) window.LemonSqueezy.Url.Open(url);
+    else window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const requiredFields = ['fullName', 'email', 'selectedService', 'paymentMethod', 'paidAmount', 'transactionId', 'paymentDate'];
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        toast.error('Please fill in all required fields');
-        return;
-      }
+    const required = ['fullName', 'email', 'selectedService', 'paymentMethod', 'paidAmount', 'transactionId'];
+    for (const f of required) {
+      if (!formData[f]) { toast.error('Please fill in all required fields'); return; }
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error('Please enter a valid email address');
-      return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error('Please enter a valid email'); return;
     }
-
     setLoading(true);
     const toastId = toast.loading('Submitting payment details...');
-
     try {
-      let proofFileUrl = '';
-      let proofFileName = '';
-      let proofFileSize = 0;
-      let proofFileType = '';
-      let storagePath = '';
-
+      let proofFileUrl = '', storagePath = '';
       if (formData.proofFile) {
         const safeName = formData.proofFile.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
         storagePath = `payment-proofs/${Date.now()}_${safeName}`;
         const storageRef = ref(storage, storagePath);
         await uploadBytes(storageRef, formData.proofFile);
         proofFileUrl = await getDownloadURL(storageRef);
-        proofFileName = safeName;
-        proofFileSize = formData.proofFile.size;
-        proofFileType = formData.proofFile.type;
       }
-
       await addDoc(collection(db, 'manualPayments'), {
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone || '',
-        companyName: formData.companyName || '',
-        selectedService: formData.selectedService,
-        paymentMethod: formData.paymentMethod,
+        ...formData, proofFile: undefined,
+        proofFileUrl, storagePath,
         paidAmount: Number(formData.paidAmount) || formData.paidAmount,
-        currency: formData.currency,
-        transactionId: formData.transactionId,
-        paymentDate: formData.paymentDate,
-        proofFileUrl: proofFileUrl,
-        proofFileName: proofFileName,
-        proofFileSize: proofFileSize,
-        proofFileType: proofFileType,
-        storagePath: storagePath,
-        message: formData.message || '',
-        invoiceNumber: formData.invoiceNumber || publicOrderId || '',
-        linkedOrderId: linkedOrderId || '',
-        publicOrderId: publicOrderId || '',
-        expectedAmount: expectedAmount,
-        status: 'pending',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        adminNote: ''
+        linkedOrderId, publicOrderId,
+        expectedAmount, status: 'pending',
+        createdAt: serverTimestamp(), updatedAt: serverTimestamp(), adminNote: ''
       });
-
       setSubmitted(true);
-      toast.success('Payment submitted successfully! Instant order confirmation generated.', { id: toastId });
-    } catch (error) {
-      console.error('Error submitting payment:', error);
-      toast.error('Failed to submit payment. Please try again.', { id: toastId });
+      toast.success('Payment details submitted!', { id: toastId });
+    } catch (err) {
+      console.error(err);
+      toast.error('Submission failed. Please try again.', { id: toastId });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="payment-page">
+    <div style={{ minHeight: '100vh', background: '#f8f9fb', fontFamily: 'var(--font-body, Inter, sans-serif)' }}>
       <SEO
-        title="International Checkout & Payment | CreatifyBD"
-        description="Secure international payment portal for CreatifyBD creative services. Credit Card, Apple Pay, Payoneer, and Wise Bank Transfer."
-        keywords="international payment, credit card payment, wise transfer, payoneer payment, creatifybd checkout"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "International Payment | CreatifyBD",
-          "description": "Secure international checkout for CreatifyBD global agency clients",
-          "url": `${siteConfig.websiteUrl}/payment`
-        }}
+        title="International Payment Portal | CreatifyBD"
+        description="Secure international payment for CreatifyBD creative services. Credit Card, Apple Pay, Google Pay & Wise Bank Transfer."
+        keywords="payment, credit card, wise transfer, apple pay, creatifybd checkout"
       />
-      
       <Navbar />
-      
-      {/* ── Page Header ── */}
-      <div className="page-header page-header-light" style={{ padding: '3.5rem 0 2rem' }}>
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
+
+      {/* ── DARK HERO HEADER ── */}
+      <div style={{
+        background: 'linear-gradient(135deg, #0a0a0f 0%, #111118 50%, #0f0f15 100%)',
+        padding: '6rem 1.5rem 4rem',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Ambient glow orbs */}
+        <div style={{ position: 'absolute', top: '-80px', left: '10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(232,25,44,0.15) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-60px', right: '5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(100,100,255,0.1) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+        {/* Grid pattern */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          className="container"
-          style={{ textAlign: 'center', maxWidth: '720px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ position: 'relative', textAlign: 'center', maxWidth: '680px', margin: '0 auto' }}
         >
+          {/* Secure badge */}
           <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0.35rem 0.9rem',
-            background: 'rgba(238,27,46,0.08)',
-            border: '1px solid rgba(238,27,46,0.2)',
-            borderRadius: '100px',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            color: 'var(--red)',
-            marginBottom: '1.2rem'
+            display: 'inline-flex', alignItems: 'center', gap: '7px',
+            padding: '0.4rem 1rem', marginBottom: '1.6rem',
+            background: 'rgba(232,25,44,0.12)', border: '1px solid rgba(232,25,44,0.28)',
+            borderRadius: '100px', fontSize: '0.78rem', fontWeight: 700, color: '#ff6b7a',
+            letterSpacing: '0.02em'
           }}>
             <ShieldCheck size={14} />
-            <span>Secure 256-Bit SSL Encrypted Agency Checkout</span>
+            256-Bit SSL Encrypted · Secure Agency Checkout
           </div>
 
-          <h1 className="page-title" style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.75rem' }}>
-            International <span className="red">Payment Portal</span>
+          <h1 style={{
+            fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 900, color: '#ffffff',
+            margin: '0 0 1rem', lineHeight: 1.1, letterSpacing: '-0.04em',
+            fontFamily: 'var(--font-display, Bricolage Grotesque, sans-serif)'
+          }}>
+            International <span style={{ color: RED, WebkitTextFillColor: RED }}>Payment</span> Portal
           </h1>
-          <p className="page-subtitle" style={{ fontSize: '1rem', color: '#666', lineHeight: 1.6, margin: 0 }}>
-            Pay securely for your creative services in USD, EUR, or GBP using Visa, Mastercard, Apple Pay, or Wise Bank Transfer.
+
+          <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, margin: '0 0 2.5rem', fontWeight: 400 }}>
+            Pay for your creative services in USD, EUR, or GBP via Visa, Mastercard, Apple Pay, or direct Wise Bank Transfer.
           </p>
+
+          {/* Trust badges row */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem' }}>
+            {TRUST_BADGES.map(b => (
+              <div key={b.label} style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '0.4rem 0.8rem', borderRadius: '8px',
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                fontSize: '0.76rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600
+              }}>
+                <span style={{ color: 'rgba(255,255,255,0.4)' }}>{b.icon}</span>
+                {b.label}
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
 
-      <div className="container" style={{ padding: '2rem 1rem 5rem', maxWidth: '1100px' }}>
-
-        {/* ── Order Summary Card (If Prefilled) ── */}
-        {(selectedService || prefillAmount || publicOrderId) && (
+      {/* ── ORDER SUMMARY CARD (floats over hero) ── */}
+      {(selectedService || prefillAmount || publicOrderId) && (
+        <div style={{ maxWidth: '1080px', margin: '-2.5rem auto 0', padding: '0 1.5rem' }}>
           <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
             style={{
-              background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 100%)',
-              color: '#ffffff',
+              background: 'linear-gradient(135deg, #1a1a24 0%, #111118 100%)',
+              border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: '20px',
               padding: '1.5rem 2rem',
-              marginBottom: '2.5rem',
-              boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1.2rem'
+              boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem'
             }}
           >
-            <div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#e8192c', fontWeight: 800, marginBottom: '0.2rem' }}>
-                Invoice Details {publicOrderId && `• #${publicOrderId}`}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '44px', height: '44px', background: 'rgba(232,25,44,0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <CreditCard size={20} color={RED} />
               </div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                {selectedService || 'Creative Services Package'}
+              <div>
+                <div style={{ fontSize: '0.7rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 800 }}>
+                  Invoice {publicOrderId && `#${publicOrderId}`}
+                </div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', marginTop: '2px' }}>
+                  {selectedService || 'Creative Services Package'}
+                </div>
+                {prefillEmail && <div style={{ fontSize: '0.8rem', color: '#666', marginTop: '2px' }}>Client: {prefillEmail}</div>}
               </div>
-              {prefillEmail && <div style={{ fontSize: '0.85rem', color: '#aaa', marginTop: '0.2rem' }}>Billed to: {prefillEmail}</div>}
             </div>
-
             {prefillAmount && (
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '0.75rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Amount Due</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#ffffff', lineHeight: 1 }}>
-                  ${prefillAmount} <span style={{ fontSize: '0.9rem', color: '#e8192c', fontWeight: 700 }}>{prefillCurrency}</span>
+                <div style={{ fontSize: '0.7rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>Amount Due</div>
+                <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-0.04em' }}>
+                  ${prefillAmount}<span style={{ fontSize: '1rem', color: RED, fontWeight: 700, marginLeft: '4px' }}>{prefillCurrency}</span>
                 </div>
               </div>
             )}
           </motion.div>
-        )}
+        </div>
+      )}
 
-        <div className="payment-grid">
-          {/* Left Column: Payment Options */}
-          <div className="payment-instructions">
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
-              
-              <h2 style={{ marginBottom: '1.2rem', fontSize: '1.4rem', fontWeight: 800 }}>
-                1. Select Payment Method
-              </h2>
+      {/* ── MAIN CONTENT ── */}
+      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: (selectedService || prefillAmount) ? '2.5rem 1.5rem 6rem' : '4rem 1.5rem 6rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '2rem', alignItems: 'start' }}>
 
-              {/* Payment Method Tabs */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+          {/* ────── LEFT COLUMN: PAYMENT OPTIONS ────── */}
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15, duration: 0.55 }}>
+            
+            {/* Step label */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', marginBottom: '1.2rem' }}>
+              <div style={{ width: '28px', height: '28px', background: RED, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.82rem', fontWeight: 900, color: '#fff', flexShrink: 0 }}>1</div>
+              <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#111', letterSpacing: '-0.02em' }}>Select Payment Method</span>
+            </div>
+
+            {/* Tab Switcher */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              {[
+                { key: 'card', icon: <CreditCard size={20} />, label: 'Card & Wallets', sub: 'Visa · Mastercard · Apple Pay', method: 'credit_card' },
+                { key: 'wise', icon: <Globe size={20} />, label: 'Wise Wire Transfer', sub: 'USD · EUR · GBP', method: 'wise_bank' },
+              ].map(tab => (
                 <button
+                  key={tab.key}
                   type="button"
-                  onClick={() => { setActiveTab('card'); setFormData(p => ({ ...p, paymentMethod: 'credit_card' })); }}
+                  onClick={() => { setActiveTab(tab.key); setFormData(p => ({ ...p, paymentMethod: tab.method })); }}
                   style={{
-                    padding: '1rem',
-                    borderRadius: '14px',
-                    border: activeTab === 'card' ? '2px solid var(--red)' : '1.5px solid var(--border)',
-                    background: activeTab === 'card' ? 'rgba(232,25,44,0.06)' : '#fff',
-                    color: activeTab === 'card' ? 'var(--red)' : 'var(--ink)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    cursor: 'pointer',
-                    fontWeight: 700,
-                    fontSize: '0.9rem',
-                    transition: 'all 0.2s ease'
+                    padding: '1rem 0.85rem',
+                    borderRadius: '16px',
+                    border: activeTab === tab.key ? `2px solid ${RED}` : '2px solid #e8e8e8',
+                    background: activeTab === tab.key ? 'rgba(232,25,44,0.05)' : '#ffffff',
+                    color: activeTab === tab.key ? RED : '#555',
+                    display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.3rem',
+                    cursor: 'pointer', textAlign: 'left', width: '100%',
+                    transition: 'all 0.22s ease', boxShadow: activeTab === tab.key ? `0 0 0 4px rgba(232,25,44,0.08)` : 'none'
                   }}
                 >
-                  <CreditCard size={22} />
-                  <span>Credit Card / Apple Pay</span>
-                  <span style={{ fontSize: '0.68rem', opacity: 0.7, fontWeight: 500 }}>Lemon Squeezy & Payoneer</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, fontSize: '0.88rem' }}>
+                    {tab.icon}{tab.label}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: '#999', fontWeight: 500 }}>{tab.sub}</div>
                 </button>
+              ))}
+            </div>
 
-                <button
-                  type="button"
-                  onClick={() => { setActiveTab('wise'); setFormData(p => ({ ...p, paymentMethod: 'wise_bank' })); }}
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '14px',
-                    border: activeTab === 'wise' ? '2px solid var(--red)' : '1.5px solid var(--border)',
-                    background: activeTab === 'wise' ? 'rgba(232,25,44,0.06)' : '#fff',
-                    color: activeTab === 'wise' ? 'var(--red)' : 'var(--ink)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    cursor: 'pointer',
-                    fontWeight: 700,
-                    fontSize: '0.9rem',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <Globe size={22} />
-                  <span>Wise Bank Wire</span>
-                  <span style={{ fontSize: '0.68rem', opacity: 0.7, fontWeight: 500 }}>USD, EUR, GBP Transfers</span>
-                </button>
-              </div>
+            <AnimatePresence mode="wait">
 
-              {/* ── CARD / APPLE PAY SECTION ── */}
+              {/* ── CARD TAB ── */}
               {activeTab === 'card' && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="payment-method-card" style={{ background: '#fff', border: '1.5px solid var(--border)', borderRadius: '18px', padding: '1.5rem' }}>
-                  <div className="payment-method-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.2rem' }}>
-                    <CreditCard size={24} style={{ color: 'var(--red)' }} />
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>Credit Card & Digital Wallets</h3>
-                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#777' }}>Instant processing with 256-bit encryption</p>
+                <motion.div
+                  key="card"
+                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28 }}
+                  style={{ background: '#ffffff', borderRadius: '20px', border: '1.5px solid #eaeaea', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}
+                >
+                  {/* Card header gradient strip */}
+                  <div style={{ height: '4px', background: `linear-gradient(90deg, ${RED}, #ff6b7a, #ff9a56)` }} />
+                  
+                  <div style={{ padding: '1.75rem' }}>
+                    {/* Title row */}
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.2rem', gap: '1rem' }}>
+                      <div>
+                        <div style={{ fontSize: '1rem', fontWeight: 800, color: '#111', marginBottom: '2px' }}>Credit Card & Digital Wallets</div>
+                        <div style={{ fontSize: '0.78rem', color: '#888' }}>Instant processing · Secure Merchant checkout</div>
+                      </div>
+                      <div style={{ padding: '0.28rem 0.7rem', background: 'rgba(46,125,50,0.1)', color: '#2e7d32', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 800, whiteSpace: 'nowrap', flexShrink: 0 }}>
+                        ✓ Instant
+                      </div>
                     </div>
-                    <span style={{ marginLeft: 'auto', fontSize: '0.72rem', background: 'rgba(76,175,80,0.15)', color: '#2e7d32', padding: '0.25rem 0.65rem', borderRadius: '100px', fontWeight: 800 }}>
-                      Instant Confirmation
-                    </span>
-                  </div>
 
-                  {/* Supported Cards Icons */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.8rem', background: '#fafafa', borderRadius: '12px', marginBottom: '1.2rem', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#888', textTransform: 'uppercase' }}>Accepted:</span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, background: '#fff', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #eee' }}>💳 Visa</span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, background: '#fff', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #eee' }}>💳 Mastercard</span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, background: '#fff', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #eee' }}>💳 AMEX</span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, background: '#fff', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #eee' }}>🍎 Apple Pay</span>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 700, background: '#fff', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #eee' }}>🌐 Google Pay</span>
-                  </div>
+                    {/* Card brand pills */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem' }}>
+                      {CARD_BRANDS.map(b => (
+                        <div key={b.label} style={{
+                          padding: '0.3rem 0.65rem', borderRadius: '7px', fontSize: '0.72rem', fontWeight: 700,
+                          background: b.bg, color: b.color, display: 'flex', alignItems: 'center', gap: '0.3rem'
+                        }}>
+                          {b.emoji} {b.label}
+                        </div>
+                      ))}
+                    </div>
 
-                  {/* Main Action Button */}
-                  <button
-                    type="button"
-                    onClick={handleLemonSqueezyCheckout}
-                    style={{
-                      width: '100%',
-                      padding: '1.1rem',
-                      background: 'var(--red)',
-                      color: '#ffffff',
-                      fontSize: '1rem',
-                      fontWeight: 800,
-                      borderRadius: '14px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.6rem',
-                      boxShadow: '0 8px 24px rgba(232,25,44,0.3)',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <Zap size={18} />
-                    <span>Pay with Credit Card / Apple Pay →</span>
-                  </button>
-                  <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#999', marginTop: '0.75rem' }}>
-                    Opens secure Merchant checkout overlay. Instant receipt issued upon payment.
-                  </p>
+                    {/* Primary CTA */}
+                    <button
+                      type="button"
+                      onClick={handleLemonSqueezyCheckout}
+                      style={{
+                        width: '100%', padding: '1rem 1.5rem',
+                        background: `linear-gradient(135deg, ${RED} 0%, #c51225 100%)`,
+                        color: '#ffffff', fontSize: '0.95rem', fontWeight: 800,
+                        borderRadius: '14px', border: 'none', cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                        boxShadow: `0 10px 30px rgba(232,25,44,0.35)`,
+                        transition: 'all 0.22s ease', letterSpacing: '-0.01em'
+                      }}
+                    >
+                      <Zap size={17} />
+                      Pay Securely with Card / Apple Pay
+                      <ArrowRight size={17} />
+                    </button>
 
-                  {/* Payoneer Option */}
-                  {payoneer.paymentLink && (
-                    <div style={{ marginTop: '1.5rem', paddingTop: '1.2rem', borderTop: '1px solid #eee' }}>
-                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#444', marginBottom: '0.5rem' }}>Alternative: Payoneer Card Invoice</div>
+                    {/* Payoneer alternative */}
+                    {payoneer.paymentLink && (
                       <a
                         href={payoneer.paymentLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '0.5rem',
-                          padding: '0.85rem',
-                          background: '#f5f5f7',
-                          color: '#111',
-                          borderRadius: '12px',
-                          textDecoration: 'none',
-                          fontWeight: 700,
-                          fontSize: '0.88rem'
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                          marginTop: '0.8rem', padding: '0.75rem',
+                          background: '#f7f8fa', color: '#444', borderRadius: '12px',
+                          textDecoration: 'none', fontSize: '0.82rem', fontWeight: 700,
+                          border: '1.5px solid #eee', transition: 'background 0.2s'
                         }}
                       >
-                        Pay via Payoneer Invoice <ExternalLink size={14} />
+                        Pay via Payoneer Invoice <ExternalLink size={13} />
                       </a>
+                    )}
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', marginTop: '1rem', fontSize: '0.73rem', color: '#bbb', fontWeight: 600 }}>
+                      <Lock size={12} />
+                      Secured by Lemon Squeezy Merchant Platform
                     </div>
-                  )}
+                  </div>
                 </motion.div>
               )}
 
-              {/* ── WISE BANK TRANSFER SECTION ── */}
+              {/* ── WISE TAB ── */}
               {activeTab === 'wise' && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="payment-method-card" style={{ background: '#fff', border: '1.5px solid var(--border)', borderRadius: '18px', padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.2rem' }}>
-                    <Globe size={24} style={{ color: '#2563eb' }} />
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>Wise International Bank Transfer</h3>
-                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#777' }}>Direct wire to local USD, EUR, or GBP accounts</p>
+                <motion.div
+                  key="wise"
+                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28 }}
+                  style={{ background: '#ffffff', borderRadius: '20px', border: '1.5px solid #eaeaea', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}
+                >
+                  <div style={{ height: '4px', background: 'linear-gradient(90deg, #2563eb, #7c3aed, #0891b2)' }} />
+
+                  <div style={{ padding: '1.75rem' }}>
+                    <div style={{ marginBottom: '1.2rem' }}>
+                      <div style={{ fontSize: '1rem', fontWeight: 800, color: '#111', marginBottom: '2px' }}>Wise International Bank Transfer</div>
+                      <div style={{ fontSize: '0.78rem', color: '#888' }}>Zero international fees · Local bank accounts worldwide</div>
                     </div>
-                  </div>
 
-                  {/* Currency Selector Sub-tabs */}
-                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem' }}>
-                    <button
-                      type="button"
-                      onClick={() => setWiseCurrency('usd')}
-                      style={{
-                        flex: 1, padding: '0.5rem', borderRadius: '8px', border: '1px solid #ddd',
-                        background: wiseCurrency === 'usd' ? '#111' : '#f8f8f8',
-                        color: wiseCurrency === 'usd' ? '#fff' : '#444',
-                        fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer'
-                      }}
-                    >
-                      🇺🇸 USD (US Wire/ACH)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setWiseCurrency('eur')}
-                      style={{
-                        flex: 1, padding: '0.5rem', borderRadius: '8px', border: '1px solid #ddd',
-                        background: wiseCurrency === 'eur' ? '#111' : '#f8f8f8',
-                        color: wiseCurrency === 'eur' ? '#fff' : '#444',
-                        fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer'
-                      }}
-                    >
-                      🇪🇺 EUR (SEPA IBAN)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setWiseCurrency('gbp')}
-                      style={{
-                        flex: 1, padding: '0.5rem', borderRadius: '8px', border: '1px solid #ddd',
-                        background: wiseCurrency === 'gbp' ? '#111' : '#f8f8f8',
-                        color: wiseCurrency === 'gbp' ? '#fff' : '#444',
-                        fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer'
-                      }}
-                    >
-                      🇬🇧 GBP (UK Sort Code)
-                    </button>
-                  </div>
+                    {/* Currency selector */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginBottom: '1.2rem' }}>
+                      {WISE_CURRENCIES.map(c => (
+                        <button
+                          key={c.key}
+                          type="button"
+                          onClick={() => setWiseCurrency(c.key)}
+                          style={{
+                            padding: '0.75rem 0.5rem', borderRadius: '12px', border: '1.5px solid',
+                            borderColor: wiseCurrency === c.key ? c.color : '#e5e7eb',
+                            background: wiseCurrency === c.key ? `${c.color}12` : '#f9fafb',
+                            cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s'
+                          }}
+                        >
+                          <div style={{ fontSize: '1.4rem', lineHeight: 1 }}>{c.flag}</div>
+                          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: wiseCurrency === c.key ? c.color : '#333', marginTop: '4px' }}>{c.label}</div>
+                          <div style={{ fontSize: '0.65rem', color: '#999', marginTop: '2px' }}>{c.sublabel}</div>
+                        </button>
+                      ))}
+                    </div>
 
-                  {/* Account Details Box */}
-                  <div style={{ background: '#f9fafb', borderRadius: '14px', padding: '1.2rem', border: '1px solid #f0f0f0' }}>
-                    {wiseCurrency === 'usd' && (
-                      <div className="payment-details">
-                        <DetailRow label="Account Holder" value={wise.usd?.accountName || 'CreatifyBD Agency'} onCopy={() => handleCopy(wise.usd?.accountName, 'usd-name')} copied={copied === 'usd-name'} />
-                        <DetailRow label="Bank Name" value={wise.usd?.bankName || 'Evolve Bank & Trust (Wise)'} />
-                        <DetailRow label="ACH & Wire Routing" value={wise.usd?.routingNumber || '026073150'} onCopy={() => handleCopy(wise.usd?.routingNumber, 'usd-rt')} copied={copied === 'usd-rt'} />
-                        <DetailRow label="Account Number" value={wise.usd?.accountNumber || '2981048123'} onCopy={() => handleCopy(wise.usd?.accountNumber, 'usd-acc')} copied={copied === 'usd-acc'} />
-                        <DetailRow label="SWIFT / BIC" value={wise.usd?.swift || 'EVOLUS33'} onCopy={() => handleCopy(wise.usd?.swift, 'usd-swift')} copied={copied === 'usd-swift'} />
-                      </div>
-                    )}
+                    {/* Account details */}
+                    <div style={{ background: '#f8faff', borderRadius: '14px', padding: '1.1rem', border: '1px solid #e8edf8' }}>
+                      {wiseCurrency === 'usd' && (
+                        <>
+                          <BankDetailRow k="usd-name" label="Account Holder" value={wise.usd?.accountName} copied={copied} onCopy={handleCopy} />
+                          <BankDetailRow k="usd-bank" label="Bank Name" value={wise.usd?.bankName} copied={copied} onCopy={handleCopy} />
+                          <BankDetailRow k="usd-rt" label="ACH & Wire Routing" value={wise.usd?.routingNumber} copied={copied} onCopy={handleCopy} highlight />
+                          <BankDetailRow k="usd-acc" label="Account Number" value={wise.usd?.accountNumber} copied={copied} onCopy={handleCopy} highlight />
+                          <BankDetailRow k="usd-swift" label="SWIFT / BIC" value={wise.usd?.swift} copied={copied} onCopy={handleCopy} />
+                        </>
+                      )}
+                      {wiseCurrency === 'eur' && (
+                        <>
+                          <BankDetailRow k="eur-name" label="Account Holder" value={wise.eur?.accountName} copied={copied} onCopy={handleCopy} />
+                          <BankDetailRow k="eur-bank" label="Bank Name" value={wise.eur?.bankName} copied={copied} onCopy={handleCopy} />
+                          <BankDetailRow k="eur-iban" label="IBAN Number" value={wise.eur?.iban} copied={copied} onCopy={handleCopy} highlight />
+                          <BankDetailRow k="eur-swift" label="BIC / SWIFT" value={wise.eur?.bicSwift} copied={copied} onCopy={handleCopy} highlight />
+                        </>
+                      )}
+                      {wiseCurrency === 'gbp' && (
+                        <>
+                          <BankDetailRow k="gbp-name" label="Account Holder" value={wise.gbp?.accountName} copied={copied} onCopy={handleCopy} />
+                          <BankDetailRow k="gbp-sort" label="Sort Code" value={wise.gbp?.sortCode} copied={copied} onCopy={handleCopy} highlight />
+                          <BankDetailRow k="gbp-acc" label="Account Number" value={wise.gbp?.accountNumber} copied={copied} onCopy={handleCopy} highlight />
+                          <BankDetailRow k="gbp-iban" label="IBAN (International)" value={wise.gbp?.iban} copied={copied} onCopy={handleCopy} />
+                        </>
+                      )}
+                    </div>
 
-                    {wiseCurrency === 'eur' && (
-                      <div className="payment-details">
-                        <DetailRow label="Account Holder" value={wise.eur?.accountName || 'CreatifyBD Agency'} onCopy={() => handleCopy(wise.eur?.accountName, 'eur-name')} copied={copied === 'eur-name'} />
-                        <DetailRow label="Bank Name" value={wise.eur?.bankName || 'Wise Europe SA'} />
-                        <DetailRow label="IBAN Number" value={wise.eur?.iban || 'BE98 3630 1823 4910'} onCopy={() => handleCopy(wise.eur?.iban, 'eur-iban')} copied={copied === 'eur-iban'} />
-                        <DetailRow label="BIC / SWIFT" value={wise.eur?.bicSwift || 'TRWIBE21XXX'} onCopy={() => handleCopy(wise.eur?.bicSwift, 'eur-swift')} copied={copied === 'eur-swift'} />
-                      </div>
-                    )}
-
-                    {wiseCurrency === 'gbp' && (
-                      <div className="payment-details">
-                        <DetailRow label="Account Holder" value={wise.gbp?.accountName || 'CreatifyBD Agency'} onCopy={() => handleCopy(wise.gbp?.accountName, 'gbp-name')} copied={copied === 'gbp-name'} />
-                        <DetailRow label="Sort Code" value={wise.gbp?.sortCode || '23-14-70'} onCopy={() => handleCopy(wise.gbp?.sortCode, 'gbp-sort')} copied={copied === 'gbp-sort'} />
-                        <DetailRow label="Account Number" value={wise.gbp?.accountNumber || '84910283'} onCopy={() => handleCopy(wise.gbp?.accountNumber, 'gbp-acc')} copied={copied === 'gbp-acc'} />
-                        <DetailRow label="IBAN (International)" value={wise.gbp?.iban || 'GB12 TRWI 2314 7084 9102 83'} onCopy={() => handleCopy(wise.gbp?.iban, 'gbp-iban')} copied={copied === 'gbp-iban'} />
-                      </div>
-                    )}
-                  </div>
-
-                  <div style={{ fontSize: '0.78rem', color: '#777', marginTop: '1rem', background: 'rgba(37,99,235,0.06)', padding: '0.75rem 1rem', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <AlertCircle size={15} style={{ color: '#2563eb', flexShrink: 0 }} />
-                    <span>Include your Order ID or Email in the transfer reference note so we can verify instantly.</span>
+                    <div style={{ marginTop: '1rem', padding: '0.75rem 1rem', background: 'rgba(37,99,235,0.06)', borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.76rem', color: '#4b5563', lineHeight: 1.55 }}>
+                      <AlertCircle size={14} color="#2563eb" style={{ flexShrink: 0, marginTop: '1px' }} />
+                      <span>Add your <strong>Order ID or Email</strong> in the transfer reference note so we can verify your payment instantly.</span>
+                    </div>
                   </div>
                 </motion.div>
               )}
+            </AnimatePresence>
 
-              {/* FAQ */}
-              <div className="payment-faq" style={{ marginTop: '2rem' }}>
-                <h3 style={{ marginBottom: '1.2rem', fontSize: '1.2rem', fontWeight: 700 }}>
-                  Frequently Asked Questions
-                </h3>
-                <div className="faq-item">
-                  <p className="faq-question">Are international credit cards accepted?</p>
-                  <p className="faq-answer">
-                    Yes! We accept all major international Visa, Mastercard, AMEX, Apple Pay, and Google Pay cards via secure Merchant checkout.
-                  </p>
-                </div>
-                <div className="faq-item">
-                  <p className="faq-question">Will I get an official invoice & receipt?</p>
-                  <p className="faq-answer">
-                    Yes! Once payment details are submitted, an instant digital receipt is generated and emailed to your billing address.
-                  </p>
-                </div>
+            {/* FAQ */}
+            <div style={{ marginTop: '2rem', background: '#ffffff', borderRadius: '20px', border: '1.5px solid #eaeaea', padding: '1.5rem', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#111', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+                ❓ Frequently Asked Questions
               </div>
+              {[
+                { q: 'Are all international cards accepted?', a: 'Yes — Visa, Mastercard, AMEX, Discover, Apple Pay, and Google Pay are all accepted globally.' },
+                { q: 'Will I receive an official invoice?', a: 'Yes! A branded PDF receipt is generated instantly and emailed to your billing address upon payment confirmation.' },
+                { q: 'How long does verification take?', a: 'Card payments are instant. Wise wire transfers are typically verified within 24 business hours.' },
+              ].map((item, i) => (
+                <details key={i} style={{ borderTop: '1px solid #f0f0f0', paddingTop: '0.8rem', marginTop: '0.8rem' }}>
+                  <summary style={{ cursor: 'pointer', fontSize: '0.83rem', fontWeight: 700, color: '#222', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {item.q}
+                    <ChevronDown size={14} color="#999" />
+                  </summary>
+                  <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.5rem', lineHeight: 1.6, marginBottom: 0 }}>{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </motion.div>
 
-            </motion.div>
-          </div>
+          {/* ────── RIGHT COLUMN: FORM ────── */}
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25, duration: 0.55 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', marginBottom: '1.2rem' }}>
+              <div style={{ width: '28px', height: '28px', background: '#111', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.82rem', fontWeight: 900, color: '#fff', flexShrink: 0 }}>2</div>
+              <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#111', letterSpacing: '-0.02em' }}>Confirm Payment Details</span>
+            </div>
 
-          {/* Right Column: Payment Proof & Confirmation Form */}
-          <div className="payment-form-wrapper">
             <AnimatePresence mode="wait">
               {!submitted ? (
                 <motion.form
                   key="form"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 0.97 }}
                   onSubmit={handleSubmit}
-                  className="payment-form"
-                  style={{ background: '#ffffff', border: '1.5px solid var(--border)', borderRadius: '20px', padding: '2rem', boxShadow: '0 12px 36px rgba(0,0,0,0.06)' }}
+                  style={{ background: '#ffffff', borderRadius: '20px', border: '1.5px solid #eaeaea', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}
                 >
-                  <h2 style={{ marginBottom: '0.4rem', fontSize: '1.5rem', fontWeight: 800 }}>
-                    2. Confirm & Submit Details
-                  </h2>
-                  <p style={{ fontSize: '0.83rem', color: '#777', marginBottom: '1.5rem' }}>
-                    Enter your transaction details below for instant confirmation & invoice generation.
-                  </p>
+                  <div style={{ height: '4px', background: 'linear-gradient(90deg, #111, #333, #555)' }} />
+                  <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
 
-                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
-                    <label className="luxury-label" htmlFor="fullName">Full Name *</label>
-                    <input
-                      id="fullName"
-                      type="text"
-                      required
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      placeholder="e.g. John Smith"
-                      className="admin-input"
-                    />
-                  </div>
+                    <p style={{ fontSize: '0.8rem', color: '#888', margin: 0, lineHeight: 1.6 }}>
+                      Enter your transaction details for instant confirmation & receipt generation.
+                    </p>
 
-                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
-                    <label className="luxury-label" htmlFor="email">Email Address *</label>
-                    <input
-                      id="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="e.g. john@company.com"
-                      className="admin-input"
-                    />
-                  </div>
+                    {/* Two column fields */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+                      <FormField label="Full Name *" id="fullName" placeholder="John Smith"
+                        value={formData.fullName} onChange={v => setFormData(p => ({ ...p, fullName: v }))} />
+                      <FormField label="Email *" id="email" type="email" placeholder="john@company.com"
+                        value={formData.email} onChange={v => setFormData(p => ({ ...p, email: v }))} />
+                    </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.1rem' }}>
-                    <div className="form-group">
-                      <label className="luxury-label" htmlFor="selectedService">Service / Package *</label>
-                      <input
-                        id="selectedService"
-                        type="text"
-                        required
-                        value={formData.selectedService}
-                        onChange={(e) => setFormData({ ...formData, selectedService: e.target.value })}
-                        placeholder="e.g. Website Design"
-                        className="admin-input"
+                    <FormField label="Service / Package *" id="service" placeholder="e.g. Brand Identity Design"
+                      value={formData.selectedService} onChange={v => setFormData(p => ({ ...p, selectedService: v }))} />
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.8rem' }}>
+                      <FormField label={`Amount (${formData.currency}) *`} id="amount" type="number" placeholder="e.g. 499"
+                        value={formData.paidAmount} onChange={handleAmountChange}
+                        error={amountMismatch ? `Expected: $${expectedAmount}` : ''} />
+                      {/* Currency select */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#555', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                          Currency
+                        </label>
+                        <select
+                          value={formData.currency}
+                          onChange={e => setFormData(p => ({ ...p, currency: e.target.value }))}
+                          style={{
+                            width: '100%', padding: '0.75rem 0.9rem', borderRadius: '12px',
+                            border: '1.5px solid #e5e7eb', background: '#fafafa',
+                            fontSize: '0.88rem', fontWeight: 700, color: '#111',
+                            cursor: 'pointer', outline: 'none'
+                          }}
+                        >
+                          <option value="USD">🇺🇸 USD</option>
+                          <option value="EUR">🇪🇺 EUR</option>
+                          <option value="GBP">🇬🇧 GBP</option>
+                          <option value="CAD">🇨🇦 CAD</option>
+                          <option value="AUD">🇦🇺 AUD</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <FormField label="Transaction ID / Wire Reference *" id="txn" placeholder="e.g. LS-98124 or Wise Ref #CBD891"
+                      value={formData.transactionId} onChange={v => setFormData(p => ({ ...p, transactionId: v }))} />
+
+                    {/* File upload zone */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#555', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        Upload Receipt / Screenshot (Optional)
+                      </label>
+                      <label htmlFor="proofFile" style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        gap: '0.5rem', padding: '1.5rem', borderRadius: '14px',
+                        border: `2px dashed ${filePreview ? '#4caf50' : '#ddd'}`,
+                        background: filePreview ? 'rgba(76,175,80,0.05)' : '#fafafa',
+                        cursor: 'pointer', transition: 'all 0.2s ease'
+                      }}>
+                        {filePreview ? (
+                          <img src={filePreview} alt="Preview" style={{ maxHeight: '80px', maxWidth: '100%', objectFit: 'contain', borderRadius: '8px' }} />
+                        ) : (
+                          <>
+                            <Upload size={22} color="#bbb" />
+                            <div style={{ fontSize: '0.78rem', color: '#888', textAlign: 'center' }}>
+                              <strong style={{ color: '#555' }}>Click to upload</strong> or drag & drop<br />
+                              PNG, JPG, WEBP, PDF · Max 5MB
+                            </div>
+                          </>
+                        )}
+                        <input id="proofFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={handleFileChange} style={{ display: 'none' }} />
+                      </label>
+                    </div>
+
+                    {/* Optional note */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#555', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        Message / Note (Optional)
+                      </label>
+                      <textarea
+                        rows={2}
+                        placeholder="Any additional notes for the team..."
+                        value={formData.message}
+                        onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
+                        style={{
+                          width: '100%', padding: '0.75rem 0.9rem', borderRadius: '12px',
+                          border: '1.5px solid #e5e7eb', background: '#fafafa',
+                          fontSize: '0.88rem', color: '#111', resize: 'none',
+                          fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box'
+                        }}
                       />
                     </div>
-                    <div className="form-group">
-                      <label className="luxury-label" htmlFor="paidAmount">Amount ({formData.currency}) *</label>
-                      <input
-                        id="paidAmount"
-                        type="number"
-                        step="any"
-                        required
-                        value={formData.paidAmount}
-                        onChange={(e) => handleAmountChange(e.target.value)}
-                        placeholder="e.g. 500"
-                        className="admin-input"
-                      />
-                    </div>
+
+                    {/* Submit CTA */}
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      style={{
+                        width: '100%', padding: '1rem 1.5rem',
+                        background: loading ? '#ccc' : 'linear-gradient(135deg, #111 0%, #333 100%)',
+                        color: '#ffffff', fontSize: '0.95rem', fontWeight: 800,
+                        borderRadius: '14px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                        boxShadow: loading ? 'none' : '0 8px 24px rgba(0,0,0,0.2)',
+                        transition: 'all 0.22s ease', letterSpacing: '-0.01em',
+                        marginTop: '0.25rem'
+                      }}
+                    >
+                      {loading ? (
+                        <><Loader2 size={17} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</>
+                      ) : (
+                        <><span>Submit Payment Details</span><ArrowRight size={17} /></>
+                      )}
+                    </button>
+
+                    <p style={{ textAlign: 'center', fontSize: '0.71rem', color: '#c0c0c0', margin: 0, lineHeight: 1.5 }}>
+                      🔒 Your payment details are protected. By submitting you agree to CreatifyBD's&nbsp;
+                      <Link to="/terms" style={{ color: '#999' }}>Terms of Service</Link>.
+                    </p>
                   </div>
-
-                  <div className="form-group" style={{ marginBottom: '1.1rem' }}>
-                    <label className="luxury-label" htmlFor="transactionId">Transaction ID / Wire Reference *</label>
-                    <input
-                      id="transactionId"
-                      type="text"
-                      required
-                      value={formData.transactionId}
-                      onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
-                      placeholder="e.g. LS-98124 or Wise Ref #CBD891"
-                      className="admin-input"
-                    />
-                  </div>
-
-                  <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                    <label className="luxury-label" htmlFor="proofFile">Upload Receipt / Screenshot (Optional)</label>
-                    <input
-                      id="proofFile"
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp,application/pdf"
-                      onChange={handleFileChange}
-                      className="admin-input"
-                      style={{ padding: '0.6rem' }}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn-red"
-                    style={{
-                      width: '100%',
-                      padding: '1.1rem',
-                      borderRadius: '14px',
-                      fontSize: '1rem',
-                      fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 size={18} className="spin" />
-                        <span>Processing Confirmation...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Submit Payment Details</span>
-                        <ArrowRight size={18} />
-                      </>
-                    )}
-                  </button>
-
-                  <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#999', marginTop: '1rem' }}>
-                    🔒 Guaranteed secure processing. Your payment details are protected under CreatifyBD Client Agreement.
-                  </p>
                 </motion.form>
               ) : (
-                /* Success Confirmation State */
+                /* ── SUCCESS STATE ── */
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  style={{
-                    background: '#ffffff',
-                    border: '2px solid #4caf50',
-                    borderRadius: '24px',
-                    padding: '2.5rem 2rem',
-                    textAlign: 'center',
-                    boxShadow: '0 16px 40px rgba(76,175,80,0.12)'
-                  }}
+                  initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}
+                  style={{ background: '#ffffff', borderRadius: '24px', border: '2px solid #4caf50', overflow: 'hidden', boxShadow: '0 20px 60px rgba(76,175,80,0.15)' }}
                 >
-                  <div style={{ width: '64px', height: '64px', background: 'rgba(76,175,80,0.12)', color: '#4caf50', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                    <CheckCircle2 size={36} />
-                  </div>
-                  <h2 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '0 0 0.5rem', color: '#111' }}>
-                    Payment Submitted!
-                  </h2>
-                  <p style={{ color: '#666', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-                    Thank you! Your payment details have been received. An order confirmation & receipt has been logged.
-                  </p>
+                  <div style={{ height: '5px', background: 'linear-gradient(90deg, #4caf50, #66bb6a, #81c784)' }} />
+                  <div style={{ padding: '2.5rem 2rem', textAlign: 'center' }}>
+                    <motion.div
+                      initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300, delay: 0.1 }}
+                      style={{ width: '72px', height: '72px', background: 'rgba(76,175,80,0.12)', color: '#4caf50', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}
+                    >
+                      <CheckCircle2 size={40} />
+                    </motion.div>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111', margin: '0 0 0.5rem', letterSpacing: '-0.03em' }}>
+                      Payment Submitted!
+                    </h2>
+                    <p style={{ color: '#666', fontSize: '0.9rem', lineHeight: 1.7, marginBottom: '1.75rem' }}>
+                      Thank you, {formData.fullName}! Your payment details are confirmed. Our team will verify and send your official receipt within 24 hours.
+                    </p>
 
-                  <div style={{ background: '#fafafa', borderRadius: '16px', padding: '1.2rem', textAlign: 'left', marginBottom: '2rem', border: '1px solid #eee' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                      <span style={{ color: '#888' }}>Service:</span>
-                      <strong style={{ color: '#111' }}>{formData.selectedService}</strong>
+                    <div style={{ background: '#f9fafb', borderRadius: '16px', padding: '1.2rem', textAlign: 'left', marginBottom: '2rem', border: '1px solid #eee' }}>
+                      <SummaryRow label="Service" value={formData.selectedService} />
+                      <SummaryRow label="Amount" value={`$${formData.paidAmount} ${formData.currency}`} highlight />
+                      <SummaryRow label="Transaction Ref" value={formData.transactionId} />
+                      <SummaryRow label="Billing Email" value={formData.email} />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                      <span style={{ color: '#888' }}>Amount:</span>
-                      <strong style={{ color: 'var(--red)' }}>${formData.paidAmount} {formData.currency}</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                      <span style={{ color: '#888' }}>Transaction Ref:</span>
-                      <strong style={{ color: '#111' }}>{formData.transactionId}</strong>
-                    </div>
-                  </div>
 
-                  <Link to="/" className="btn-red" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.9rem 2rem', borderRadius: '12px', textDecoration: 'none', fontWeight: 700 }}>
-                    Return to Homepage →
-                  </Link>
+                    <Link
+                      to="/"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.9rem 2rem', background: `linear-gradient(135deg, ${RED}, #c51225)`,
+                        color: '#fff', borderRadius: '12px', textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem',
+                        boxShadow: `0 8px 24px rgba(232,25,44,0.3)`
+                      }}
+                    >
+                      Return to Homepage <ArrowRight size={16} />
+                    </Link>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .payment-two-col { grid-template-columns: 1fr !important; }
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        details summary::-webkit-details-marker { display: none; }
+      `}</style>
 
       <Footer />
     </div>
   );
 };
 
-const DetailRow = ({ label, value, onCopy, copied }) => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid #eeeeee' }}>
-    <span style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600 }}>{label}</span>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      <span style={{ fontSize: '0.88rem', color: '#111', fontWeight: 700, fontFamily: 'monospace' }}>{value}</span>
-      {onCopy && (
+/* ── Reusable sub-components ── */
+
+const FormField = ({ label, id, type = 'text', placeholder, value, onChange, error }) => (
+  <div>
+    <label htmlFor={id} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#555', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+      {label}
+    </label>
+    <input
+      id={id}
+      type={type}
+      required={label.includes('*')}
+      placeholder={placeholder}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      style={{
+        width: '100%', padding: '0.75rem 0.9rem', borderRadius: '12px',
+        border: `1.5px solid ${error ? '#ef4444' : '#e5e7eb'}`,
+        background: '#fafafa', fontSize: '0.88rem', color: '#111', outline: 'none',
+        fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s'
+      }}
+    />
+    {error && <p style={{ margin: '0.25rem 0 0', fontSize: '0.72rem', color: '#ef4444', fontWeight: 600 }}>{error}</p>}
+  </div>
+);
+
+const BankDetailRow = ({ k, label, value, copied, onCopy, highlight }) => (
+  <div style={{
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    padding: '0.55rem 0', borderBottom: '1px solid #edf0f5', gap: '1rem'
+  }}>
+    <span style={{ fontSize: '0.77rem', color: '#888', fontWeight: 600, flexShrink: 0 }}>{label}</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0 }}>
+      <span style={{
+        fontSize: '0.82rem', color: '#111', fontWeight: highlight ? 800 : 600,
+        fontFamily: highlight ? 'monospace' : 'inherit', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+      }}>
+        {value || '—'}
+      </span>
+      {value && (
         <button
           type="button"
-          onClick={onCopy}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: copied ? '#2e7d32' : '#888', padding: '4px' }}
-          aria-label={`Copy ${label}`}
+          onClick={() => onCopy(value, k)}
+          style={{
+            background: copied === k ? 'rgba(76,175,80,0.12)' : 'rgba(0,0,0,0.05)',
+            border: 'none', borderRadius: '6px', padding: '3px 6px',
+            cursor: 'pointer', color: copied === k ? '#2e7d32' : '#888',
+            display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'all 0.2s'
+          }}
         >
-          {copied ? <Check size={14} /> : <Copy size={14} />}
+          {copied === k ? <Check size={12} /> : <Copy size={12} />}
         </button>
       )}
     </div>
+  </div>
+);
+
+const SummaryRow = ({ label, value, highlight }) => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0', borderBottom: '1px solid #f0f0f0' }}>
+    <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 600 }}>{label}</span>
+    <span style={{ fontSize: '0.88rem', fontWeight: highlight ? 900 : 700, color: highlight ? RED : '#111' }}>{value}</span>
   </div>
 );
 
