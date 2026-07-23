@@ -101,14 +101,81 @@ const PaymentPage = () => {
     setAmountMismatch(expectedAmount !== null && val && parseFloat(val) !== expectedAmount);
   };
 
-  const handleLemonSqueezyCheckout = () => {
-    const url = lemonSqueezy.checkoutUrl || 'https://lemonsqueezy.com';
-    if (window.LemonSqueezy?.Url) window.LemonSqueezy.Url.Open(url);
-    else window.open(url, '_blank', 'noopener,noreferrer');
+  const handleLemonSqueezyCheckout = async () => {
+    if (!lemonSqueezy.apiKey || !lemonSqueezy.storeId) {
+      toast.error('Lemon Squeezy not configured properly');
+      return;
+    }
+
+    setLoading(true);
+    const toastId = toast.loading('Creating secure checkout...');
+
+    try {
+      // Create custom checkout with dynamic amount
+      const checkoutData = {
+        data: {
+          type: 'checkouts',
+          attributes: {
+            custom_price: {
+              enabled: true,
+              price: parseFloat(formData.paidAmount) * 100, // Convert to cents
+            },
+            product_options: {
+              description: `${formData.selectedService} - Order: ${publicOrderId || 'Custom'}`,
+              receipt_button_url: window.location.origin,
+              redirect_url: `${window.location.origin}/payment/success?order=${publicOrderId || 'custom'}`,
+            },
+            checkout_options: {
+              button_color: '#E8192C',
+            },
+          },
+          relationships: {
+            store: {
+              data: {
+                type: 'stores',
+                id: lemonSqueezy.storeId,
+              },
+            },
+          },
+        },
+      };
+
+      const response = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+          'Authorization': `Bearer ${lemonSqueezy.apiKey}`,
+        },
+        body: JSON.stringify(checkoutData),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        throw new Error(result.errors[0].detail || 'Failed to create checkout');
+      }
+
+      const checkoutUrl = result.data.attributes.url;
+      window.open(checkoutUrl, '_blank', 'noopener,noreferrer');
+      toast.success('Checkout opened!', { id: toastId });
+    } catch (error) {
+      console.error('Lemon Squeezy checkout error:', error);
+      toast.error('Failed to create checkout. Please try again.', { id: toastId });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // If Lemon Squeezy is selected, handle checkout differently
+    if (formData.paymentMethod === 'lemonsqueezy') {
+      await handleLemonSqueezyCheckout();
+      return;
+    }
+
     const required = ['fullName', 'email', 'selectedService', 'paymentMethod', 'paidAmount', 'transactionId'];
     for (const f of required) {
       if (!formData[f]) { toast.error('Please fill in all required fields'); return; }
@@ -272,7 +339,7 @@ const PaymentPage = () => {
             {/* Tab Switcher */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
               {[
-                { key: 'card', icon: <CreditCard size={20} />, label: 'Card & Wallets', sub: 'Visa · Mastercard · Apple Pay', method: 'credit_card' },
+                { key: 'card', icon: <CreditCard size={20} />, label: 'Card & Wallets', sub: 'Visa · Mastercard · Apple Pay', method: 'lemonsqueezy' },
                 { key: 'wise', icon: <Globe size={20} />, label: 'Wise Wire Transfer', sub: 'USD · EUR · GBP', method: 'wise_bank' },
               ].map(tab => (
                 <button

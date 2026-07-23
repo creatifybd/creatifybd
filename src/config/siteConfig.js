@@ -31,7 +31,7 @@ export const siteConfig = {
   // is only the fallback shown before Firestore data loads.
   lemonSqueezy: {
     storeId: '437558',
-    apiKey: '',
+    apiKey: '', // Add via admin settings for security
     checkoutUrl: 'https://creatifybd.lemonsqueezy.com',
     enabled: true
   },
