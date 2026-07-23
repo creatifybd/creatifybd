@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Key, Plus, Trash2, CheckCircle2, AlertCircle, RefreshCw, Zap, Globe, Sparkles, Copy, ExternalLink } from 'lucide-react';
 import { getStoredKeys, saveKeys, getProviderStatus } from '../../utils/aiRotator';
-import { getHFToken, setHFToken, getIdeogramToken, setIdeogramToken } from '../../utils/imageGenerator';
 
 const PROVIDER_INFO = {
   groq: {
@@ -303,118 +302,6 @@ export default function AIKeysManager() {
             onKeysChange={handleKeysChange}
           />
         ))}
-      </div>
-
-      {/* ─── Image Generation Providers ─────────────────────────────────── */}
-      <div style={{ marginTop: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <div style={{ background: '#7C3AED', padding: '0.4rem', borderRadius: '8px', color: '#fff' }}>
-            <span style={{ fontSize: '1rem' }}>🎨</span>
-          </div>
-          <div>
-            <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#0F172A' }}>Image Generation Keys</h2>
-            <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>Generate client mockups directly inside the Lead CRM dashboard</p>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-          {/* HuggingFace FLUX.1 */}
-          <div style={{ background: '#FAF5FF', border: '1px solid #D8B4FE', borderRadius: '14px', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.6rem' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                  <span style={{ fontSize: '1.1rem' }}>⚡</span>
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0F172A' }}>HuggingFace FLUX.1</h3>
-                  <span style={{ background: '#7C3AED', color: '#fff', fontSize: '0.65rem', fontWeight: '700', padding: '2px 6px', borderRadius: '20px' }}>RECOMMENDED</span>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>FLUX.1-schnell — Top quality, completely free · Works without token (slower queue)</p>
-              </div>
-              {hfToken && <span style={{ background: '#D1FAE5', color: '#065F46', fontSize: '0.7rem', fontWeight: '700', padding: '3px 8px', borderRadius: '20px' }}>✅ Active</span>}
-            </div>
-
-            {hfToken && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.5rem 0.75rem', marginBottom: '0.5rem', fontSize: '0.82rem', fontFamily: 'monospace' }}>
-                <CheckCircle2 size={14} color="#22C55E" />
-                <span style={{ flex: 1, color: '#334155' }}>{hfToken.slice(0, 6)}••••••••{hfToken.slice(-4)}</span>
-                <button onClick={() => { setHFToken(''); setHfTokenState(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EF4444' }}><Trash2 size={13} /></button>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <input
-                value={hfInput}
-                onChange={e => setHfInput(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && hfInput.trim()) { setHFToken(hfInput.trim()); setHfTokenState(hfInput.trim()); setHfInput(''); setImgSaved('hf'); setTimeout(() => setImgSaved(''), 2000); } }}
-                placeholder="Paste HuggingFace token (starts with hf_...)"
-                style={{ flex: 1, padding: '0.5rem 0.75rem', border: '1px solid #D8B4FE', borderRadius: '8px', fontSize: '0.8rem', fontFamily: 'monospace', background: '#fff', outline: 'none', color: '#1E293B' }}
-              />
-              <button
-                onClick={() => { if (hfInput.trim()) { setHFToken(hfInput.trim()); setHfTokenState(hfInput.trim()); setHfInput(''); setImgSaved('hf'); setTimeout(() => setImgSaved(''), 2000); } }}
-                style={{ background: '#7C3AED', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.5rem 0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.82rem', fontWeight: '700' }}
-              >
-                {imgSaved === 'hf' ? <><CheckCircle2 size={14} /> Saved!</> : <><Plus size={14} /> Save</>}
-              </button>
-            </div>
-            <details style={{ marginTop: '0.5rem' }}>
-              <summary style={{ cursor: 'pointer', color: '#7C3AED', fontSize: '0.78rem', fontWeight: '600' }}>▼ How to get a free HuggingFace token</summary>
-              <ol style={{ margin: '0.5rem 0 0', paddingLeft: '1.2rem', fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <li>Go to <a href="https://huggingface.co" target="_blank" rel="noopener noreferrer" style={{ color: '#7C3AED', fontWeight: '700' }}>huggingface.co</a> → Sign up free (no credit card)</li>
-                <li>Click your profile icon → Settings → Access Tokens</li>
-                <li>Click "New token" → Name it anything → Role: Read → Create</li>
-                <li>Copy the token (starts with hf_...) → Paste above</li>
-              </ol>
-            </details>
-          </div>
-
-          {/* Ideogram v2 */}
-          <div style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '14px', padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.6rem' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                  <span style={{ fontSize: '1.1rem' }}>🖼️</span>
-                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#0F172A' }}>Ideogram v2</h3>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>Ideogram.ai API — Excellent for text in images, logos, banners · Free tier available</p>
-              </div>
-              {ideogramToken && <span style={{ background: '#D1FAE5', color: '#065F46', fontSize: '0.7rem', fontWeight: '700', padding: '3px 8px', borderRadius: '20px' }}>✅ Active</span>}
-            </div>
-
-            {ideogramToken && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.5rem 0.75rem', marginBottom: '0.5rem', fontSize: '0.82rem', fontFamily: 'monospace' }}>
-                <CheckCircle2 size={14} color="#22C55E" />
-                <span style={{ flex: 1, color: '#334155' }}>{ideogramToken.slice(0, 6)}••••••••{ideogramToken.slice(-4)}</span>
-                <button onClick={() => { setIdeogramToken(''); setIdeogramTokenState(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EF4444' }}><Trash2 size={13} /></button>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <input
-                value={ideogramInput}
-                onChange={e => setIdeogramInput(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && ideogramInput.trim()) { setIdeogramToken(ideogramInput.trim()); setIdeogramTokenState(ideogramInput.trim()); setIdeogramInput(''); setImgSaved('ideogram'); setTimeout(() => setImgSaved(''), 2000); } }}
-                placeholder="Paste Ideogram API key..."
-                style={{ flex: 1, padding: '0.5rem 0.75rem', border: '1px solid #FDE68A', borderRadius: '8px', fontSize: '0.8rem', fontFamily: 'monospace', background: '#fff', outline: 'none', color: '#1E293B' }}
-              />
-              <button
-                onClick={() => { if (ideogramInput.trim()) { setIdeogramToken(ideogramInput.trim()); setIdeogramTokenState(ideogramInput.trim()); setIdeogramInput(''); setImgSaved('ideogram'); setTimeout(() => setImgSaved(''), 2000); } }}
-                style={{ background: '#D97706', color: '#fff', border: 'none', borderRadius: '8px', padding: '0.5rem 0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.82rem', fontWeight: '700' }}
-              >
-                {imgSaved === 'ideogram' ? <><CheckCircle2 size={14} /> Saved!</> : <><Plus size={14} /> Save</>}
-              </button>
-            </div>
-            <details style={{ marginTop: '0.5rem' }}>
-              <summary style={{ cursor: 'pointer', color: '#D97706', fontSize: '0.78rem', fontWeight: '600' }}>▼ How to get a free Ideogram API key</summary>
-              <ol style={{ margin: '0.5rem 0 0', paddingLeft: '1.2rem', fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <li>Go to <a href="https://ideogram.ai/manage-api" target="_blank" rel="noopener noreferrer" style={{ color: '#D97706', fontWeight: '700' }}>ideogram.ai/manage-api</a></li>
-                <li>Sign up or log in (free Google login works)</li>
-                <li>Click "Create API Key" → Copy it</li>
-                <li>Paste above → Save</li>
-              </ol>
-            </details>
-          </div>
-
-        </div>
       </div>
 
       {/* Bottom note */}

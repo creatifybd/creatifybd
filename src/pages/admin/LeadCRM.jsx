@@ -3,12 +3,18 @@ import {
   Users, Search, Filter, Globe, Phone, Mail, ExternalLink, 
   Sparkles, MessageCircle, Send, CheckCircle2, Clock, 
   Building2, MapPin, RefreshCw, ChevronLeft, ChevronRight,
-  AlertCircle, Copy, FileText, Check, ShieldAlert, Award, Key, Zap
+  AlertCircle, Copy, FileText, Check, ShieldAlert, Award, Key, Zap,
+  Upload, Image, Trash2, Clipboard, Save, MessageSquare, StickyNote, Edit3
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { analyzeLeadBusiness } from '../../utils/aiRotator';
-import { generateImage, getHFToken, getIdeogramToken } from '../../utils/imageGenerator';
+import { 
+  saveLeadRecordToFirestore, 
+  fetchAllLeadRecordsFromFirestore, 
+  updateLeadStatusAndRemarksInFirestore 
+} from '../../firebase/leadCrmService';
+import { uploadConceptImage, readImageFromClipboard } from '../../utils/imageGenerator';
 
 const STATUS_OPTIONS = [
   { id: 'New', label: 'New Lead', color: '#64748B', bg: '#F1F5F9' },
@@ -29,7 +35,7 @@ const LeadCRM = () => {
   const [loadedChunkCount, setLoadedChunkCount] = useState(0);
   const [error, setError] = useState('');
   
-  // Local storage lead status & audits tracker
+  // Persistent Stores (Synced with Firestore)
   const [leadStatuses, setLeadStatuses] = useState(() => {
     try {
       const saved = localStorage.getItem('creatify_lead_statuses');
@@ -48,6 +54,12 @@ const LeadCRM = () => {
     }
   });
 
+  const [leadRemarks, setLeadRemarks] = useState({});
+  const [leadSavedImages, setLeadSavedImages] = useState({});
+
+  // Image Uploading / Pasting States
+  const [isUploadingImage, setIsUploadingImage] = useState({});
+
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('all');
@@ -56,7 +68,7 @@ const LeadCRM = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Active AI Modal
+  // Active AI Modal State
   const [activeLead, setActiveLead] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [activeKeyNum, setActiveKeyNum] = useState(1);
@@ -68,14 +80,11 @@ const LeadCRM = () => {
   const [editedWhatsapp, setEditedWhatsapp] = useState('');
   const [editedEmailSubject, setEditedEmailSubject] = useState('');
   const [editedEmailBody, setEditedEmailBody] = useState('');
+  const [activeRemarks, setActiveRemarks] = useState('');
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPromptIndex, setCopiedPromptIndex] = useState(null);
   const [isScraping, setIsScraping] = useState(false);
-
-  // In-dashboard image generation state — key: `${leadId}_${promptIdx}`
-  const [generatedImages, setGeneratedImages] = useState({});
-  const [generatingImages, setGeneratingImages] = useState({});
 
   // Autonomous Batch Queue Engine State
   const [batchRunning, setBatchRunning] = useState(false);
@@ -85,25 +94,53 @@ const LeadCRM = () => {
   const [batchStepMsg, setBatchStepMsg] = useState('');
   const [batchStopRequested, setBatchStopRequested] = useState(false);
 
-  // Save statuses to localStorage
+  // Sync from Firestore on Mount (Cross-browser / Cross-device persistence)
+  useEffect(() => {
+    const syncFirestore = async () => {
+      const dbRecords = await fetchAllLeadRecordsFromFirestore();
+      if (dbRecords && Object.keys(dbRecords).length > 0) {
+        setLeadAudits(prev => {
+          const merged = { ...prev };
+          Object.values(dbRecords).forEach(r => { if (r.audit) merged[r.leadId || r.id] = r.audit; });
+          return merged;
+        });
+
+        setLeadStatuses(prev => {
+          const merged = { ...prev };
+          Object.values(dbRecords).forEach(r => { if (r.status) merged[r.leadId || r.id] = r.status; });
+          return merged;
+        });
+
+        setLeadRemarks(prev => {
+          const merged = { ...prev };
+          Object.values(dbRecords).forEach(r => { if (r.remarks) merged[r.leadId || r.id] = r.remarks; });
+          return merged;
+        });
+
+        setLeadSavedImages(prev => {
+          const merged = { ...prev };
+          Object.values(dbRecords).forEach(r => { if (r.savedImages) merged[r.leadId || r.id] = r.savedImages; });
+          return merged;
+        });
+      }
+    };
+    syncFirestore();
+  }, []);
+
+  // LocalStorage Fallback Backup
   useEffect(() => {
     try {
       localStorage.setItem('creatify_lead_statuses', JSON.stringify(leadStatuses));
-    } catch (e) {
-      console.error('Failed to save statuses to localStorage', e);
-    }
+    } catch (e) { console.error('Failed to save leadStatuses locally', e); }
   }, [leadStatuses]);
 
-  // Save audits to localStorage
   useEffect(() => {
     try {
       localStorage.setItem('creatify_lead_audits', JSON.stringify(leadAudits));
-    } catch (e) {
-      console.error('Failed to save audits to localStorage', e);
-    }
+    } catch (e) { console.error('Failed to save leadAudits locally', e); }
   }, [leadAudits]);
 
-  // Progressive Chunk Loading (Instant first chunk, then append background chunks, with NaN sanitizer)
+  // Progressive Lead Dataset Loading
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -119,7 +156,7 @@ const LeadCRM = () => {
             chunksToFetch = manifest.chunks;
           }
         }
-      } catch (e) {
+      } catch {
         console.warn('Manifest fetch skipped, using default chunks');
       }
 
@@ -133,7 +170,6 @@ const LeadCRM = () => {
           const res = await fetch(`/data/${chunkFile}` + cacheBuster);
           if (res.ok) {
             const rawText = await res.text();
-            // Bulletproof: Replace any invalid float NaN values with empty string
             const sanitizedText = rawText.replace(/:\s*NaN\b/g, ':""');
             const data = JSON.parse(sanitizedText);
             
@@ -142,7 +178,7 @@ const LeadCRM = () => {
               setLeads([...allAccumulated]);
               successCount++;
               setLoadedChunkCount(successCount);
-              if (i === 0) setLoading(false); // First chunk ready! Hide main spinner
+              if (i === 0) setLoading(false);
             }
           }
         } catch (err) {
@@ -161,7 +197,6 @@ const LeadCRM = () => {
     };
 
     loadDataset();
-
     return () => { isMounted = false; };
   }, []);
 
@@ -185,21 +220,14 @@ const LeadCRM = () => {
     return leads.filter(item => {
       const currentStatus = leadStatuses[item.id] || 'New';
 
-      // Status filter
       if (statusFilter !== 'all' && currentStatus !== statusFilter) return false;
-
-      // Country filter
       if (selectedCountry !== 'all' && item.country !== selectedCountry) return false;
-
-      // Type filter
       if (selectedType !== 'all' && item.type !== selectedType) return false;
 
-      // Contact filter
       if (contactFilter === 'whatsapp' && !item.whatsapp_url && !item.phone_e164) return false;
       if (contactFilter === 'email' && !item.email) return false;
       if (contactFilter === 'website' && !item.website) return false;
 
-      // Search term
       if (searchTerm.trim()) {
         const q = searchTerm.toLowerCase();
         const matchName = (item.business_name || '').toLowerCase().includes(q);
@@ -228,14 +256,71 @@ const LeadCRM = () => {
     setCurrentPage(1);
   };
 
-  const updateLeadStatus = (leadId, newStatus) => {
+  // Status & Remarks Handlers (Save to Firestore instantly)
+  const updateLeadStatus = async (leadId, newStatus) => {
     setLeadStatuses(prev => ({ ...prev, [leadId]: newStatus }));
+    const lead = leads.find(l => l.id === leadId) || { id: leadId };
+    await updateLeadStatusAndRemarksInFirestore(lead, { status: newStatus });
+  };
+
+  const updateLeadRemarks = async (leadId, newRemarks) => {
+    setLeadRemarks(prev => ({ ...prev, [leadId]: newRemarks }));
+    const lead = leads.find(l => l.id === leadId) || { id: leadId };
+    await updateLeadStatusAndRemarksInFirestore(lead, { remarks: newRemarks });
+  };
+
+  // Concept Image Upload & Clipboard Paste Handler
+  const handleSaveConceptImage = async (lead, conceptIdx, fileOrBlobOrUrl) => {
+    if (!lead) return;
+    const imgKey = `${lead.id}_${conceptIdx}`;
+    setIsUploadingImage(prev => ({ ...prev, [imgKey]: true }));
+
+    try {
+      let imageUrl = '';
+      if (typeof fileOrBlobOrUrl === 'string') {
+        imageUrl = fileOrBlobOrUrl;
+      } else {
+        imageUrl = await uploadConceptImage(fileOrBlobOrUrl);
+      }
+
+      const existingForLead = leadSavedImages[lead.id] || {};
+      const updatedImages = { ...existingForLead, [conceptIdx]: imageUrl };
+
+      setLeadSavedImages(prev => ({ ...prev, [lead.id]: updatedImages }));
+
+      await updateLeadStatusAndRemarksInFirestore(lead, { savedImages: updatedImages });
+    } catch (err) {
+      console.error('Failed to upload concept image:', err);
+      alert('Could not upload image: ' + (err.message || err));
+    } finally {
+      setIsUploadingImage(prev => ({ ...prev, [imgKey]: false }));
+    }
+  };
+
+  const handlePasteClipboardImage = async (lead, conceptIdx) => {
+    try {
+      const blob = await readImageFromClipboard();
+      await handleSaveConceptImage(lead, conceptIdx, blob);
+    } catch (err) {
+      alert(err.message || 'Clipboard paste failed. Copy an image first.');
+    }
+  };
+
+  const handleRemoveConceptImage = async (lead, conceptIdx) => {
+    if (!lead) return;
+    const existing = { ...(leadSavedImages[lead.id] || {}) };
+    delete existing[conceptIdx];
+    setLeadSavedImages(prev => ({ ...prev, [lead.id]: existing }));
+    await updateLeadStatusAndRemarksInFirestore(lead, { savedImages: existing });
   };
 
   // Open AI Study Modal
   const openStudyModal = (lead) => {
     setActiveLead(lead);
     const existingAudit = leadAudits[lead.id];
+    const existingRemarks = leadRemarks[lead.id] || '';
+    setActiveRemarks(existingRemarks);
+
     if (existingAudit) {
       setAiResult(existingAudit);
       setEditedWhatsapp(existingAudit.whatsappMessage || '');
@@ -256,15 +341,13 @@ const LeadCRM = () => {
     setIsScraping(false);
     setAiError('');
     setKeyWaiting(false);
+
     try {
       const res = await analyzeLeadBusiness(activeLead, (prog) => {
         if (prog.status === 'scraping') {
           setIsScraping(true);
           setActiveProvider('Web Scraper');
           setActiveModel('Jina Reader');
-        } else if (prog.status === 'failed') {
-          setIsScraping(false);
-          setKeyWaiting(false);
         } else if (prog.status === 'trying' || prog.status === 'calling') {
           setIsScraping(false);
           setActiveProvider(prog.provider || 'AI');
@@ -273,6 +356,7 @@ const LeadCRM = () => {
           setKeyWaiting(false);
         }
       });
+
       setIsScraping(false);
       setKeyWaiting(false);
       setActiveProvider(res.provider || 'AI');
@@ -283,12 +367,18 @@ const LeadCRM = () => {
       setEditedEmailSubject(res.emailSubject || '');
       setEditedEmailBody(res.emailBody || '');
 
-      // Save audit
       setLeadAudits(prev => ({ ...prev, [activeLead.id]: res }));
-      // Update status to Audited if still New
-      if ((leadStatuses[activeLead.id] || 'New') === 'New') {
-        updateLeadStatus(activeLead.id, 'Audited');
-      }
+      const newStatus = (leadStatuses[activeLead.id] || 'New') === 'New' ? 'Audited' : (leadStatuses[activeLead.id] || 'Audited');
+      setLeadStatuses(prev => ({ ...prev, [activeLead.id]: newStatus }));
+
+      // Save to Firestore globally!
+      await saveLeadRecordToFirestore(
+        activeLead,
+        res,
+        newStatus,
+        activeRemarks || leadRemarks[activeLead.id] || '',
+        leadSavedImages[activeLead.id] || {}
+      );
     } catch (err) {
       console.error('AI Analysis failed:', err);
       setAiError(err.message || 'AI Business Study failed. Please try again.');
@@ -311,6 +401,7 @@ const LeadCRM = () => {
     setBatchCurrentIndex(0);
 
     for (let i = 0; i < targetLeads.length; i++) {
+      if (batchStopRequested) break;
       const lead = targetLeads[i];
       setBatchCurrentIndex(i + 1);
       setBatchCurrentLead(lead);
@@ -321,17 +412,19 @@ const LeadCRM = () => {
           if (prog.status === 'scraping') {
             setBatchStepMsg(`🌐 Live site read! Extracting digital footprint...`);
           } else if (prog.status === 'trying' || prog.status === 'calling') {
-            setBatchStepMsg(`🧠 Groq 70B (${prog.model || 'AI'}) Analyzing & generating 4 Flux Prompts...`);
+            setBatchStepMsg(`🧠 Groq 70B (${prog.model || 'AI'}) Analyzing & generating 4 Prompts...`);
           }
         });
 
         setLeadAudits(prev => ({ ...prev, [lead.id]: res }));
-        if ((leadStatuses[lead.id] || 'New') === 'New') {
-          updateLeadStatus(lead.id, 'Audited');
-        }
+        const newStatus = (leadStatuses[lead.id] || 'New') === 'New' ? 'Audited' : leadStatuses[lead.id];
+        setLeadStatuses(prev => ({ ...prev, [lead.id]: newStatus }));
 
-        setBatchStepMsg(`✅ Audit & Flux Mockup Images complete for ${lead.business_name}!`);
-        await new Promise(r => setTimeout(r, 1200));
+        // Save record to Firestore so other admins see it!
+        await saveLeadRecordToFirestore(lead, res, newStatus, leadRemarks[lead.id] || '', leadSavedImages[lead.id] || {});
+
+        setBatchStepMsg(`✅ Audit complete for ${lead.business_name}!`);
+        await new Promise(r => setTimeout(r, 1000));
       } catch (err) {
         console.error(`Batch audit failed for lead ${lead.id}:`, err);
       }
@@ -403,7 +496,7 @@ const LeadCRM = () => {
                 Lead CRM &amp; AI Outreach Engine
               </h1>
               <p style={{ fontSize: '0.85rem', color: '#64748B', margin: 0 }}>
-                Manage 51,090 international leads &bull; Multi-Key Gemini AI Deep Business Study &bull; WhatsApp &amp; Email Automation
+                Manage 51,090 international leads &bull; Multi-Key Groq / Gemini AI Business Study &bull; ChatGPT DALL-E 3 Mockups &bull; Cloud Persistence
               </p>
             </div>
           </div>
@@ -424,7 +517,7 @@ const LeadCRM = () => {
               cursor: 'pointer'
             }}>
               <Zap size={15} />
-              <span>Configure AI Keys (Groq / OpenRouter)</span>
+              <span>Configure AI Keys (Groq / OpenRouter / Gemini)</span>
             </div>
           </Link>
         </div>
@@ -442,117 +535,102 @@ const LeadCRM = () => {
         <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
           <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Loaded Leads</span>
           <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0F172A', margin: '0.2rem 0 0' }}>{leads.length.toLocaleString()}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#22C55E', fontWeight: '600' }}>100% Validated Leads</span>
+          <span style={{ fontSize: '0.75rem', color: '#22C55E', fontWeight: '600' }}>100% Verified Database</span>
         </div>
 
         <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
           <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Filtered Match</span>
           <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#E8192C', margin: '0.2rem 0 0' }}>{filteredLeads.length.toLocaleString()}</h2>
-          <span style={{ fontSize: '0.75rem', color: '#64748B' }}>Ready for Outreach</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '500' }}>Active View Selection</span>
         </div>
 
         <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>WhatsApp Direct</span>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#16A34A', margin: '0.2rem 0 0' }}>
-            {leads.filter(l => l.whatsapp_url || l.phone_e164).length.toLocaleString()}
-          </h2>
-          <span style={{ fontSize: '0.75rem', color: '#16A34A', fontWeight: '600' }}>88.8% Contactable</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Cloud Audited</span>
+          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#8B5CF6', margin: '0.2rem 0 0' }}>{Object.keys(leadAudits).length.toLocaleString()}</h2>
+          <span style={{ fontSize: '0.75rem', color: '#8B5CF6', fontWeight: '600' }}>Saved in Cloud Firestore</span>
         </div>
 
         <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Email Available</span>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#2563EB', margin: '0.2rem 0 0' }}>
-            {leads.filter(l => l.email).length.toLocaleString()}
-          </h2>
-          <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: '600' }}>46.2% Verified Email</span>
-        </div>
-
-        <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Contacted / Audited</span>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#8B5CF6', margin: '0.2rem 0 0' }}>
-            {Object.keys(leadStatuses).filter(k => leadStatuses[k] !== 'New').length.toLocaleString()}
-          </h2>
-          <span style={{ fontSize: '0.75rem', color: '#8B5CF6', fontWeight: '600' }}>In Pipeline</span>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Saved Mockups</span>
+          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#10B981', margin: '0.2rem 0 0' }}>{Object.keys(leadSavedImages).length.toLocaleString()}</h2>
+          <span style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: '600' }}>ChatGPT Images Saved</span>
         </div>
       </div>
 
-      {/* ── FILTER & SEARCH BAR ── */}
-      <div style={{ 
-        background: '#fff', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.2rem', 
-        marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
-      }}>
-        {/* Search */}
-        <div style={{ position: 'relative', flex: '1 1 260px' }}>
-          <Search size={17} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-          <input
-            type="text"
-            placeholder="Search business name, city, phone, email..."
-            value={searchTerm}
-            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-            style={{
-              width: '100%', padding: '0.65rem 1rem 0.65rem 2.4rem', border: '1px solid #CBD5E1', 
-              borderRadius: '10px', fontSize: '0.88rem', outline: 'none', background: '#F8FAFC'
-            }}
-          />
+      {/* ── FILTERS & SEARCH BAR ── */}
+      <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          
+          {/* Search Box */}
+          <div style={{ gridColumn: 'span 2' }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Search Lead:</label>
+            <div style={{ position: 'relative' }}>
+              <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+              <input
+                type="text"
+                placeholder="Search business name, city, phone, or email..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%', padding: '0.55rem 0.8rem 0.55rem 2.2rem', borderRadius: '10px',
+                  border: '1px solid #CBD5E1', fontSize: '0.85rem', outline: 'none'
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Pipeline Status Filter */}
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Pipeline Status:</label>
+            <select
+              value={statusFilter}
+              onChange={handleFilterChange(setStatusFilter)}
+              style={{ width: '100%', padding: '0.55rem 0.8rem', borderRadius: '10px', border: '1px solid #CBD5E1', fontSize: '0.85rem', outline: 'none', background: '#fff' }}
+            >
+              <option value="all">All Statuses ({leads.length})</option>
+              {STATUS_OPTIONS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+            </select>
+          </div>
+
+          {/* Country Filter */}
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Country:</label>
+            <select
+              value={selectedCountry}
+              onChange={handleFilterChange(setSelectedCountry)}
+              style={{ width: '100%', padding: '0.55rem 0.8rem', borderRadius: '10px', border: '1px solid #CBD5E1', fontSize: '0.85rem', outline: 'none', background: '#fff' }}
+            >
+              <option value="all">All Countries ({countries.length})</option>
+              {countries.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          {/* Niche Type Filter */}
+          <div>
+            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Niche / Category:</label>
+            <select
+              value={selectedType}
+              onChange={handleFilterChange(setSelectedType)}
+              style={{ width: '100%', padding: '0.55rem 0.8rem', borderRadius: '10px', border: '1px solid #CBD5E1', fontSize: '0.85rem', outline: 'none', background: '#fff' }}
+            >
+              <option value="all">All Business Types ({businessTypes.length})</option>
+              {businessTypes.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+
         </div>
 
-        {/* Country Filter */}
-        <select
-          value={selectedCountry}
-          onChange={handleFilterChange(setSelectedCountry)}
-          style={{ padding: '0.65rem 1rem', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.85rem', background: '#fff', outline: 'none', fontWeight: '600' }}
-        >
-          <option value="all">🌐 All Countries</option>
-          {countries.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-
-        {/* Niche / Type Filter */}
-        <select
-          value={selectedType}
-          onChange={handleFilterChange(setSelectedType)}
-          style={{ padding: '0.65rem 1rem', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.85rem', background: '#fff', outline: 'none', fontWeight: '600' }}
-        >
-          <option value="all">🏢 All Niches / Types</option>
-          {businessTypes.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-
-        {/* Contact Channel Filter */}
-        <select
-          value={contactFilter}
-          onChange={handleFilterChange(setContactFilter)}
-          style={{ padding: '0.65rem 1rem', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.85rem', background: '#fff', outline: 'none', fontWeight: '600' }}
-        >
-          <option value="all">📞 All Contact Methods</option>
-          <option value="whatsapp">💬 Has WhatsApp</option>
-          <option value="email">✉️ Has Email</option>
-          <option value="website">🌐 Has Website</option>
-        </select>
-
-        {/* Pipeline Status Filter */}
-        <select
-          value={statusFilter}
-          onChange={handleFilterChange(setStatusFilter)}
-          style={{ padding: '0.65rem 1rem', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.85rem', background: '#fff', outline: 'none', fontWeight: '600' }}
-        >
-          <option value="all">📊 All Pipeline Statuses</option>
-          {STATUS_OPTIONS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-        </select>
-
-        {/* Reset Filters Button */}
         {(searchTerm || selectedCountry !== 'all' || selectedType !== 'all' || contactFilter !== 'all' || statusFilter !== 'all') && (
           <button
-            onClick={() => {
-              setSearchTerm(''); setSelectedCountry('all'); setSelectedType('all'); 
-              setContactFilter('all'); setStatusFilter('all'); setCurrentPage(1);
-            }}
-            style={{ padding: '0.65rem 1rem', background: '#F1F5F9', border: 'none', borderRadius: '10px', fontSize: '0.82rem', fontWeight: '700', color: '#475569', cursor: 'pointer' }}
+            onClick={() => { setSearchTerm(''); setSelectedCountry('all'); setSelectedType('all'); setContactFilter('all'); setStatusFilter('all'); setCurrentPage(1); }}
+            style={{ marginTop: '0.75rem', background: '#F1F5F9', border: 'none', padding: '4px 12px', borderRadius: '6px', fontSize: '0.75rem', color: '#475569', fontWeight: '600', cursor: 'pointer' }}
           >
             Reset Filters
           </button>
         )}
       </div>
 
-      {/* ── AUTONOMOUS BATCH AI ENGINE CONTROL PANEL ── */}
+      {/* ── BATCH AI ENGINE CONTROL PANEL ── */}
       <div style={{
         background: 'linear-gradient(135deg, #0F172A, #1E293B)',
         border: '1px solid #334155', borderRadius: '16px', padding: '1.25rem 1.5rem',
@@ -563,14 +641,14 @@ const LeadCRM = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
               <span style={{ fontSize: '1.2rem' }}>⚡</span>
               <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#fff' }}>
-                Autonomous AI Outreach Engine (100% Free Stack)
+                Autonomous AI Business Audit Engine
               </h3>
               <span style={{ background: '#22C55E', color: '#fff', fontSize: '0.65rem', fontWeight: '800', padding: '2px 8px', borderRadius: '20px' }}>
-                PRODUCTION READY
+                CLOUD SYNCED
               </span>
             </div>
             <p style={{ margin: 0, fontSize: '0.82rem', color: '#94A3B8' }}>
-              Jina Live Scraper &bull; Groq 70B Rotator &bull; Flux AI Image Generator &bull; Auto-Audit Queue
+              Jina Live Reader &bull; Groq 70B Audit &bull; Auto-saves result to Firestore for all admin accounts
             </p>
           </div>
 
@@ -624,7 +702,6 @@ const LeadCRM = () => {
           )}
         </div>
 
-        {/* Live Batch Progress Indicator */}
         {batchRunning && (
           <div style={{ marginTop: '1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '0.8rem 1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '6px' }}>
@@ -636,7 +713,6 @@ const LeadCRM = () => {
               </span>
             </div>
 
-            {/* Progress bar */}
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '6px', height: '6px', overflow: 'hidden', marginBottom: '8px' }}>
               <div style={{ background: 'linear-gradient(90deg, #38BDF8, #22C55E)', height: '100%', width: `${(batchCurrentIndex / batchTotal) * 100}%`, transition: 'width 0.3s ease' }} />
             </div>
@@ -656,17 +732,18 @@ const LeadCRM = () => {
             <thead>
               <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', color: '#475569', fontWeight: '700', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 <th style={{ padding: '0.9rem 1.2rem' }}>Business Name</th>
-                <th style={{ padding: '0.9rem 1rem' }}>Niche / Category</th>
+                <th style={{ padding: '0.9rem 1rem' }}>Category</th>
                 <th style={{ padding: '0.9rem 1rem' }}>Location</th>
-                <th style={{ padding: '0.9rem 1rem' }}>Contact Info</th>
+                <th style={{ padding: '0.9rem 1rem' }}>Contact</th>
                 <th style={{ padding: '0.9rem 1rem' }}>Pipeline Status</th>
-                <th style={{ padding: '0.9rem 1.2rem', textAlign: 'right' }}>AI Action</th>
+                <th style={{ padding: '0.9rem 1rem' }}>Internal Remarks</th>
+                <th style={{ padding: '0.9rem 1.2rem', textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {paginatedLeads.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ padding: '3rem', textAlign: 'center', color: '#94A3B8' }}>
+                  <td colSpan="7" style={{ padding: '3rem', textAlign: 'center', color: '#94A3B8' }}>
                     <Users size={32} style={{ margin: '0 auto 0.5rem', color: '#CBD5E1' }} />
                     <p style={{ margin: 0, fontWeight: '600' }}>No leads matching your current filters.</p>
                   </td>
@@ -676,6 +753,9 @@ const LeadCRM = () => {
                   const currentStatus = leadStatuses[item.id] || 'New';
                   const statusOpt = STATUS_OPTIONS.find(s => s.id === currentStatus) || STATUS_OPTIONS[0];
                   const hasAudit = !!leadAudits[item.id];
+                  const savedImgs = leadSavedImages[item.id] || {};
+                  const savedImgCount = Object.keys(savedImgs).length;
+                  const remark = leadRemarks[item.id] || '';
 
                   return (
                     <tr 
@@ -683,13 +763,18 @@ const LeadCRM = () => {
                       style={{ borderBottom: '1px solid #F1F5F9', transition: 'background 0.15s' }}
                       className="lead-row-hover"
                     >
-                      {/* Business Name */}
+                      {/* Business Name & Badges */}
                       <td style={{ padding: '1rem 1.2rem', fontWeight: '700', color: '#0F172A' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
                           <span>{item.business_name}</span>
                           {hasAudit && (
                             <span style={{ background: '#F3E8FF', color: '#8B5CF6', padding: '2px 6px', borderRadius: '6px', fontSize: '0.68rem', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                               <Sparkles size={10} /> Audited
+                            </span>
+                          )}
+                          {savedImgCount > 0 && (
+                            <span style={{ background: '#D1FAE5', color: '#065F46', padding: '2px 6px', borderRadius: '6px', fontSize: '0.68rem', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                              <Image size={10} /> {savedImgCount} Mockup
                             </span>
                           )}
                         </div>
@@ -700,7 +785,7 @@ const LeadCRM = () => {
                         )}
                       </td>
 
-                      {/* Niche */}
+                      {/* Category */}
                       <td style={{ padding: '1rem 1rem' }}>
                         <span style={{ background: '#F1F5F9', color: '#334155', padding: '4px 10px', borderRadius: '8px', fontSize: '0.78rem', fontWeight: '600' }}>
                           {item.type || 'General'}
@@ -751,20 +836,39 @@ const LeadCRM = () => {
                         </select>
                       </td>
 
-                      {/* AI Action */}
+                      {/* Internal Remarks Inline Input */}
+                      <td style={{ padding: '1rem 1rem' }}>
+                        <input
+                          type="text"
+                          defaultValue={remark}
+                          onBlur={(e) => {
+                            if (e.target.value !== remark) {
+                              updateLeadRemarks(item.id, e.target.value);
+                            }
+                          }}
+                          placeholder="Add internal note..."
+                          style={{
+                            width: '100%', minWidth: '130px', padding: '4px 8px', borderRadius: '6px',
+                            border: '1px solid #CBD5E1', fontSize: '0.75rem', outline: 'none', background: '#F8FAFC'
+                          }}
+                        />
+                      </td>
+
+                      {/* Action Button */}
                       <td style={{ padding: '1rem 1.2rem', textAlign: 'right' }}>
                         <button
                           onClick={() => openStudyModal(item)}
                           style={{
-                            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                            padding: '0.55rem 1rem', background: '#E8192C', color: '#fff',
-                            border: 'none', borderRadius: '10px', fontSize: '0.8rem', fontWeight: '700',
-                            cursor: 'pointer', boxShadow: '0 2px 8px rgba(232,25,44,0.25)',
-                            transition: 'transform 0.15s, background 0.15s'
+                            padding: '0.45rem 0.9rem',
+                            background: hasAudit ? '#8B5CF6' : 'linear-gradient(135deg, #E8192C, #C21323)',
+                            color: '#fff', border: 'none', borderRadius: '10px',
+                            fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer',
+                            display: 'inline-flex', alignItems: 'center', gap: '4px',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                           }}
                         >
-                          <Sparkles size={14} />
-                          {hasAudit ? 'View AI Study' : 'AI Deep Study'}
+                          <Sparkles size={13} />
+                          {hasAudit ? 'View AI Study' : 'Run AI Study'}
                         </button>
                       </td>
                     </tr>
@@ -775,128 +879,134 @@ const LeadCRM = () => {
           </table>
         </div>
 
-        {/* ── PAGINATION BAR ── */}
-        <div style={{ padding: '1rem 1.2rem', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '500' }}>
-            Showing <strong>{((currentPage - 1) * ITEMS_PER_PAGE) + 1}</strong> to <strong>{Math.min(currentPage * ITEMS_PER_PAGE, filteredLeads.length)}</strong> of <strong>{filteredLeads.length.toLocaleString()}</strong> leads
-          </span>
+        {/* Pagination Bar */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.2rem', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div style={{ fontSize: '0.8rem', color: '#64748B' }}>
+            Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredLeads.length)} of {filteredLeads.length.toLocaleString()} leads
+          </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-              style={{
-                padding: '0.4rem 0.8rem', border: '1px solid #CBD5E1', borderRadius: '8px',
-                background: '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                opacity: currentPage === 1 ? 0.5 : 1, display: 'flex', alignItems: 'center', gap: '2px', fontSize: '0.8rem', fontWeight: '600'
-              }}
+              style={{ padding: '0.4rem 0.8rem', borderRadius: '8px', border: '1px solid #CBD5E1', background: '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '0.8rem', opacity: currentPage === 1 ? 0.5 : 1 }}
             >
-              <ChevronLeft size={16} /> Prev
+              <ChevronLeft size={14} style={{ display: 'inline' }} /> Prev
             </button>
-
-            <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', padding: '0 0.5rem' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#334155' }}>
               Page {currentPage} of {totalPages}
             </span>
-
             <button
-              disabled={currentPage >= totalPages}
-              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-              style={{
-                padding: '0.4rem 0.8rem', border: '1px solid #CBD5E1', borderRadius: '8px',
-                background: '#fff', cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-                opacity: currentPage >= totalPages ? 0.5 : 1, display: 'flex', alignItems: 'center', gap: '2px', fontSize: '0.8rem', fontWeight: '600'
-              }}
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              style={{ padding: '0.4rem 0.8rem', borderRadius: '8px', border: '1px solid #CBD5E1', background: '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '0.8rem', opacity: currentPage === totalPages ? 0.5 : 1 }}
             >
-              Next <ChevronRight size={16} />
+              Next <ChevronRight size={14} style={{ display: 'inline' }} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* ── AI BUSINESS STUDY MODAL ── */}
+      {/* ── AI STUDY MODAL ── */}
       <AnimatePresence>
         {activeLead && (
-          <div 
-            style={{
-              position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(15,23,42,0.6)', 
-              backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
-            }}
-            onClick={(e) => e.target === e.currentTarget && setActiveLead(null)}
-          >
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.75)',
+            backdropFilter: 'blur(6px)', zIndex: 9999, display: 'flex',
+            alignItems: 'center', justifyContent: 'center', padding: '1rem'
+          }}>
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               style={{
-                background: '#fff', width: '100%', maxWidth: '850px', maxHeight: '90vh', 
-                borderRadius: '20px', overflowY: 'auto', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-                display: 'flex', flexDirection: 'column'
+                background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '960px',
+                maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)',
+                border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column'
               }}
             >
               {/* Modal Header */}
-              <div style={{ padding: '1.25rem 1.5rem', background: '#0F172A', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTopLeftRadius: '20px', borderTopRightRadius: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <Sparkles size={20} color="#E8192C" />
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', letterSpacing: '-0.01em' }}>
-                      AI Business Audit &amp; Outreach Generator
+              <div style={{ padding: '1.25rem 1.5rem', background: '#0F172A', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTopLeftRadius: '20px', borderTopRightRadius: '20px', sticky: 'top' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Building2 size={18} color="#E8192C" />
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#fff' }}>
+                      {activeLead.business_name}
                     </h3>
-                    <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>
-                      Target: {activeLead.business_name} &bull; {activeLead.city}, {activeLead.country}
-                    </span>
                   </div>
+                  <span style={{ fontSize: '0.78rem', color: '#94A3B8' }}>
+                    {[activeLead.type, activeLead.city, activeLead.country].filter(Boolean).join(' • ')}
+                  </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ background: 'rgba(255,255,255,0.1)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.72rem', color: '#CBD5E1', fontWeight: '600' }}>
-                    Gemini Key #{activeKeyNum} Active
-                  </span>
-                  <button 
-                    onClick={() => setActiveLead(null)}
-                    style={{ background: 'transparent', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '1.2rem' }}
-                  >
-                    &times;
-                  </button>
-                </div>
+                <button
+                  onClick={() => setActiveLead(null)}
+                  style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: 'none', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', fontSize: '1.1rem', fontWeight: '700' }}
+                >
+                  &times;
+                </button>
               </div>
 
               {/* Modal Body */}
-              <div style={{ padding: '1.5rem', flex: 1 }}>
-                
-                {/* Lead Summary Info Card */}
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '14px', padding: '1rem 1.2rem', marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-                  <div>
-                    <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Niche</span>
-                    <p style={{ margin: '2px 0 0', fontWeight: '700', color: '#0F172A', fontSize: '0.88rem' }}>{activeLead.type || 'N/A'}</p>
+              <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                {/* Lead Status & Internal Remarks Control Card */}
+                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                    
+                    {/* Pipeline Status Selector */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#475569' }}>Pipeline Status:</span>
+                      <select
+                        value={leadStatuses[activeLead.id] || 'New'}
+                        onChange={(e) => updateLeadStatus(activeLead.id, e.target.value)}
+                        style={{
+                          padding: '0.35rem 0.8rem', borderRadius: '8px', border: '1px solid #CBD5E1',
+                          fontSize: '0.8rem', fontWeight: '700', outline: 'none', background: '#fff'
+                        }}
+                      >
+                        {STATUS_OPTIONS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                      </select>
+                    </div>
+
+                    <div style={{ fontSize: '0.75rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={13} color="#22C55E" /> Auto-synced to Cloud Firestore
+                    </div>
                   </div>
+
+                  {/* Remarks Input */}
                   <div>
-                    <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Phone / WhatsApp</span>
-                    <p style={{ margin: '2px 0 0', fontWeight: '700', color: '#16A34A', fontSize: '0.88rem' }}>{activeLead.phone_e164 || activeLead.phone || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Email</span>
-                    <p style={{ margin: '2px 0 0', fontWeight: '700', color: '#2563EB', fontSize: '0.88rem' }}>{activeLead.email || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Website</span>
-                    {activeLead.website ? (
-                      <a href={activeLead.website.startsWith('http') ? activeLead.website : `https://${activeLead.website}`} target="_blank" rel="noreferrer" style={{ display: 'block', margin: '2px 0 0', fontWeight: '700', color: '#E8192C', fontSize: '0.85rem', textDecoration: 'none' }}>
-                        Visit Site &rarr;
-                      </a>
-                    ) : <p style={{ margin: '2px 0 0', color: '#94A3B8', fontSize: '0.85rem' }}>No Website</p>}
+                    <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '3px' }}>
+                      📝 Internal Remarks / Notes (Shared with team):
+                    </label>
+                    <input
+                      type="text"
+                      value={activeRemarks}
+                      onChange={(e) => {
+                        setActiveRemarks(e.target.value);
+                        updateLeadRemarks(activeLead.id, e.target.value);
+                      }}
+                      placeholder="e.g. Sent mockup on WhatsApp, client interested in website package..."
+                      style={{
+                        width: '100%', padding: '0.5rem 0.75rem', borderRadius: '8px',
+                        border: '1px solid #CBD5E1', fontSize: '0.82rem', outline: 'none', background: '#fff'
+                      }}
+                    />
                   </div>
                 </div>
 
-                {/* AI Action Trigger Button */}
-                <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                {/* AI Study Trigger Button */}
+                <div>
                   <button
-                    disabled={analyzing}
                     onClick={runAiStudy}
+                    disabled={analyzing}
                     style={{
-                      padding: '0.85rem 2rem', background: analyzing ? '#94A3B8' : 'linear-gradient(135deg, #E8192C, #991B1B)',
-                      color: '#fff', border: 'none', borderRadius: '12px', fontSize: '0.95rem', fontWeight: '800',
-                      cursor: analyzing ? 'not-allowed' : 'pointer', boxShadow: '0 4px 16px rgba(232,25,44,0.3)',
-                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem', transition: 'transform 0.15s'
+                      width: '100%', padding: '0.9rem',
+                      background: analyzing ? '#94A3B8' : 'linear-gradient(135deg, #E8192C, #B91C1C)',
+                      color: '#fff', border: 'none', borderRadius: '14px',
+                      fontSize: '0.92rem', fontWeight: '800', cursor: analyzing ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                      boxShadow: '0 4px 14px rgba(232,25,44,0.3)'
                     }}
                   >
                     {analyzing ? (
@@ -906,44 +1016,31 @@ const LeadCRM = () => {
                           ? `🌐 Reading Live Website: ${activeLead?.website || '...'}`
                           : keyWaiting
                           ? 'Keys Cooling Down — Auto-Resuming...'
-                          : `🧠 ${activeProvider} (${activeModel || 'AI'}) Analyzing Business · Key #${activeKeyNum}...`
+                          : `🧠 ${activeProvider} (${activeModel || 'AI'}) Analyzing Business...`
                         }
                       </>
                     ) : (
                       <>
                         <Sparkles size={18} />
-                        {aiResult ? 'Re-run AI Deep Study' : 'Run AI Deep Business Study & Generate Messages'}
+                        {aiResult ? 'Re-run AI Business Audit' : 'Run AI Deep Business Audit'}
                       </>
                     )}
                   </button>
 
-                  {/* Inline error — no alert() popup */}
                   {aiError && (
-                    <div style={{
-                      marginTop: '0.75rem', padding: '0.75rem 1rem',
-                      background: '#FEF3C7', border: '1px solid #FCD34D',
-                      borderRadius: '10px', fontSize: '0.82rem',
-                      color: '#92400E', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', textAlign: 'left'
-                    }}>
+                    <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', background: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '10px', fontSize: '0.82rem', color: '#92400E', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
                       <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
-                      <div style={{ flex: 1 }}>
+                      <div>
                         <strong>AI Limit / Notice:</strong> {aiError}<br />
-                        <div style={{ marginTop: '0.4rem', opacity: 0.9 }}>
-                          💡 <strong>Solution:</strong> Add a free <strong>Groq API key</strong> (14,400 requests/day per key, no credit card required).
-                        </div>
-                        <Link to="/admin/ai-keys" style={{
-                          display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '0.5rem',
-                          background: '#F97316', color: '#fff', padding: '0.35rem 0.75rem', borderRadius: '6px',
-                          fontWeight: '700', fontSize: '0.75rem', textDecoration: 'none'
-                        }}>
-                          <Key size={12} /> Add Groq API Key in Admin Keys
+                        <Link to="/admin/ai-keys" style={{ color: '#F97316', fontWeight: '700', textDecoration: 'underline', marginTop: '4px', display: 'inline-block' }}>
+                          Add a free Groq / Gemini key in Admin Keys
                         </Link>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* AI Output Section */}
+                {/* AI Audit Results */}
                 {aiResult && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     
@@ -960,211 +1057,193 @@ const LeadCRM = () => {
                         </ul>
                       </div>
 
-                      {/* Lackings / Growth Opportunities */}
+                      {/* Lackings */}
                       <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '12px', padding: '1rem' }}>
                         <h4 style={{ margin: '0 0 0.5rem', color: '#991B1B', fontSize: '0.88rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <ShieldAlert size={16} /> Identified Lackings &amp; Opportunities
+                          <ShieldAlert size={16} /> Revenue &amp; Branding Lackings
                         </h4>
                         <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.82rem', color: '#B91C1C' }}>
                           {aiResult.lackings?.map((l, i) => <li key={i} style={{ marginBottom: '4px' }}>{l}</li>)}
                         </ul>
                       </div>
+
                     </div>
 
-                    {/* AI Image Generation Prompts (3-4 Prompts tailored to specific lackings) */}
+                    {/* 🎨 3-4 Custom Design Prompts & ChatGPT Integration */}
                     {((aiResult.imagePrompts && aiResult.imagePrompts.length > 0) || aiResult.imagePrompt) && (
                       <div style={{ background: 'linear-gradient(135deg, #FAF5FF, #F3E8FF)', border: '1px solid #D8B4FE', borderRadius: '14px', padding: '1.2rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                           <h4 style={{ margin: 0, color: '#7E22CE', fontSize: '0.92rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                            <Sparkles size={18} /> 🎨 3-4 AI Image Prompts (Midjourney / ChatGPT / Gemini)
+                            <Sparkles size={18} /> 🎨 Custom Visual Concepts &amp; ChatGPT Mockup Generator
                           </h4>
                           <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#9333EA', background: '#fff', padding: '2px 8px', borderRadius: '12px', border: '1px solid #E9D5FF' }}>
                             {aiResult.imagePrompts?.length || 1} Custom Design Concepts
                           </span>
                         </div>
                         <p style={{ margin: '0 0 1rem', fontSize: '0.8rem', color: '#6B21A8', lineHeight: '1.4' }}>
-                          These 3-4 prompts are specifically engineered to generate visual mockups that fix the client's identified revenue leaks. Generate images in Midjourney/ChatGPT and send them to the client to demonstrate value!
+                          Generate ultra-high quality mockups in ChatGPT (DALL-E 3). Paste or upload the generated image back here to save it forever in the cloud for your team!
                         </p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-                          {(aiResult.imagePrompts || [{ title: 'Brand Concept', targetsLacking: aiResult.lackings?.[0], prompt: aiResult.imagePrompt }]).map((p, idx) => (
-                            <div key={idx} style={{ background: '#fff', border: '1px solid #E9D5FF', borderRadius: '12px', padding: '0.9rem' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem', gap: '0.5rem' }}>
-                                <div>
-                                  <div style={{ fontWeight: '800', fontSize: '0.85rem', color: '#5B21B6' }}>
-                                    {p.title || `Concept #${idx + 1}`}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                          {(aiResult.imagePrompts || [{ title: 'Brand Concept', targetsLacking: aiResult.lackings?.[0], prompt: aiResult.imagePrompt }]).map((p, idx) => {
+                            const savedImagesForLead = leadSavedImages[activeLead.id] || {};
+                            const savedImgUrl = savedImagesForLead[idx];
+                            const isUploadingThis = isUploadingImage[`${activeLead.id}_${idx}`];
+
+                            return (
+                              <div key={idx} style={{ background: '#fff', border: '1px solid #E9D5FF', borderRadius: '12px', padding: '1rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem', gap: '0.5rem' }}>
+                                  <div>
+                                    <div style={{ fontWeight: '800', fontSize: '0.88rem', color: '#5B21B6' }}>
+                                      {p.title || `Concept #${idx + 1}`}
+                                    </div>
+                                    {p.targetsLacking && (
+                                      <div style={{ fontSize: '0.75rem', color: '#991B1B', marginTop: '2px', fontWeight: '600' }}>
+                                        🎯 Solves Lacking: {p.targetsLacking}
+                                      </div>
+                                    )}
+                                    {p.valueAddition && (
+                                      <div style={{ fontSize: '0.75rem', color: '#15803D', marginTop: '2px', fontWeight: '600' }}>
+                                        💡 Business Value: {p.valueAddition}
+                                      </div>
+                                    )}
                                   </div>
-                                  {p.targetsLacking && (
-                                    <div style={{ fontSize: '0.75rem', color: '#991B1B', marginTop: '2px', fontWeight: '600' }}>
-                                      🎯 Solves Lacking: {p.targetsLacking}
-                                    </div>
-                                  )}
-                                  {p.valueAddition && (
-                                    <div style={{ fontSize: '0.75rem', color: '#15803D', marginTop: '2px', fontWeight: '600' }}>
-                                      💡 Business Value: {p.valueAddition}
-                                    </div>
-                                  )}
+
+                                  <button
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(p.prompt);
+                                      setCopiedPromptIndex(idx);
+                                      setTimeout(() => setCopiedPromptIndex(null), 2000);
+                                    }}
+                                    style={{
+                                      background: copiedPromptIndex === idx ? '#16A34A' : '#9333EA',
+                                      color: '#fff', border: 'none', padding: '4px 10px', borderRadius: '8px',
+                                      fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
+                                      display: 'inline-flex', alignItems: 'center', gap: '4px', flexShrink: 0
+                                    }}
+                                  >
+                                    {copiedPromptIndex === idx ? <Check size={12} /> : <Copy size={12} />}
+                                    {copiedPromptIndex === idx ? 'Copied!' : 'Copy Prompt'}
+                                  </button>
                                 </div>
 
-                                <button
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(p.prompt);
-                                    setCopiedPromptIndex(idx);
-                                    setTimeout(() => setCopiedPromptIndex(null), 2000);
-                                  }}
-                                  style={{
-                                    background: copiedPromptIndex === idx ? '#16A34A' : '#9333EA',
-                                    color: '#fff', border: 'none', padding: '4px 10px', borderRadius: '8px',
-                                    fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
-                                    display: 'inline-flex', alignItems: 'center', gap: '4px', flexShrink: 0
-                                  }}
-                                >
-                                  {copiedPromptIndex === idx ? <Check size={12} /> : <Copy size={12} />}
-                                  {copiedPromptIndex === idx ? 'Copied!' : 'Copy Prompt'}
-                                </button>
-                              </div>
+                                <div style={{
+                                  background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px',
+                                  padding: '0.6rem 0.75rem', fontSize: '0.8rem', fontFamily: 'monospace',
+                                  color: '#334155', lineHeight: '1.4', wordBreak: 'break-word', marginTop: '0.4rem'
+                                }}>
+                                  {p.prompt}
+                                </div>
 
-                              <div style={{
-                                background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px',
-                                padding: '0.6rem 0.75rem', fontSize: '0.8rem', fontFamily: 'monospace',
-                                color: '#334155', lineHeight: '1.4', wordBreak: 'break-word', marginTop: '0.4rem'
-                              }}>
-                                {p.prompt}
-                              </div>
-
-                              {/* ─── IN-DASHBOARD AI Image Generator ─────────────────── */}
-                              {(() => {
-                                const imgKey = `${activeLead?.id || activeLead?.name}_${idx}`;
-                                const isGen = generatingImages[imgKey];
-                                const imgResult = generatedImages[imgKey];
-
-                                const handleGenerate = async (provider) => {
-                                  setGeneratingImages(prev => ({ ...prev, [imgKey]: provider }));
-                                  setGeneratedImages(prev => { const n = { ...prev }; delete n[imgKey]; return n; });
-                                  try {
-                                    const res = await generateImage(p.prompt, provider);
-                                    setGeneratedImages(prev => ({ ...prev, [imgKey]: res || { error: true } }));
-                                  } catch {
-                                    setGeneratedImages(prev => ({ ...prev, [imgKey]: { error: true } }));
-                                  } finally {
-                                    setGeneratingImages(prev => { const n = { ...prev }; delete n[imgKey]; return n; });
-                                  }
-                                };
-
-                                return (
-                                  <div style={{ marginTop: '0.75rem' }}>
-                                    {/* Buttons Panel */}
-                                    <div style={{
-                                      background: 'linear-gradient(135deg, #0F172A, #1E1B4B)',
-                                      borderRadius: '10px', padding: '0.85rem 1rem',
-                                      marginBottom: imgResult ? '0.5rem' : 0
-                                    }}>
-                                      <div style={{ fontSize: '0.73rem', fontWeight: '800', color: '#CBD5E1', marginBottom: '0.45rem' }}>
-                                        ⚡ Generate — Renders Here Automatically:
-                                      </div>
-                                      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-
-                                        {/* FLUX.1 free in-dashboard */}
-                                        <button
-                                          onClick={() => handleGenerate('hf')}
-                                          disabled={!!isGen}
-                                          style={{
-                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                            background: isGen === 'hf' ? '#374151' : 'linear-gradient(135deg,#7C3AED,#6D28D9)',
-                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
-                                            fontSize: '0.73rem', fontWeight: '800', border: 'none',
-                                            cursor: isGen ? 'not-allowed' : 'pointer',
-                                            opacity: isGen && isGen !== 'hf' ? 0.55 : 1
-                                          }}
-                                        >
-                                          {isGen === 'hf'
-                                            ? <><span style={{ display:'inline-block',width:'9px',height:'9px',border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.7s linear infinite' }} /> Generating…</>
-                                            : <><span>⚡</span> FLUX.1 — Free</>
-                                          }
-                                        </button>
-
-                                        {/* Ideogram in-dashboard */}
-                                        <button
-                                          onClick={() => {
-                                            const tok = getIdeogramToken();
-                                            tok ? handleGenerate('ideogram') : window.open('https://ideogram.ai/manage-api','_blank');
-                                          }}
-                                          disabled={!!isGen}
-                                          title={!getIdeogramToken() ? 'Get free Ideogram API key → add in Admin → AI Keys' : 'Generate via Ideogram v2 (renders here)'}
-                                          style={{
-                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                            background: isGen === 'ideogram' ? '#374151'
-                                              : getIdeogramToken() ? 'linear-gradient(135deg,#D97706,#B45309)'
-                                              : 'linear-gradient(135deg,#4B5563,#374151)',
-                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
-                                            fontSize: '0.73rem', fontWeight: '800', border: 'none',
-                                            cursor: isGen ? 'not-allowed' : 'pointer',
-                                            opacity: isGen && isGen !== 'ideogram' ? 0.55 : 1
-                                          }}
-                                        >
-                                          {isGen === 'ideogram'
-                                            ? <><span style={{ display:'inline-block',width:'9px',height:'9px',border:'2px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin 0.7s linear infinite' }} /> Generating…</>
-                                            : getIdeogramToken() ? <><span>🖼️</span> Ideogram v2</> : <><span>🔑</span> Get Ideogram Key</>
-                                          }
-                                        </button>
-
-                                        {/* ChatGPT — opens tab */}
-                                        <a
-                                          href={`https://chatgpt.com/?q=${encodeURIComponent('Create a professional marketing design mockup image. Brief:\n\n' + p.prompt + '\n\nIMPORTANT: Ultra-realistic, world-class creative agency quality. No watermarks.')}`}
-                                          target="_blank" rel="noopener noreferrer"
-                                          style={{
-                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                            background: 'linear-gradient(135deg,#10A37F,#059669)',
-                                            color: '#fff', padding: '0.38rem 0.75rem', borderRadius: '8px',
-                                            fontSize: '0.73rem', fontWeight: '800', textDecoration: 'none'
-                                          }}
-                                        >
-                                          <span>✨</span> ChatGPT ↗
-                                        </a>
-                                      </div>
-
-                                      {isGen && (
-                                        <p style={{ margin: '0.45rem 0 0', fontSize: '0.68rem', color: '#93C5FD' }}>
-                                          🧠 Generating via {isGen === 'hf' ? 'HuggingFace FLUX.1' : 'Ideogram v2'}… ~15–30s. Image will appear below.
-                                        </p>
-                                      )}
-                                      {!isGen && !imgResult && !getHFToken() && (
-                                        <p style={{ margin: '0.45rem 0 0', fontSize: '0.65rem', color: '#64748B', lineHeight: 1.4 }}>
-                                          💡 <Link to="/admin/ai-keys" style={{ color: '#A78BFA', fontWeight: '700' }}>Add free HuggingFace token</Link> for priority queue & better resolution.
-                                        </p>
-                                      )}
+                                {/* ── ChatGPT Button & Paste/Upload Panel ── */}
+                                <div style={{ marginTop: '0.8rem', background: '#0F172A', borderRadius: '10px', padding: '0.85rem 1rem', color: '#fff' }}>
+                                  
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.6rem' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#E2E8F0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                      <span>✨</span> Generate &amp; Save Mockup:
                                     </div>
 
-                                    {/* Generated Image */}
-                                    {imgResult && !imgResult.error && (
-                                      <div style={{ borderRadius: '10px', overflow: 'hidden', border: '2px solid #7C3AED', background: '#0F172A' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0.75rem', background: 'rgba(124,58,237,0.2)' }}>
-                                          <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#A78BFA' }}>✅ {imgResult.provider}</span>
-                                          <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            <a
-                                              href={imgResult.url}
-                                              download={`concept-${idx+1}-${(activeLead?.name||'lead').replace(/\s+/g,'-')}.png`}
-                                              style={{ fontSize: '0.68rem', fontWeight: '700', color: '#34D399', textDecoration: 'none' }}
-                                            >⬇ Download</a>
-                                            <button onClick={() => handleGenerate('hf')} style={{ fontSize: '0.68rem', fontWeight: '700', color: '#93C5FD', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>🔄 Redo</button>
-                                          </div>
-                                        </div>
-                                        <img src={imgResult.url} alt={p.title || 'AI Design Concept'} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '380px', objectFit: 'cover' }} />
-                                      </div>
-                                    )}
-
-                                    {/* Error */}
-                                    {imgResult?.error && (
-                                      <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '8px', padding: '0.55rem 0.8rem', fontSize: '0.72rem', color: '#991B1B', marginTop: '0.3rem', display: 'flex', gap: '6px' }}>
-                                        ⚠️ Failed — HF may be busy.
-                                        <button onClick={() => handleGenerate('hf')} style={{ fontWeight: '700', color: '#7C3AED', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '0.72rem' }}>Try again ↺</button>
-                                      </div>
-                                    )}
+                                    {/* 1-Click ChatGPT Launcher */}
+                                    <a
+                                      href={`https://chatgpt.com/?q=${encodeURIComponent(`Create a professional marketing design mockup image based on this brief:\n\n${p.prompt}\n\nIMPORTANT: Make it look like world-class creative agency work. Ultra-realistic, photographic quality. No watermarks.`)}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                                        background: 'linear-gradient(135deg, #10A37F, #0D9373)',
+                                        color: '#fff', padding: '0.4rem 0.85rem', borderRadius: '8px',
+                                        fontSize: '0.75rem', fontWeight: '800', textDecoration: 'none',
+                                        boxShadow: '0 2px 8px rgba(16,163,127,0.4)'
+                                      }}
+                                    >
+                                      <span>✨</span> Open in ChatGPT (DALL-E 3) ↗
+                                    </a>
                                   </div>
-                                );
-                              })()}
-                            </div>
-                          ))}
+
+                                  {/* Render Saved Mockup Image */}
+                                  {savedImgUrl ? (
+                                    <div style={{ borderRadius: '8px', overflow: 'hidden', border: '2px solid #10B981', background: '#1E293B', marginTop: '0.5rem' }}>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.75rem', background: 'rgba(16,185,129,0.15)' }}>
+                                        <span style={{ fontSize: '0.72rem', fontWeight: '700', color: '#34D399', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                          <CheckCircle2 size={13} /> Saved Mockup Image (Cloud Synced)
+                                        </span>
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                          <a
+                                            href={savedImgUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ fontSize: '0.72rem', fontWeight: '700', color: '#60A5FA', textDecoration: 'none' }}
+                                          >
+                                            ↗ Open Link
+                                          </a>
+                                          <button
+                                            onClick={() => handleRemoveConceptImage(activeLead, idx)}
+                                            style={{ fontSize: '0.72rem', fontWeight: '700', color: '#F87171', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                                          >
+                                            🗑️ Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <img
+                                        src={savedImgUrl}
+                                        alt={p.title || 'Client Mockup'}
+                                        style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '350px', objectFit: 'cover' }}
+                                      />
+                                    </div>
+                                  ) : (
+                                    /* Image Paste / Upload Actions */
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+                                      
+                                      {/* Paste from Clipboard Button */}
+                                      <button
+                                        onClick={() => handlePasteClipboardImage(activeLead, idx)}
+                                        disabled={isUploadingThis}
+                                        style={{
+                                          background: '#3B82F6', color: '#fff', border: 'none',
+                                          borderRadius: '8px', padding: '0.45rem 0.85rem', fontSize: '0.75rem',
+                                          fontWeight: '800', cursor: 'pointer', display: 'inline-flex',
+                                          alignItems: 'center', gap: '5px', boxShadow: '0 2px 6px rgba(59,130,246,0.3)'
+                                        }}
+                                      >
+                                        {isUploadingThis ? (
+                                          <RefreshCw size={12} className="animate-spin" />
+                                        ) : (
+                                          <Clipboard size={13} />
+                                        )}
+                                        {isUploadingThis ? 'Saving Image...' : '📋 Paste Image from Clipboard'}
+                                      </button>
+
+                                      {/* File Upload Selector */}
+                                      <label style={{
+                                        background: 'rgba(255,255,255,0.1)', color: '#CBD5E1', border: '1px solid rgba(255,255,255,0.2)',
+                                        borderRadius: '8px', padding: '0.45rem 0.85rem', fontSize: '0.75rem',
+                                        fontWeight: '700', cursor: 'pointer', display: 'inline-flex',
+                                        alignItems: 'center', gap: '5px'
+                                      }}>
+                                        <Upload size={13} /> Upload Image File
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          style={{ display: 'none' }}
+                                          onChange={(e) => {
+                                            if (e.target.files?.[0]) {
+                                              handleSaveConceptImage(activeLead, idx, e.target.files[0]);
+                                            }
+                                          }}
+                                        />
+                                      </label>
+
+                                      <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>
+                                        Copy image in ChatGPT → Click Paste Image
+                                      </span>
+                                    </div>
+                                  )}
+
+                                </div>
+
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -1223,7 +1302,6 @@ const LeadCRM = () => {
                         </button>
                       </div>
 
-                      {/* Email Subject */}
                       <div style={{ marginBottom: '0.6rem' }}>
                         <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Email Subject Line:</label>
                         <input
@@ -1237,7 +1315,6 @@ const LeadCRM = () => {
                         />
                       </div>
 
-                      {/* Email Body */}
                       <div>
                         <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569', display: 'block', marginBottom: '4px' }}>Email Body Content:</label>
                         <textarea
