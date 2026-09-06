@@ -63,24 +63,38 @@ export const SettingsProvider = ({ children }) => {
       checkDone();
     });
 
-    // Content settings with codebase version auto-sync
+    // Content settings — Bengali defaultContent ALWAYS wins for copy/text.
+    // Firestore is only trusted for: visibility toggles, hero mockup image, ceo_image.
     const unsubContent = onSnapshot(doc(db, 'settings', 'content'), (snap) => {
       if (snap.exists()) {
         const remoteData = snap.data();
-        const merged = deepMerge(defaultContent, remoteData);
-        
-        // If Firestore version is missing or older than codebase CONTENT_VERSION,
-        // automatically sync updated codebase content to Firestore
+
+        // Only pull specific non-text fields from Firestore (images, visibility)
+        // All copy/text comes from defaultContent to prevent English override
+        const safeFromFirestore = {
+          visibility: remoteData.visibility,
+          hero: {
+            mockup_primary: remoteData.hero?.mockup_primary || defaultContent.hero.mockup_primary,
+            hero_image: remoteData.hero?.hero_image,
+          },
+          about_trust: {
+            ceo_image: remoteData.about_trust?.ceo_image,
+          },
+          settings: remoteData.settings,
+        };
+
+        // Deep merge: defaultContent text wins, only safe fields from Firestore
+        const merged = deepMerge(defaultContent, safeFromFirestore);
+        setContent(merged);
+
+        // Sync new version to Firestore if outdated
         if (!remoteData.version || Number(remoteData.version) < CONTENT_VERSION) {
           const updatedPayload = { ...merged, version: CONTENT_VERSION, updated_at: Date.now() };
-          setDoc(doc(db, 'settings', 'content'), updatedPayload, { merge: true }).catch(console.error);
-          setContent(updatedPayload);
-        } else {
-          setContent(merged);
+          setDoc(doc(db, 'settings', 'content'), updatedPayload, { merge: true }).catch(() => {});
         }
       } else {
         // Seed Firestore if document doesn't exist
-        setDoc(doc(db, 'settings', 'content'), defaultContent, { merge: true }).catch(console.error);
+        setDoc(doc(db, 'settings', 'content'), defaultContent, { merge: true }).catch(() => {});
         setContent(defaultContent);
       }
       contentLoaded = true;
