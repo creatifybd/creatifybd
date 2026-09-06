@@ -416,26 +416,20 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             <div className="wk-inner">
               <div className="wk-header">
                 <TextReveal className="wk-heading">
-                  {lang === 'bn' ? (
-                    <>আমাদের <span className="text-red">সফল প্রজেক্টগুলো</span></>
-                  ) : (
-                    <>Our <span className="text-red">Works</span></>
-                  )}
+                  আমাদের <span className="text-red">সফল প্রজেক্টগুলো</span>
                 </TextReveal>
                 <FadeReveal delay={0.2}>
                   <p className="wk-header-copy">
-                    {lang === 'bn'
-                      ? 'ব্র্যান্ডিং, সোশ্যাল মিডিয়া গ্রোথ, ভিডিও ও রিলস এডিটিং এবং কনভার্সন-ফোকাসড ওয়েবসাইট—বাংলাদেশের বিভিন্ন ব্র্যান্ডের জন্য আমাদের তৈরি কাজের এক ঝলক।'
-                      : 'Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.'}
+                    ব্র্যান্ডিং, সোশ্যাল মিডিয়া গ্রোথ, ভিডিও ও রিলস এডিটিং এবং কনভার্সন-ফোকাসড ওয়েবসাইট—বাংলাদেশের বিভিন্ন ব্র্যান্ডের জন্য আমাদের তৈরি কাজের এক ঝলক।
                   </p>
                 </FadeReveal>
                 <FadeReveal delay={0.4}>
                   <div className="wk-stats-row">
-                    <div className="wk-stat"><strong><Counter target={portfolioItems.length || 50} />+</strong><span>{lang === 'bn' ? 'সফল প্রজেক্ট' : 'Projects'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={150} />+</strong><span>সফল প্রজেক্ট</span></div>
                     <div className="wk-stat-div" />
-                    <div className="wk-stat"><strong><Counter target={350} />+</strong><span>{lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={50} />+</strong><span>সন্তুষ্ট ক্লায়েন্ট</span></div>
                     <div className="wk-stat-div" />
-                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'সাপোর্ট ও রেসপন্স' : 'Response Time'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>সাপোর্ট ও রেসপন্স</span></div>
                   </div>
                 </FadeReveal>
               </div>
@@ -443,8 +437,8 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             <PortfolioMarquee items={displayItems} onOpen={openLightbox} />
             <div className="wk-inner">
               <FadeReveal delay={0.4}>
-                <div className="wk-footer" style={{ marginTop: '4rem', textAlign: 'center' }}>
-                  <Link to="/portfolio" className="btn-red">{lang === 'bn' ? 'সব কাজ একসাথে দেখুন →' : 'See All Our Works →'}</Link>
+                <div className="wk-footer" style={{ marginTop: '3.5rem', textAlign: 'center' }}>
+                  <Link to="/portfolio" className="btn-red">সব কাজ একসাথে দেখুন →</Link>
                 </div>
               </FadeReveal>
             </div>
@@ -455,25 +449,19 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
               <div className="agency-work-page-header">
                 <div>
                   <TextReveal className="wk-heading">
-                    {lang === 'bn' ? (
-                      <>আমাদের <span className="text-red">পোর্টফোলিও</span></>
-                    ) : (
-                      <>CreatifyBD <span className="text-red">Portfolio</span></>
-                    )}
+                    আমাদের <span className="text-red">পোর্টফোলিও ও সাম্প্রতিক কাজ</span>
                   </TextReveal>
                   <FadeReveal delay={0.2}>
                     <p>
-                      {lang === 'bn'
-                        ? 'প্রতিটি ডিজাইন ও ভিডিওর পেছনে থাকে সুনির্দিষ্ট ব্র্যান্ড স্ট্র্যাটেজি। দেখুন আমাদের তৈরি কিছু সেরা কাজ।'
-                        : 'Visual work, brand systems, campaigns, videos, and web experiences built for ambitious brands.'}
+                      প্রতিটি ডিজাইন ও ভিডিওর পেছনে থাকে সুনির্দিষ্ট ব্র্যান্ড স্ট্র্যাটেজি। দেখুন আমাদের তৈরি কিছু সেরা কাজের নমুনা।
                     </p>
                   </FadeReveal>
                 </div>
                 <FadeReveal delay={0.35}>
                   <div className="agency-work-page-stats">
-                    <div><strong><Counter target={portfolioItems.length || 50} />+</strong><span>{lang === 'bn' ? 'সফল প্রজেক্ট' : 'Projects'}</span></div>
-                    <div><strong><Counter target={350} />+</strong><span>{lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</span></div>
-                    <div><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'সাপোর্ট ও রেসপন্স' : 'Response Time'}</span></div>
+                    <div><strong><Counter target={150} />+</strong><span>সফল প্রজেক্ট</span></div>
+                    <div><strong><Counter target={50} />+</strong><span>সন্তুষ্ট ক্লায়েন্ট</span></div>
+                    <div><strong><Counter target={24} />h</strong><span>সাপোর্ট ও রেসপন্স</span></div>
                   </div>
                 </FadeReveal>
               </div>
@@ -481,26 +469,20 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
             {!fullPage && (
               <div className="wk-header">
                 <TextReveal className="wk-heading">
-                  {lang === 'bn' ? (
-                    <>আমাদের <span className="text-red">সফল প্রজেক্টগুলো</span></>
-                  ) : (
-                    <>Our <span className="text-red">Works</span></>
-                  )}
+                  আমাদের <span className="text-red">সফল প্রজেক্টগুলো</span>
                 </TextReveal>
                 <FadeReveal delay={0.2}>
                   <p className="wk-header-copy">
-                    {lang === 'bn'
-                      ? 'ব্র্যান্ডিং, সোশ্যাল মিডিয়া গ্রোথ, ভিডিও ও রিলস এডিটিং এবং কনভার্সন-ফোকাসড ওয়েবসাইট—বাংলাদেশের বিভিন্ন ব্র্যান্ডের জন্য আমাদের তৈরি কাজের এক ঝলক।'
-                      : 'Social content, campaign design, brand systems, video edits, and websites presented as one continuous creative wall.'}
+                    ব্র্যান্ডিং, সোশ্যাল মিডিয়া গ্রোথ, ভিডিও ও রিলস এডিটিং এবং কনভার্সন-ফোকাসড ওয়েবসাইট—বাংলাদেশের বিভিন্ন ব্র্যান্ডের জন্য আমাদের তৈরি কাজের এক ঝলক।
                   </p>
                 </FadeReveal>
                 <FadeReveal delay={0.4}>
                   <div className="wk-stats-row">
-                    <div className="wk-stat"><strong><Counter target={portfolioItems.length || 50} />+</strong><span>{lang === 'bn' ? 'সফল প্রজেক্ট' : 'Projects'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={150} />+</strong><span>সফল প্রজেক্ট</span></div>
                     <div className="wk-stat-div" />
-                    <div className="wk-stat"><strong><Counter target={350} />+</strong><span>{lang === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={50} />+</strong><span>সন্তুষ্ট ক্লায়েন্ট</span></div>
                     <div className="wk-stat-div" />
-                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>{lang === 'bn' ? 'সাপোর্ট ও রেসপন্স' : 'Response Time'}</span></div>
+                    <div className="wk-stat"><strong><Counter target={24} />h</strong><span>সাপোর্ট ও রেসপন্স</span></div>
                   </div>
                 </FadeReveal>
               </div>

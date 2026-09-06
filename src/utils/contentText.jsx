@@ -1,7 +1,6 @@
 import React from 'react';
 
 const LEGACY_TAG_PATTERN = /<\/?(?:span|br)\b/i;
-const LOCATION_SPECIFIC_PATTERN = /(bangladesh|dhaka|\bbd\b|small business(?:es)?|local market)/i;
 
 export const stripLegacyMarkup = (value = '') => String(value)
   .replace(/<br\s*\/?>/gi, ' ')
@@ -11,8 +10,7 @@ export const stripLegacyMarkup = (value = '') => String(value)
 
 export const globalizeCopy = (value, fallback = '') => {
   const source = String(value || '').trim();
-  if (!source || LOCATION_SPECIFIC_PATTERN.test(stripLegacyMarkup(source))) return fallback;
-  return source;
+  return source || fallback;
 };
 
 export const renderRichTitle = (value, fallback = '') => {
@@ -43,3 +41,4 @@ export const renderRichTitle = (value, fallback = '') => {
     return <React.Fragment key={`text-${index}`}>{inlineText}</React.Fragment>;
   });
 };
+

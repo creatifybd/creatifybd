@@ -13,9 +13,9 @@ const defaultRoles = [
 ];
 
 const defaultStats = [
-  { value: '২০০+', label: 'সফল প্রজেক্ট ডেলিভারি' },
-  { value: '৭+', label: 'বছরের অভিজ্ঞতা' },
-  { value: '৯৮%', label: 'সন্তুষ্ট ক্লায়েন্ট রেটিং' }
+  { value: '১৫০+', label: 'সফল প্রজেক্ট ডেলিভারি' },
+  { value: '৫০+', label: 'সন্তুষ্ট ক্লায়েন্ট' },
+  { value: '১০০%', label: 'কোয়ালিটি নিশ্চয়তা' }
 ];
 
 // NOTE: these three were leftover from an earlier version of this section
@@ -100,7 +100,7 @@ const AboutTrust = () => {
 
       <style>{`
         .about-trust-section-v3 {
-          padding: 8rem 0;
+          padding: clamp(4.5rem, 7vw, 6.5rem) 0;
           background: #fff;
           position: relative;
           overflow: hidden;

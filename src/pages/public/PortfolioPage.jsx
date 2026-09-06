@@ -7,8 +7,8 @@ import usePageSEO from '../../hooks/usePageSEO';
 
 const PortfolioPage = () => {
   const seo = usePageSEO('portfolio', {
-    title: "Our Work \u2014 Real Projects for Real Businesses | CreatifyBD",
-    description: "Logos, campaigns, edits, and websites we've actually shipped for real clients \u2014 not stock mockups. Browse the work and see what we'd build for you."
+    title: "আমাদের পোর্টফোলিও ও কাজের নমুনা — CreatifyBD",
+    description: "লোগো ডিজাইন, সোশ্যাল মিডিয়া পোস্টার, ভিডিও এডিটিং ও ওয়েবসাইট ডেভেলপমেন্ট—আমাদের তৈরি করা সফল প্রজেক্টের গ্যালারি।"
   });
 
   return (
@@ -16,12 +16,12 @@ const PortfolioPage = () => {
       <SEO
         title={seo.title}
         description={seo.description}
-        keywords="creative agency portfolio, graphic design portfolio, video editing portfolio, digital marketing portfolio, social media management portfolio, best graphic design work, creative design showcase, marketing agency portfolio, web design portfolio, branding portfolio, video production portfolio, creative work samples, design agency portfolio, digital marketing case studies, social media marketing portfolio, creative agency work samples"
+        keywords="পোর্টফোলিও, গ্রাফিক ডিজাইন স্যাম্পল, ভিডিও এডিটিং কাজ, ওয়েবসাইট পোর্টফোলিও, creatifybd portfolio, creative work bangladesh"
         schema={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          "name": "CreatifyBD Creative Portfolio",
-          "description": "Collection of premium graphic design, video editing, and digital marketing projects by CreatifyBD creative agency.",
+          "name": "CreatifyBD ক্রিয়েটিভ পোর্টফোলিও",
+          "description": "লোগো ডিজাইন, ভিডিও এডিটিং ও সোশ্যাল মিডিয়া প্রজেক্টের সংগ্রহ",
           "url": "https://creatifybd.com/portfolio",
           "provider": {
             "@type": "Organization",

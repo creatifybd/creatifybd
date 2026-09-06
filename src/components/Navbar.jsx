@@ -198,7 +198,7 @@ const Navbar = () => {
                             <p className="nav-mega-cta-title">ব্র্যান্ড গ্রোথ শুরু করুন</p>
                             <p className="nav-mega-cta-text">সাশ্রয়ী বাজেটে পান এজেন্সির চেয়েও ভালো ক্রিয়েটিভ সাপোর্ট।</p>
                             <div className="nav-mega-cta-badges">
-                              <span>SMM</span><span>Design</span><span>Video</span><span>Web</span>
+                              <span>সোশ্যাল</span><span>ডিজাইন</span><span>ভিডিও</span><span>ওয়েবসাইট</span>
                             </div>
                             <Link
                               to="/contact"

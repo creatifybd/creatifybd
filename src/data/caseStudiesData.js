@@ -1,60 +1,60 @@
 export const detailedCaseStudies = {
   "logo-design-branding": {
     id: "logo-design-branding",
-    category: "Logo Design & Branding",
-    client: "Multiple International Clients",
-    title: "Brand Identity & Logo Design",
-    year: "2021-2024",
-    industry: "Various Industries",
-    duration: "Ongoing Service",
-    about: "A collection of logo design and branding projects delivered for clients across USA, Germany, UK, Australia, Malaysia, and other countries. Each project focuses on creating memorable visual identities that communicate the client's brand values clearly.",
-    challenge: "Clients needed distinctive logos that would stand out in their respective markets while remaining versatile enough for use across digital platforms, print materials, and various applications.",
-    solution: "We developed custom logo concepts through iterative design processes, delivering multiple options per client with refined typography, balanced color schemes, and scalable vector formats suitable for any application.",
+    category: "লোগো ও ব্র্যান্ডিং",
+    client: "বিভিন্ন দেশীয় ও আন্তর্জাতিক ব্র্যান্ড",
+    title: "ব্র্যান্ড আইডেন্টিটি ও প্রফেশনাল লোগো ডিজাইন",
+    year: "২০২৩-২০২৬",
+    industry: "ই-কমার্স, ক্লদিং ও এফঅ্যান্ডবি",
+    duration: "চলমান প্রজেক্ট",
+    about: "বাংলাদেশের সম্ভাবনাময় উদ্যোক্তা ও ব্যবসার জন্য তৈরি করা ইউনিক লোগো এবং কমপ্লিট ব্র্যান্ড গাইডলাইন। প্রতিটি প্রজেক্টে ব্র্যান্ডের ভিশন ও টার্গেট অডিয়েন্সের মনস্তত্ত্ব মাথায় রেখে ডিজাইন করা হয়েছে।",
+    challenge: "ক্লায়েন্টদের এমন একটি শক্তিশালী ভিজ্যুয়াল আইডেন্টিটি প্রয়োজন ছিল যা তাদের প্রতিযোগিতামূলক বাজারে আলাদাভাবে চিনিয়ে দেয় এবং ডিজিটাল ও প্রিন্ট উভয় মাধ্যমে সমানভাবে কার্যকরী হয়।",
+    solution: "আমরা গভীর মার্কেট রিসার্চের মাধ্যমে কাস্টম লোগো কনসেপ্ট, কালার প্যালেট, টাইপোগ্রাফি সিস্টেম এবং সোশ্যাল মিডিয়া ব্র্যান্ডিং কিট তৈরি করেছি।",
     results: [
-      { val: "30+", label: "Logo Designs" },
-      { val: "10+", label: "Countries Served" },
-      { val: "5.0", label: "Average Rating" }
+      { val: "৫০+", label: "সফল লোগো ডিজাইন" },
+      { val: "১০০%", label: "ক্লায়েন্ট সন্তুষ্টি" },
+      { val: "৫.০★", label: "গড় রেটিং" }
     ],
     testimonial: {
-      text: "Creatify delivered exactly what I had in mind. He met all my requirements and made sure that I am happy with the final result. I can highly recommend him.",
-      author: "janvamberg",
-      position: "Iceland"
+      text: "আমাদের নতুন ব্র্যান্ডের জন্য লোগো ও প্যাকেজিং ডিজাইন করিয়েছি। CreatifyBD-এর কাজের কোয়ালিটি এবং ডেলিভারি স্পিড সত্যিই প্রশংসনীয়।",
+      author: "রাকিবুল হাসান",
+      position: "ফাউন্ডার, স্টাইলিশ ওয়্যার"
     },
     gallery: [
-      { type: "hero", url: "/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg", caption: "Logo Design Collection" },
-      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-02.jpg", caption: "Brand Identity Concept" },
-      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg", caption: "Logo Variations" },
-      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-04.jpg", caption: "Typography & Color" }
+      { type: "hero", url: "/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg", caption: "ব্র্যান্ড আইডেন্টিটি শোকেস" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-02.jpg", caption: "কর্পোরেট লোগো কনসেপ্ট" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg", caption: "টাইপোগ্রাফি ও কালার সিস্টেম" },
+      { type: "branding", url: "/assets/portfolio/logo-design-branding/logo-design-branding-04.jpg", caption: "ব্র্যান্ডিং মেটেরিয়ালস" }
     ],
-    color: "#000000"
+    color: "#E8192C"
   },
   "digital-marketing": {
     id: "digital-marketing",
-    category: "Digital Marketing",
-    client: "E-commerce & Service Businesses",
-    title: "Social Media Content & Marketing",
-    year: "2022-2024",
-    industry: "Digital Marketing",
-    duration: "Ongoing Service",
-    about: "Digital marketing and social media content creation projects focused on helping businesses improve their online presence through strategic content planning and visual creative.",
-    challenge: "Clients needed consistent, engaging social media content that would build brand awareness and drive engagement across multiple platforms.",
-    solution: "We developed content strategies with visually appealing posts, maintaining brand consistency while adapting content for different social platforms and audience preferences.",
+    category: "সোশ্যাল মিডিয়া ও মার্কেটিং",
+    client: "ই-কমার্স ও গ্রোথ স্টার্টআপ",
+    title: "মান্থলি সোশ্যাল মিডিয়া গ্রোথ ও কনটেন্ট সিস্টেম",
+    year: "২০২৪-২০২৬",
+    industry: "ডিজিটাল কমার্স ও রিটেইল",
+    duration: "মাসিক রিটেইনার",
+    about: "সোশ্যাল মিডিয়া পেজগুলোর নিয়মিত ম্যানেজমেন্ট—প্রতিদিনের পোস্টার ডিজাইন, এনগেজিং ক্যাপশন, প্রমোশনাল রিলস এবং সেলস ক্যাম্পেইন পরিচালনা।",
+    challenge: "ক্লায়েন্টদের সবচেয়ে বড় চ্যালেঞ্জ ছিল নিয়মিত হাই-কোয়ালিটি কনটেন্ট পোস্ট করা এবং কাস্টমারদের সাথে স্থায়ী এনগেজমেন্ট তৈরি করা।",
+    solution: "আমরা মান্থলি কনটেন্ট ক্যালেন্ডার, ট্রেন্ডিং শর্ট ভিডিও এবং সেলস-ফোকাসড অ্যাড ক্রিয়েটিভের মাধ্যমে ব্র্যান্ডের পেজগুলোতে নিয়মিত উপস্থিতি নিশ্চিত করেছি।",
     results: [
-      { val: "10+", label: "Marketing Projects" },
-      { val: "Multi-platform", label: "Content Delivery" },
-      { val: "Fast", label: "Turnaround Time" }
+      { val: "৩ গুণ", label: "এনগেজমেন্ট বৃদ্ধি" },
+      { val: "৬০+", label: "মাসিক ক্রিয়েটিভস" },
+      { val: "২৪/৭", label: "গ্রোথ সাপোর্ট" }
     ],
     testimonial: {
-      text: "Great work! Very reliable and quick responses!",
-      author: "brianwojtravel",
-      position: "USA"
+      text: "CreatifyBD-র মান্থলি প্যাকেজ নেওয়ার পর থেকে আমাদের পেজে মেসেজ ও সেলস অনেক বেড়েছে। কোনো বাড়তি ঝামেলা ছাড়াই চমৎকার সাপোর্ট পাচ্ছি।",
+      author: "ফারহানা ইসলাম",
+      position: "মালিক, অরোরা স্কিনকেয়ার"
     },
     gallery: [
-      { type: "hero", url: "/assets/portfolio/digital-marketing/digital-marketing-01.jpg", caption: "Social Media Content" },
-      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-02.jpg", caption: "Marketing Creative" },
-      { type: "desktop", url: "/assets/portfolio/digital-marketing/digital-marketing-03.jpg", caption: "Content Strategy" },
-      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-04.jpg", caption: "Brand Campaign" }
+      { type: "hero", url: "/assets/portfolio/digital-marketing/digital-marketing-01.jpg", caption: "সোশ্যাল মিডিয়া ক্যাম্পেইন" },
+      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-02.jpg", caption: "ইনস্টাগ্রাম ও ফেসবুক পোস্ট" },
+      { type: "desktop", url: "/assets/portfolio/digital-marketing/digital-marketing-03.jpg", caption: "অ্যাডভার্টাইজিং ব্যানার" },
+      { type: "mobile", url: "/assets/portfolio/digital-marketing/digital-marketing-04.jpg", caption: "প্রমোশনাল রিলস কনসেপ্ট" }
     ],
-    color: "#D4AF37"
+    color: "#7C3AED"
   }
 };

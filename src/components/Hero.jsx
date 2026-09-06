@@ -61,6 +61,32 @@ const Hero = () => {
       <div className="hero-agency-inner">
         {/* ── LEFT COPY ── */}
         <div className="hero-agency-copy">
+          {/* Eyebrow badge */}
+          {heroContent.eyebrow && (
+            <motion.div
+              className="hero-eyebrow"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: EASE_EXPO }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '0.4rem 1rem',
+                borderRadius: '100px',
+                background: 'rgba(232, 25, 44, 0.08)',
+                color: 'var(--brand-red)',
+                fontSize: '0.85rem',
+                fontWeight: '700',
+                marginBottom: '1.25rem',
+                border: '1px solid rgba(232, 25, 44, 0.15)'
+              }}
+            >
+              <span className="hero-agency-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-red)', display: 'inline-block' }} />
+              <span>{heroContent.eyebrow}</span>
+            </motion.div>
+          )}
+
           {/* Headline */}
           <motion.h1
             className="hero-agency-h1"
@@ -75,7 +101,7 @@ const Hero = () => {
             className="hero-agency-desc"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.32 }}
+            transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.2 }}
           >
             {description}
           </motion.p>
@@ -85,15 +111,21 @@ const Hero = () => {
             className="hero-agency-ctas"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.44 }}
+            transition={{ duration: 0.6, ease: EASE_EXPO, delay: 0.3 }}
           >
             <Link to="/portfolio" className="hero-cta-primary">
               {cta1Label}
               <ArrowRight size={17} />
             </Link>
-            <Link to="/contact" className="hero-cta-ghost">
+            <a
+              href="https://wa.me/8801951676600?text=%E0%A6%86%E0%A6%B8%E0%A6%B8%E0%A6%BE%E0%A6%B2%E0%A6%BE%E0%A6%AE%E0%A7%81%20%E0%A6%86%E0%A6%B2%E0%A6%BE%E0%A6%87%E0%A6%95%E0%A7%81%E0%A6%AE%20CreatifyBD!%20%E0%A6%86%E0%A6%AE%E0%A6%BF%20%E0%A6%8F%E0%A6%95%E0%A6%9F%E0%A6%BF%20%E0%A6%A8%E0%A6%A4%E0%A7%81%E0%A6%A8%20%E0%A6%AA%E0%A7%8D%E0%A6%B0%E0%A6%9C%E0%A7%87%E0%A6%95%E0%A7%8F%E0%A6%9F%20%E0%A6%A8%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A7%87%20%E0%A6%95%E0%A6%A5%E0%A6%BE%20%E0%A6%AC%E0%A6%B2%E0%A6%A4%E0%A7%87%20%E0%A6%9A%E0%A6%BE%E0%A6%87%E0%A5%A4"
+              target="_blank"
+              rel="noreferrer"
+              className="hero-cta-ghost"
+            >
               {cta2Label}
-            </Link>
+              <ArrowUpRight size={16} />
+            </a>
           </motion.div>
 
           {/* Stats row */}

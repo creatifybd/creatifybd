@@ -8,8 +8,8 @@ import { motion } from 'framer-motion';
 
 const PricingPage = () => {
   const seo = usePageSEO('pricing', {
-    title: "Pricing \u2014 Get a Custom Quote | CreatifyBD",
-    description: "Every project's different, so we skip the one-size-fits-all price list. Tell us what you need, we'll tell you exactly what it costs \u2014 no surprise line items later."
+    title: "প্যাকেজ ও মূল্য তালিকা — CreatifyBD",
+    description: "সোশ্যাল মিডিয়া ম্যানেজমেন্ট স্পেশাল অফার প্যাকেজ (৳৫,০০০ থেকে শুরু) এবং ব্র্যান্ডিং, ভিডিও ও ওয়েবের কাস্টম বাজেট।"
   });
 
   return (
@@ -17,7 +17,7 @@ const PricingPage = () => {
       <SEO
         title={seo.title}
         description={seo.description}
-        keywords="creatifybd pricing, digital marketing pricing, web design price, social media management packages"
+        keywords="সোশ্যাল মিডিয়া প্যাকেজ, লোগো ডিজাইন মূল্য, ভিডিও এডিটিং খরচ, ওয়েবসাইট ডেভেলপমেন্ট প্রাইস, creatifybd pricing"
       />
       <Navbar theme="light" />
       <div className="page-header page-header-light">

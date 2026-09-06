@@ -7,8 +7,8 @@ import usePageSEO from '../../hooks/usePageSEO';
 
 const ServicesPage = () => {
   const seo = usePageSEO('services', {
-    title: "What We Do \u2014 Branding, Social Media, Video & Web | CreatifyBD",
-    description: "Four disciplines, one team, zero gaps between departments who've never met each other. See how we build brands, run social, edit video, and ship websites."
+    title: "আমাদের সার্ভিসসমূহ — ব্র্যান্ডিং, সোশ্যাল মিডিয়া, ভিডিও ও ওয়েব | CreatifyBD",
+    description: "আপনার বিজনেসের জন্য ফুল-সার্ভিস ক্রিয়েটিভ সলিউশন — সোশ্যাল মিডিয়া ম্যানেজমেন্ট, লোগো ও ব্র্যান্ডিং, ভিডিও এডিটিং এবং ফাস্ট-লোডিং ওয়েবসাইট।"
   });
 
   return (
@@ -16,19 +16,19 @@ const ServicesPage = () => {
       <SEO
         title={seo.title}
         description={seo.description}
-        keywords="digital marketing agency services, social media management service, graphic design service, video editing service, creative agency services, best marketing agency services, social media marketing company, graphic design agency, video production company, web design services, content marketing services, branding agency services, online marketing services, creative design services, professional video editing services"
+        keywords="ক্রিয়েটিভ সার্ভিস, সোশ্যাল মিডিয়া ম্যানেজমেন্ট, লোগো ডিজাইন, ভিডিও এডিটিং, ওয়েবসাইট ডিজাইন, ডিজিটাল মার্কেটিং বাংলাদেশ, creatifybd services"
         schema={{
           "@context": "https://schema.org",
           "@type": "Service",
           "serviceType": "Digital Marketing & Creative Services",
-          "name": "CreatifyBD Digital Marketing Services",
-          "description": "Comprehensive digital marketing and creative services including social media management, graphic design, video editing, and website design",
+          "name": "CreatifyBD ক্রিয়েটিভ সার্ভিসেস",
+          "description": "সোশ্যাল মিডিয়া ম্যানেজমেন্ট, গ্রাফিক ডিজাইন, ভিডিও এডিটিং এবং ওয়েবসাইট ডেভেলপমেন্ট",
           "provider": {
             "@type": "Organization",
             "name": "CreatifyBD",
             "url": "https://creatifybd.com"
           },
-          "areaServed": "Global"
+          "areaServed": "Bangladesh"
         }}
       />
       <Navbar />

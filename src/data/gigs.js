@@ -3,27 +3,27 @@
 
 export const categories = {
   'social-media-management': {
-    name: 'Social Media Management',
+    name: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',
     slug: 'social-media-management',
-    desc: 'Grow your business with premium social content, calendars, and strategies.',
+    desc: 'নিয়মিত পোস্টার, ট্রেন্ডিং রিলস ও মাসিক কনটেন্ট ক্যালেন্ডার ম্যানেজমেন্ট।',
     icon: '📱'
   },
   'graphic-design': {
-    name: 'Graphic Design',
+    name: 'গ্রাফিক ডিজাইন ও ব্র্যান্ডিং',
     slug: 'graphic-design',
-    desc: 'Premium branding, logos, posters, and visual identities.',
+    desc: 'প্রিমিয়াম লোগো, ব্র্যান্ড আইডেন্টিটি, ব্যানার ও প্রোডাক্ট প্যাকেজিং ডিজাইন।',
     icon: '🎨'
   },
   'video-editing': {
-    name: 'Video Editing',
+    name: 'ভিডিও এডিটিং ও রিলস',
     slug: 'video-editing',
-    desc: 'Cinematic reels, YouTube edits, and high-converting video ads.',
+    desc: 'সিনেমাটিক রিলস, ইউটিউব ভিডিও এবং হাই-কনভার্সন প্রমোশনাল অ্যাডস।',
     icon: '🎬'
   },
   'website-design': {
-    name: 'Website Design',
+    name: 'ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট',
     slug: 'website-design',
-    desc: 'Stunning landing pages and full business websites optimized for conversions.',
+    desc: 'সুপার ফাস্ট, কনভার্সন-ফোকাসড আধুনিক ল্যান্ডিং পেজ ও বিজনেস ওয়েবসাইট।',
     icon: '💻'
   }
 };

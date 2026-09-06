@@ -5256,3 +5256,91 @@ body:not(.admin-body) .portfolio-marquee-arrow {
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   UNIFIED MASTER DESIGN SYSTEM OVERRIDES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Global container rhythm */
+body:not(.admin-body) .container {
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(1.25rem, 4vw, 2.5rem) !important;
+  padding-right: clamp(1.25rem, 4vw, 2.5rem) !important;
+  box-sizing: border-box !important;
+}
+
+/* Uniform section padding */
+body:not(.admin-body) section.section,
+body:not(.admin-body) .svc-section,
+body:not(.admin-body) .wk-section,
+body:not(.admin-body) .about-trust-section-v3,
+body:not(.admin-body) .process-new-section,
+body:not(.admin-body) .pricing-section,
+body:not(.admin-body) .testimonials-section,
+body:not(.admin-body) .contact-section-v3 {
+  padding-top: clamp(4.5rem, 7vw, 6.5rem) !important;
+  padding-bottom: clamp(4.5rem, 7vw, 6.5rem) !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+/* Section typography harmony */
+body:not(.admin-body) .section-h {
+  font-family: var(--font-display, 'Bricolage Grotesque', 'Hind Siliguri', sans-serif) !important;
+  font-size: clamp(2rem, 3.8vw, 2.85rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.035em !important;
+  color: var(--ink, #0f0f12) !important;
+  margin-top: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+body:not(.admin-body) .section-sub {
+  font-family: var(--font-body, 'Inter', 'Hind Siliguri', sans-serif) !important;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem) !important;
+  line-height: 1.78 !important;
+  color: var(--muted, #555962) !important;
+  max-width: 620px !important;
+  margin-top: 0 !important;
+  margin-bottom: 2.5rem !important;
+}
+
+body:not(.admin-body) .text-center .section-sub,
+body:not(.admin-body) .text-center.section-header .section-sub,
+body:not(.admin-body) .pricing-header .section-sub,
+body:not(.admin-body) .process-new-header .section-sub {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+/* Red accent class */
+body:not(.admin-body) .text-red,
+body:not(.admin-body) .red {
+  color: var(--brand-red, #e8192c) !important;
+}
+
+/* Unified Card elevations and borders */
+body:not(.admin-body) .price-card,
+body:not(.admin-body) .ab-ceo-card,
+body:not(.admin-body) .ab-model-card,
+body:not(.admin-body) .ab-stat-box {
+  border-radius: 18px !important;
+  border: 1px solid rgba(15, 15, 18, 0.08) !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease !important;
+}
+
+body:not(.admin-body) .price-card:hover,
+body:not(.admin-body) .ab-ceo-card:hover,
+body:not(.admin-body) .ab-model-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07) !important;
+  border-color: rgba(232, 25, 44, 0.2) !important;
+}
+

@@ -68,8 +68,8 @@ const ClientOrdersPortal = () => {
   return (
     <div className="client-portal-gate">
       <SEO 
-        title="Client Order Portal | CreatifyBD"
-        description="Access and track your order progress, download drafts, request revisions, and verify manual payments."
+        title="অর্ডার ট্র্যাকিং পোর্টাল | CreatifyBD"
+        description="আপনার প্রজেক্ট ও অর্ডারের সর্বশেষ অগ্রগতি ট্র্যাক করুন, রিভিশন চান এবং ফাইল ডাউনলোড করুন।"
         noIndex={true}
       />
 
@@ -81,19 +81,19 @@ const ClientOrdersPortal = () => {
             <KeyRound size={32} />
           </div>
 
-          <h2>Track Your <span className="red">Order</span></h2>
+          <h2>অর্ডার <span className="red">ট্র্যাকিং পোর্টাল</span></h2>
           <p className="lookup-intro">
-            Enter your Order ID, email, and Tracking Token from your order confirmation to access your delivery portal.
+            আপনার প্রজেক্টের ডেলিভারি স্ট্যাটাস দেখতে অর্ডার আইডি, ইমেইল এবং ট্র্যাকিং টোকেন প্রবেশ করান।
           </p>
 
           <form onSubmit={handleLookup} className="lookup-form">
             <div className="form-group">
-              <label htmlFor="lookup-public-id">Order ID</label>
+              <label htmlFor="lookup-public-id">অর্ডার আইডি</label>
               <input 
                 id="lookup-public-id"
                 type="text"
                 required
-                placeholder="e.g. CBD-1234567"
+                placeholder="যেমন: CBD-1234567"
                 className="luxury-input"
                 value={publicOrderId}
                 onChange={e => setPublicOrderId(e.target.value)}
@@ -101,12 +101,12 @@ const ClientOrdersPortal = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="lookup-email">Email Address</label>
+              <label htmlFor="lookup-email">ইমেইল এড্রেস</label>
               <input 
                 id="lookup-email"
                 type="email"
                 required
-                placeholder="john@example.com"
+                placeholder="অর্ডারের সময় ব্যবহৃত ইমেইল"
                 className="luxury-input"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -114,19 +114,19 @@ const ClientOrdersPortal = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="lookup-token">Tracking Token</label>
+              <label htmlFor="lookup-token">ট্র্যাকিং সিক্রেট টোকেন</label>
               <input 
                 id="lookup-token"
                 type="text"
                 required
-                placeholder="Your 24-character access token"
+                placeholder="কনফার্মেশনে পাঠানো ট্র্যাকিং টোকেন"
                 className="luxury-input"
                 value={trackingToken}
                 onChange={e => setTrackingToken(e.target.value)}
                 style={{ fontFamily: 'monospace', fontSize: '0.85rem', letterSpacing: '0.05em' }}
               />
               <span style={{ fontSize: '0.72rem', color: '#555', marginTop: '0.3rem', display: 'block' }}>
-                Found in your order confirmation email sent by CreatifyBD
+                আপনার কনফার্মেশন ইমেইলে এই টোকেনটি পাবেন
               </span>
             </div>
 

@@ -212,26 +212,32 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
   const [billing, setBilling] = useState('monthly');
 
   useEffect(() => {
+    // Read from Firestore if available, but fallbackPricing is the primary baseline
     const unsub = onSnapshot(
       collection(db, 'pricing'),
       (snap) => {
         try {
-          const data = { social: [], branding: [], web: [], video: [] };
           const docs = Array.isArray(snap?.docs) ? snap.docs : [];
-          docs
-            .map(doc => ({ id: doc.id, ...doc.data() }))
-            .filter(item => item?.hidden !== true)
-            .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0))
-            .forEach(item => {
-              if (item?.category && data[item.category]) data[item.category].push(item);
-            });
-          setPricingData(data);
+          if (docs.length > 0) {
+            const data = { social: [], branding: [], web: [], video: [] };
+            docs
+              .map(doc => ({ id: doc.id, ...doc.data() }))
+              .filter(item => item?.hidden !== true)
+              .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0))
+              .forEach(item => {
+                if (item?.category && data[item.category]) data[item.category].push(item);
+              });
+            // Only set if docs actually contain Bengali content
+            const hasValidBn = Object.values(data).some(arr => arr.some(p => p.tier_bn || (p.tier && /[\u0980-\u09FF]/.test(p.tier))));
+            if (hasValidBn) {
+              setPricingData(data);
+            }
+          }
         } catch (err) {
-          console.error('Pricing: failed to process snapshot, using empty defaults', err);
-          setPricingData({ social: [], branding: [], web: [], video: [] });
+          console.error('Pricing snapshot handling fallback:', err);
         }
       },
-      () => setPricingData({ social: [], branding: [], web: [], video: [] })
+      () => {}
     );
     return () => unsub();
   }, []);
@@ -241,10 +247,19 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     const source = remotePlans.length > 0 ? remotePlans : fallbackPricing[activeTab];
     const plans = highlight ? source.slice(0, 3) : source;
     return plans.map(p => {
-      if (p.isCustom || String(p.price).includes('কাস্টম')) {
-        return { ...p, _isCustom: true, _displayPrice: p.price || 'কাস্টম বাজেট' };
-      }
-      return { ...p, _isCustom: false, _displayPrice: p.price };
+      const tierName = p.tier_bn || p.tier;
+      const descText = p.desc_bn || p.desc;
+      const featuresList = (p.features_bn && p.features_bn.length > 0) ? p.features_bn : p.features;
+      const priceText = p.bdtPrice || p.price;
+      const isCustom = p.isCustom || String(priceText).includes('কাস্টম') || !priceText || priceText === '0';
+      return {
+        ...p,
+        tier: tierName,
+        desc: descText,
+        features: featuresList,
+        _isCustom: isCustom,
+        _displayPrice: isCustom ? 'কাস্টম বাজেট' : priceText
+      };
     });
   }, [activeTab, highlight, pricingData]);
 

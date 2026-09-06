@@ -78,22 +78,31 @@ const Services = ({ highlight = false, fullPage = false }) => {
       (snap) => {
         try {
           const docs = Array.isArray(snap?.docs) ? snap.docs : [];
-          const all = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-          const sorted = all.sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
-          setServices(sorted.filter((s) => !s?.hidden));
+          if (docs.length > 0) {
+            const all = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            const sorted = all.sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
+            const validBnServices = sorted.filter((s) => !s?.hidden && (s.title_bn || (s.title && /[\u0980-\u09FF]/.test(s.title))));
+            if (validBnServices.length > 0) {
+              setServices(validBnServices);
+            }
+          }
         } catch (err) {
-          console.error('Services: failed to process snapshot, using defaults', err);
-          setServices([]);
+          console.error('Services: snapshot fallback', err);
         }
       },
-      () => setServices([])
+      () => {}
     );
     return () => unsub();
   }, []);
 
   const displayServices = useMemo(() => {
     const source = services.length > 0 ? services : defaultServices;
-    return highlight ? source.slice(0, 5) : source;
+    const mapped = source.map(s => ({
+      ...s,
+      title: s.title_bn || s.title,
+      desc: s.desc_bn || s.desc || s.description
+    }));
+    return highlight ? mapped.slice(0, 5) : mapped;
   }, [highlight, services]);
 
   return (
