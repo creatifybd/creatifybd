@@ -36,40 +36,58 @@ const PORTFOLIO_CAT_DISPLAY = {
 
 const FALLBACK_WORK = [
   {
-    id: 'local-service-social-growth',
-    title: 'Local Service Brand Content System',
-    category: 'graphic',
-    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1400&auto=format&fit=crop'
-  },
-  {
-    id: 'restaurant-reel-campaign',
-    title: 'Restaurant Reels and Launch Creatives',
-    category: 'video',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1400&auto=format&fit=crop'
-  },
-  {
-    id: 'clinic-website-redesign',
-    title: 'Clinic Website Redesign',
-    category: 'web',
-    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1400&auto=format&fit=crop'
-  },
-  {
-    id: 'fitness-brand-identity',
-    title: 'Fitness Studio Brand Identity',
+    id: 'logo-branding-01',
+    title: 'প্রফেশনাল লোগো ও ব্র্যান্ড আইডেন্টিটি',
     category: 'branding',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1400&auto=format&fit=crop'
+    image: '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg'
   },
   {
-    id: 'home-service-ad-pack',
-    title: 'Home Service Ad Creative Pack',
-    category: 'graphic',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1400&auto=format&fit=crop'
+    id: 'social-media-01',
+    title: 'সোশ্যাল মিডিয়া কন্টেন্ট ম্যানেজমেন্ট',
+    category: 'social',
+    image: '/assets/portfolio/social-media-management/social-media-management-01.jpg'
   },
   {
-    id: 'saas-landing-page',
-    title: 'SaaS Landing Page Visual Direction',
+    id: 'product-packaging-01',
+    title: 'প্রোডাক্ট প্যাকেজিং ডিজাইন',
+    category: 'packaging',
+    image: '/assets/portfolio/product-packaging-design/product-packaging-design-01.jpg'
+  },
+  {
+    id: 'logo-branding-03',
+    title: 'কর্পোরেট ব্র্যান্ড আইডেন্টিটি',
+    category: 'branding',
+    image: '/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg'
+  },
+  {
+    id: 'website-design-01',
+    title: 'মডার্ন বিজনেস ওয়েবসাইট',
     category: 'web',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1400&auto=format&fit=crop'
+    image: '/assets/portfolio/website-design/website-design-01.jpg'
+  },
+  {
+    id: 'social-media-02',
+    title: 'ব্র্যান্ড সোশ্যাল মিডিয়া পোস্ট',
+    category: 'social',
+    image: '/assets/portfolio/social-media-management/social-media-management-02.jpg'
+  },
+  {
+    id: 'logo-branding-05',
+    title: 'মিনিমাল লোগো ডিজাইন',
+    category: 'branding',
+    image: '/assets/portfolio/logo-design-branding/logo-design-branding-05.jpg'
+  },
+  {
+    id: 'product-packaging-02',
+    title: 'প্রিমিয়াম প্যাকেজিং ডিজাইন',
+    category: 'packaging',
+    image: '/assets/portfolio/product-packaging-design/product-packaging-design-02.jpg'
+  },
+  {
+    id: 'digital-marketing-01',
+    title: 'ডিজিটাল মার্কেটিং ক্রিয়েটিভ',
+    category: 'marketing',
+    image: '/assets/portfolio/digital-marketing/digital-marketing-01.jpg'
   }
 ];
 

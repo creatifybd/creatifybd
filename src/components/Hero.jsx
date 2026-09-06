@@ -17,9 +17,9 @@ const PREVIEW_IMAGES = [
 ];
 
 const STATS = [
-  { value: '২০০+', label: 'সফল প্রজেক্ট' },
-  { value: '৭+',   label: 'বছরের অভিজ্ঞতা' },
-  { value: '৯৮%',  label: 'সন্তুষ্ট ক্লায়েন্ট' },
+  { value: '১৫০+', label: 'সফল প্রজেক্ট' },
+  { value: '৫০+',  label: 'সন্তুষ্ট ক্লায়েন্ট' },
+  { value: '১০০%', label: 'কোয়ালিটি গ্যারান্টি' },
 ];
 
 const Hero = () => {
