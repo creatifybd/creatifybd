@@ -1,0 +1,75 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      // Keep in sync with the legacy owner list in firestore.rules — both
+      // accounts must be treated as admins consistently across services.
+      return request.auth != null
+        && (
+          request.auth.token.admin == true
+          || request.auth.token.email == "binashad7@gmail.com"
+          || request.auth.token.email == "creatifybd@gmail.com"
+        );
+    }
+
+    // ─── Admin Uploaded Content ──────────────────────────────────────────────
+    match /uploads/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 20 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // ─── Payment Proof Screenshots ───────────────────────────────────────────
+    // Any unauth user can upload (client proof of payment).
+    // Only admin can read proof images.
+    match /payment-proofs/{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*')
+          || request.resource.contentType == 'application/pdf');
+    }
+
+    // ─── Order Requirements Attachments ─────────────────────────────────────
+    // Client submits reference files during order onboarding (any unauthenticated upload).
+    // Admin reads them to understand project brief.
+    match /order-requirements/{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if request.resource.size < 10 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('image/.*')
+          || request.resource.contentType == 'application/pdf'
+          || request.resource.contentType == 'application/zip'
+          || request.resource.contentType.matches('application/.*word.*')
+          || request.resource.contentType.matches('application/.*document.*')
+        );
+    }
+
+    // ─── Delivery File Uploads ───────────────────────────────────────────────
+    // Admin team uploads finished deliverables.
+    // Phase 12: Raw path access restricted to admin only.
+    // Clients access files via getDownloadURL signed URLs stored in their order doc.
+    // (Firebase download tokens in the URL bypass storage read rules for direct links)
+    match /deliveries/{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin()
+        && request.resource.size < 100 * 1024 * 1024; // 100MB max per delivery file
+    }
+
+    // ─── Portfolio / Showcase Samples ────────────────────────────────────────
+    // Admin uploads approved sample images to portfolio showcase.
+    match /portfolio/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // ─── Fallback deny ───────────────────────────────────────────────────────
+    // Phase 12: Default deny all — nothing falls through without explicit permit
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

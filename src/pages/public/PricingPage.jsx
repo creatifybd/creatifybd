@@ -1,0 +1,42 @@
+import React from 'react';
+import Navbar from '../../components/Navbar';
+import Pricing from '../../components/Pricing';
+import Footer from '../../components/Footer';
+import SEO from '../../components/SEO';
+import usePageSEO from '../../hooks/usePageSEO';
+import { motion } from 'framer-motion';
+
+const PricingPage = () => {
+  const seo = usePageSEO('pricing', {
+    title: "Pricing \u2014 Get a Custom Quote | CreatifyBD",
+    description: "Every project's different, so we skip the one-size-fits-all price list. Tell us what you need, we'll tell you exactly what it costs \u2014 no surprise line items later."
+  });
+
+  return (
+    <div className="pricing-page">
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        keywords="creatifybd pricing, digital marketing pricing, web design price, social media management packages"
+      />
+      <Navbar theme="light" />
+      <div className="page-header page-header-light">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="container"
+          style={{ textAlign: 'center' }}
+        >
+          <h1 className="page-title">স্বচ্ছ <span className="red">প্যাকেজ ও প্রাইসিং</span></h1>
+          <p className="page-subtitle" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+            সোশ্যাল মিডিয়া, ব্র্যান্ডিং, ভিডিও এডিটিং ও ওয়েব ডেভেলপমেন্টের জন্য উপযুক্ত প্যাকেজ।
+          </p>
+        </motion.div>
+      </div>
+      <Pricing fullPage={false} />
+      <Footer />
+    </div>
+  );
+};
+
+export default PricingPage;

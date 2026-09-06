@@ -1,0 +1,313 @@
+/* ═══════════════════════════════════════════════════════════════
+   BASE — Reset + Typography + Global utilities
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+  background-color: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 95% 0%, rgba(232,25,44,0.03) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 5% 95%, rgba(232,25,44,0.02) 0%, transparent 50%);
+  background-attachment: fixed;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Restore native cursor for text inputs so I-beam is visible while typing */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  cursor: text;
+}
+
+/* ─── Typography Defaults ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+p {
+  color: var(--muted);
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  cursor: none;
+}
+a:hover { color: var(--brand-red); }
+
+
+
+/* ─── Brand selection color ─── */
+::selection {
+  background: var(--brand-red);
+  color: var(--white);
+}
+
+/* ─── Scrollbar — thin rose-tinted ─── */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: var(--surface-soft); }
+::-webkit-scrollbar-thumb { background: rgba(232,25,44,0.25); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(232,25,44,0.45); }
+
+/* ─── Focus ─── */
+.skip-to-content {
+  position: absolute; top: -100px; left: 0;
+  background: var(--brand-red); color: var(--white);
+  padding: 0.5rem 1rem; z-index: 9999; transition: top 0.2s;
+}
+.skip-to-content:focus { top: 0; }
+:focus-visible { outline: 2px solid var(--brand-red); outline-offset: 4px; }
+
+/* ─── Container — Duck Design inspired responsive margins ─── */
+.container {
+  width: 100%;
+  max-width: var(--container-max-lg);
+  margin: 0 auto;
+  padding: 0 var(--container-margin-lg);
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: var(--container-max-xl);
+    padding: 0 var(--container-margin-xl);
+  }
+}
+@media (min-width: 1920px) {
+  .container {
+    max-width: var(--container-max-2xl);
+    padding: 0 var(--container-margin-2xl);
+  }
+}
+@media (max-width: 1024px) {
+  .container {
+    max-width: var(--container-max-md);
+    padding: 0 var(--container-margin-md);
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    max-width: var(--container-max-sm);
+    padding: 0 var(--container-margin-sm);
+  }
+}
+
+/* ─── Utility Classes ─── */
+.red         { color: var(--brand-red); }
+.text-center { text-align: center; }
+
+.page-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  margin-bottom: var(--space-md);
+}
+.page-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--muted);
+  max-width: 700px;
+  margin-bottom: var(--space-xl);
+}
+
+/* ─── Custom cursor — desktop only ─── */
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"], label[for] { cursor: none; }
+}
+@media (pointer: coarse), (hover: none) {
+  body { cursor: auto !important; }
+  a, button, [role="button"] { cursor: pointer !important; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL REVEAL SYSTEM
+   Elements start with .sr class, gain .vis when in viewport
+   ═══════════════════════════════════════════════════════════════ */
+.sr {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sr.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for child elements */
+.sr-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.sr-stagger > *:nth-child(2) { transition-delay: 0.15s; }
+.sr-stagger > *:nth-child(3) { transition-delay: 0.25s; }
+.sr-stagger > *:nth-child(4) { transition-delay: 0.35s; }
+.sr-stagger > *:nth-child(5) { transition-delay: 0.45s; }
+.sr-stagger > *:nth-child(6) { transition-delay: 0.55s; }
+
+/* Directional variants */
+.sr-left  { transform: translateX(-36px); }
+.sr-right { transform: translateX(36px); }
+.sr-scale { transform: scale(0.92) translateY(20px); }
+.sr-left.vis, .sr-right.vis, .sr-scale.vis {
+  transform: none;
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL ANIMATION KEYFRAMES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Float — gentle vertical bob */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(0.5deg); }
+  66%       { transform: translateY(-6px) rotate(-0.5deg); }
+}
+
+/* Float horizontal */
+@keyframes floatX {
+  0%, 100% { transform: translateX(0px); }
+  50%       { transform: translateX(10px); }
+}
+
+/* Slow rotation */
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Pulse — subtle scale */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.06); opacity: 0.85; }
+}
+
+/* Red glow pulse */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,25,44,0.25); }
+  50%       { box-shadow: 0 0 0 12px rgba(232,25,44,0); }
+}
+
+/* Shimmer — text or skeleton */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Slide in from bottom */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Scale in */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Ripple */
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Marquee scroll */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Typewriter cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Counter pop */
+@keyframes countPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Draw underline */
+@keyframes drawLine {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* Button press */
+@keyframes buttonPress {
+  0%, 100% { transform: translateY(-2px) scale(1); }
+  50%       { transform: translateY(-2px) scale(1.02); }
+}
+
+/* Badge pop */
+@keyframes badgePop {
+  0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+  60%  { transform: scale(1.1) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* WhatsApp pulse */
+@keyframes whatsappPulse {
+  0%, 100% { box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4); }
+  50%       { box-shadow: 0 4px 28px rgba(37, 211, 102, 0.65); }
+}
+
+/* Progress bar fill */
+@keyframes progressFill {
+  from { width: 0%; }
+}
+
+/* ─── Animation utility classes ─── */
+.anim-float      { animation: float 5s ease-in-out infinite; }
+.anim-float-slow { animation: float 7s ease-in-out infinite; }
+.anim-pulse-red  { animation: glowPulse 2.5s ease-in-out infinite; }
+.anim-spin-slow  { animation: rotateSlow 20s linear infinite; }
+.anim-slide-up   { animation: slideUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+.anim-scale-in   { animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+

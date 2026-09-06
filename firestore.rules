@@ -1,0 +1,258 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper Functions ───────────────────────────────────────────────────
+    // Bootstrap owners — kept only so the original two accounts can never be
+    // locked out while the `admins/{email}` collection is being populated.
+    // Prefer granting access via the `admins` collection (see AdminUsers.jsx).
+    function isLegacyOwner() {
+      return request.auth != null
+        && (
+          request.auth.token.admin == true
+          || request.auth.token.email == "binashad7@gmail.com"
+          || request.auth.token.email == "creatifybd@gmail.com"
+        );
+    }
+
+    function isRegisteredAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+
+    function adminRole() {
+      return isRegisteredAdmin()
+        ? get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.role
+        : (isLegacyOwner() ? 'owner' : null);
+    }
+
+    function isAdmin() {
+      return isLegacyOwner() || isRegisteredAdmin();
+    }
+
+    function isOwner() {
+      return isAdmin() && adminRole() == 'owner';
+    }
+
+    function isEditorOrAbove() {
+      return isAdmin() && adminRole() != 'viewer';
+    }
+
+    // ─── RBAC: Admin Users Directory ─────────────────────────────────────────
+    // Doc ID is the admin's lowercase email. Only owners can manage this list;
+    // any admin may read it to know who else has access.
+    match /admins/{email} {
+      allow read: if isAdmin();
+      allow write: if isOwner();
+    }
+
+    function isValidMessage() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 3
+        && request.resource.data.email.size() <= 180
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 3000
+        && request.resource.data.status == "unread"
+        && request.resource.data.read == false;
+    }
+
+    function isValidOrder() {
+      return request.resource.data.gigId is string
+        && request.resource.data.gigSlug is string
+        && request.resource.data.selectedPackage is string
+        && request.resource.data.price is number
+        && request.resource.data.status == "payment_pending"
+        && request.resource.data.clientInfo is map
+        && request.resource.data.clientInfo.email is string
+        && request.resource.data.clientInfo.fullName is string
+        && request.resource.data.clientInfo.phone is string;
+    }
+
+    function isClientCompletionUpdate() {
+      return resource.data.status in ['draft_shared', 'delivered']
+        && request.resource.data.status == 'completed'
+        && request.resource.data.reviewSubmitted == true
+        && request.resource.data.reviewStatus == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'reviewSubmitted', 'reviewStatus', 'reviewedAt', 'updatedAt']);
+    }
+
+    function isClientRevisionUpdate() {
+      return resource.data.status in ['draft_shared', 'delivered']
+        && request.resource.data.status == 'revision_requested'
+        && request.resource.data.revisionNotes is string
+        && request.resource.data.revisionNotes.size() > 0
+        && request.resource.data.revisionNotes.size() <= 3000
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'revisionNotes', 'updatedAt']);
+    }
+
+    // ─── Contact Messages ────────────────────────────────────────────────────
+    match /messages/{message} {
+      allow create: if isValidMessage();
+      allow read: if isAdmin();
+      allow update, delete: if isEditorOrAbove();
+    }
+
+    // ─── Existing CMS Collections ────────────────────────────────────────────
+    // Note: write access requires Editor or Owner role — Viewers are read-only
+    // even via direct API calls (see AdminUsers.jsx role descriptions).
+    match /services/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /portfolio/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /team_members/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /pricing/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    // ─── Settings Collection (Split for Security) ────────────────────────────────
+    // Public settings (safe for public read)
+    match /settings/public/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    // Private settings (admin only - payment info, sensitive data)
+    match /settings/private/{id} {
+      allow read: if isAdmin();
+      allow write: if isEditorOrAbove();
+    }
+    // Legacy settings (for backward compatibility)
+    match /settings/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /case_study_images/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /case_studies/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /gig_overrides/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+    match /media_assets/{id} {
+      allow read: if isAdmin();
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── Manual Payments (legacy) ────────────────────────────────────────────
+    function isValidPayment() {
+      return request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 0
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 3
+        && request.resource.data.phone is string
+        && request.resource.data.selectedService is string
+        && request.resource.data.paymentMethod is string
+        && (request.resource.data.paidAmount is string || request.resource.data.paidAmount is number)
+        && request.resource.data.transactionId is string
+        && request.resource.data.proofFileUrl is string
+        && request.resource.data.status == "pending"
+        && request.resource.data.createdAt is timestamp;
+    }
+
+    match /manualPayments/{paymentId} {
+      allow create: if isValidPayment();
+      allow read: if isAdmin();
+      allow update: if isEditorOrAbove()
+        && (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'adminNote', 'verifiedBy', 'verifiedAt', 'rejectedBy', 'rejectedAt', 'updatedAt']));
+      allow delete: if isEditorOrAbove();
+    }
+
+    // ─── Marketplace Orders ──────────────────────────────────────────────────
+    // Phase 7/11: clientAccessToken IS the doc ID (24-char random hex).
+    // Public can GET a single document by its exact ID — but cannot LIST orders.
+    // Only admin can list, update status, or delete.
+    // Client updates restricted to safe transitions only.
+    match /orders/{orderId} {
+      // Public: create a new order (setDoc with token as ID)
+      allow create: if isValidOrder();
+      // Public: get-only by knowing the exact token (doc ID) — no list permitted
+      allow get: if true;
+      allow list: if isAdmin();
+      // Admin: full control over all fields
+      // Client: only safe status transitions (revision_requested, completed)
+      allow update: if (
+        isEditorOrAbove()
+        && (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly([
+            'status', 'paymentStatus', 'internalNotes', 'revisionNotes', 'deliveries',
+            'drafts', 'updatedAt', 'adminNote',
+            'paymentVerifiedAt', 'paymentRejectedAt', 'paymentRejectionNote',
+            'paymentProofUrl', 'transactionId'
+          ]))
+      ) || isClientCompletionUpdate() || isClientRevisionUpdate();
+      allow delete: if isEditorOrAbove();
+    }
+
+    // ─── Client Reviews ──────────────────────────────────────────────────────
+    // Clients can submit reviews (any unauthenticated POST from order completion).
+    // Only approved reviews are publicly readable.
+    // Only admin can approve, reject, or delete.
+    match /reviews/{reviewId} {
+      // Anti-spam: a review can only be created if it references a real order
+      // that has just been marked "completed" by its client, and only once
+      // per order (the order's reviewSubmitted flag is flipped in the same
+      // client transaction that writes this document).
+      allow create: if request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.reviewText is string
+        && request.resource.data.reviewText.size() > 10
+        && request.resource.data.status == "pending"
+        && request.resource.data.orderId is string
+        && request.resource.data.orderId.size() > 0
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'completed'
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.reviewSubmitted == true;
+      allow read: if resource.data.status == "approved" || isAdmin();
+      allow update: if isEditorOrAbove()
+        && (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'approvedAt', 'rejectedAt']));
+      allow delete: if isEditorOrAbove();
+    }
+
+    // ─── Portfolio / Delivered Works Showcase ────────────────────────────────
+    // Admin creates portfolio records from delivered work samples.
+    // Public read for showcase display.
+    match /portfolio_delivered/{id} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── Activity Log / Audit Trail ──────────────────────────────────────────
+    // Any admin can write an entry (recording their own actions). Entries are
+    // immutable — no update or delete — and only owners can view the trail.
+    match /activity_log/{id} {
+      allow create: if isAdmin()
+        && request.resource.data.actorEmail == request.auth.token.email;
+      allow read: if isOwner();
+      allow update, delete: if false;
+    }
+
+    // ─── Fallback: deny everything else ─────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
