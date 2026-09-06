@@ -24,6 +24,12 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
+      - name: 🖼️ Install Sharp for Image Compression
+        run: npm install sharp --no-save
+
+      - name: 🗜️ Compress Portfolio Images
+        run: node scripts/compress-images.mjs
+
       - name: 🏗️ Build Project
         run: npm run build
         env:
