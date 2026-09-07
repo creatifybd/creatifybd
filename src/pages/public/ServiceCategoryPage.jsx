@@ -208,13 +208,13 @@ const ServiceCategoryPage = () => {
         <div className="container">
           <div className="scp-hero-inner">
             {/* Breadcrumb */}
-            <nav className="scp-breadcrumb" aria-label="Breadcrumb">
+            <div className="scp-breadcrumb" role="navigation" aria-label="Breadcrumb">
               <Link to="/">হোম</Link>
               <ChevronRight size={14} className="breadcrumb-arrow" />
               <Link to="/services">সার্ভিসসমূহ</Link>
               <ChevronRight size={14} className="breadcrumb-arrow" />
               <span className="current">{category.name}</span>
-            </nav>
+            </div>
 
             <motion.div
               className="scp-badge"
