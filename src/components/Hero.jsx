@@ -270,14 +270,13 @@ const Hero = () => {
         /* Headline */
         .hero-agency-h1 {
           font-family: var(--font-display);
-          font-size: clamp(2.6rem, 5.5vw, 4.8rem);
+          font-size: clamp(2.2rem, 3.8vw, 3.4rem);
           font-weight: 800;
-          line-height: 1.32;
+          line-height: 1.2;
           letter-spacing: 0;
           color: var(--ink);
           margin: 0 0 1.75rem;
-          display: flex;
-          flex-wrap: wrap;
+          display: block;
           overflow: visible;
         }
         .hero-word {
@@ -290,7 +289,7 @@ const Hero = () => {
           font-size: clamp(0.95rem, 1.5vw, 1.08rem);
           color: var(--muted);
           max-width: 520px;
-          line-height: 1.82;
+          line-height: 1.6;
           margin: 0 0 2.5rem;
           font-weight: 400;
         }

@@ -5645,3 +5645,49 @@ body:not(.admin-body) .agency-work-page .duck-work-gallery--masonry .duck-work-t
     padding: 0.75rem !important;
   }
 }
+
+
+body:not(.admin-body) h1,
+body:not(.admin-body) h2,
+body:not(.admin-body) h3,
+body:not(.admin-body) h4,
+body:not(.admin-body) h5,
+body:not(.admin-body) h6,
+body:not(.admin-body) .section-h,
+body:not(.admin-body) .hero-agency-h1,
+body:not(.admin-body) .page-title,
+body:not(.admin-body) .pricing-title,
+body:not(.admin-body) .scp-hero-title,
+body:not(.admin-body) .scp-modal-title,
+body:not(.admin-body) .modal-title,
+body:not(.admin-body) .intro-card-title,
+body:not(.admin-body) .service-card-title,
+body:not(.admin-body) .hero-title {
+  font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 700 !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.01em !important;
+  overflow: visible !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+body:not(.admin-body) .hero-agency-h1 {
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.015em !important;
+  max-width: 640px !important;
+  display: block !important;
+}
+
+body:not(.admin-body) p,
+body:not(.admin-body) .section-sub,
+body:not(.admin-body) .hero-agency-desc,
+body:not(.admin-body) .scp-hero-desc,
+body:not(.admin-body) .page-subtitle,
+body:not(.admin-body) .card-desc,
+body:not(.admin-body) .scp-gig-desc {
+  font-family: 'Noto Sans Bengali', 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.58 !important;
+  letter-spacing: 0 !important;
+}
