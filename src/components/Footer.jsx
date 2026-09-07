@@ -27,19 +27,19 @@ const Footer = () => {
   const handleNewsletter = async (e) => {
     e.preventDefault();
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      toast.error('Please enter a valid email address.');
+      toast.error('সঠিক ইমেইল এড্রেস প্রদান করুন।');
       return;
     }
     setSubLoading(true);
     try {
       const q = query(collection(db, 'subscribers'), where('email', '==', email));
       const snap = await getDocs(q);
-      if (!snap.empty) { toast.error('This email is already subscribed.'); return; }
+      if (!snap.empty) { toast.error('এই ইমেইলটি আগেই সাবস্ক্রাইব করা হয়েছে।'); return; }
       await addDoc(collection(db, 'subscribers'), { email, subscribedAt: new Date(), status: 'active' });
-      toast.success('Subscribed! Updates coming to ' + email);
+      toast.success('সাবস্ক্রিপশন সফল হয়েছে! নিয়মিত আপডেট পাবেন।');
       setEmail('');
     } catch {
-      toast.error('Failed to subscribe. Please try again.');
+      toast.error('সাবস্ক্রাইব করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।');
     } finally {
       setSubLoading(false);
     }
@@ -63,7 +63,7 @@ const Footer = () => {
               <span>{brandBase}<em>BD</em></span>
             </Link>
             <p className="footer-brand-desc">
-              Full-service creative agency based in Dhaka, Bangladesh — social media, branding, video editing, and website design for businesses that want to grow. 🇧🇩
+              ঢাকায় অবস্থিত ফুল-সার্ভিস ক্রিয়েটিভ এজেন্সি — সোশ্যাল মিডিয়া, ব্র্যান্ডিং, ভিডিও এডিটিং ও ওয়েবসাইট ডিজাইনের মাধ্যমে আপনার ব্যবসার ডিজিটাল গ্রোথ নিশ্চিত করি। 🇧🇩
             </p>
             {/* Social links */}
             <div className="footer-socials">

@@ -40,17 +40,17 @@ const WhatsAppButton = () => {
       </svg>
       <span
         style={{
-          fontSize: '0.8rem',
+          fontSize: '0.82rem',
           fontWeight: 700,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          maxWidth: hovered ? '120px' : '0px',
+          maxWidth: hovered ? '160px' : '0px',
           opacity: hovered ? 1 : 0,
           transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease',
           display: 'block',
         }}
       >
-        Chat on WhatsApp
+        হোয়াটসঅ্যাপে কথা বলুন
       </span>
     </a>
   );
