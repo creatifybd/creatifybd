@@ -69,11 +69,11 @@ export const ConfirmProvider = ({ children }) => {
             onClick={(e) => e.stopPropagation()}
             style={{
               width: '100%',
-              maxWidth: '440px',
+              maxWidth: '360px',
               background: '#ffffff',
-              borderRadius: '20px',
-              padding: '2.25rem 2rem 1.75rem',
-              boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0,0,0,0.06)',
+              borderRadius: '18px',
+              padding: '1.75rem 1.5rem 1.35rem',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0,0,0,0.06)',
               textAlign: 'center',
               boxSizing: 'border-box',
               position: 'relative'
@@ -82,13 +82,13 @@ export const ConfirmProvider = ({ children }) => {
             {/* Icon */}
             <div
               style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '16px',
+                width: '46px',
+                height: '46px',
+                borderRadius: '13px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 auto 1.25rem',
+                margin: '0 auto 1rem',
                 background: state.tone === 'danger' ? 'rgba(232, 25, 44, 0.1)' : state.tone === 'warning' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(59, 130, 246, 0.1)',
                 color: state.tone === 'danger' ? '#e8192c' : state.tone === 'warning' ? '#f59e0b' : '#3b82f6',
               }}
@@ -99,10 +99,10 @@ export const ConfirmProvider = ({ children }) => {
             {/* Title & Description */}
             <h3
               style={{
-                fontSize: '1.28rem',
+                fontSize: '1.15rem',
                 fontWeight: 800,
                 color: '#111827',
-                margin: '0 0 0.5rem',
+                margin: '0 0 0.35rem',
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 letterSpacing: '-0.02em'
               }}
@@ -111,10 +111,10 @@ export const ConfirmProvider = ({ children }) => {
             </h3>
             <p
               style={{
-                fontSize: '0.92rem',
+                fontSize: '0.84rem',
                 color: '#6b7280',
-                margin: '0 0 1.75rem',
-                lineHeight: 1.55,
+                margin: '0 0 1.4rem',
+                lineHeight: 1.5,
                 fontFamily: "'Plus Jakarta Sans', sans-serif"
               }}
             >
@@ -125,7 +125,7 @@ export const ConfirmProvider = ({ children }) => {
             <div
               style={{
                 display: 'flex',
-                gap: '0.75rem',
+                gap: '0.65rem',
                 width: '100%',
                 justifyContent: 'center'
               }}
@@ -135,13 +135,13 @@ export const ConfirmProvider = ({ children }) => {
                 onClick={() => close(false)}
                 style={{
                   flex: 1,
-                  padding: '0.8rem 1.25rem',
-                  borderRadius: '12px',
+                  padding: '0.68rem 1rem',
+                  borderRadius: '11px',
                   border: '1.5px solid #e5e7eb',
                   background: '#f9fafb',
                   color: '#374151',
                   fontWeight: 600,
-                  fontSize: '0.92rem',
+                  fontSize: '0.86rem',
                   cursor: 'pointer',
                   transition: 'background 0.18s, border-color 0.18s',
                   outline: 'none'
@@ -157,15 +157,15 @@ export const ConfirmProvider = ({ children }) => {
                 autoFocus
                 style={{
                   flex: 1,
-                  padding: '0.8rem 1.25rem',
-                  borderRadius: '12px',
+                  padding: '0.68rem 1rem',
+                  borderRadius: '11px',
                   border: 'none',
                   background: state.tone === 'danger' ? '#e8192c' : '#111827',
                   color: '#ffffff',
                   fontWeight: 700,
-                  fontSize: '0.92rem',
+                  fontSize: '0.86rem',
                   cursor: 'pointer',
-                  boxShadow: state.tone === 'danger' ? '0 4px 16px rgba(232,25,44,0.32)' : '0 4px 16px rgba(0,0,0,0.2)',
+                  boxShadow: state.tone === 'danger' ? '0 4px 14px rgba(232,25,44,0.3)' : '0 4px 14px rgba(0,0,0,0.2)',
                   transition: 'transform 0.18s, opacity 0.18s',
                   outline: 'none'
                 }}

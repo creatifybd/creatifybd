@@ -69,45 +69,45 @@ const Login = () => {
         <div
           style={{
             width: '100%',
-            maxWidth: '430px',
+            maxWidth: '370px',
             margin: '0 auto',
             background: 'rgba(255, 255, 255, 0.98)',
-            borderRadius: '24px',
-            padding: '2.5rem 2.25rem',
-            boxShadow: '0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+            borderRadius: '20px',
+            padding: '2rem 1.75rem',
+            boxShadow: '0 25px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1)',
             boxSizing: 'border-box',
             position: 'relative',
             zIndex: 10
           }}
         >
           {/* Brand Header */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '1.6rem' }}>
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '0.35rem 0.85rem',
+                gap: '5px',
+                padding: '0.28rem 0.75rem',
                 borderRadius: '100px',
                 background: 'rgba(232, 25, 44, 0.08)',
                 color: '#e8192c',
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 fontWeight: 800,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
-                marginBottom: '1rem'
+                marginBottom: '0.75rem'
               }}
             >
-              <Shield size={13} />
+              <Shield size={12} />
               <span>Admin Console</span>
             </div>
 
             <h1
               style={{
-                fontSize: '1.65rem',
+                fontSize: '1.45rem',
                 fontWeight: 900,
                 color: '#0f0f12',
-                margin: '0 0 0.4rem',
+                margin: '0 0 0.35rem',
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 letterSpacing: '-0.03em',
                 lineHeight: 1.1
@@ -118,7 +118,7 @@ const Login = () => {
             <p
               style={{
                 color: '#6b7280',
-                fontSize: '0.86rem',
+                fontSize: '0.82rem',
                 margin: 0,
                 lineHeight: 1.4
               }}
@@ -133,10 +133,10 @@ const Login = () => {
               style={{
                 background: 'rgba(232, 25, 44, 0.08)',
                 color: '#c4101f',
-                padding: '0.85rem 1rem',
-                borderRadius: '12px',
-                fontSize: '0.84rem',
-                marginBottom: '1.5rem',
+                padding: '0.75rem 0.9rem',
+                borderRadius: '10px',
+                fontSize: '0.82rem',
+                marginBottom: '1.25rem',
                 textAlign: 'center',
                 border: '1px solid rgba(232, 25, 44, 0.18)',
                 fontWeight: 500
