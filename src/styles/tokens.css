@@ -153,8 +153,8 @@
   /* ═══════════════════════════════════════════════════════════════
      LAYOUT TOKENS — Duck Design inspired responsive margins
      ═══════════════════════════════════════════════════════════════ */
-  --nav-height:        90px;
-  --nav-height-scroll: 64px;
+  --nav-height: 72px;
+  --nav-height-scroll: 58px;
   
   /* Responsive container margins based on screen size */
   --container-margin-sm:   1.5rem;  /* Mobile (< 768px) */
@@ -164,8 +164,8 @@
   --container-margin-2xl:  7rem;    /* Extra large (> 1920px) */
   
   /* Section padding with responsive behavior */
-  --section-padding:   clamp(4rem, 6vw, 7rem);
-  --section-padding-sm: clamp(3rem, 5vw, 5rem);
+  --section-padding: clamp(3rem, 4.5vw, 5rem);
+  --section-padding-sm: clamp(2rem, 3.5vw, 3.5rem);
   
   /* Container max widths */
   --container-max-sm:   100%;

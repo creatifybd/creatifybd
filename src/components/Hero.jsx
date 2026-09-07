@@ -272,7 +272,7 @@ const Hero = () => {
         /* Headline */
         .hero-agency-h1 {
           font-family: var(--font-display);
-          font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+          font-size: clamp(1.85rem, 3.2vw, 2.75rem);
           font-weight: 800;
           line-height: 1.2;
           letter-spacing: 0;
@@ -288,11 +288,11 @@ const Hero = () => {
 
         /* Description */
         .hero-agency-desc {
-          font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+          font-size: clamp(0.88rem, 1.15vw, 0.98rem);
           color: var(--muted);
           max-width: 520px;
           line-height: 1.6;
-          margin: 0 0 2.5rem;
+          margin: 0 0 1.75rem;
           font-weight: 400;
         }
 
@@ -302,13 +302,13 @@ const Hero = () => {
           align-items: center;
           gap: 0.85rem;
           flex-wrap: wrap;
-          margin-bottom: 2.75rem;
+          margin-bottom: 1.85rem;
         }
         .hero-cta-primary {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.9rem 2rem;
+          padding: 0.75rem 1.6rem;
           background: var(--brand-red);
           color: #fff;
           font-family: var(--font-body);
@@ -330,7 +330,7 @@ const Hero = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
-          padding: 0.9rem 2rem;
+          padding: 0.75rem 1.6rem;
           background: transparent;
           color: var(--ink);
           font-family: var(--font-body);
@@ -354,7 +354,7 @@ const Hero = () => {
           display: flex;
           align-items: center;
           gap: 0;
-          padding: 1.25rem 1.5rem;
+          padding: 0.85rem 1.25rem;
           background: rgba(255,255,255,0.85);
           border: 1px solid var(--border);
           border-radius: 16px;

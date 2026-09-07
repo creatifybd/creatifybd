@@ -518,17 +518,17 @@ const Navbar = () => {
           position: fixed;
           top: 0; left: 0;
           width: 100%;
-          height: var(--nav-height, 90px);
+          height: var(--nav-height, 72px);
           z-index: 10001;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.55s cubic-bezier(0.16,1,0.3,1);
-          padding: 0 2.5rem;
+          padding: 0 1.75rem;
         }
         .agency-nav.scrolled {
-          height: 66px;
-          top: 16px;
+          height: 58px;
+          top: 10px;
           width: 88%;
           max-width: 1100px;
           left: 50%;
@@ -556,12 +556,12 @@ const Navbar = () => {
           text-decoration: none; flex-shrink: 0;
         }
         .agency-nav-logo-img {
-          height: 32px; width: auto; max-width: 110px;
+          height: 28px; width: auto; max-width: 100px;
           object-fit: contain; display: block; flex-shrink: 0;
         }
         .agency-nav-logo-text {
           font-family: var(--font-display);
-          font-size: 1.35rem; font-weight: 800;
+          font-size: 1.2rem; font-weight: 800;
           letter-spacing: -0.04em; color: var(--ink); line-height: 1;
         }
         .agency-nav-logo-text em { font-style: normal; color: var(--brand-red); }
@@ -570,7 +570,7 @@ const Navbar = () => {
         .agency-nav-links {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.35rem;
           list-style: none;
           margin: 0;
           padding: 0;
@@ -587,9 +587,9 @@ const Navbar = () => {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 0.55rem 1rem;
+          padding: 0.42rem 0.75rem;
           font-family: var(--font-body);
-          font-size: 0.95rem;
+          font-size: 0.88rem;
           font-weight: 600;
           color: var(--ink);
           text-decoration: none;
@@ -643,7 +643,7 @@ const Navbar = () => {
         .nav-mega-panel {
           position: absolute; top: calc(100% + 16px); left: 50%;
           transform: translateX(-50%);
-          width: 780px !important; min-width: 780px !important; max-width: 780px !important;
+          width: 680px !important; min-width: 680px !important; max-width: 90vw !important;
           background: #ffffff; border-radius: 18px;
           box-shadow: 0 24px 60px rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.05);
           border: 1px solid rgba(0,0,0,0.07); overflow: hidden; z-index: 10010;
@@ -655,8 +655,8 @@ const Navbar = () => {
           background: #fff; border-top: 1px solid rgba(0,0,0,0.07);
           border-left: 1px solid rgba(0,0,0,0.07); border-radius: 2px 0 0 0;
         }
-        .nav-mega-body { display: grid; grid-template-columns: 1fr 220px; min-height: 280px; }
-        .nav-mega-list { padding: 1.25rem 1.25rem 1rem; border-right: 1px solid rgba(0,0,0,0.06); }
+        .nav-mega-body { display: grid; grid-template-columns: 1fr 190px; min-height: 280px; }
+        .nav-mega-list { padding: 1rem 1rem 0.75rem; border-right: 1px solid rgba(0,0,0,0.06); }
         .nav-mega-section-label {
           font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
           letter-spacing: 0.07em; color: #aaa; margin: 0 0 0.55rem 0.25rem;
@@ -716,7 +716,7 @@ const Navbar = () => {
           background: var(--brand-red); color: #fff;
           display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .nav-mega-cta-title { font-size: 0.95rem; font-weight: 800; color: var(--ink); margin: 0; letter-spacing: -0.02em; }
+        .nav-mega-cta-title { font-size: 0.88rem; font-weight: 800; color: var(--ink); margin: 0; letter-spacing: -0.02em; }
         .nav-mega-cta-text { font-size: 0.73rem; color: #777; line-height: 1.55; margin: 0; }
         .nav-mega-cta-btn {
           display: block; padding: 0.6rem 0; background: var(--brand-red); color: #fff;
@@ -741,7 +741,7 @@ const Navbar = () => {
         .nav-mega-footer-tag { font-size: 0.68rem; color: #bbb; font-weight: 500; }
 
         /* Right actions */
-        .agency-nav-right { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+        .agency-nav-right { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
         .agency-nav-cta {
           display: inline-flex; align-items: center; gap: 0.4rem;
           padding: 0.6rem 1.4rem; background: var(--brand-red); color: #fff;
@@ -766,7 +766,7 @@ const Navbar = () => {
 
         /* Mobile breakpoints */
         @media (max-width: 900px) {
-          .agency-nav { padding: 0 1.25rem; height: 66px; }
+          .agency-nav { padding: 0 1.25rem; height: 58px; }
           .agency-nav.scrolled {
             top: 0 !important; left: 0 !important; width: 100% !important;
             max-width: none !important; height: 66px !important; transform: none !important;

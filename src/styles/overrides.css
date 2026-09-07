@@ -5691,3 +5691,69 @@ body:not(.admin-body) .scp-gig-desc {
   line-height: 1.58 !important;
   letter-spacing: 0 !important;
 }
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   REFINED LAPTOP & DESKTOP SCALE HARMONIZATION (1366px / 1440px / 1080p)
+   ═══════════════════════════════════════════════════════════════════ */
+body:not(.admin-body) h1,
+body:not(.admin-body) .hero-agency-h1 {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.015em !important;
+  max-width: 600px !important;
+}
+
+body:not(.admin-body) h2,
+body:not(.admin-body) .section-h,
+body:not(.admin-body) .pricing-title-v4,
+body:not(.admin-body) .svc-heading,
+body:not(.admin-body) .page-title {
+  font-size: clamp(1.5rem, 2.4vw, 2.15rem) !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.012em !important;
+  margin-bottom: 0.65rem !important;
+}
+
+body:not(.admin-body) h3,
+body:not(.admin-body) .card-tier-name,
+body:not(.admin-body) .svc-title,
+body:not(.admin-body) .intro-card-title,
+body:not(.admin-body) .service-card-title {
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body:not(.admin-body) p,
+body:not(.admin-body) .section-sub,
+body:not(.admin-body) .hero-agency-desc,
+body:not(.admin-body) .pricing-subtitle-v4,
+body:not(.admin-body) .page-subtitle,
+body:not(.admin-body) .card-desc,
+body:not(.admin-body) .svc-desc {
+  font-size: clamp(0.88rem, 1.1vw, 0.96rem) !important;
+  line-height: 1.6 !important;
+  letter-spacing: 0 !important;
+}
+
+body:not(.admin-body) .price-digits {
+  font-size: clamp(2.1rem, 3.2vw, 2.5rem) !important;
+}
+
+body:not(.admin-body) .luxury-price-card {
+  padding: clamp(1.5rem, 2.2vw, 2rem) clamp(1.25rem, 1.8vw, 1.65rem) !important;
+  border-radius: 20px !important;
+}
+
+body:not(.admin-body) section {
+  padding-top: clamp(3rem, 4.5vw, 4.75rem) !important;
+  padding-bottom: clamp(3rem, 4.5vw, 4.75rem) !important;
+}
+
+body:not(.admin-body) .hero-agency {
+  padding-top: calc(var(--nav-height, 72px) + 1.25rem) !important;
+  padding-bottom: clamp(2.5rem, 4vh, 3.75rem) !important;
+}
+
