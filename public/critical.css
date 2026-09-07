@@ -8,7 +8,7 @@ html, body {
   min-height: 100%;
   background: var(--critical-bg);
   color: var(--critical-ink);
-  font-family: 'Noto Sans Bengali', "Plus Jakarta Sans", Inter, system-ui, -apple-system, sans-serif;
+  font-family: 'Noto Sans Bengali', 'Hind Siliguri', "Plus Jakarta Sans", Inter, system-ui, -apple-system, sans-serif;
 }
 #root {
   min-height: 100vh;

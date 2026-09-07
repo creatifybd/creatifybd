@@ -230,6 +230,22 @@ const tabConfig = [
   { key: 'web',       label: 'ওয়েবসাইট ডিজাইন',          Icon: Globe2,    color: '#10B981' },
 ];
 
+/**
+ * Normalizes and sanitizes Bengali strings to prevent corrupt glyphs
+ * (e.g., replacement characters, low-quotes, missing vowel signs 'টি').
+ */
+export const cleanBengaliText = (str) => {
+  if (!str || typeof str !== 'string') return str;
+  return str
+    .replace(/[\u201A\u2018\u2019\u0060\u00B4\']/g, '\u09E7')
+    .replace(/([\u09E6-\u09EF\d]+)\u099F(?=[\s\)\,\.\-\/]|$)/g, (_, p1) => p1 + '\u099F\u09BF')
+    .replace(/([\u09E6-\u09EF\d]+)\u099F\)/g, (_, p1) => p1 + '\u099F\u09BF)')
+    .replace(/\u201A\u099F\u09BF/g, '\u09E7\u099F\u09BF')
+    .replace(/\u2018\u099F\u09BF/g, '\u09E7\u099F\u09BF')
+    .replace(/\u2019\u099F\u09BF/g, '\u09E7\u099F\u09BF')
+    .trim();
+};
+
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
   const [activeTab, setActiveTab] = useState('social');

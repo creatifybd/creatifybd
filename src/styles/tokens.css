@@ -74,8 +74,8 @@
   /* ═══════════════════════════════════════════════════════════════
      FONTS
      ═══════════════════════════════════════════════════════════════ */
-  --font-display: 'Noto Sans Bengali', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    'Noto Sans Bengali', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Noto Sans Bengali', 'Hind Siliguri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    'Noto Sans Bengali', 'Hind Siliguri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-bn:      'Noto Sans Bengali', sans-serif;
   --font-heading: 'Noto Sans Bengali', 'Plus Jakarta Sans', sans-serif;
   --font-mono:    'Fira Code', 'JetBrains Mono', monospace;
