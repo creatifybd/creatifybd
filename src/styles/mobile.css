@@ -256,65 +256,46 @@ img, svg, video, canvas, iframe {
 
 /* ── 7. Pricing Section Mobile Perfection ── */
 @media (max-width: 900px) {
-  .pricing-grid {
+  .pricing-cards-grid {
     grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+    gap: 1.75rem !important;
   }
 
-  .pricing-service-tabs {
+  .pricing-segmented-bar {
     display: flex !important;
     overflow-x: auto !important;
     scrollbar-width: none !important;
     -webkit-overflow-scrolling: touch !important;
     justify-content: flex-start !important;
-    padding-bottom: 0.5rem !important;
-    gap: 8px !important;
+    padding: 4px !important;
+    gap: 6px !important;
   }
 
-  .pricing-service-tabs::-webkit-scrollbar {
+  .pricing-segmented-bar::-webkit-scrollbar {
     display: none !important;
   }
 
-  .pricing-service-tab {
+  .pricing-seg-btn {
     flex-shrink: 0 !important;
-    padding: 0.6rem 1.1rem !important;
+    padding: 0.55rem 1rem !important;
     font-size: 0.82rem !important;
   }
 
-  .price-card {
-    padding: 1.5rem !important;
-    border-radius: 16px !important;
+  .luxury-price-card {
+    padding: 2rem 1.35rem 1.5rem !important;
+    border-radius: 20px !important;
   }
 
-  .price-card.featured {
+  .luxury-price-card.is-featured {
     transform: none !important;
-    border: 2px solid var(--brand-red) !important;
   }
 
-  .price-tier {
-    font-size: 1.2rem !important;
+  .price-digits {
+    font-size: 2.5rem !important;
   }
 
-  .price-amount {
-    font-size: 2rem !important;
-    margin: 0.75rem 0 0.5rem !important;
-  }
-
-  .price-desc {
-    font-size: 0.88rem !important;
-    margin-bottom: 1rem !important;
-  }
-
-  .price-features li {
-    font-size: 0.85rem !important;
-    line-height: 1.6 !important;
-    margin-bottom: 0.6rem !important;
-  }
-
-  .price-cta {
-    width: 100% !important;
-    margin-top: 1.25rem !important;
-    font-size: 0.9rem !important;
+  .card-action-wrap .card-cta-btn {
+    min-height: 48px !important;
   }
 }
 

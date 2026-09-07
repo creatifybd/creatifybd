@@ -3,61 +3,65 @@ import { Link } from 'react-router-dom';
 import { db } from '../firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { FadeReveal, StaggerReveal } from './MotionReveal';
-import { BarChart2, Palette, Video, Globe2, ArrowRight, Check, Star } from 'lucide-react';
+import { BarChart2, Palette, Video, Globe2, ArrowRight, Check, Sparkles, Zap, ShieldCheck, MessageCircle } from 'lucide-react';
 
 const fallbackPricing = {
   social: [
     {
       id: 's1',
       tier: 'প্যাকেজ ০১',
-      specialOffer: true,
-      badge: 'স্পেশাল অফার',
+      tierSub: 'স্টার্টার গ্রোথ',
+      badge: 'স্টার্টার প্যাক',
+      badgeType: 'starter',
       price: '৫,০০০',
       rawPrice: 5000,
       period: '/মাস',
-      desc: 'দৈনিক ২টি পোস্টার ও সাপ্তাহিক ভিডিও সহ স্টার্টার সোশ্যাল গ্রোথ',
+      desc: 'নতুন বা ছোট পেজের জন্য নিয়মিত পোস্ট ও প্রাথমিক অডিয়েন্স এনগেজমেন্ট।',
       features: [
-        'দৈনিক ২টি সোশ্যাল মিডিয়া পোস্টার (মাসে ৬০টি পোস্টার)',
-        'সপ্তাহে ১টি প্রমোশনাল ভিডিও (মাসে ৪টি ভিডিও)',
-        'আকর্ষণীয় বাংলা/ইংলিশ ক্যাপশন ও নিশ হ্যাশট্যাগ',
-        'মান্থলি কনটেন্ট প্ল্যানিং ও ডিজাইন সিডিউল',
-        '১টি প্ল্যাটফর্ম ফুল ম্যানেজমেন্ট ও সাপোর্ট'
+        'দৈনিক ২টি প্রফেশনাল পোস্টার (মাসে ৬০টি)',
+        'সপ্তাহে ১টি প্রমোশনাল ভিডিও/রিলস (মাসে ৪টি)',
+        'আকর্ষণীয় বাংলা ক্যাপশন ও নিশ হ্যাশট্যাগ',
+        'মান্থলি কনটেন্ট প্ল্যানিং ও ডিজাইন শিডিউল',
+        '১টি প্ল্যাটফর্ম (ফেসবুক অথবা ইনস্টাগ্রাম)'
       ]
     },
     {
       id: 's2',
       tier: 'প্যাকেজ ০২',
-      specialOffer: true,
-      badge: 'স্পেশাল অফার',
+      tierSub: 'প্রো গ্রোথ ও সেলস',
+      badge: 'সর্বাধিক জনপ্রিয় 🔥',
+      badgeType: 'popular',
       featured: true,
-      popularLabel: 'সবচেয়ে জনপ্রিয়',
       price: '৭,০০০',
       rawPrice: 7000,
       period: '/মাস',
-      desc: 'দৈনিক ৩টি পোস্টার ও সাপ্তাহিক ভিডিও সহ রেগুলার ব্র্যান্ড গ্রোথ',
+      desc: 'দ্রুত পেজ গ্রোথ ও নিয়মিত সেলসের জন্য সবচেয়ে ব্যালান্সড ও সেরা প্যাকেজ।',
       features: [
-        'দৈনিক ৩টি সোশ্যাল মিডিয়া পোস্টার (মাসে ৯০টি পোস্টার)',
-        'সপ্তাহে ১টি প্রমোশনাল ভিডিও (মাসে ৪টি ভিডিও)',
-        'ট্রেন্ডিং রিলস কনসেপ্ট ও মোশন গ্রাফিক্স',
+        'দৈনিক ৩টি আকর্ষণীয় পোস্টার (মাসে ৯০টি)',
+        'সপ্তাহে ১টি ট্রেন্ডিং ভিডিও/রিলস (মাসে ৪টি)',
+        'মোশন গ্রাফিক্স ও ডায়নামিক কনটেন্ট আইডিয়া',
         'ফেসবুক ও ইনস্টাগ্রাম ২ প্ল্যাটফর্ম সাপোর্ট',
-        'এনগেজিং ক্যাপশন ও রেগুলার কনটেন্ট সিডিউলিং'
+        'এনগেজিং ক্যাপশন ও রেগুলার কনটেন্ট শিডিউলিং',
+        'সরাসরি ডেডিকেটেড ক্রিয়েটিভ সাপোর্ট'
       ]
     },
     {
       id: 's3',
       tier: 'প্যাকেজ ০৩',
-      specialOffer: true,
-      badge: 'স্পেশাল অফার',
+      tierSub: 'ফুল-স্কেল ডমিনেশন',
+      badge: 'আলটিমেট পাওয়ার 👑',
+      badgeType: 'vip',
       price: '১০,০০০',
       rawPrice: 10000,
       period: '/মাস',
-      desc: 'দৈনিক ৫টি পোস্টার ও সপ্তাহে ২টি ভিডিও সহ ফুল-স্কেল ডমিনেশন',
+      desc: 'বড় ব্র্যান্ড ও এগ্রেসিভ মার্কেটিংয়ের জন্য ফুল-স্কেল সোশ্যাল মিডিয়া সাপোর্ট।',
       features: [
-        'দৈনিক ৫টি সোশ্যাল মিডিয়া পোস্টার (মাসে ১৫০টি পোস্টার)',
-        'সপ্তাহে ২টি প্রমোশনাল ভিডিও (মাসে ৮টি ভিডিও)',
-        'হাই-কনভার্সন ভিডিও ও সেলস-ফোকাসড ক্রিয়েটিভস',
+        'দৈনিক ৫টি হাই-কোয়ালিটি পোস্টার (মাসে ১৫০টি)',
+        'সপ্তাহে ২টি হাই-কনভার্সন ভিডিও (মাসে ৮টি)',
+        'হাই-কনভার্সন সেলস ও ট্রেন্ডিং রিলস ক্রিয়েটিভস',
         'মাল্টি-প্ল্যাটফর্ম ফুল ম্যানেজমেন্ট',
-        'ডেডিকেটেড ক্রিয়েটিভ ম্যানেজার ও প্রায়োরিটি সাপোর্ট'
+        'ডেডিকেটেড সিনিয়র ম্যানেজার ও প্রায়োরিটি ডেলিভারি',
+        'ফ্রি ক্যাম্পেইন প্ল্যানিং ও ডিজাইন কনসাল্টেশন'
       ]
     }
   ],
@@ -65,40 +69,51 @@ const fallbackPricing = {
     {
       id: 'b1',
       tier: 'লোগো ও বেসিক ব্র্যান্ডিং',
+      tierSub: 'স্টার্টআপ আইডেন্টিটি',
+      badge: 'স্টার্টআপ',
+      badgeType: 'starter',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'ইউনিক লোগো, কালার প্যালেট ও সোশ্যাল কিট',
+      desc: 'নতুন ব্যবসার জন্য আধুনিক ভেক্টর লোগো ও প্রাথমিক ব্র্যান্ড অ্যাসেটস।',
       features: [
-        'কাস্টম ভেক্টর লোগো কনসেপ্ট',
-        'কালার ও টাইপোগ্রাফি গাইডলাইন',
-        'সোশ্যাল মিডিয়া প্রোফাইল ও কভার কিট',
-        'প্রিন্ট ও ওয়েব রেডি সোর্স ফাইল'
+        'কাস্টম ইউনিক লোগো ডিজাইন কনসেপ্ট',
+        'কালার প্যালেট ও টাইপোগ্রাফি গাইডলাইন',
+        'সোশ্যাল মিডিয়া প্রোফাইল ও কভার ব্যানার',
+        'প্রিন্ট ও ওয়েব রেডি হাই-রেজ সোর্স ফাইল'
       ]
     },
     {
       id: 'b2',
       tier: 'কমপ্লিট ব্র্যান্ড আইডেন্টিটি',
+      tierSub: 'বিজনেস কমপ্লিট প্যাকেজ',
+      badge: 'ফুল প্যাকেজ 🔥',
+      badgeType: 'popular',
+      featured: true,
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'ফুল ভিজ্যুয়াল আইডেন্টিটি ও বিজনেস মেটেরিয়ালস',
+      desc: 'কর্পোরেট প্রতিষ্ঠান ও ব্র্যান্ডের পূর্ণাঙ্গ ভিজ্যুয়াল আইডেন্টিটি সিস্টেম।',
       features: [
-        'মাস্টার ব্র্যান্ড গাইডবুক',
-        'স্টেশনারি ও ভিজিটিং কার্ড ডিজাইন',
-        'প্যাকেজিং অথবা মার্কেটিং কোলাটেরাল',
-        '১০০% কাস্টমাইজড প্রজেক্ট সাপোর্ট'
-      ],
-      featured: true
+        'মাস্টার ব্র্যান্ড স্টাইল গাইডবুক',
+        'ভিজিটিং কার্ড, লেটারহেড ও ইনভয়েস ডিজাইন',
+        'প্রোডাক্ট প্যাকেজিং অথবা মার্কেটিং কোলাটেরাল',
+        'ফুল ভেক্টর সোর্স ফাইল (AI, EPS, PDF, PNG)',
+        '১০০% কাস্টমাইজড আর্ট ডিরেকশন'
+      ]
     },
     {
       id: 'b3',
       tier: 'এন্টারপ্রাইজ ব্র্যান্ডিং',
+      tierSub: 'লার্জ-স্কেল সলিউশন',
+      badge: 'এন্টারপ্রাইজ 👑',
+      badgeType: 'vip',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'লার্জ-স্কেল ব্যবসা ও রি-ব্র্যান্ডিং সলিউশন',
+      desc: 'বড় ব্যবসা, রি-ব্র্যান্ডিং ও মাল্টি-চ্যানেল মার্কেটিং ম্যাটেরিয়ালস।',
       features: [
         'কম্প্রিহেনসিভ ব্র্যান্ড সিস্টেম ও অ্যাসেট লাইব্রেরি',
-        'মার্কেটিং ক্যাম্পেইন টেমপ্লেট ও ব্যানার প্যাক',
-        'আনলিমিটেড আর্টওয়ার্ক ভ্যারিয়েশন',
+        'মার্কেটিং ক্যাম্পেইন টেমপ্লেট ও অ্যাড ব্যানার প্যাক',
+        'প্যাকেজিং ও মার্চেন্ডাইজ ডিজাইন',
+        'আনলিমিটেড আর্টওয়ার্ক রিভিশন সাপোর্ট',
         'ডেডিকেটেড সিনিয়র আর্ট ডিরেক্টর'
       ]
     }
@@ -107,38 +122,50 @@ const fallbackPricing = {
     {
       id: 'v1',
       tier: 'শর্ট-ফর্ম ভিডিও ও রিলস',
+      tierSub: 'সোশ্যাল রিলস প্যাক',
+      badge: 'ট্রেন্ডিং প্যাক',
+      badgeType: 'starter',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'ইনস্টাগ্রাম, ফেসবুক ও টিকটক রিলস এডিটিং',
+      desc: 'ফেসবুক, ইনস্টাগ্রাম ও টিকটকের জন্য হাই-এনগেজিং শর্ট ভিডিও এডিটিং।',
       features: [
-        'ডায়নামিক হুক ও মোশন ক্যাপশন',
-        'ট্রেন্ডিং সাউন্ড ও সাউন্ড ইফেক্টস',
-        'কালার কারেকশন ও হাই-কোয়ালিটি রেন্ডার'
+        'ডায়নামিক হুক ও মোশন টেক্সট ক্যাপশন',
+        'ট্রেন্ডিং অডিও ও সাউন্ড এফেক্টস (SFX)',
+        'স্মুথ ট্রানজিশন ও জুম এফেক্টস',
+        'কালার কারেকশন ও 4K/1080p রেন্ডারিং'
       ]
     },
     {
       id: 'v2',
-      tier: 'প্রোডাক্ট ও কমার্শিয়াল প্রমো',
+      tier: 'কমার্শিয়াল ভিডিও অ্যাডস',
+      tierSub: 'প্রোডাক্ট ও সেলস ভিডিও',
+      badge: 'হাই কনভার্সন 🔥',
+      badgeType: 'popular',
+      featured: true,
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'সেলস ও প্রমোশনাল ভিডিও বিজ্ঞাপন',
+      desc: 'পণ্য বিক্রি ও ব্র্যান্ড প্রমোশনের জন্য সেলস-ফোকাসড ভিডিও ক্রিয়েটিভস।',
       features: [
-        'স্ক্রিপ্ট ও ভয়েসওভার সিঙ্কিং',
-        'মোশন গ্রাফিক্স ও প্রোডাক্ট হাইলাইটস',
-        'হাই-কনভার্সন ভিডিও অ্যাডস ফরমুলা'
-      ],
-      featured: true
+        'স্ক্রিপ্ট ও ভয়েসওভার পারফেক্ট সিঙ্কিং',
+        'মোশন গ্রাফিক্স ও প্রোডাক্ট ফিচার হাইলাইটস',
+        'ফেসবুক/ইনস্টাগ্রাম অ্যাড রেডি রেশিও (9:16, 1:1, 16:9)',
+        'হাই-কনভার্সন অডিয়েন্স রিটেনশন হুক্স'
+      ]
     },
     {
       id: 'v3',
-      tier: 'ইউটিউব ও ফুল প্রোডাকশন এডিট',
+      tier: 'ইউটিউব ও লং-ফর্ম ভিডিও',
+      tierSub: 'ফুল প্রোডাকশন এডিটিং',
+      badge: 'ফুল প্রোডাকশন 👑',
+      badgeType: 'vip',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'লং-ফর্ম কন্টেন্ট ও ব্র্যান্ড স্টোরিটেলিং',
+      desc: 'ইউটিউব ভিডিও, পডকাস্ট ও ডকুমেন্টারি স্টাইলের ফুল-লেন্থ এডিটিং।',
       features: [
         'মাল্টি-ক্যামেরা এডিটিং ও B-Roll ইন্টিগ্রেশন',
         'সিনেমাটিক কালার গ্রেডিং ও অডিও মাস্টারিং',
-        'কাস্টম থাম্বনেইল ও সোশ্যাল ভার্সন'
+        'কাস্টম আই-ক্যাচিং থাম্বনেইল ডিজাইন',
+        'সোশ্যাল মিডিয়া শর্ট টিজার ক্লিপস'
       ]
     }
   ],
@@ -146,73 +173,68 @@ const fallbackPricing = {
     {
       id: 'w1',
       tier: 'হাই-কনভার্সন ল্যান্ডিং পেজ',
+      tierSub: 'সিঙ্গেল প্রোডাক্ট/ক্যাম্পেইন',
+      badge: 'ক্যাম্পেইন রেডি',
+      badgeType: 'starter',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'সিঙ্গেল প্রমোশনাল পেজ ও ক্যাম্পেইন ল্যান্ডার',
+      desc: 'বিজ্ঞাপনের জন্য দ্রুত লোডিং ও উচ্চ বিক্রয় রূপান্তরের ল্যান্ডিং পেজ।',
       features: [
-        'সুপার ফাস্ট লোডিং স্পিড',
-        'মোবাইল-ফার্স্ট রেসপন্সিভ ডিজাইন',
-        'হোয়াটসঅ্যাপ ও লিড ফর্ম ইন্টিগ্রেশন',
-        'বেসিক অন-পেজ এসইও সেটআপ'
+        'সুপার ফাস্ট আল্ট্রা-লাইট লোডিং স্পিড',
+        '১০০% মোবাইল-ফার্স্ট রেসপন্সিভ ডিজাইন',
+        '১-ট্যাপ WhatsApp ও লিড ফর্ম ইন্টিগ্রেশন',
+        'বেসিক অন-পেজ এসইও ও মেটা সেটআপ'
       ]
     },
     {
       id: 'w2',
       tier: 'কমপ্লিট বিজনেস ওয়েবসাইট',
+      tierSub: 'কর্পোরেট ও কোম্পানি সাইট',
+      badge: 'মোস্ট ওয়ান্টেড 🔥',
+      badgeType: 'popular',
+      featured: true,
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'প্রফেশনাল কর্পোরেট ও সার্ভিস ওয়েবসাইট',
+      desc: 'আপনার প্রতিষ্ঠানের আস্থা ও গ্রহণযোগ্যতা বাড়াতে আধুনিক বিজনেস ওয়েবসাইট।',
       features: [
-        'কাস্টম UI/UX ডিজাইন',
-        'সার্ভিস, পোর্টফোলিও ও ব্লগ পেজ',
-        'ডায়নামিক কনটেন্ট ও ইউজার ফ্রেন্ডলি প্যানেল',
-        'ফুল সিকিউরিটি ও স্পিড অপ্টিমাইজেশন'
-      ],
-      featured: true
+        'কাস্টম ইউনিক UI/UX ডিজাইন',
+        'হোম, সার্ভিস, পোর্টফোলিও, রিভিউ ও যোগাযোগ পেজ',
+        'সহজে কনটেন্ট পরিবর্তনের ব্যাকএন্ড প্যানেল',
+        'ফুল সিকিউরিটি, এসএসএল ও স্পিড অপ্টিমাইজেশন',
+        '১ বছর ফ্রি টেকনিক্যাল মেইনটেন্যান্স'
+      ]
     },
     {
       id: 'w3',
-      tier: 'ই-কমার্স ও কাস্টম ওয়েব সলিউশন',
+      tier: 'ই-কমার্স ও কাস্টম ওয়েব',
+      tierSub: 'ফুল স্কেল অনলাইন শপ',
+      badge: 'এন্টারপ্রাইজ শপ 👑',
+      badgeType: 'vip',
       isCustom: true,
       price: 'কাস্টম বাজেট',
-      desc: 'ফুল স্কেল অনলাইন শপ ও ডায়নামিক পোর্টাল',
+      desc: 'অটোমেটেড সেলস, পেমেন্ট ও ইনভেন্টরি সহ ফুল অনলাইন স্টোর।',
       features: [
-        'প্রোডাক্ট ক্যাটালগ ও অর্ডার ম্যানেজমেন্ট',
-        'পেমেন্ট ও কুরিয়ার গেটওয়ে ইন্টিগ্রেশন',
-        'অ্যাডভান্সড অ্যানালিটিক্স ও কাস্টমার ট্র্যাকিং',
-        'ডেডিকেটেড টেকনিক্যাল সাপোর্ট'
+        'প্রোডাক্ট ক্যাটালগ ও ইনভেন্টরি ম্যানেজমেন্ট',
+        'বিকাশ, নগদ ও কার্ড পেমেন্ট গেটওয়ে ইন্টিগ্রেশন',
+        'কুরিয়ার ও ডেলিভারি ট্র্যাকিং অটোমেশন',
+        'ফেসবুক পিক্সেল ও অ্যাডভান্সড কনভার্সন API'
       ]
     }
   ]
 };
 
 const tabConfig = [
-  { key: 'social',    label: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',  Icon: BarChart2, color: '#E8192C' },
+  { key: 'social',    label: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',  Icon: BarChart2, color: '#E8192C', badge: 'স্পেশাল অফার' },
   { key: 'branding',  label: 'লোগো ও ব্র্যান্ডিং',        Icon: Palette,   color: '#8B5CF6' },
   { key: 'video',     label: 'ভিডিও এডিটিং',             Icon: Video,     color: '#EC4899' },
   { key: 'web',       label: 'ওয়েবসাইট ডিজাইন',          Icon: Globe2,    color: '#10B981' },
 ];
 
-const serviceGroups = {
-  retainers: {
-    label: 'স্পেশাল অফার — মান্থলি ম্যানেজমেন্ট প্যাকেজ',
-    description: 'প্রতিদিন পোস্টার ও সাপ্তাহিক ভিডিও সহ আপনার সোশ্যাল মিডিয়া পেজের সম্পূর্ণ গ্রোথ ও ডিজাইন সাপোর্ট।',
-    categories: ['social']
-  },
-  projectBased: {
-    label: 'প্রজেক্ট-ভিত্তিক কাস্টম সার্ভিস',
-    description: 'আপনার প্রজেক্টের রিকোয়ারমেন্ট ও চাহিদা অনুযায়ী কাস্টম কোটেশন ও অন-টাইম ডেলিভারি।',
-    categories: ['branding', 'video', 'web']
-  }
-};
-
 const Pricing = ({ highlight = false, fullPage = false }) => {
   const [pricingData, setPricingData] = useState({ social: [], branding: [], web: [], video: [] });
   const [activeTab, setActiveTab] = useState('social');
-  const [billing, setBilling] = useState('monthly');
 
   useEffect(() => {
-    // Read from Firestore if available, but fallbackPricing is the primary baseline
     const unsub = onSnapshot(
       collection(db, 'pricing'),
       (snap) => {
@@ -227,7 +249,6 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
               .forEach(item => {
                 if (item?.category && data[item.category]) data[item.category].push(item);
               });
-            // Only set if docs actually contain Bengali content
             const hasValidBn = Object.values(data).some(arr => arr.some(p => p.tier_bn || (p.tier && /[\u0980-\u09FF]/.test(p.tier))));
             if (hasValidBn) {
               setPricingData(data);
@@ -248,6 +269,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     const plans = highlight ? source.slice(0, 3) : source;
     return plans.map(p => {
       const tierName = p.tier_bn || p.tier;
+      const tierSub = p.tierSub || '';
       const descText = p.desc_bn || p.desc;
       const featuresList = (p.features_bn && p.features_bn.length > 0) ? p.features_bn : p.features;
       const priceText = p.bdtPrice || p.price;
@@ -255,6 +277,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
       return {
         ...p,
         tier: tierName,
+        tierSub,
         desc: descText,
         features: featuresList,
         _isCustom: isCustom,
@@ -263,538 +286,743 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
     });
   }, [activeTab, highlight, pricingData]);
 
-  const activeGroup = Object.values(serviceGroups).find(g => g.categories.includes(activeTab));
   const isSocialTab = activeTab === 'social';
 
   return (
-    <section className={`section pricing-section ${fullPage ? 'full-page-section' : ''}`} id="pricing">
+    <section className={`pricing-master-section ${fullPage ? 'full-page-section' : ''}`} id="pricing">
+      {/* Subtle ambient lighting */}
+      <div className="pricing-ambient-glow" aria-hidden="true" />
+
       <div className="container">
         {!fullPage && (
-          <div className="pricing-header text-center">
-            <h2 className="section-h">স্বচ্ছ প্যাকেজ ও <span className="red">স্পেশাল অফার</span></h2>
-            <p className="section-sub">সোশ্যাল মিডিয়া গ্রোথের জন্য রয়েছে আকর্ষণীয় স্পেশাল অফার প্যাকেজ। অন্যান্য সার্ভিসের জন্য আপনার প্রজেক্ট অনুযায়ী সরাসরি কথা বলে কাস্টম কোটেশন নিন।</p>
+          <div className="pricing-header-v4 text-center">
+            <span className="pricing-eyebrow">
+              <Sparkles size={14} className="text-red animate-pulse" />
+              <span>সাশ্রয়ী মূল্যে প্রিমিয়াম কোয়ালিটি</span>
+            </span>
+            <h2 className="pricing-title-v4">
+              স্বচ্ছ প্যাকেজ ও <span className="text-gradient-red">স্পেশাল অফার</span>
+            </h2>
+            <p className="pricing-subtitle-v4">
+              সোশ্যাল মিডিয়া গ্রোথের জন্য রয়েছে আকর্ষণীয় মান্থলি অফার প্যাকেজ। এছাড়া যেকোনো কাস্টম প্রজেক্টে পান দ্রুত ডেলিভারি ও শতভাগ সাপোর্ট।
+            </p>
           </div>
         )}
 
-        {/* Service Tabs */}
-        <FadeReveal delay={0.15}>
-          <div className="pricing-tabs-wrapper">
-            <div className="pricing-service-tabs" role="tablist" aria-label="Service categories">
-              {tabConfig.map(({ key, label, Icon, color }) => (
+        {/* ── Modern Segmented Filter Bar ── */}
+        <FadeReveal delay={0.1}>
+          <div className="pricing-nav-container">
+            <div className="pricing-segmented-bar" role="tablist">
+              {tabConfig.map(({ key, label, Icon, color, badge }) => (
                 <button
                   key={key}
                   role="tab"
                   aria-selected={activeTab === key}
-                  className={`pricing-service-tab ${activeTab === key ? 'active' : ''}`}
+                  className={`pricing-seg-btn ${activeTab === key ? 'active' : ''}`}
                   onClick={() => setActiveTab(key)}
-                  style={{ '--tab-color': color }}
+                  style={{ '--tab-theme': color }}
                 >
-                  <span className="tab-icon-wrap">
-                    <Icon size={18} strokeWidth={2} />
+                  <span className="seg-icon-pill">
+                    <Icon size={16} />
                   </span>
-                  <span className="tab-label">{label}</span>
-                  {key === 'social' && (
-                    <span className="tab-special-badge">অফার</span>
-                  )}
+                  <span className="seg-label">{label}</span>
+                  {badge && <span className="seg-badge">{badge}</span>}
                 </button>
               ))}
             </div>
-
-            {/* Service Info Strip */}
-            {activeGroup && (
-              <div className="pricing-service-info">
-                <span className={`service-tag ${isSocialTab ? 'tag-special' : ''}`}>{activeGroup.label}</span>
-                <p className="service-info-desc">{activeGroup.description}</p>
-              </div>
-            )}
           </div>
         </FadeReveal>
 
-        {/* Pricing Cards */}
-        <StaggerReveal delay={0.25} className="pricing-grid active">
+        {/* ── Contextual Offer Micro-Banner ── */}
+        <div className="pricing-info-pill-wrap">
+          <div className="pricing-info-pill">
+            <span className="info-pill-dot" />
+            <span className="info-pill-text">
+              {isSocialTab
+                ? '🔥 স্পেশাল অফার: প্রতিদিন পোস্টার ও ভিডিও সহ সোশ্যাল পেজের সম্পূর্ণ গ্রোথ ও ডিজাইন সাপোর্ট'
+                : '✨ আপনার প্রজেক্টের রিকোয়ারমেন্ট অনুযায়ী কাস্টম কোটেশন ও অন-টাইম ডেলিভারি গ্যারান্টি'}
+            </span>
+          </div>
+        </div>
+
+        {/* ── Pricing Cards Grid ── */}
+        <StaggerReveal delay={0.2} className="pricing-cards-grid">
           {displayPlans.map((plan) => (
             <FadeReveal key={plan.id || plan.tier}>
-              <article className={`price-card ${plan.featured ? 'featured' : ''} ${plan.specialOffer ? 'special-offer-card' : ''}`}>
-                {plan.specialOffer && (
-                  <div className="special-offer-badge">
-                    ⚡ {plan.badge || 'স্পেশাল অফার'}
+              <div
+                className={`luxury-price-card ${plan.featured ? 'is-featured' : ''} ${plan.badgeType === 'vip' ? 'is-vip' : ''}`}
+              >
+                {/* Popular / Badge banner */}
+                {plan.badge && (
+                  <div className={`card-top-badge badge-${plan.badgeType || 'default'}`}>
+                    <span>{plan.badge}</span>
                   </div>
                 )}
-                {plan.featured && !plan.specialOffer && (
-                  <div className="popular-badge">
-                    <Star size={12} strokeWidth={2.5} />
-                    {plan.popularLabel || 'সবচেয়ে জনপ্রিয়'}
-                  </div>
-                )}
-                <div className="price-tier">{plan.tier}</div>
 
-                <div className="price-amount">
+                {/* Card Header */}
+                <div className="card-head">
+                  <div className="card-tier-wrap">
+                    <h3 className="card-tier-name">{plan.tier}</h3>
+                    {plan.tierSub && <span className="card-tier-sub">{plan.tierSub}</span>}
+                  </div>
+                  <p className="card-desc">{plan.desc}</p>
+                </div>
+
+                {/* Price Display */}
+                <div className="card-price-block">
                   {plan._isCustom ? (
-                    <span className="price-custom-text">{plan._displayPrice}</span>
+                    <div className="custom-price-display">
+                      <span className="custom-price-tag">কাস্টম বাজেট</span>
+                      <span className="custom-price-sub">প্রজেক্ট অনুযায়ী সাশ্রয়ী কোটেশন</span>
+                    </div>
                   ) : (
-                    <>
-                      <span className="currency">৳</span>
-                      {plan._displayPrice}
-                      <span className="price-period">{plan.period || '/মাস'}</span>
-                    </>
+                    <div className="fixed-price-display">
+                      <div className="price-number-row">
+                        <span className="currency-symbol">৳</span>
+                        <span className="price-digits">{plan._displayPrice}</span>
+                        <span className="price-tenure">{plan.period || '/মাস'}</span>
+                      </div>
+                      <span className="price-guarantee-tag">নো হিডেন চার্জ · ১০০% কোয়ালিটি</span>
+                    </div>
                   )}
                 </div>
 
-                <div className="price-desc">{plan.desc}</div>
-                <div className="price-divider" />
-                <ul className="price-features">
-                  {plan.features?.map((feat) => (
-                    <li key={feat}>
-                      <Check size={14} strokeWidth={2.5} />
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
+                <div className="card-divider-line" />
 
-                {plan._isCustom ? (
-                  <a
-                    href={`https://wa.me/8801951676600?text=${encodeURIComponent(`আসসালামু আলাইকুম CreatifyBD! আমি "${plan.tier}" সার্ভিসের জন্য কাস্টম কোটেশন ও বাজেট আলোচনা করতে চাই।`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-outline-red price-cta"
-                  >
-                    কাস্টম কোটেশন নিন
-                    <ArrowRight size={15} strokeWidth={2.5} />
-                  </a>
-                ) : (
-                  <a
-                    href={`https://wa.me/8801951676600?text=${encodeURIComponent(`আসসালামু আলাইকুম CreatifyBD! আমি সোশ্যাল মিডিয়া ম্যানেজমেন্টের "${plan.tier}" (৳${plan._displayPrice}/মাস) স্পেশাল অফার প্যাকেজটি নিতে আগ্রহী।`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-red price-cta"
-                  >
-                    প্যাকেজটি শুরু করুন
-                    <ArrowRight size={15} strokeWidth={2.5} />
-                  </a>
-                )}
-              </article>
+                {/* Features List */}
+                <div className="card-features-block">
+                  <span className="features-headline">প্যাকেজে যা যা পাচ্ছেন:</span>
+                  <ul className="features-checklist">
+                    {plan.features?.map((feat, idx) => (
+                      <li key={idx}>
+                        <span className="check-bullet">
+                          <Check size={13} strokeWidth={3} />
+                        </span>
+                        <span className="feat-text">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Card Action CTA */}
+                <div className="card-action-wrap">
+                  {plan._isCustom ? (
+                    <a
+                      href={`https://wa.me/8801951676600?text=${encodeURIComponent(`আসসালামু আলাইকুম CreatifyBD! আমি "${plan.tier}" (${plan.tierSub || ''}) সার্ভিসের জন্য কাস্টম বাজেট ও কোটেশন আলোচনা করতে চাই।`)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="card-cta-btn btn-ghost-luxury"
+                    >
+                      <MessageCircle size={16} />
+                      <span>কাস্টম কোটেশন নিন</span>
+                      <ArrowRight size={15} />
+                    </a>
+                  ) : (
+                    <a
+                      href={`https://wa.me/8801951676600?text=${encodeURIComponent(`আসসালামু আলাইকুম CreatifyBD! আমি সোশ্যাল মিডিয়া ম্যানেজমেন্টের "${plan.tier}" (৳${plan._displayPrice}/মাস) স্পেশাল অফার প্যাকেজটি বুক করতে চাই।`)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`card-cta-btn ${plan.featured ? 'btn-red-luxury-glow' : 'btn-red-luxury'}`}
+                    >
+                      <Zap size={16} />
+                      <span>এই প্যাকেজটি বুক করুন</span>
+                      <ArrowRight size={15} />
+                    </a>
+                  )}
+                </div>
+              </div>
             </FadeReveal>
           ))}
         </StaggerReveal>
 
+        {/* ── Trust Footnote ── */}
+        <div className="pricing-trust-strip">
+          <div className="trust-strip-item">
+            <ShieldCheck size={18} className="text-red" />
+            <span>কোনো হিডেন ফি নেই</span>
+          </div>
+          <div className="trust-strip-dot" />
+          <div className="trust-strip-item">
+            <Zap size={18} className="text-red" />
+            <span>দ্রুত ডেলিভারি ও রেসপন্স</span>
+          </div>
+          <div className="trust-strip-dot" />
+          <div className="trust-strip-item">
+            <MessageCircle size={18} className="text-red" />
+            <span>২৪/৭ WhatsApp সাপোর্ট</span>
+          </div>
+        </div>
+
         {highlight && (
           <FadeReveal delay={0.4}>
-            <div className="section-action">
-              <Link to="/pricing" className="btn-outline-red">সব প্যাকেজ একসাথে দেখুন</Link>
+            <div className="section-action" style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <Link to="/pricing" className="btn-outline-red">সব প্যাকেজ ও বিস্তারিত দেখুন →</Link>
             </div>
           </FadeReveal>
         )}
       </div>
 
       <style>{`
-        /* ══ PRICING ════════════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════════════════════
+           CREATIFYBD — LUXURY PRICING SECTION V4
+           ═══════════════════════════════════════════════════════════ */
+        .pricing-master-section {
+          position: relative;
+          background: #ffffff;
+          padding: clamp(4.5rem, 7vw, 6.5rem) 0;
+          overflow: hidden;
+        }
 
-        /* Billing toggle */
-        .pricing-billing-toggle {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          background: var(--surface-soft);
-          border: 1px solid var(--border);
-          border-radius: 100px;
-          padding: 4px;
-          width: fit-content;
+        .pricing-ambient-glow {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 800px;
+          height: 400px;
+          background: radial-gradient(ellipse at top, rgba(232, 25, 44, 0.05) 0%, rgba(232, 25, 44, 0) 70%);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* ── Header ── */
+        .pricing-header-v4 {
+          max-width: 680px;
           margin: 0 auto 2.5rem;
-        }
-        .pbt-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.45rem;
-          padding: 0.55rem 1.4rem;
-          border-radius: 100px;
-          border: none;
-          background: transparent;
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: var(--muted);
-          cursor: pointer;
-          transition: all 0.22s ease;
-          white-space: nowrap;
-        }
-        .pbt-btn.active {
-          background: var(--brand-red);
-          color: #fff;
-          box-shadow: 0 4px 12px rgba(232,25,44,0.28);
-        }
-        .pbt-save {
-          font-size: 0.7rem;
-          font-weight: 700;
-          background: rgba(255,255,255,0.25);
-          padding: 0.1rem 0.45rem;
-          border-radius: 100px;
-          letter-spacing: 0.02em;
-        }
-        .pbt-btn:not(.active) .pbt-save {
-          background: rgba(34,197,94,0.12);
-          color: #16a34a;
+          position: relative;
+          z-index: 1;
         }
 
-        /* Tabs wrapper */
-        .pricing-tabs-wrapper {
-          margin-bottom: 2.5rem;
-        }
-
-        /* Service tabs row */
-        .pricing-service-tabs {
-          display: flex;
-          gap: 10px;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-bottom: 1.5rem;
-        }
-        .pricing-service-tab {
+        .pricing-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 0.7rem 1.35rem;
-          border: 1.5px solid var(--border);
-          background: var(--surface-card);
-          border-radius: 12px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: var(--muted);
-          cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-          white-space: nowrap;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-          position: relative;
-        }
-        .pricing-service-tab:hover {
-          border-color: var(--tab-color, var(--brand-red));
-          color: var(--tab-color, var(--brand-red));
-          background: rgba(232,25,44,0.05);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-        .pricing-service-tab.active {
-          background: var(--tab-color, var(--brand-red));
-          border-color: var(--tab-color, var(--brand-red));
-          color: #fff;
+          padding: 0.35rem 1rem;
+          background: rgba(232, 25, 44, 0.07);
+          border: 1px solid rgba(232, 25, 44, 0.18);
+          border-radius: 100px;
+          font-size: 0.8rem;
           font-weight: 700;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-          transform: translateY(-2px);
+          color: var(--brand-red, #E8192C);
+          margin-bottom: 1.25rem;
         }
-        .tab-icon-wrap {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          line-height: 1;
-          flex-shrink: 0;
-        }
-        .tab-label { line-height: 1; }
 
-        /* Service info strip */
-        .pricing-service-info {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 1rem;
-          padding: 0.85rem 1.5rem;
-          background: var(--surface-soft);
-          border-radius: 12px;
-          border: 1px solid var(--border);
-          flex-wrap: wrap;
+        .pricing-title-v4 {
+          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-size: clamp(2.25rem, 5vw, 3.5rem);
+          font-weight: 800;
+          line-height: 1.15;
+          letter-spacing: -0.04em;
+          color: var(--ink, #0F0F12);
+          margin-bottom: 1rem;
         }
-        .service-tag {
+
+        .text-gradient-red {
+          color: var(--brand-red, #E8192C);
+          background: linear-gradient(135deg, #E8192C 0%, #B91C1C 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .pricing-subtitle-v4 {
+          font-size: 1.02rem;
+          color: var(--muted, #667085);
+          line-height: 1.7;
+          margin: 0 auto;
+        }
+
+        /* ── Segmented Control Filter Bar ── */
+        .pricing-nav-container {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .pricing-segmented-bar {
           display: inline-flex;
           align-items: center;
-          padding: 0.3rem 0.9rem;
-          background: var(--surface-card);
-          color: var(--ink);
+          gap: 6px;
+          padding: 6px;
+          background: #F4F4F6;
+          border: 1px solid rgba(15, 15, 18, 0.07);
           border-radius: 100px;
-          font-size: 0.72rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          border: 1px solid var(--border);
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+          max-width: 100%;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .pricing-segmented-bar::-webkit-scrollbar { display: none; }
+
+        .pricing-seg-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 0.65rem 1.35rem;
+          border: none;
+          background: transparent;
+          border-radius: 100px;
+          font-family: var(--font-body, 'Hind Siliguri', sans-serif);
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #555A64;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
           white-space: nowrap;
+          user-select: none;
+        }
+
+        .pricing-seg-btn:hover {
+          color: #11141A;
+          background: rgba(255, 255, 255, 0.6);
+        }
+
+        .pricing-seg-btn.active {
+          background: #ffffff;
+          color: #0F0F12;
+          font-weight: 700;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .seg-icon-pill {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.05);
+          color: inherit;
+        }
+        .pricing-seg-btn.active .seg-icon-pill {
+          background: rgba(232, 25, 44, 0.1);
+          color: var(--brand-red, #E8192C);
+        }
+
+        .seg-badge {
+          font-size: 0.68rem;
+          font-weight: 800;
+          padding: 0.15rem 0.5rem;
+          border-radius: 100px;
+          background: #E8192C;
+          color: #ffffff;
+          letter-spacing: 0.02em;
+        }
+
+        /* ── Micro-Banner ── */
+        .pricing-info-pill-wrap {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 2.75rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .pricing-info-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 0.5rem 1.25rem;
+          background: #FAFAFC;
+          border: 1px solid #ECECF1;
+          border-radius: 100px;
+          font-size: 0.86rem;
+          color: #4A505C;
+          text-align: center;
+          max-width: 90%;
+        }
+
+        .info-pill-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #22C55E;
+          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
           flex-shrink: 0;
         }
-        .service-info-desc {
-          font-size: 0.9rem;
-          color: var(--muted);
-          margin: 0;
-          line-height: 1.5;
-          font-weight: 500;
-        }
 
-        /* Cards Grid */
-        .pricing-grid {
+        /* ── Cards Grid ── */
+        .pricing-cards-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem;
-          align-items: start;
+          gap: 1.75rem;
+          align-items: stretch;
+          position: relative;
+          z-index: 1;
         }
 
-        /* Price Card */
-        .price-card {
-          background: var(--surface-card);
-          border: 1.5px solid var(--border);
-          border-radius: 20px;
-          padding: 2rem 1.75rem;
+        /* ── Luxury Price Card ── */
+        .luxury-price-card {
           position: relative;
           display: flex;
           flex-direction: column;
-          gap: 0;
-          transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-        }
-        .price-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 16px 48px rgba(0,0,0,0.09);
-          border-color: rgba(16,24,40,0.14);
-        }
-        .price-card.featured {
-          border-color: var(--brand-red);
-          background: linear-gradient(160deg, #fff 60%, rgba(232,25,44,0.025) 100%);
-          box-shadow: 0 8px 32px rgba(232,25,44,0.12), 0 2px 8px rgba(0,0,0,0.04);
-          transform: translateY(-4px) scale(1.02);
-        }
-        .price-card.featured:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 56px rgba(232,25,44,0.18);
+          background: #ffffff;
+          border: 1.5px solid #EBEBF0;
+          border-radius: 24px;
+          padding: 2.5rem 2rem 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
         }
 
-        .tag-special {
-          background: rgba(232,25,44,0.1) !important;
-          color: var(--brand-red) !important;
-          border-color: rgba(232,25,44,0.25) !important;
+        .luxury-price-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 48px rgba(0, 0, 0, 0.08);
+          border-color: #D1D5DB;
         }
 
-        .tab-special-badge {
-          font-size: 0.65rem;
-          font-weight: 800;
-          background: #E8192C;
-          color: #fff;
-          padding: 0.15rem 0.45rem;
+        /* Featured Card (Middle Hero) */
+        .luxury-price-card.is-featured {
+          border-color: #E8192C;
+          background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F8 100%);
+          box-shadow: 0 12px 40px rgba(232, 25, 44, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+          transform: translateY(-8px);
+        }
+
+        .luxury-price-card.is-featured:hover {
+          transform: translateY(-12px);
+          box-shadow: 0 24px 60px rgba(232, 25, 44, 0.2);
+        }
+
+        /* VIP Card */
+        .luxury-price-card.is-vip {
+          border-color: #1E293B;
+        }
+
+        /* ── Badges ── */
+        .card-top-badge {
+          position: absolute;
+          top: -14px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 0.35rem 1.1rem;
           border-radius: 100px;
-          margin-left: 4px;
+          font-size: 0.76rem;
+          font-weight: 800;
+          white-space: nowrap;
           letter-spacing: 0.02em;
-        }
-        .pricing-service-tab.active .tab-special-badge {
-          background: #fff;
-          color: var(--brand-red);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
         }
 
-        /* Special offer card */
-        .price-card.special-offer-card {
-          border-color: rgba(232,25,44,0.35);
-          background: linear-gradient(165deg, var(--surface-card) 70%, rgba(232,25,44,0.03) 100%);
-        }
-        .price-card.special-offer-card.featured {
-          border-color: var(--brand-red);
-          box-shadow: 0 10px 36px rgba(232,25,44,0.16), 0 2px 8px rgba(0,0,0,0.04);
+        .badge-popular {
+          background: linear-gradient(135deg, #E8192C 0%, #FF4D5E 100%);
+          color: #ffffff;
+          box-shadow: 0 6px 18px rgba(232, 25, 44, 0.38);
         }
 
-        /* Special offer badge */
-        .special-offer-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          position: absolute;
-          top: -13px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: linear-gradient(135deg, #E8192C 0%, #C41223 100%);
-          color: #fff;
-          font-size: 0.72rem;
+        .badge-starter {
+          background: #F1F5F9;
+          color: #334155;
+          border: 1px solid #CBD5E1;
+        }
+
+        .badge-vip {
+          background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+          color: #F8FAFC;
+        }
+
+        /* ── Card Header ── */
+        .card-head {
+          margin-bottom: 1.5rem;
+        }
+
+        .card-tier-wrap {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 8px;
+          margin-bottom: 0.5rem;
+        }
+
+        .card-tier-name {
+          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-size: 1.35rem;
           font-weight: 800;
-          letter-spacing: 0.04em;
-          padding: 0.32rem 0.95rem;
-          border-radius: 100px;
-          white-space: nowrap;
-          box-shadow: 0 4px 14px rgba(232,25,44,0.38);
+          color: var(--ink, #0F0F12);
+          margin: 0;
+          letter-spacing: -0.02em;
         }
 
-        /* Popular badge */
-        .popular-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          position: absolute;
-          top: -13px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: #3B82F6;
-          color: #fff;
-          font-size: 0.7rem;
-          font-weight: 800;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          padding: 0.3rem 0.9rem;
-          border-radius: 100px;
-          white-space: nowrap;
-          box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+        .card-tier-sub {
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: #64748B;
+          background: rgba(0,0,0,0.04);
+          padding: 0.2rem 0.6rem;
+          border-radius: 6px;
         }
 
-        /* Tier name */
-        .price-tier {
-          font-family: var(--font-display);
-          font-size: 0.85rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: var(--ink);
-          margin-bottom: 0.85rem;
+        .card-desc {
+          font-size: 0.88rem;
+          color: var(--muted, #667085);
+          line-height: 1.6;
+          margin: 0;
+          min-height: 42px;
         }
 
-        /* Price amount */
-        .price-amount {
+        /* ── Price Display ── */
+        .card-price-block {
+          margin-bottom: 1.5rem;
+        }
+
+        .fixed-price-display {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .price-number-row {
           display: flex;
           align-items: baseline;
           gap: 2px;
-          font-family: var(--font-display);
-          font-size: 2.8rem;
-          font-weight: 900;
-          color: var(--ink);
-          letter-spacing: -0.04em;
-          line-height: 1;
-          margin-bottom: 0.5rem;
+          color: #0F0F12;
         }
-        .price-custom-text {
-          font-size: 1.85rem;
-          letter-spacing: -0.02em;
-          color: var(--ink);
+
+        .currency-symbol {
+          font-size: 1.75rem;
           font-weight: 800;
+          color: var(--brand-red, #E8192C);
+          margin-right: 2px;
         }
-        .currency {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: var(--muted);
-          align-self: flex-start;
-          padding-top: 0.35rem;
+
+        .price-digits {
+          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-size: 3rem;
+          font-weight: 900;
+          letter-spacing: -0.05em;
+          line-height: 1;
         }
-        .price-period {
-          font-size: 0.95rem;
+
+        .price-tenure {
+          font-size: 1rem;
           font-weight: 600;
-          color: var(--muted);
+          color: #64748B;
           margin-left: 4px;
         }
-        .price-original {
-          font-size: 1.1rem;
+
+        .price-guarantee-tag {
+          font-size: 0.75rem;
           font-weight: 600;
-          color: var(--muted);
-          text-decoration: line-through;
-          margin-left: 6px;
-          opacity: 0.6;
+          color: #16A34A;
         }
 
-        /* Description */
-        .price-desc {
-          font-size: 0.875rem;
-          color: var(--muted);
-          line-height: 1.55;
-          margin-bottom: 1.25rem;
-        }
-
-        /* Divider */
-        .price-divider {
-          height: 1px;
-          background: var(--border);
-          margin-bottom: 1.25rem;
-        }
-
-        /* Features list */
-        .price-features {
-          list-style: none;
-          padding: 0;
-          margin: 0 0 1.75rem;
+        .custom-price-display {
           display: flex;
           flex-direction: column;
-          gap: 0.7rem;
-          flex: 1;
-        }
-        .price-features li {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.6rem;
-          font-size: 0.875rem;
-          color: var(--ink-soft);
-          line-height: 1.45;
-        }
-        .price-features li svg {
-          color: var(--brand-red);
-          flex-shrink: 0;
-          margin-top: 2px;
-        }
-        .price-card.featured .price-features li svg {
-          color: var(--brand-red);
+          gap: 0.3rem;
+          padding: 0.5rem 0;
         }
 
-        /* CTA button */
-        .price-cta {
+        .custom-price-tag {
+          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-size: 1.95rem;
+          font-weight: 900;
+          color: #0F0F12;
+          letter-spacing: -0.03em;
+          line-height: 1.1;
+        }
+
+        .custom-price-sub {
+          font-size: 0.78rem;
+          color: #64748B;
+          font-weight: 500;
+        }
+
+        .card-divider-line {
+          height: 1px;
+          background: #EBEBF0;
+          margin-bottom: 1.5rem;
+        }
+
+        /* ── Features List ── */
+        .card-features-block {
+          flex: 1;
+          margin-bottom: 2rem;
+        }
+
+        .features-headline {
+          display: block;
+          font-size: 0.78rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #94A3B8;
+          margin-bottom: 1rem;
+        }
+
+        .features-checklist {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
+        }
+
+        .features-checklist li {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 0.88rem;
+          color: #334155;
+          line-height: 1.5;
+        }
+
+        .check-bullet {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
-          padding: 0.85rem 1.5rem;
-          font-size: 0.875rem;
-          font-weight: 700;
-          width: 100%;
-          border-radius: 12px;
-          text-decoration: none;
-          transition: all 0.22s ease;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: rgba(232, 25, 44, 0.09);
+          color: var(--brand-red, #E8192C);
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        .is-featured .check-bullet {
+          background: var(--brand-red, #E8192C);
+          color: #ffffff;
+        }
+
+        .feat-text {
+          font-weight: 500;
+        }
+
+        /* ── CTA Buttons ── */
+        .card-action-wrap {
           margin-top: auto;
         }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-          .pricing-grid {
-            grid-template-columns: repeat(2, 1fr);
+        .card-cta-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 0.95rem 1.5rem;
+          border-radius: 14px;
+          font-family: var(--font-body, 'Hind Siliguri', sans-serif);
+          font-size: 0.92rem;
+          font-weight: 700;
+          text-decoration: none;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-red-luxury {
+          background: #0F172A;
+          color: #ffffff;
+        }
+        .btn-red-luxury:hover {
+          background: var(--brand-red, #E8192C);
+          color: #ffffff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(232, 25, 44, 0.3);
+        }
+
+        .btn-red-luxury-glow {
+          background: linear-gradient(135deg, #E8192C 0%, #D41224 100%);
+          color: #ffffff;
+          box-shadow: 0 8px 26px rgba(232, 25, 44, 0.32);
+        }
+        .btn-red-luxury-glow:hover {
+          background: linear-gradient(135deg, #FF2E42 0%, #E8192C 100%);
+          transform: translateY(-3px) scale(1.01);
+          box-shadow: 0 14px 36px rgba(232, 25, 44, 0.42);
+        }
+
+        .btn-ghost-luxury {
+          background: #F8FAFC;
+          color: #0F172A;
+          border: 1.5px solid #E2E8F0;
+        }
+        .btn-ghost-luxury:hover {
+          border-color: #0F172A;
+          background: #ffffff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* ── Trust Strip ── */
+        .pricing-trust-strip {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
+          margin-top: 3.5rem;
+          padding: 1.25rem 2rem;
+          background: #FAFAFC;
+          border: 1px solid #ECECF1;
+          border-radius: 100px;
+          width: fit-content;
+          margin-left: auto;
+          margin-right: auto;
+          flex-wrap: wrap;
+        }
+
+        .trust-strip-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #334155;
+        }
+
+        .trust-strip-dot {
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: #CBD5E1;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+          .pricing-cards-grid {
+            grid-template-columns: 1fr;
+            max-width: 480px;
+            margin: 0 auto;
+            gap: 2.25rem;
           }
-          .price-card.featured {
+          .luxury-price-card.is-featured {
             transform: none;
           }
-          .price-card.featured:hover {
+          .luxury-price-card.is-featured:hover {
             transform: translateY(-4px);
           }
         }
 
         @media (max-width: 640px) {
-          .pricing-service-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            justify-items: stretch;
+          .pricing-title-v4 {
+            font-size: clamp(2rem, 8vw, 2.75rem);
           }
-          .pricing-service-tab {
+          .pricing-segmented-bar {
+            border-radius: 16px;
+            padding: 4px;
+            width: 100%;
+          }
+          .pricing-seg-btn {
+            flex: 1;
             justify-content: center;
-            padding: 0.65rem 1rem;
-            font-size: 0.82rem;
+            padding: 0.55rem 0.75rem;
+            font-size: 0.8rem;
           }
-          .pricing-service-info {
-            flex-direction: column;
-            gap: 0.5rem;
-            text-align: center;
-          }
-          .pricing-grid {
-            grid-template-columns: 1fr;
-          }
-          .price-card.featured {
-            order: -1;
-          }
-          .price-amount {
-            font-size: 2.4rem;
-          }
-        }
-
-        @media (max-width: 400px) {
-          .pricing-service-tab {
-            padding: 0.6rem 0.75rem;
+          .seg-label {
             font-size: 0.78rem;
-            gap: 6px;
           }
-          .tab-icon-wrap svg {
-            width: 15px;
-            height: 15px;
+          .luxury-price-card {
+            padding: 2.25rem 1.35rem 1.5rem;
           }
-          .pbt-btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.82rem;
+          .pricing-trust-strip {
+            border-radius: 20px;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            width: 100%;
           }
         }
       `}</style>
