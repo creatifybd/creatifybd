@@ -74,7 +74,7 @@ export const SettingsProvider = ({ children }) => {
         const safeFromFirestore = {
           visibility: remoteData.visibility,
           hero: {
-            mockup_primary: defaultContent.hero.mockup_primary || '/assets/hero-visual.png',
+            mockup_primary: defaultContent.hero.mockup_primary || '/assets/hero-agency-showcase-v2.png',
           },
           about_trust: {
             ceo_image: remoteData.about_trust?.ceo_image,
