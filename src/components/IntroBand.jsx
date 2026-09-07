@@ -124,19 +124,21 @@ const IntroBand = () => {
         }
 
         .intro-title-luxury {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-family: var(--font-display);
           font-size: clamp(2rem, 4.5vw, 3.25rem);
           font-weight: 800;
-          line-height: 1.2;
-          letter-spacing: -0.04em;
+          line-height: 1.35;
+          letter-spacing: 0;
           color: var(--ink, #0F0F12);
           margin-bottom: 1rem;
+          overflow: visible;
         }
 
         .intro-subtitle-luxury {
           font-size: 1rem;
           color: var(--muted, #667085);
-          line-height: 1.7;
+          line-height: 1.72;
+          letter-spacing: 0;
           margin: 0 auto;
         }
 
@@ -197,13 +199,14 @@ const IntroBand = () => {
         }
 
         .pillar-title {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-family: var(--font-display);
           font-size: 1.35rem;
           font-weight: 800;
           color: var(--ink, #0F0F12);
-          letter-spacing: -0.02em;
-          line-height: 1.3;
+          letter-spacing: 0;
+          line-height: 1.38;
           margin: 0 0 0.85rem;
+          overflow: visible;
           transition: color 0.2s ease;
         }
 

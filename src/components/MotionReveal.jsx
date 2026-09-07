@@ -11,78 +11,34 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
   export const TextReveal = ({ children, className = '', delay = 0, as = 'h2' }) => {
     const MotionTag = motion[as] || motion.h2;
 
-    if (typeof children !== 'string') {
-      return (
-        <MotionTag
-          className={`text-reveal-container ${className}`}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-30px' }}
-          transition={{ duration: 0.8, ease: EASE_EXPO, delay }}
-        >
-          {children}
-        </MotionTag>
-      );
-    }
-
-    const words = children.split(' ');
-    const container = {
-      hidden: { opacity: 0 },
-      visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: delay } },
-    };
-    const child = {
-      visible:  { opacity: 1, y: 0, rotate: 0,   transition: { type: 'spring', damping: 16, stiffness: 140 } },
-      hidden:   { opacity: 0, y: 40, rotate: 2,   transition: { type: 'spring', damping: 16, stiffness: 140 } },
-    };
-
     return (
       <MotionTag
         className={`text-reveal-container ${className}`}
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-30px' }}
+        transition={{ duration: 0.75, ease: EASE_EXPO, delay }}
+        style={{ overflow: 'visible' }}
       >
-        {words.map((word, i) => (
-          <span key={i} className="word-mask">
-            <motion.span variants={child} className="word-inner">{word}{' '}</motion.span>
-          </span>
-        ))}
+        {children}
       </MotionTag>
     );
   };
 
-  // ─── CharReveal — Duck Design signature: per-character reveal ─────────────────
+  // ─── CharReveal — Smooth reveal without destroying Bengali ligatures ─────────
   export const CharReveal = ({ children, className = '', delay = 0, as = 'h2', stagger = 0.03 }) => {
     const MotionTag = motion[as] || motion.h2;
-    const text = typeof children === 'string' ? children : '';
-    const chars = text.split('');
-
-    const container = {
-      hidden: {},
-      visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
-    };
-    const char = {
-      hidden:  { opacity: 0, y: '110%', skewY: 8 },
-      visible: { opacity: 1, y: '0%',   skewY: 0, transition: { duration: 0.55, ease: EASE_EXPO } },
-    };
 
     return (
       <MotionTag
         className={`char-reveal-container ${className}`}
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-20px' }}
-        style={{ overflow: 'hidden', display: 'flex', flexWrap: 'wrap' }}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-30px' }}
+        transition={{ duration: 0.75, ease: EASE_EXPO, delay }}
+        style={{ overflow: 'visible' }}
       >
-        {chars.map((c, i) => (
-          <span key={i} style={{ overflow: 'hidden', display: 'inline-block' }}>
-            <motion.span variants={char} style={{ display: 'inline-block' }}>
-              {c === ' ' ? '\u00A0' : c}
-            </motion.span>
-          </span>
-        ))}
+        {children}
       </MotionTag>
     );
   };

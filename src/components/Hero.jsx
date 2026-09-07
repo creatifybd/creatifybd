@@ -270,18 +270,19 @@ const Hero = () => {
         /* Headline */
         .hero-agency-h1 {
           font-family: var(--font-display);
-          font-size: clamp(3rem, 6vw, 5.5rem);
+          font-size: clamp(2.6rem, 5.5vw, 4.8rem);
           font-weight: 800;
-          line-height: 1.04;
-          letter-spacing: -0.04em;
+          line-height: 1.32;
+          letter-spacing: 0;
           color: var(--ink);
           margin: 0 0 1.75rem;
           display: flex;
           flex-wrap: wrap;
+          overflow: visible;
         }
         .hero-word {
           display: inline-block;
-          overflow: hidden;
+          overflow: visible;
         }
 
         /* Description */

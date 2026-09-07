@@ -74,9 +74,10 @@
   /* ═══════════════════════════════════════════════════════════════
      FONTS
      ═══════════════════════════════════════════════════════════════ */
-  --font-display: 'Bricolage Grotesque', 'Hind Siliguri', 'Inter', sans-serif;
-  --font-body:    'Hind Siliguri', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-bn:      'Hind Siliguri', 'Inter', sans-serif;
+  --font-display: 'Hind Siliguri', 'Noto Sans Bengali', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    'Hind Siliguri', 'Noto Sans Bengali', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-bn:      'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  --font-heading: 'Hind Siliguri', 'Noto Sans Bengali', 'Plus Jakarta Sans', sans-serif;
   --font-mono:    'Fira Code', 'JetBrains Mono', monospace;
 
   /* ═══════════════════════════════════════════════════════════════

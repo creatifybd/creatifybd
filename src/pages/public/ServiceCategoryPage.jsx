@@ -788,17 +788,20 @@ const ServiceCategoryPage = () => {
         }
 
         .scp-hero-title {
+          font-family: var(--font-display);
           font-size: clamp(2rem, 4.5vw, 3.2rem);
-          font-weight: 900;
-          line-height: 1.15;
+          font-weight: 800;
+          line-height: 1.35;
           color: var(--ink, #0f0f12);
-          letter-spacing: -0.03em;
+          letter-spacing: 0;
+          overflow: visible;
           margin: 0;
         }
         .scp-hero-desc {
           font-size: clamp(0.96rem, 2vw, 1.12rem);
           color: var(--muted, #555);
-          line-height: 1.7;
+          line-height: 1.75;
+          letter-spacing: 0;
           max-width: 680px;
           margin: 0;
         }
