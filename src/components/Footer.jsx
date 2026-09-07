@@ -115,7 +115,7 @@ const Footer = () => {
               <li><Link to="/services/social-media-management">সোশ্যাল মিডিয়া ম্যানেজমেন্ট</Link></li>
               <li><Link to="/services/graphic-design">গ্রাফিক ডিজাইন ও ব্র্যান্ডিং</Link></li>
               <li><Link to="/services/video-editing">ভিডিও এডিটিং ও রিলস</Link></li>
-              <li><Link to="/contact?service=Digital%20Marketing">ডিজিটাল মার্কেটিং</Link></li>
+              <li><Link to="/services">সব সার্ভিসসমূহ</Link></li>
               <li><Link to="/services/website-design">ওয়েবসাইট ডিজাইন</Link></li>
             </ul>
           </motion.div>
@@ -133,6 +133,7 @@ const Footer = () => {
               <li><Link to="/about">আমাদের সম্পর্কে</Link></li>
               <li><Link to="/portfolio">পোর্টফোলিও</Link></li>
               <li><Link to="/pricing">প্যাকেজ ও প্রাইসিং</Link></li>
+              <li><Link to="/reviews">ক্লায়েন্ট রিভিউ</Link></li>
               <li><Link to="/contact">যোগাযোগ</Link></li>
             </ul>
           </motion.div>

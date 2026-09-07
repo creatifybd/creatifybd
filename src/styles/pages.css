@@ -626,7 +626,7 @@ select:focus {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 600;
-  cursor: none;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 .gig-filter-btn:hover,

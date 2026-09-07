@@ -106,7 +106,7 @@ const PackageTabs = ({ packages = {}, onSelect }) => {
           font-weight: 700;
           font-size: 0.9rem;
           padding: 1.25rem 0.5rem;
-          cursor: none;
+          cursor: pointer;
           transition: all 0.2s;
           position: relative;
         }

@@ -69,21 +69,12 @@ export const SettingsProvider = ({ children }) => {
       if (snap.exists()) {
         const remoteData = snap.data();
 
-        // Only pull specific non-text fields from Firestore (images, visibility)
-        // All copy/text and primary brand assets come from defaultContent
-        const safeFromFirestore = {
-          visibility: remoteData.visibility,
-          hero: {
-            mockup_primary: defaultContent.hero.mockup_primary || '/assets/hero-agency-showcase-v2.png',
-          },
-          about_trust: {
-            ceo_image: remoteData.about_trust?.ceo_image,
-          },
-          settings: remoteData.settings,
-        };
-
-        // Deep merge: defaultContent text wins, only safe fields from Firestore
-        const merged = deepMerge(defaultContent, safeFromFirestore);
+        // Deep merge: defaultContent provides baseline Bengali defaults, remoteData from admin panel overrides
+        const merged = deepMerge(defaultContent, remoteData);
+        if (!merged.hero?.mockup_primary) {
+          merged.hero = merged.hero || {};
+          merged.hero.mockup_primary = defaultContent.hero.mockup_primary || '/assets/hero-agency-showcase-v2.png';
+        }
         setContent(merged);
 
         // Sync new version to Firestore if outdated

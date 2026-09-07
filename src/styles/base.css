@@ -65,7 +65,7 @@ a {
   color: var(--ink);
   text-decoration: none;
   transition: color var(--transition-fast);
-  cursor: none;
+  cursor: pointer;
 }
 a:hover { color: var(--brand-red); }
 
@@ -143,8 +143,8 @@ a:hover { color: var(--brand-red); }
 
 /* ─── Custom cursor — desktop only ─── */
 @media (pointer: fine) {
-  body { cursor: none; }
-  a, button, [role="button"], label[for] { cursor: none; }
+  body { cursor: pointer; }
+  a, button, [role="button"], label[for] { cursor: pointer; }
 }
 @media (pointer: coarse), (hover: none) {
   body { cursor: auto !important; }

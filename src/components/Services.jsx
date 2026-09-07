@@ -81,9 +81,9 @@ const Services = ({ highlight = false, fullPage = false }) => {
           if (docs.length > 0) {
             const all = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             const sorted = all.sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
-            const validBnServices = sorted.filter((s) => !s?.hidden && (s.title_bn || (s.title && /[\u0980-\u09FF]/.test(s.title))));
-            if (validBnServices.length > 0) {
-              setServices(validBnServices);
+            const visibleServices = sorted.filter((s) => !s?.hidden);
+            if (visibleServices.length > 0) {
+              setServices(visibleServices);
             }
           }
         } catch (err) {

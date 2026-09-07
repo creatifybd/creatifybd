@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { TextReveal, FadeReveal, StaggerReveal } from './MotionReveal';
 import OptimizedImage from './OptimizedImage';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Grid, LayoutGrid } from 'lucide-react';
 import { CURATED_PORTFOLIO } from '../data/portfolioItems';
 
 
@@ -340,13 +340,19 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
       const override = adminById.get(item.id);
       return {
         ...item,
+        title: override?.title || item.title,
+        description: override?.description !== undefined ? override.description : item.description,
+        category: override?.category || item.category,
+        service: override?.service || item.service,
+        industry: override?.industry || item.industry,
         image: override?.imageUrl || override?.image || item.image,
         hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
         featured: override?.featured !== undefined ? override.featured : item.featured || false,
-        featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : item.featuredOrder || 0
+        featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : item.featuredOrder || 0,
+        _deleted: override?._deleted || false
       };
     })
-    .filter(item => item.hidden !== true);
+    .filter(item => item.hidden !== true && !item._deleted);
   const adminItems = items.filter(item => !curatedIds.has(item.id) && item.hidden !== true);
   const curatedGroups = ['social', 'branding', 'packaging', 'apparel', 'marketing', 'video', 'web']
     .map(category => syncedCuratedItems.filter(item => item.category === category));
@@ -508,13 +514,26 @@ const Portfolio = ({ highlight = false, fullPage = false, theme = 'light' }) => 
                     </button>
                   ))}
                   {fullPage && (
-                    <button
-                      className="wk-layout-toggle"
-                      onClick={() => setLayoutMode(layoutMode === 'masonry' ? 'grid' : 'masonry')}
-                      title={layoutMode === 'masonry' ? 'Switch to Grid' : 'Switch to Masonry'}
-                    >
-                      {layoutMode === 'masonry' ? (lang === 'bn' ? 'গ্রিড ভিউ' : 'Grid') : (lang === 'bn' ? 'ম্যাসনরি ভিউ' : 'Masonry')}
-                    </button>
+                    <div className="portfolio-view-switcher" role="group" aria-label="Layout mode">
+                      <button
+                        type="button"
+                        className={`view-switch-btn ${layoutMode === 'masonry' ? 'active' : ''}`}
+                        onClick={() => setLayoutMode('masonry')}
+                        title="ম্যাসনরি ভিউ"
+                      >
+                        <LayoutGrid size={15} />
+                        <span>{lang === 'bn' ? 'ম্যাসনরি ভিউ' : 'Masonry'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`view-switch-btn ${layoutMode === 'grid' ? 'active' : ''}`}
+                        onClick={() => setLayoutMode('grid')}
+                        title="গ্রিড ভিউ"
+                      >
+                        <Grid size={15} />
+                        <span>{lang === 'bn' ? 'গ্রিড ভিউ' : 'Grid'}</span>
+                      </button>
+                    </div>
                   )}
                 </div>
               </FadeReveal>

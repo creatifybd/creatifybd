@@ -10,8 +10,8 @@ const EASE_EXPO = [0.16, 1, 0.3, 1];
 
 const ContactPage = () => {
   const seo = usePageSEO('contact', {
-    title: "Get in Touch \u2014 Book a Call, WhatsApp, or Send a Brief | CreatifyBD",
-    description: "Message us on WhatsApp, book a call, or send a quick project brief \u2014 whichever's easiest for you. We reply fast."
+    title: "যোগাযোগ — CreatifyBD | প্রজেক্ট নিয়ে সরাসরি আলোচনা করুন",
+    description: "WhatsApp, কল বা ফর্মের মাধ্যমে আমাদের সাথে সরাসরি যোগাযোগ করুন। ২৪ ঘণ্টার মধ্যে রেসপন্স পাবেন।"
   });
 
   return (

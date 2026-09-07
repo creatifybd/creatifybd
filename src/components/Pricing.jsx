@@ -249,8 +249,8 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
               .forEach(item => {
                 if (item?.category && data[item.category]) data[item.category].push(item);
               });
-            const hasValidBn = Object.values(data).some(arr => arr.some(p => p.tier_bn || (p.tier && /[\u0980-\u09FF]/.test(p.tier))));
-            if (hasValidBn) {
+            const hasAny = Object.values(data).some(arr => arr.length > 0);
+            if (hasAny) {
               setPricingData(data);
             }
           }
@@ -508,7 +508,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         }
 
         .pricing-title-v4 {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-family: var(--font-display, 'Noto Sans Bengali', sans-serif);
           font-size: clamp(2.25rem, 5vw, 3.5rem);
           font-weight: 800;
           line-height: 1.15;
@@ -563,7 +563,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           border: none;
           background: transparent;
           border-radius: 100px;
-          font-family: var(--font-body, 'Hind Siliguri', sans-serif);
+          font-family: var(--font-body, 'Noto Sans Bengali', sans-serif);
           font-size: 0.88rem;
           font-weight: 600;
           color: #555A64;
@@ -738,12 +738,12 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         }
 
         .card-tier-name {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
-          font-size: 1.35rem;
+          font-family: var(--font-display, 'Noto Sans Bengali', sans-serif);
+          font-size: 1.3rem;
           font-weight: 800;
           color: var(--ink, #0F0F12);
           margin: 0;
-          letter-spacing: -0.02em;
+          letter-spacing: 0;
         }
 
         .card-tier-sub {
@@ -789,10 +789,10 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         }
 
         .price-digits {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-family: var(--font-display, 'Noto Sans Bengali', sans-serif);
           font-size: 3rem;
-          font-weight: 900;
-          letter-spacing: -0.05em;
+          font-weight: 800;
+          letter-spacing: 0.02em;
           line-height: 1;
         }
 
@@ -817,7 +817,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
         }
 
         .custom-price-tag {
-          font-family: var(--font-display, 'Bricolage Grotesque', sans-serif);
+          font-family: var(--font-display, 'Noto Sans Bengali', sans-serif);
           font-size: 1.95rem;
           font-weight: 900;
           color: #0F0F12;
@@ -906,7 +906,7 @@ const Pricing = ({ highlight = false, fullPage = false }) => {
           width: 100%;
           padding: 0.95rem 1.5rem;
           border-radius: 14px;
-          font-family: var(--font-body, 'Hind Siliguri', sans-serif);
+          font-family: var(--font-body, 'Noto Sans Bengali', sans-serif);
           font-size: 0.92rem;
           font-weight: 700;
           text-decoration: none;

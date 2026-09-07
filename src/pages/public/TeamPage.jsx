@@ -25,7 +25,17 @@ const TeamPage = () => {
           .filter(m => m.hidden !== true);
         if (active) setTeamMembers(list);
       } catch (err) {
-        console.error('Failed to load team members', err);
+        console.warn('TeamPage query fallback', err);
+        try {
+          const snap = await getDocs(collection(db, 'team_members'));
+          const list = snap.docs
+            .map(d => ({ id: d.id, ...d.data() }))
+            .filter(m => m.hidden !== true)
+            .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+          if (active) setTeamMembers(list);
+        } catch (e) {
+          console.error('Failed to load team members', e);
+        }
       } finally {
         if (active) setLoading(false);
       }

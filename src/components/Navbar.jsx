@@ -35,6 +35,8 @@ const navLinks = [
   { to: '/services',  label: 'সার্ভিসেস',       hasPanel: true },
   { to: '/portfolio', label: 'পোর্টফোলিও' },
   { to: '/pricing',   label: 'প্যাকেজ ও প্রাইসিং' },
+  { to: '/about',     label: 'আমাদের সম্পর্কে' },
+                  { to: '/reviews',   label: 'ক্লায়েন্ট রিভিউ' },
   { to: '/contact',   label: 'যোগাযোগ' },
 ];
 

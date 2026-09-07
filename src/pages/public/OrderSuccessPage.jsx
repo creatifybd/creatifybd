@@ -211,7 +211,7 @@ const OrderSuccessPage = () => {
           color: #aaa;
           padding: 0.4rem;
           border-radius: 6px;
-          cursor: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;

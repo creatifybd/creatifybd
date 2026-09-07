@@ -215,7 +215,7 @@ const ReviewsPage = () => {
               <motion.button
                 key={c}
                 type="button"
-                data-country={c === 'all' ? 'সব রিভিউ' : c}
+                
                 className={`filter-tab-btn ${filter === c ? 'active' : ''}`}
                 onClick={() => { setFilter(c); setDisplayCount(9); }}
                 whileHover={{ scale: 1.04 }}
@@ -363,16 +363,13 @@ const ReviewsPage = () => {
           border: 1px solid var(--border);
           border-radius: 100px;
           color: var(--muted);
-          font-size: 0;
+          font-size: 0.85rem;
           font-weight: 600;
-          cursor: none;
+          cursor: pointer;
           transition: all 0.2s;
         }
 
-        .filter-tab-btn::after {
-          content: attr(data-country);
-          font-size: 0.85rem;
-        }
+        /* clean native text rendering */
 
         .filter-tab-btn:hover,
         .filter-tab-btn.active {
@@ -504,7 +501,7 @@ const ReviewsPage = () => {
           border-radius: 100px;
           font-weight: 700;
           font-size: 0.9rem;
-          cursor: none;
+          cursor: pointer;
           transition: all 0.2s;
         }
 
