@@ -8,64 +8,101 @@ import { Link } from 'react-router-dom';
 
 const EASE = [0.16, 1, 0.3, 1];
 
-const formatBDTPrice = (priceStr) => {
-  if (!priceStr) return 'কাস্টম বাজেট';
-  if (priceStr.includes('কাস্টম') || priceStr.includes('আলোচনা')) return priceStr;
-  let cleaned = String(priceStr)
-    .replace(/\$/g, '৳')
-    .replace(/USD/gi, 'BDT')
-    .trim();
-  if (/^\d/.test(cleaned)) {
-    cleaned = '৳' + cleaned;
+const bengaliServiceMap = {
+  web: {
+    title: 'ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট',
+    desc: 'রেসপন্সিভ, এসইও-অপ্টিমাইজড ও হাই-স্পিড বিজনেস ওয়েবসাইট এবং ই-কমার্স সলিউশন।',
+    price: 'কাস্টম বাজেট',
+    slug: 'website-design'
+  },
+  video: {
+    title: 'প্রফেশনাল ভিডিও প্রোডাকশন ও রিলস',
+    desc: 'হাই-কনভার্সন শর্ট-ফর্ম রিলস, ইউটিউব ভিডিও এবং সিনেমাটিক ব্র্যান্ড প্রমোশন।',
+    price: 'কাস্টম বাজেট',
+    slug: 'video-editing'
+  },
+  social: {
+    title: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',
+    desc: 'প্রতিদিন আকর্ষণীয় পোস্ট ডিজাইন, ট্রেন্ডিং রিলস আইডিয়া ও পেজের সম্পূর্ণ গ্রোথ সাপোর্ট।',
+    price: 'স্পেশাল প্যাকেজ',
+    slug: 'social-media-management'
+  },
+  marketing: {
+    title: 'ডিজিটাল মার্কেটিং ও অ্যাড ক্যাম্পেইন',
+    desc: 'টার্গেটেড ফেসবুক ও ইনস্টাগ্রাম অ্যাডস, অডিয়েন্স রিসার্চ এবং সেলস ফানেল অপ্টিমাইজেশন।',
+    price: 'কাস্টম বাজেট',
+    slug: 'digital-marketing'
+  },
+  advertising: {
+    title: 'ডিজিটাল মার্কেটিং ও অ্যাড ক্যাম্পেইন',
+    desc: 'টার্গেটেড ফেসবুক ও ইনস্টাগ্রাম অ্যাডস, অডিয়েন্স রিসার্চ এবং সেলস ফানেল অপ্টিমাইজেশন।',
+    price: 'কাস্টম বাজেট',
+    slug: 'digital-marketing'
+  },
+  branding: {
+    title: 'ব্র্যান্ড আইডেন্টিটি ও লোগো ডিজাইন',
+    desc: 'কাস্টম ইউনিক ভেক্টর লোগো, ব্র্যান্ড গাইডলাইন, প্যাকেজিং ও সোশ্যাল মিডিয়া কিট।',
+    price: 'কাস্টম বাজেট',
+    slug: 'graphic-design'
+  },
+  graphic: {
+    title: 'ব্র্যান্ড আইডেন্টিটি ও লোগো ডিজাইন',
+    desc: 'কাস্টম ইউনিক ভেক্টর লোগো, ব্র্যান্ড গাইডলাইন, প্যাকেজিং ও সোশ্যাল মিডিয়া কিট।',
+    price: 'কাস্টম বাজেট',
+    slug: 'graphic-design'
   }
-  return cleaned;
 };
 
 const defaultServices = [
   {
-    id: 'social-media',
-    icon: <BarChart3 size={22} />,
-    title: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',
-    desc: 'প্রতিদিন পোস্টার ও সাপ্তাহিক প্রমোশনাল ভিডিও সহ আপনার সোশ্যাল মিডিয়া পেজের সম্পূর্ণ গ্রোথ ও ডিজাইন সাপোর্ট।',
-    price: '৳৫,০০০/মাস থেকে শুরু',
-    badge: 'স্পেশাল অফার',
-  },
-  {
-    id: 'graphic-design',
-    icon: <Palette size={22} />,
-    title: 'ব্র্যান্ড আইডেন্টিটি ও লোগো ডিজাইন',
-    desc: 'কাস্টম ভেক্টর লোগো, কমপ্লিট ব্র্যান্ড গাইডলাইন, প্যাকেজিং ও সোশ্যাল মিডিয়া ব্র্যান্ডিং কিট।',
+    id: 'website-design',
+    icon: <Code2 size={22} />,
+    title: 'ওয়েবসাইট ডিজাইন ও ডেভেলপমেন্ট',
+    desc: 'রেসপন্সিভ, এসইও-অপ্টিমাইজড ও হাই-স্পিড বিজনেস ওয়েবসাইট এবং ই-কমার্স সলিউশন।',
     price: 'কাস্টম বাজেট',
+    badge: 'সবচেয়ে জনপ্রিয়',
+    slug: 'website-design'
   },
   {
     id: 'video-editing',
     icon: <Clapperboard size={22} />,
-    title: 'প্রফেশনাল ভিডিও এডিটিং ও রিলস',
-    desc: 'হাই-কনভার্সন শর্ট-ফর্ম রিলস, ইউটিউব কন্টেন্ট এবং সিনেমাটিক প্রোডাক্ট প্রমোশনাল ভিডিও।',
+    title: 'প্রফেশনাল ভিডিও প্রোডাকশন ও রিলস',
+    desc: 'হাই-কনভার্সন শর্ট-ফর্ম রিলস, ইউটিউব ভিডিও এবং সিনেমাটিক ব্র্যান্ড প্রমোশন।',
     price: 'কাস্টম বাজেট',
+    slug: 'video-editing'
+  },
+  {
+    id: 'social-media',
+    icon: <BarChart3 size={22} />,
+    title: 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট',
+    desc: 'প্রতিদিন আকর্ষণীয় পোস্ট ডিজাইন, ট্রেন্ডিং রিলস আইডিয়া ও পেজের সম্পূর্ণ গ্রোথ সাপোর্ট।',
+    price: 'স্পেশাল প্যাকেজ',
+    slug: 'social-media-management'
   },
   {
     id: 'digital-marketing',
     icon: <Megaphone size={22} />,
     title: 'ডিজিটাল মার্কেটিং ও অ্যাড ক্যাম্পেইন',
-    desc: 'টার্গেটেড ফেসবুক ও ইনস্টাগ্রাম অ্যাড ক্যাম্পেইন, অডিয়েন্স রিসার্চ এবং সেলস ফানেল অপটিমাইজেশন।',
+    desc: 'টার্গেটেড ফেসবুক ও ইনস্টাগ্রাম অ্যাডস, অডিয়েন্স রিসার্চ এবং সেলস ফানেল অপ্টিমাইজেশন।',
     price: 'কাস্টম বাজেট',
+    slug: 'digital-marketing'
   },
   {
-    id: 'website-design',
-    icon: <Code2 size={22} />,
-    title: 'হাই-স্পিড কনভার্সন-ফোকাসড ওয়েবসাইট',
-    desc: 'রেসপন্সিভ ল্যান্ডিং পেজ ও বিজনেস ওয়েবসাইট যা ভিজিটরকে সরাসরি কাস্টমারে রূপান্তর করে।',
+    id: 'graphic-design',
+    icon: <Palette size={22} />,
+    title: 'ব্র্যান্ড আইডেন্টিটি ও লোগো ডিজাইন',
+    desc: 'কাস্টম ইউনিক ভেক্টর লোগো, ব্র্যান্ড গাইডলাইন, প্যাকেজিং ও সোশ্যাল মিডিয়া কিট।',
     price: 'কাস্টম বাজেট',
+    slug: 'graphic-design'
   },
 ];
 
 const serviceImages = [
-  '/assets/portfolio/social-media-management/social-media-management-01.jpg',
-  '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg',
-  '/assets/portfolio/video-editing/video-editing-01.jpg',
-  '/assets/portfolio/digital-marketing/digital-marketing-01.jpg',
   '/assets/portfolio/website-design/website-design-01.jpg',
+  '/assets/portfolio/video-editing/video-editing-01.jpg',
+  '/assets/portfolio/social-media-management/social-media-management-01.jpg',
+  '/assets/portfolio/digital-marketing/digital-marketing-01.jpg',
+  '/assets/portfolio/logo-design-branding/logo-design-branding-01.jpg',
 ];
 
 const Services = ({ highlight = false, fullPage = false }) => {
@@ -97,11 +134,32 @@ const Services = ({ highlight = false, fullPage = false }) => {
 
   const displayServices = useMemo(() => {
     const source = services.length > 0 ? services : defaultServices;
-    const mapped = source.map(s => ({
-      ...s,
-      title: s.title_bn || s.title,
-      desc: s.desc_bn || s.desc || s.description
-    }));
+    const mapped = source.map((s) => {
+      const rawTitle = String(s.title_bn || s.title || '').toLowerCase();
+      const rawDesc = s.desc_bn || s.desc || s.description || '';
+      
+      let matched = null;
+      if (rawTitle.includes('web') || rawTitle.includes('ওয়েব')) matched = bengaliServiceMap['web'];
+      else if (rawTitle.includes('video') || rawTitle.includes('ভিডিও')) matched = bengaliServiceMap['video'];
+      else if (rawTitle.includes('social') || rawTitle.includes('সোসাল') || rawTitle.includes('সোশ্যাল')) matched = bengaliServiceMap['social'];
+      else if (rawTitle.includes('advert') || rawTitle.includes('ad ') || rawTitle.includes('campaign') || rawTitle.includes('মার্কেটিং') || rawTitle.includes('marketing')) matched = bengaliServiceMap['marketing'];
+      else if (rawTitle.includes('brand') || rawTitle.includes('logo') || rawTitle.includes('ব্র্যান্ড') || rawTitle.includes('লোগো') || rawTitle.includes('graphic') || rawTitle.includes('গ্রাফিক')) matched = bengaliServiceMap['branding'];
+
+      const finalTitle = s.title_bn || (matched ? matched.title : s.title);
+      const finalDesc = s.desc_bn || (matched ? matched.desc : rawDesc);
+      
+      const isSocial = (s.id === 'social-media' || finalTitle.includes('সোশ্যাল') || rawTitle.includes('social'));
+      const finalPrice = isSocial ? 'স্পেশাল প্যাকেজ' : 'কাস্টম বাজেট';
+      const targetSlug = matched ? matched.slug : (s.slug || (isSocial ? 'social-media-management' : 'graphic-design'));
+
+      return {
+        ...s,
+        title: finalTitle,
+        desc: finalDesc,
+        price: finalPrice,
+        slug: targetSlug
+      };
+    });
     return highlight ? mapped.slice(0, 5) : mapped;
   }, [highlight, services]);
 
@@ -187,11 +245,11 @@ const Services = ({ highlight = false, fullPage = false }) => {
                   {/* Price + Arrow */}
                   <div className="svc-action">
                     <span className="svc-price">
-                      {formatBDTPrice(svc.price)}
+                      {svc.price}
                     </span>
-                    <a href="/contact" className="svc-arrow" aria-label={`Discuss ${svc.title}`}>
+                    <Link to={svc.price === 'স্পেশাল প্যাকেজ' ? '/pricing' : `/services/${svc.slug || 'graphic-design'}`} className="svc-arrow" aria-label={`Explore ${svc.title}`}>
                       <ArrowUpRight size={20} />
-                    </a>
+                    </Link>
                   </div>
 
                 </div>
@@ -248,92 +306,102 @@ const Services = ({ highlight = false, fullPage = false }) => {
           align-items: start;
         }
 
+        /* Sticky left header */
         .svc-header {
           position: sticky;
           top: calc(var(--nav-height, 90px) + 2rem);
-          display: flex;
-          flex-direction: column;
-          gap: 1.25rem;
-          padding-bottom: 2rem;
         }
-
         .svc-heading {
-          margin: 0 !important;
-          font-size: clamp(1.85rem, 3vw, 2.6rem) !important;
+          font-family: var(--font-display);
+          font-size: clamp(2rem, 3.4vw, 3rem);
+          font-weight: 800;
+          color: var(--ink);
+          letter-spacing: -0.015em;
+          line-height: 1.2;
+          margin: 0 0 1rem;
         }
-
+        .svc-header .section-sub {
+          font-size: 0.95rem;
+          color: var(--muted);
+          line-height: 1.65;
+          margin: 0 0 2rem;
+          max-width: 340px;
+        }
         .svc-explore-link {
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          font-family: var(--font-body);
-          font-size: 0.875rem;
+          gap: 0.4rem;
+          font-family: var(--font-display);
+          font-size: 0.88rem;
           font-weight: 700;
           color: var(--brand-red);
           text-decoration: none;
           letter-spacing: -0.01em;
-          border-bottom: 1.5px solid rgba(232,25,44,0.3);
-          padding-bottom: 2px;
-          transition: border-color 0.2s;
+          transition: gap 0.22s, color 0.22s;
         }
-        .svc-explore-link:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .svc-explore-link:hover {
+          gap: 0.65rem;
+          color: var(--brand-red-dark);
+        }
 
-        /* List */
+        /* Numbered row list */
         .svc-list {
           display: flex;
           flex-direction: column;
+        }
+        .svc-row {
+          border-bottom: 1px solid var(--border);
+          padding: 1.75rem 0;
+          transition: border-color 0.25s, background 0.25s;
+          position: relative;
+        }
+        .svc-row:first-child {
           border-top: 1px solid var(--border);
         }
-
-        .svc-row {
-          position: relative;
-          border-bottom: 1px solid var(--border);
-          cursor: pointer;
-          transition: background 0.22s;
-          overflow: visible;
-        }
-        .svc-row:hover { background: var(--surface-soft); }
-
         .svc-row-inner {
-          display: grid;
-          grid-template-columns: 3rem 2.5rem 1fr auto;
+          display: flex;
           align-items: center;
-          gap: 1.25rem;
-          padding: 1.75rem 1.5rem 1.75rem 0;
-          min-height: 90px;
+          gap: 1.5rem;
         }
 
         /* Number */
         .svc-num {
           font-family: var(--font-display);
-          font-size: 0.8rem;
-          font-weight: 900;
-          letter-spacing: 0.06em;
+          font-size: 0.82rem;
+          font-weight: 800;
           color: var(--muted);
-          opacity: 0.45;
-          user-select: none;
+          letter-spacing: 0.04em;
+          width: 28px;
+          flex-shrink: 0;
+          opacity: 0.55;
         }
-        .svc-row.is-hovered .svc-num { opacity: 1; color: var(--brand-red); }
+        .svc-row.is-hovered .svc-num { color: var(--brand-red); opacity: 1; }
 
-        /* Icon */
+        /* Icon container */
         .svc-icon {
-          width: 2.5rem; height: 2.5rem;
-          display: flex; align-items: center; justify-content: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: var(--radius-md);
           background: var(--surface-soft);
-          border-radius: 10px;
-          border: 1px solid var(--border);
           color: var(--ink);
+          border: 1px solid var(--border);
           flex-shrink: 0;
           transition: background 0.22s, color 0.22s, border-color 0.22s;
         }
         .svc-row.is-hovered .svc-icon {
-          background: rgba(232,25,44,0.07);
-          color: var(--brand-red);
-          border-color: rgba(232,25,44,0.2);
+          background: var(--brand-red);
+          border-color: var(--brand-red);
+          color: #ffffff;
         }
 
-        /* Copy */
-        .svc-copy { min-width: 0; }
+        /* Title + desc */
+        .svc-copy {
+          flex: 1;
+          min-width: 0;
+        }
         .svc-title-row {
           display: flex;
           align-items: center;
@@ -421,60 +489,63 @@ const Services = ({ highlight = false, fullPage = false }) => {
         }
         .svc-preview-content {
           position: relative;
-          width: 100%;
-        }
-        .svc-preview img {
-          width: 100%;
-          height: auto;
-          max-height: 300px;
-          object-fit: cover;
-          display: block;
+          aspect-ratio: 16 / 9;
+          background: var(--surface-muted);
         }
         .svc-preview-overlay {
           position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 70%, transparent 100%);
-          padding: 1.5rem;
-          color: #fff;
+          inset: 0;
+          background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 1.25rem;
+          color: #ffffff;
         }
         .svc-preview-details {
-          font-size: 0.85rem;
-          font-weight: 600;
-          margin: 0 0 0.75rem 0;
-          line-height: 1.4;
+          font-size: 0.82rem;
+          line-height: 1.45;
+          margin: 0 0 0.5rem;
+          color: rgba(255,255,255,0.92);
         }
         .svc-preview-deliverables {
           list-style: none;
-          margin: 0;
           padding: 0;
+          margin: 0;
           display: flex;
           flex-wrap: wrap;
-          gap: 0.5rem;
+          gap: 0.35rem;
         }
         .svc-preview-deliverables li {
-          font-size: 0.75rem;
-          background: rgba(255,255,255,0.15);
-          padding: 0.25rem 0.6rem;
-          border-radius: 4px;
+          font-size: 0.72rem;
+          padding: 0.2rem 0.6rem;
+          background: rgba(255,255,255,0.18);
+          border-radius: 100px;
           backdrop-filter: blur(4px);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-          .svc-preview { display: none; }
-        }
+        /* ── Responsive ── */
         @media (max-width: 900px) {
-          .svc-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-          .svc-header { position: static; }
-          .svc-row-inner { grid-template-columns: 2.5rem 2rem 1fr auto; gap: 1rem; padding: 1.35rem 0.75rem 1.35rem 0; }
-        }
-        @media (max-width: 540px) {
-          .svc-row-inner { grid-template-columns: 2rem 1fr auto; }
-          .svc-icon { display: none; }
-          .svc-action { gap: 0.5rem; padding-left: 0.5rem; }
-          .svc-price { display: none; }
+          .svc-layout {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+          }
+          .svc-header {
+            position: static;
+          }
+          .svc-header .section-sub {
+            max-width: 100%;
+          }
+          .svc-row-inner {
+            flex-wrap: wrap;
+            gap: 1rem;
+          }
+          .svc-action {
+            width: 100%;
+            justify-content: space-between;
+            padding-left: 0;
+            margin-top: 0.5rem;
+          }
         }
       `}</style>
     </section>
