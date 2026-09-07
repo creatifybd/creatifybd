@@ -159,11 +159,13 @@ function AppContent() {
   }, [location.pathname]);
 
 
+  const isAdminOrLogin = location.pathname.startsWith('/admin') || location.pathname === '/login';
+
   return (
     <>
-      <ScrollProgress />
+      {!isAdminOrLogin && <ScrollProgress />}
       <ScrollToTop />
-      <WhatsAppButton />
+      {!isAdminOrLogin && <WhatsAppButton />}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />

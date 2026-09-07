@@ -5433,5 +5433,31 @@ body:not(.admin-body) .agency-nav-link {
   box-shadow: none !important;
 }
 
+/* Modal and dialog layout safety */
+.adm-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.25rem !important;
+}
+
+.adm-modal-box {
+  width: 100% !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Clean Admin Dashboard: Hide public floaters inside admin */
+body.admin-body .whatsapp-float-btn,
+body.admin-body .whatsapp-floating,
+body.admin-body .scroll-progress-bar {
+  display: none !important;
+}
+
+
 
 
