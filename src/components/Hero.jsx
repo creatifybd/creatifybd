@@ -123,7 +123,7 @@ const Hero = () => {
               rel="noreferrer"
               className="hero-cta-ghost"
             >
-              {cta2Label}
+              <span>💬 WhatsApp-এ কথা বলুন</span>
               <ArrowUpRight size={16} />
             </a>
           </motion.div>
