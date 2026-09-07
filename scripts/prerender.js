@@ -576,6 +576,27 @@ const STATIC_ROUTES = [
       </ul>
       <p><a href="/gigs">View gig revision details</a> | <a href="/contact">Contact support</a></p>
     `
+  },
+  {
+    path: 'login',
+    title: 'Admin Login | CreatifyBD',
+    description: 'Secure access to CreatifyBD administrative console.',
+    h1: 'Admin Login — CreatifyBD',
+    bodyContent: `<p>Please wait while redirecting to secure login console...</p>`
+  },
+  {
+    path: 'admin',
+    title: 'Admin Dashboard | CreatifyBD',
+    description: 'CreatifyBD Admin Dashboard',
+    h1: 'CreatifyBD Admin Console',
+    bodyContent: `<p>Loading admin console...</p>`
+  },
+  {
+    path: 'client/orders',
+    title: 'Client Orders Portal | CreatifyBD',
+    description: 'Track your creative service orders with CreatifyBD.',
+    h1: 'Client Orders Portal',
+    bodyContent: `<p>Loading client orders...</p>`
   }
 ];
 
@@ -709,15 +730,17 @@ function prerender() {
       fs.writeFileSync(BASE_TEMPLATE_PATH, rendered);
       console.log('Prerendered: / -> dist/index.html');
     } else {
-      // Write a flat "<path>.html" file instead of "<path>/index.html".
-      // With Firebase Hosting's "cleanUrls" option this is served directly
-      // at /<path> with a 200 (no physical directory exists), avoiding the
-      // extra 301 redirect that directory-style "index.html" files trigger
-      // when the URL is requested without a trailing slash.
+      // Write flat "<path>.html" file
       const filePath = path.join(DIST_DIR, `${route.path}.html`);
       ensureDir(path.dirname(filePath));
       fs.writeFileSync(filePath, rendered);
-      console.log(`Prerendered: /${route.path} -> dist/${route.path}.html`);
+
+      // Also write "<path>/index.html" for servers configured for directory index routing
+      const dirIndexPath = path.join(DIST_DIR, route.path, 'index.html');
+      ensureDir(path.dirname(dirIndexPath));
+      fs.writeFileSync(dirIndexPath, rendered);
+
+      console.log(`Prerendered: /${route.path} -> dist/${route.path}.html & dist/${route.path}/index.html`);
     }
     count++;
   }
