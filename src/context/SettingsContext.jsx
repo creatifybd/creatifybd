@@ -79,6 +79,7 @@ export const SettingsProvider = ({ children }) => {
 
         // Sync new version to Firestore if outdated
         if (!remoteData.version || Number(remoteData.version) < CONTENT_VERSION) {
+          merged.hero.eyebrow = defaultContent.hero.eyebrow;
           const updatedPayload = { ...merged, version: CONTENT_VERSION, updated_at: Date.now() };
           setDoc(doc(db, 'settings', 'content'), updatedPayload, { merge: true }).catch(() => {});
         }

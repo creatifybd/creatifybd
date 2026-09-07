@@ -26,7 +26,9 @@ const Hero = () => {
   const { content } = useSettings();
   const heroContent = content?.hero || {};
 
-  const headline     = heroContent.title    || 'আপনার ব্র্যান্ডকে দিন প্রিমিয়াম লুক ও নিশ্চিত ডিজিটাল গ্রোথ';
+  const rawEyebrow = heroContent.eyebrow;
+  const eyebrow = (!rawEyebrow || rawEyebrow.includes('বাংলাদেশের') || rawEyebrow.includes('🇧🇩') || rawEyebrow.includes('BD')) ? 'আপনার ব্যবসার প্রিমিয়াম ক্রিয়েটিভ ও গ্রোথ পার্টনার' : rawEyebrow;
+  const headline = heroContent.title    || 'আপনার ব্র্যান্ডকে দিন প্রিমিয়াম লুক ও নিশ্চিত ডিজিটাল গ্রোথ';
   const description  = heroContent.desc     ||
     'CreatifyBD হলো একটি ফুল-সার্ভিস ক্রিয়েটিভ টিম — ব্র্যান্ডিং, সোশ্যাল মিডিয়া ম্যানেজমেন্ট, ভিডিও এডিটিং এবং হাই-স্পিড ওয়েবসাইট ডিজাইন। কোনো মিডলম্যান ছাড়া সরাসরি কাজ করুন আমাদের ডেডিকেটেড স্পেশালিস্টদের সাথে।';
   const cta1Label    = heroContent.cta1     || 'আমাদের কাজ দেখুন';
@@ -62,7 +64,7 @@ const Hero = () => {
         {/* ── LEFT COPY ── */}
         <div className="hero-agency-copy">
           {/* Eyebrow badge */}
-          {heroContent.eyebrow && (
+          {eyebrow && (
             <motion.div
               className="hero-eyebrow"
               initial={{ opacity: 0, y: 15 }}
@@ -83,7 +85,7 @@ const Hero = () => {
               }}
             >
               <span className="hero-agency-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-red)', display: 'inline-block' }} />
-              <span>{heroContent.eyebrow}</span>
+              <span>{eyebrow}</span>
             </motion.div>
           )}
 
