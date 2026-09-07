@@ -1,4 +1,4 @@
-export const CONTENT_VERSION = 20260906_100;
+export const CONTENT_VERSION = 20260907_200;
 
 export const defaultContent = {
   version: CONTENT_VERSION,

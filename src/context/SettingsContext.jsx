@@ -70,12 +70,11 @@ export const SettingsProvider = ({ children }) => {
         const remoteData = snap.data();
 
         // Only pull specific non-text fields from Firestore (images, visibility)
-        // All copy/text comes from defaultContent to prevent English override
+        // All copy/text and primary brand assets come from defaultContent
         const safeFromFirestore = {
           visibility: remoteData.visibility,
           hero: {
-            mockup_primary: remoteData.hero?.mockup_primary || defaultContent.hero.mockup_primary,
-            hero_image: remoteData.hero?.hero_image,
+            mockup_primary: defaultContent.hero.mockup_primary || '/assets/hero-visual.png',
           },
           about_trust: {
             ceo_image: remoteData.about_trust?.ceo_image,

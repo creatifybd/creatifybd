@@ -31,7 +31,7 @@ const Hero = () => {
     'CreatifyBD হলো একটি ফুল-সার্ভিস ক্রিয়েটিভ টিম — ব্র্যান্ডিং, সোশ্যাল মিডিয়া ম্যানেজমেন্ট, ভিডিও এডিটিং এবং হাই-স্পিড ওয়েবসাইট ডিজাইন। কোনো মিডলম্যান ছাড়া সরাসরি কাজ করুন আমাদের ডেডিকেটেড স্পেশালিস্টদের সাথে।';
   const cta1Label    = heroContent.cta1     || 'আমাদের কাজ দেখুন';
   const cta2Label    = heroContent.cta2     || 'প্রজেক্ট নিয়ে কথা বলুন';
-  const heroImage    = heroContent.mockup_primary || heroContent.hero_image || '/assets/hero-visual.png';
+  const heroImage    = heroContent.mockup_primary || '/assets/hero-visual.png';
 
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
