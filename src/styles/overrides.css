@@ -5757,3 +5757,48 @@ body:not(.admin-body) .hero-agency {
   padding-bottom: clamp(2.5rem, 4vh, 3.75rem) !important;
 }
 
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PREVENT TEXT OVERFLOW & CLIPPING ACROSS ALL CARDS & HEADINGS
+   ═══════════════════════════════════════════════════════════════════ */
+body:not(.admin-body) .rc-name,
+body:not(.admin-body) .testi-name,
+body:not(.admin-body) .card-tier-name,
+body:not(.admin-body) .svc-title,
+body:not(.admin-body) .intro-card-title,
+body:not(.admin-body) .service-card-title,
+body:not(.admin-body) h1,
+body:not(.admin-body) h2,
+body:not(.admin-body) h3,
+body:not(.admin-body) h4,
+body:not(.admin-body) h5,
+body:not(.admin-body) h6 {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  text-overflow: unset !important;
+}
+
+body:not(.admin-body) .rc-meta {
+  min-width: 0 !important;
+  flex: 1 1 0% !important;
+}
+
+body:not(.admin-body) .rc-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.85rem !important;
+}
+
+body:not(.admin-body) .review-card-pub {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+body:not(.admin-body) .reviews-masonry-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 1.5rem !important;
+}
+

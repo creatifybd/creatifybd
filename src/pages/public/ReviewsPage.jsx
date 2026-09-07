@@ -61,16 +61,18 @@ const ReviewCard = ({ review, idx }) => (
       </div>
       <div className="rc-meta">
         <h5 className="rc-name">{review.clientName}</h5>
-        <div className="rc-sub">
-          <Globe size={12} />
-          <span>{review.country}</span>
-          <span className="bullet">·</span>
-          <span>যাচাইকৃত ক্লায়েন্ট</span>
-          {review.repeatClient && <span>রিপিট ক্লায়েন্ট</span>}
+        <div className="rc-sub-row">
+          <div className="rc-stars">
+            <StarDisplay rating={review.rating} />
+          </div>
+          <div className="rc-sub">
+            <Globe size={12} />
+            <span>{review.country}</span>
+            <span className="bullet">·</span>
+            <span>যাচাইকৃত</span>
+            {review.repeatClient && <span className="rc-repeat-badge">রিপিট ক্লায়েন্ট</span>}
+          </div>
         </div>
-      </div>
-      <div className="rc-stars">
-        <StarDisplay rating={review.rating} />
       </div>
     </div>
 
@@ -406,8 +408,22 @@ const ReviewsPage = () => {
 
         .rc-header {
           display: flex;
+          align-items: flex-start;
+          gap: 0.85rem;
+        }
+        .rc-sub-row {
+          display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 0.65rem;
+          flex-wrap: wrap;
+        }
+        .rc-repeat-badge {
+          background: rgba(232, 25, 44, 0.08);
+          color: var(--brand-red);
+          padding: 0.1rem 0.45rem;
+          border-radius: 100px;
+          font-size: 0.68rem;
+          font-weight: 700;
         }
 
         .rc-avatar {
@@ -437,13 +453,14 @@ const ReviewsPage = () => {
         }
 
         .rc-name {
-          font-size: 1rem;
+          font-size: 0.95rem;
           color: var(--ink);
           font-weight: 700;
-          margin-bottom: 0.2rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          margin: 0 0 0.35rem;
+          line-height: 1.35;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
         }
 
         .rc-sub {
