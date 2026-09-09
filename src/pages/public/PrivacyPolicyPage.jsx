@@ -8,13 +8,13 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
   <div className="policy-page-shell">
     <SEO title={`${title} | CreatifyBD`} description={seoDescription} />
     <Navbar />
-    <div className="container" style={{ maxWidth: '780px', margin: '0 auto', padding: '8rem 1.5rem 6rem' }}>
+    <main id="main-content" className="container" style={{ maxWidth: '780px', margin: '0 auto', padding: '4rem 0 5rem' }}>
       <div className="policy-header">
         <h1>{title}</h1>
         <p className="last-updated">সর্বশেষ আপডেট: {lastUpdated}</p>
       </div>
       <div className="policy-body">{children}</div>
-    </div>
+    </main>
     <Footer />
     <style>{`
       .policy-page-shell {
@@ -36,7 +36,7 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
       }
       .last-updated {
         font-size: 0.85rem;
-        color: var(--muted);
+        color: var(--ink-soft);
       }
       .policy-body h2 {
         font-size: 1.3rem;
@@ -45,7 +45,7 @@ const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
         margin: 2.5rem 0 1rem;
       }
       .policy-body p, .policy-body li {
-        color: var(--muted);
+        color: var(--ink-soft);
         font-size: 0.95rem;
         line-height: 1.7;
         margin-bottom: 0.75rem;

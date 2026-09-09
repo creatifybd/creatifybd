@@ -138,7 +138,7 @@ const SettingsManager = () => {
     setSavingPayment(true);
     try {
       await updateSettings(paymentSettings, 'payment');
-      toast.success('Payment settings saved \u2014 changes are live on the Payment page now.');
+      toast.success('Payment settings saved for the administration workflow.');
     } catch (err) {
       console.error(err);
       toast.error('Failed to save payment settings.');

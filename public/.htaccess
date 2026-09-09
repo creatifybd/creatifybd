@@ -1,34 +1,49 @@
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-
-  # HTTPS redirection
   RewriteCond %{HTTPS} off
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Direct files and directories pass through
+  # Old exports remain on FTP until a reviewed cleanup. Redirect their known
+  # entry points so they cannot expose an older English page.
+  RewriteRule ^(services|portfolio|pricing|about|process|contact|team|reviews|privacy|terms|refund-policy|revision-policy|privacy-policy)\.html$ /$1 [L,R=301]
+  RewriteRule ^gigs(?:\.html|/.*)?$ /services [L,R=301]
+  RewriteRule ^(?:work|case-studies|case-study)(?:\.html|/.*)?$ /portfolio [L,R=301]
+  RewriteRule ^payment(?:\.html|/.*)?$ /contact [L,R=301]
+  RewriteRule ^order/start(?:/.*)?$ /contact [L,R=301]
+
+  # Prefer the real pre-rendered route over obsolete /pricing.html exports.
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+?)/?$ $1/index.html [L]
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Check if .html file exists for the request (e.g. /login -> /login.html)
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.*)$ $1.html [L]
-
-  # React SPA fallback - redirect all other requests to index.html
-  RewriteRule ^ /index.html [L]
+  # Retained client routes use a Bengali, noindex app shell.
+  RewriteRule ^(admin|login|client|order)(/.*)?$ /app-shell.html [L]
+  RewriteRule ^ - [R=404,L]
 </IfModule>
 
-# Caching optimization
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType image/jpg "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType text/javascript "access plus 1 month"
+<IfModule mod_headers.c>
+  # New HTML must be checked on each visit; never serve cached old page copy.
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Only Vite's content-hashed files are immutable. Uploaded/source media use
+  # revalidation so an existing URL cannot stay stale for a year.
+  <FilesMatch "\.(webp|png|jpe?g|gif|svg|woff2|css|js)$">
+    Header set Cache-Control "public, max-age=86400, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "-[A-Za-z0-9_-]{8,}\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json image/svg+xml
 </IfModule>

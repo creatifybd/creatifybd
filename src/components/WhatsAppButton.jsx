@@ -11,7 +11,7 @@ const WhatsAppButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float-btn"
-      aria-label="Chat on WhatsApp"
+      aria-label="WhatsApp-এ কথা বলুন"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       title="WhatsApp-এ সরাসরি কথা বলুন"

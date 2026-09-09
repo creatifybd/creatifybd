@@ -2,7 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { db } from '../../firebase/config';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import publishedRelease from '../../data/publishedRelease.json';
+import { assertRelease, normalizeLegacyContent } from '../../data/releaseSchema';
 import MediaUploader from '../../components/admin/MediaUploader';
 import {
   Briefcase,
@@ -37,13 +39,13 @@ const tabs = [
   ['control', 'Control Map'],
   ['layout', 'Visibility'],
   ['hero', 'Hero'],
-  ['intro_band', 'Intro'],
-  ['clients', 'Clients'],
-  ['smm_highlight', 'SMM Feature'],
-  ['features', 'Features'],
+
+
+
+
   ['process', 'Process'],
   ['about_trust', 'About Trust'],
-  ['cta_band', 'CTA'],
+
   ['contact', 'Contact']
 ];
 
@@ -70,6 +72,7 @@ const ContentManager = () => {
   const [content, setContent] = useState(defaultContent);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [revision, setRevision] = useState(0);
   const [activeTab, setActiveTab] = useState('control');
   const [uploading, setUploading] = useState('');
   const [showJsonEditor, setShowJsonEditor] = useState(false);
@@ -79,8 +82,11 @@ const ContentManager = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const snap = await getDoc(doc(db, 'settings', 'content'));
-        setContent(mergeContent(snap.exists() ? snap.data() : null));
+        const snap = await getDoc(doc(db, 'settings', 'content_draft'));
+        const draft = snap.exists() ? snap.data() : null;
+        if (draft && draft.baseReleaseId !== publishedRelease.id) throw new Error('The draft belongs to another release. Resolve it before editing.');
+        setContent(mergeContent(draft?.content));
+        setRevision(draft?.revision || 0);
       } catch (err) {
         console.error(err);
         toast.error('Failed to load site content.');
@@ -153,17 +159,21 @@ const ContentManager = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const payload = {
-        ...content,
-        version: Date.now(),
-        updated_at: new Date().toISOString()
-      };
-      await setDoc(doc(db, 'settings', 'content'), payload, { merge: true });
-      setContent(payload);
-      toast.success('Website content updated.');
+      const nextContent = normalizeLegacyContent(content);
+      assertRelease({ ...publishedRelease, content: nextContent });
+      const draftRef = doc(db, 'settings', 'content_draft');
+      await runTransaction(db, async transaction => {
+        const current = await transaction.get(draftRef);
+        const data = current.exists() ? current.data() : null;
+        if ((data?.revision || 0) !== revision || (data && data.baseReleaseId !== publishedRelease.id)) throw new Error('Someone else edited this draft. Reload and review their changes before saving.');
+        transaction.set(draftRef, { content: nextContent, baseReleaseId: publishedRelease.id, revision: revision + 1, updatedAt: serverTimestamp() });
+      });
+      setRevision(previous => previous + 1);
+      setContent(nextContent);
+      toast.success('Draft saved. Export and deploy a new content release to publish.');
     } catch (err) {
       console.error(err);
-      toast.error('Failed to save website content.');
+      toast.error(err.message || 'Failed to save content draft.');
     } finally {
       setSaving(false);
     }
@@ -181,7 +191,7 @@ const ContentManager = () => {
       const parsed = JSON.parse(jsonEditorValue);
       setContent(parsed);
       setShowJsonEditor(false);
-      toast.success('JSON applied successfully. Click Save to publish.');
+      toast.success('JSON applied. Save the draft, then publish a new content release.');
     } catch (err) {
       setJsonError('Invalid JSON: ' + err.message);
     }
@@ -200,14 +210,14 @@ const ContentManager = () => {
         <div>
           <p className="admin-kicker">Full Website Control</p>
           <h1>Site Control Center</h1>
-          <p>Manage homepage copy, visibility, trust visuals, global modules, and route managers from one dashboard.</p>
+          <p>Changes are saved as a draft. A reviewed content release and Hostinger deployment publish all changes together.</p>
         </div>
         <div className="admin-toolbar-actions">
           <button type="button" onClick={openJsonEditor} className="admin-btn-secondary"><Code size={16} /> Edit JSON</button>
           <Link to="/" target="_blank" className="admin-btn-secondary"><Eye size={16} /> Preview Site</Link>
           <button type="button" onClick={handleSave} disabled={saving} className="admin-btn-primary">
             {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Saving...' : 'Save Draft'}
           </button>
         </div>
       </div>
@@ -262,13 +272,14 @@ const ContentManager = () => {
 
         {activeTab === 'hero' && (
           <FieldGroup>
-            <CMSField label="Headline HTML" value={content.hero.title} onChange={(v) => updateSection('hero', 'title', v)} textarea />
+            <CMSField label="Headline (Bengali plain text)" value={content.hero.title} onChange={(v) => updateSection('hero', 'title', v)} textarea />
+            <CMSField label="Highlighted headline" value={content.hero.accent} onChange={(v) => updateSection('hero', 'accent', v)} textarea />
             <CMSField label="Description" value={content.hero.desc} onChange={(v) => updateSection('hero', 'desc', v)} textarea />
             <TwoCols>
               <CMSField label="Primary Button" value={content.hero.cta1} onChange={(v) => updateSection('hero', 'cta1', v)} />
               <CMSField label="Secondary Button" value={content.hero.cta2} onChange={(v) => updateSection('hero', 'cta2', v)} />
             </TwoCols>
-            <ImageUploadField label="Hero Image" value={content.hero.mockup_primary} section="hero" field="mockup_primary" uploading={uploading} onUpload={handleImageUpload} />
+            <p className="admin-helper-text">The hero features the three social-media offers from Pricing. Portfolio concept images are selected in the published release.</p>
           </FieldGroup>
         )}
 
@@ -290,7 +301,7 @@ const ContentManager = () => {
           <FieldGroup>
             <CMSField label="CTA Label" value={content.smm_highlight.cta_label} onChange={(v) => updateSection('smm_highlight', 'cta_label', v)} />
             <CMSField label="Title" value={content.smm_highlight.title} onChange={(v) => updateSection('smm_highlight', 'title', v)} />
-            <CMSField label="Lead Copy" value={content.smm_highlight.lead} onChange={(v) => updateSection('smm_highlight', 'lead', v)} textarea />
+            <CMSField label="Lead Copy" value={content.smm_highlight.lead} onChange={(v) => updateSection('smm_highlight', 'subtitle', v)} textarea />
             <TwoCols>
               <CMSField label="Board Title" value={content.smm_highlight.board_title} onChange={(v) => updateSection('smm_highlight', 'board_title', v)} />
               <CMSField label="Status Badge" value={content.smm_highlight.status} onChange={(v) => updateSection('smm_highlight', 'status', v)} />

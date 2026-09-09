@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 
-// Language system removed — website is English-only for international clients.
+// Language system removed — website is Bengali for international clients.
 // This stub keeps backward-compatibility with any component that still imports useLanguage.
 const LanguageContext = createContext({ lang: 'bn', setLang: () => {} });
 
