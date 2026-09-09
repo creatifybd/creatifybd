@@ -9,7 +9,7 @@ service cloud.firestore {
     function isLegacyOwner() {
       return request.auth != null
         && (
-          request.auth.token.admin == true
+          ('admin' in request.auth.token && request.auth.token.admin == true)
           || request.auth.token.email == "binashad7@gmail.com"
           || request.auth.token.email == "creatifybd@gmail.com"
         );
@@ -35,7 +35,7 @@ service cloud.firestore {
     }
 
     function isEditorOrAbove() {
-      return isAdmin() && adminRole() != 'viewer';
+      return isAdmin() && adminRole() in ['owner', 'editor'];
     }
 
     // ─── RBAC: Admin Users Directory ─────────────────────────────────────────
@@ -51,8 +51,10 @@ service cloud.firestore {
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 120
         && request.resource.data.email is string
-        && request.resource.data.email.size() > 3
         && request.resource.data.email.size() <= 180
+        && (request.resource.data.email.size() == 0 || request.resource.data.email.matches('^[^@ ]+@[^@ ]+\\.[^@ ]+$'))
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^[+]?[0-9]{10,15}$')
         && request.resource.data.message is string
         && request.resource.data.message.size() > 0
         && request.resource.data.message.size() <= 3000
@@ -98,6 +100,32 @@ service cloud.firestore {
       allow update, delete: if isEditorOrAbove();
     }
 
+    // Newsletter addresses are create-only for visitors; no public enumeration.
+    match /subscribers/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'status', 'consent', 'subscribedAt'])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 180
+        && request.resource.data.email.matches('^[^@ ]+@[^@ ]+\\.[^@ ]+$')
+        && request.resource.data.status == 'pending'
+        && request.resource.data.consent == true
+        && request.resource.data.subscribedAt == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if isEditorOrAbove();
+    }
+    match /lead_crm/{id} {
+      allow read: if isAdmin();
+      allow write: if isEditorOrAbove();
+    }
+    // Immutable releases and migration backups are only written by Admin SDK.
+    match /site_releases/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /content_release_backups/{releaseId}/documents/{id} {
+      allow read: if isOwner();
+      allow write: if false;
+    }
+
     // ─── Existing CMS Collections ────────────────────────────────────────────
     // Note: write access requires Editor or Owner role — Viewers are read-only
     // even via direct API calls (see AdminUsers.jsx role descriptions).
@@ -134,8 +162,10 @@ service cloud.firestore {
     }
     // Legacy settings (for backward compatibility)
     match /settings/{id} {
-      allow read: if true;
-      allow write: if isEditorOrAbove();
+      // Public copy comes from the allowlisted release snapshot. Draft settings
+      // can retain legacy/private fields and must not be exposed by this API.
+      allow read: if id == 'publishing' || isAdmin();
+      allow write: if isEditorOrAbove() && id != 'publishing';
     }
     match /case_study_images/{id} {
       allow read: if true;
@@ -255,4 +285,3 @@ service cloud.firestore {
     }
   }
 }
-

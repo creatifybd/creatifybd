@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { addData, deleteData, logActivity } from '../../firebase/services';
-import { doc, serverTimestamp, setDoc, writeBatch, collection, getDocs } from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc, writeBatch, collection, getDocs, runTransaction, increment } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Plus, Trash2, X, Loader2, Search, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import MediaUploader from '../../components/admin/MediaUploader';
-import { CURATED_PORTFOLIO } from '../../data/portfolioItems';
+import publishedRelease from '../../data/publishedRelease.json';
+const CURATED_PORTFOLIO = publishedRelease.portfolio.map(item => ({ ...item, service: item.category, tags: [], seoTitle: item.title, seoDescription: item.description, featured: Number.isInteger(item.featuredOrder) }));
 import { useConfirm } from '../../context/ConfirmContext';
 
 const curatedIds = new Set(CURATED_PORTFOLIO.map(item => item.id));
 const emptyForm = {
   title: '',
-  category: '',
+  category: 'social',
+  workType: 'sample',
+  clientPermission: false,
+  revision: 0,
   imageUrl: '',
   description: '',
   service: '',
@@ -50,8 +54,10 @@ const PortfolioManager = () => {
       const override = storedById.get(item.id);
       return {
         ...item,
+        ...override,
         imageUrl: override?.imageUrl || override?.image || item.image,
-        hidden: override?.hidden !== undefined ? override.hidden : item.hidden,
+        hidden: override?.hidden !== undefined ? override.hidden : false,
+        revision: override?.revision || 0,
         featured: override?.featured !== undefined ? override.featured : item.featured || false,
         featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : item.featuredOrder || 0,
         isCurated: true
@@ -65,35 +71,8 @@ const PortfolioManager = () => {
     setItems([...syncedCurated, ...customItems]);
     setLoading(false);
 
-    // Step 3: Force sync — overwrite all Firestore documents with project file data, only preserving images & hidden/featured
-    try {
-      const batch = writeBatch(db);
-      CURATED_PORTFOLIO.forEach(item => {
-        const override = storedById.get(item.id);
-        batch.set(doc(db, 'portfolio', item.id), {
-          // Always use project file data for text fields
-          title: item.title,
-          description: item.description,
-          category: item.category,
-          service: item.service,
-          industry: item.industry,
-          tags: item.tags,
-          seoTitle: item.seoTitle,
-          seoDescription: item.seoDescription,
-          // Preserve custom uploads and visibility settings from Firestore
-          imageUrl: override?.imageUrl || override?.image || item.image,
-          hidden: override?.hidden !== undefined ? override.hidden : false,
-          featured: override?.featured !== undefined ? override.featured : false,
-          featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : 0,
-          isCurated: true,
-          updatedAt: serverTimestamp()
-        }, { merge: false }); // Use set without merge to completely replace document
-      });
-      await batch.commit();
-      console.log('✅ Portfolio synced to Firestore successfully');
-    } catch (_syncErr) {
-      console.error('❌ Portfolio sync failed:', _syncErr);
-    }
+    // Reading this screen never writes or re-seeds the database.
+
   };
 
   useEffect(() => {
@@ -114,31 +93,35 @@ const PortfolioManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.imageUrl) { toast.error('Please upload an image first'); return; }
+    if (!/[\u0980-\u09ff]/.test(formData.title)) { toast.error('প্রকল্পের নাম বাংলায় লিখুন।'); return; }
+    if (formData.workType === 'client' && !formData.clientPermission) { toast.error('গ্রাহকের কাজ প্রকাশের অনুমতি নিশ্চিত করুন।'); return; }
     setSaving(true);
     try {
       const { id, createdAt, updatedAt, ...payload } = formData;
       if (editingId) {
-        await setDoc(doc(db, 'portfolio', editingId), {
-          ...payload,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
+        await runTransaction(db, async transaction => {
+          const ref = doc(db, 'portfolio', editingId);
+          const current = await transaction.get(ref);
+          if ((current.data()?.revision || 0) !== (formData.revision || 0)) throw new Error('এই কাজের তথ্যে অন্য পরিবর্তন এসেছে। তালিকা নতুন করে খুলে মিলিয়ে নিন।');
+          transaction.set(ref, { ...payload, revision: (formData.revision || 0) + 1, updatedAt: serverTimestamp() }, { merge: true });
+        });
         toast.success('Portfolio item updated.');
       } else {
         await addData('portfolio', payload);
-        toast.success('Portfolio item published.');
+        toast.success('Portfolio draft saved. Publish a new release to show it on the website.');
       }
-      closeModal();
+      closeModal(true);
       fetchItems();
     } catch (err) {
       console.error(err);
-      toast.error('Failed to save portfolio item.');
+      toast.error(err.message || 'Failed to save portfolio item.');
     } finally {
       setSaving(false);
     }
   };
 
-  const closeModal = () => {
-    if (saving) return;
+  const closeModal = (force = false) => {
+    if (saving && force !== true) return;
     setIsModalOpen(false);
     setEditingId(null);
     setFormData(emptyForm);
@@ -146,16 +129,15 @@ const PortfolioManager = () => {
 
   const handleDelete = async (item) => {
     const ok = await confirm({
-      title: 'Delete this portfolio item?',
-      description: 'This item will be permanently removed from the portfolio.',
+      title: 'Archive this portfolio item?',
+      description: 'It will be excluded from the next published release. Its draft remains recoverable.',
       confirmLabel: 'Delete',
       tone: 'danger'
     });
     if (!ok) return;
     try {
-      // Delete from database regardless of whether it's curated or custom
-      await deleteData('portfolio', item.id);
-      toast.success('Portfolio item deleted.');
+      await setDoc(doc(db, 'portfolio', item.id), { hidden: true, published: false, revision: increment(1), updatedAt: serverTimestamp() }, { merge: true });
+      toast.success('Portfolio item archived in the draft.');
       logActivity({ action: 'portfolio.delete', resource: 'portfolio', resourceId: item.id, details: item.title || '' });
       fetchItems();
     } catch (err) {
@@ -166,7 +148,7 @@ const PortfolioManager = () => {
 
   const toggleHidden = async (item) => {
     try {
-      await setDoc(doc(db, 'portfolio', item.id), { hidden: !item.hidden, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(doc(db, 'portfolio', item.id), { hidden: !item.hidden, published: item.hidden, revision: increment(1), updatedAt: serverTimestamp() }, { merge: true });
       fetchItems();
     } catch (err) {
       console.error(err);
@@ -176,7 +158,7 @@ const PortfolioManager = () => {
 
   const toggleFeatured = async (item) => {
     try {
-      await setDoc(doc(db, 'portfolio', item.id), { featured: !item.featured, featuredOrder: !item.featured ? Date.now() : 0, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(doc(db, 'portfolio', item.id), { featured: !item.featured, featuredOrder: !item.featured ? Date.now() : 0, revision: increment(1), updatedAt: serverTimestamp() }, { merge: true });
       fetchItems();
     } catch (err) {
       console.error(err);
@@ -186,7 +168,7 @@ const PortfolioManager = () => {
 
   const updateFeaturedOrder = async (item, newOrder) => {
     try {
-      await setDoc(doc(db, 'portfolio', item.id), { featuredOrder: newOrder, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(doc(db, 'portfolio', item.id), { featuredOrder: newOrder, revision: increment(1), updatedAt: serverTimestamp() }, { merge: true });
       fetchItems();
     } catch (err) {
       console.error(err);
@@ -200,7 +182,7 @@ const PortfolioManager = () => {
   const handleBulkHide = async (hidden) => {
     try {
       const batch = writeBatch(db);
-      selectedIds.forEach(id => batch.set(doc(db, 'portfolio', id), { hidden, updatedAt: serverTimestamp() }, { merge: true }));
+      selectedIds.forEach(id => batch.set(doc(db, 'portfolio', id), { hidden, published: !hidden, revision: increment(1), updatedAt: serverTimestamp() }, { merge: true }));
       await batch.commit();
       toast.success(`${selectedIds.length} item(s) updated`);
       setSelectedIds([]);
@@ -212,56 +194,8 @@ const PortfolioManager = () => {
   };
 
   const handleSyncToFirestore = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'portfolio'));
-      const storedById = new Map();
-      querySnapshot.forEach(doc => {
-        storedById.set(doc.id, doc.data());
-      });
-
-      const batch = writeBatch(db);
-      let syncCount = 0;
-      
-      CURATED_PORTFOLIO.forEach(item => {
-        const override = storedById.get(item.id);
-        const docRef = doc(db, 'portfolio', item.id);
-        
-        // Log what we're syncing
-        console.log(`Syncing ${item.id}:`, {
-          title: item.title,
-          description: item.description,
-          currentFirestoreTitle: override?.title,
-          currentFirestoreDesc: override?.description
-        });
-        
-        batch.set(docRef, {
-          title: item.title,
-          description: item.description,
-          category: item.category,
-          service: item.service,
-          industry: item.industry,
-          tags: item.tags,
-          seoTitle: item.seoTitle,
-          seoDescription: item.seoDescription,
-          imageUrl: override?.imageUrl || override?.image || item.image,
-          hidden: override?.hidden !== undefined ? override.hidden : false,
-          featured: override?.featured !== undefined ? override.featured : false,
-          featuredOrder: override?.featuredOrder !== undefined ? override.featuredOrder : 0,
-          isCurated: true,
-          updatedAt: serverTimestamp()
-        }, { merge: false });
-        
-        syncCount++;
-      });
-      
-      await batch.commit();
-      console.log(`Synced ${syncCount} items to Firestore`);
-      toast.success(`Portfolio synced to Firestore successfully (${syncCount} items)`);
-      fetchItems();
-    } catch (err) {
-      console.error('Sync failed:', err);
-      toast.error('Failed to sync portfolio to Firestore');
-    }
+    await fetchItems();
+    toast.success('Portfolio drafts refreshed. Publication uses the protected release workflow.');
   };
 
   const handleBulkDelete = async () => {
@@ -299,7 +233,7 @@ const PortfolioManager = () => {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="admin-btn-secondary" onClick={handleSyncToFirestore}>
-            <RefreshCw size={18} /> Sync to Firestore
+            <RefreshCw size={18} /> Refresh drafts
           </button>
           <button className="admin-btn-primary" onClick={() => { setEditingId(null); setFormData(emptyForm); setIsModalOpen(true); }}>
             <Plus size={18} /> Add New Item
@@ -386,7 +320,8 @@ const PortfolioManager = () => {
                 <MediaUploader label="Portfolio Image" value={formData.imageUrl} accept="image/*" folder="creatifybd/portfolio" helperText="Drop an image, browse your device, or switch to Link." onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} />
               </div>
               <div style={{ marginBottom: '1rem' }}><label className="setting-label">Project Title</label><input className="admin-input" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="e.g. Fashion Brand Identity" required /></div>
-              <div style={{ marginBottom: '1.5rem' }}><label className="setting-label">Category</label><input className="admin-input" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="e.g. Branding / Photography" required /></div>
+              <div style={{ marginBottom: '1.5rem' }}><label className="setting-label">Category</label><select className="admin-input" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}>{[['social','সোশ্যাল পোস্ট'],['branding','লোগো ও ব্র্যান্ডিং'],['packaging','প্যাকেজিং'],['web','ওয়েবসাইট'],['video','ভিডিও'],['apparel','মার্চেন্ডাইজ']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></div>
+              <div style={{ marginBottom: 16 }}><label className="setting-label">কাজের পরিচয়</label><select className="admin-input" value={formData.workType || 'sample'} onChange={e => setFormData({ ...formData, workType: e.target.value })}><option value="sample">নির্বাচিত নমুনা</option><option value="concept">ধারণাভিত্তিক ডিজাইন</option><option value="client">গ্রাহকের প্রকল্প</option></select>{formData.workType === 'client' && <label><input type="checkbox" checked={Boolean(formData.clientPermission)} onChange={e => setFormData({ ...formData, clientPermission: e.target.checked })} /> গ্রাহক প্রকাশের অনুমতি দিয়েছেন</label>}</div>
               <div style={{ marginBottom: '1rem' }}><label className="setting-label">Service</label><input className="admin-input" value={formData.service || ''} onChange={(e) => setFormData({...formData, service: e.target.value})} placeholder="e.g. Social Media Management" /></div>
               <div style={{ marginBottom: '1rem' }}><label className="setting-label">Industry</label><input className="admin-input" value={formData.industry || ''} onChange={(e) => setFormData({...formData, industry: e.target.value})} placeholder="e.g. SaaS, Retail, Hospitality" /></div>
               <div style={{ marginBottom: '1.5rem' }}><label className="setting-label">Description</label><textarea className="admin-input" rows="4" value={formData.description || ''} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Explain the project scope, deliverables, and outcome." /></div>

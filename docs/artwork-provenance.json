@@ -1,0 +1,151 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "assets": [
+    {
+      "file": "01-restaurant-bhoj",
+      "prompt": "Use case: ads-marketing. Create ONE polished original square 1:1 Bengali social-media concept poster for an invented Bangladeshi restaurant. This is a finished ad artwork, not a device mockup or website. Brand text exactly \"ভোজ\", bold cream Bengali logotype small at top. Main headline text exactly \"দুপুরটা হোক জমজমাট\" in large beautifully shaped professional Bengali type across upper third. Make all conjuncts/diacritics correct. A spectacular appetizing close-up overhead plate of Bengali chicken roast and aromatic rice fills the lower two thirds; golden rice, rich red-brown sauce, fresh cucumber, lime wedge, small bowl of dal; real photographic food detail. Rich warm red paper background, warm cream type, a little handwritten cream curve energy, dramatic side light and soft food shadows. Clever premium art direction, simple and punchy, clear at thumbnail size. Tiny exact English label \"CONCEPT DESIGN\" at bottom edge. No other text, no pricing, discounts, contacts, ratings, real brands, watermarks, no collage of multiple posters. Full bleed 1024px square.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2727729,
+      "integration": "public/assets/portfolio/bd-social/01-restaurant-bhoj.webp"
+    },
+    {
+      "file": "02-boutique-bunon",
+      "prompt": "Use case: ads-marketing. Create ONE premium square 1:1 Bengali social-media concept fashion poster for an invented Bangladeshi boutique. Text exactly: brand \"বুনন\" small elegant Bengali at top left; large headline \"নিজের মতো সাজুন\" arranged in an editorial column on the left with beautifully shaped Bengali glyphs and correct vowel marks. Contemporary modest Bengali cotton clothing, an adult Bangladeshi woman in a graceful teal cotton salwar kameez with subtle white woven texture and loose dupatta, striking natural elegant pose on the right three quarters, face softly visible, not a celebrity. Refined saturated teal and warm ivory palette. Matte cream paper, small abstract textile motif, natural studio light, authentic fabric texture, editorial negative space; an organic oval teal shape frames subject, no generic ad-template look. Tiny English text \"CONCEPT DESIGN\" at bottom edge. Readable at thumbnail, product/scene dominant, full bleed. No other text or real brands, no invented discounts, contact information, rating, watermark, no UI or mockup, no collage of posters.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2518289,
+      "integration": "public/assets/portfolio/bd-social/02-boutique-bunon.webp"
+    },
+    {
+      "file": "03-gadget-songjog",
+      "prompt": "Use case: ads-marketing. Create ONE original premium square Bengali gadget concept advertising poster. Dramatic photorealistic unbranded wireless over-ear headphones in pale silver with cobalt blue cushions float diagonally across the lower-right on a vibrant cobalt-blue background; sharp futuristic lime arcs and subtle deep blue lighting, punchy studio product photography, clean shadows. Product fills more than half of composition. Invented Bengali brand text exactly \"সংযোগ\" as small white type upper left. Main exact Bengali headline \"কাজে গতি, সুরে স্বস্তি\" in confident large lime professional Bengali typography in 2 clean lines upper left. Beautiful correct Bengali shaping, no disconnected glyphs. Tiny exact English label \"CONCEPT DESIGN\" at bottom left. Geometric bold contemporary Bangladeshi commerce art direction, clean clear silhouette and readable at thumbnail. Single finished artwork, full bleed 1:1 square. No price, technical spec, ratings, phone, discounts, real logos, other text, watermarks, website UI, or collage of several posters.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2135108,
+      "integration": "public/assets/portfolio/bd-social/03-gadget-songjog.webp"
+    },
+    {
+      "file": "04-bakery-mishtimukh",
+      "prompt": "Use case: ads-marketing. ONE beautiful square 1:1 Bengali bakery concept advertising poster. Invented brand exactly \"মিষ্টিমুখ\" centered at the very top in delicate burgundy Bengali. Main exact headline \"ছোট আনন্দের মিষ্টি আয়োজন\" in very large dramatic curvaceous burgundy professional Bengali typography across upper half, keep accurate shaping and diacritics. Center lower half: photorealistic strawberry shortcake on a pedestal, velvety pale pink icing, fresh strawberries, a beautiful cut slice leaning beside it showing fluffy interior, natural soft cream details, tasteful berry garnish. Pale blush-pink backdrop, gentle tonal gingham tabletop on lower strip, cherry burgundy typography, little ribbon bow prop at corner. Rich editorial patisserie photography and a spacious celebratory contemporary graphic layout, premium polished, readable at thumbnail. Tiny exact English \"CONCEPT DESIGN\" lower edge. No other words, real brands, discount, contact details, sales claims, ratings, watermark, no UI, no collage; fill the entire square with this one finished poster.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2202015,
+      "integration": "public/assets/portfolio/bd-social/04-bakery-mishtimukh.webp"
+    },
+    {
+      "file": "05-homecare-nirmol",
+      "prompt": "Use case: ads-marketing. Create ONE original square 1:1 Bengali social media concept advertising poster for invented homecare brand. Palette very fresh mint green and white. Small brand text exactly \"নির্মল\" in forest green on upper left; oversized exact headline \"ঘর থাকুক সতেজ\" in clean fully shaped green Bengali typography on left half, airy 3-line composition. On right half photorealistic elegant simple white and mint household cleaning spray bottle and matching refill container displayed on mint tiled step, beautiful clean window reflection, small folded white cleaning cloth and a fresh green leaf. Bottles only carry the exact small Bengali brand \"নির্মল\", no other product text. Sunlight, soft realistic shadows, natural fresh calm premium consumer packaging art direction. Generous white space, asymmetric layout, products dominate, enough contrast to read thumbnail. Tiny exact English text \"CONCEPT DESIGN\" at bottom edge. No germs, no medical or disinfectant claims, no percentage, price, discount, fake result, phone, rating, real logos, other words, or watermark. Finished ad full bleed, not website, no device mockup, no collage.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1613873,
+      "integration": "public/assets/portfolio/bd-social/05-homecare-nirmol.webp"
+    },
+    {
+      "file": "06-furniture-nibas",
+      "prompt": "Use case: ads-marketing. Create ONE polished square 1:1 Bengali furniture concept social media poster. A contemporary cozy Bangladeshi living room photograph fills the composition: warm light oak wooden low lounge sofa in textured ochre upholstery, beautifully crafted matching rounded wooden coffee table, jute rug, plant, off-white plaster wall, filtered afternoon light, intimate architectural editorial photography. Focus on rich wood grain and inviting furniture, no people. Place a restrained charcoal rectangular typography panel within the left upper quarter, designed in the artwork; ivory Bengali invented brand exactly \"নিবাস\" small; larger beautiful properly shaped exact Bengali headline \"ঘরের প্রতিটি কোণে স্বস্তি\" in 3 lines beneath. The photograph remains dominant around and under the panel. A little ochre accent line. Tiny English text \"CONCEPT DESIGN\" at lower edge. Premium warm ochre, charcoal and natural wood palette, artful composition, readable at thumbnail. No other text, offers, dimensions, ratings, client claims, real brands, watermark. This is one finished poster, full bleed, no website UI, no collage of ads.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2556069,
+      "integration": "public/assets/portfolio/bd-social/06-furniture-nibas.webp"
+    },
+    {
+      "file": "07-travel-pother-dak",
+      "prompt": "Use case: ads-marketing. Create ONE stunning square 1:1 Bengali travel concept advertising poster. Magnificent photorealistic panoramic Bangladesh hill-country landscape: soft lush green hills layered into mist, winding footpath on grassy ridge and small distant bamboo hut, peaceful overcast golden sunrise with dramatic depth, no steep Himalayan peaks, no invented named landmark. A premium trekking/travel mood, natural genuine textures. Cover the full square edge to edge with scene. Bold exact Bengali headline \"পাহাড় ডাকছে\" in giant beautiful warm-orange Bengali typography across the upper sky, correct Bengali marks, and small exact brand \"পথের ডাক\" at lower left on dark-green land using cream text. Add one restrained orange circular sun graphic behind upper type, clean contemporary adventure poster art direction. Tiny exact English label \"CONCEPT DESIGN\" along bottom edge. Image scene dominates, strong at thumbnail. No human crowds, no price, package itinerary, real logos, testimonials, review rating, discounts, phone, other words or watermark. No device mockup, UI, or collage.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2647862,
+      "integration": "public/assets/portfolio/bd-social/07-travel-pother-dak.webp"
+    },
+    {
+      "file": "08-education-shikhon",
+      "prompt": "Use case: ads-marketing. Create ONE premium square 1:1 Bengali adult-learning social-media concept poster. Invented Bengali brand exactly \"শিখন\" small dark blue upper left. Large exact Bengali headline \"আজ শিখুন, এগিয়ে থাকুন\" in beautiful bold professional dark blue Bengali typography on upper half in two lines; ensure accurate Bengali shaping. Graphic contemporary design: soft buttery yellow background with a large deep-blue angular block lower right, natural photographic cutout of a Bangladeshi adult woman wearing contemporary modest casual cream clothing seated studying with a slim unbranded laptop and open notebook, friendly focused posture, seated at a minimal curved desk placed diagonally lower half. She is a fictional model, not staff or teacher. Playful tiny blue dotted path and minimal pencil graphic reinforce learning, but keep clean editorial style and authentic natural skin/fabric detail. Scene dominant and type concise, sophisticated blue/yellow palette, readable at thumbnail. Tiny English label exactly \"CONCEPT DESIGN\" at bottom edge. No claims of employment, results, course hours, accreditation, rating, discounts, prices, phone, real brand or software marks, other words, watermark. Full bleed finished poster, no collage or website chrome.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1738106,
+      "integration": "public/assets/portfolio/bd-social/08-education-shikhon.webp"
+    },
+    {
+      "file": "09-personalcare-snigdho",
+      "prompt": "Use case: ads-marketing. Create ONE luxurious original square 1:1 Bengali personal-care concept advertising poster. Invented brand exact Bengali \"স্নিগ্ধ\" small elegant ivory at upper left. Exact main headline \"নিজের জন্য একটু সময়\" in beautiful large editorial Bengali typography in a stepped 3-line composition on left, correctly shaped conjuncts and diacritics. Rich deep plum background with peach curved architectural plinth at bottom right. Gorgeous photorealistic beige matte cosmetic lotion bottle and small matching jar on plinth, soft translucent peach silk flowing behind without hiding product, shadow of a leaf at top right, warm side-lit studio photography with beautifully controlled deep shadows and a luxury-magazine feel. Packaging only exact Bengali word \"স্নিগ্ধ\", no small invented labeling. Very polished, brand story of quiet self-care, no clinical claims or before/after. A tiny exact English label \"CONCEPT DESIGN\" bottom edge. Product fills right half and is dominant, minimal readable text at thumbnail. No other words, prices, discount, phone, ratings, real logo, watermark, no website UI, no collage. Full bleed one finished poster.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1875712,
+      "integration": "public/assets/portfolio/bd-social/09-personalcare-snigdho.webp"
+    },
+    {
+      "file": "10-realestate-thikana",
+      "prompt": "Use case: ads-marketing. Create ONE sophisticated square Bengali real-estate concept social-media poster. Imagined tasteful mid-rise Bangladeshi urban residential architecture, 6–7 storeys, light natural stone and white plaster, deep shaded verandas with slim rails and lush plants, restrained warm wooden accents and street-level tropical landscaping, inviting afternoon sunlight, elegant architectural visualization. Building dominates two-thirds on right and bottom, photograph cropping thoughtfully. A forest-green vertical block occupies left quarter and white sky space above. Exact small Bengali invented brand \"ঠিকানা\" at top left in warm white, exact headline \"নিজের ঘরের স্বপ্ন\" in large correctly shaped sophisticated Bengali typography in left block using white, three lines. Simple thin graphic roof-line icon beside small brand is acceptable. Tiny exact English \"CONCEPT DESIGN\" along lower edge. Forest green / warm white / natural stone palette, premium editorial property design, clear at thumbnail. No real named property, location, address, square feet, price, amenities claim, completion claim, phone, rating, fake real client or actual project claim. No other text, logos, watermark, UI, or collage. One finished full bleed square poster.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2548733,
+      "integration": "public/assets/portfolio/bd-social/10-realestate-thikana.webp"
+    },
+    {
+      "file": "11-localfood-matir-ghran",
+      "prompt": "Use case: ads-marketing. Create ONE original square 1:1 Bengali concept poster for an invented local seasonal produce business. Exact Bengali brand \"মাটির ঘ্রাণ\" small forest-green logotype top right; exact headline \"দেশি স্বাদের আপন ঠিকানা\" in huge sophisticated forest-green Bengali letters at lower left on mustard background, 2 or 3 lines with correct shaping, diacritics and conjuncts. Visual direction is a joyful premium farmers-market still life: ripe golden Bangladesh mangoes, one perfectly sliced with rich yellow juicy flesh, green leaves, a small woven cane basket partially full, natural tactile jute on a vibrant mustard tabletop. Photorealistic food macro detail and graphic top-down diagonal composition, fruits cascading from upper left toward center, warm hard sunlight creating sharp organic shadows. Little abstract green hand-drawn line botanical accents, spare uncluttered contemporary layout, produce dominant and text readable at thumbnail. Tiny exact English \"CONCEPT DESIGN\" on bottom edge. No organic certification, health claims, price, discount, contact information, ratings, real logos, extra words, watermark, no webpage or collage. Full bleed finished ad.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2368064,
+      "integration": "public/assets/portfolio/bd-social/11-localfood-matir-ghran.webp"
+    },
+    {
+      "file": "12-professionalservice-hishab",
+      "prompt": "Use case: ads-marketing. Create ONE clever square 1:1 Bengali professional bookkeeping-service concept advertising poster. Exact Bengali invented brand \"হিসাব\" small charcoal at upper left on warm off-white paper background. Exact headline \"হিসাব গুছিয়ে, ব্যবসায় মন দিন\" in large rich crimson bold modern professionally shaped Bengali type across upper two fifths, 2–3 crisp lines, all Bengali marks rendered correctly. Lower three fifths a high-end photorealistic top-down conceptual still life arranged neatly on ivory paper with a diagonal crimson block: open plain ruled bookkeeping ledger with only very faint pencil lines (no meaningful financial amounts), unbranded charcoal calculator with plausible small physical digits, graphite pencil, stacked plain receipt slips without readable personal data, one black binder clip. Photographic tactile paper and soft directional shadows, impeccable editorial grid and intentional asymmetric spacing, refined financial-professional visual storytelling. One small restrained red line graphic organizes objects. Tiny exact English text \"CONCEPT DESIGN\" at bottom edge. No invented client, financial performance/results, certification, price, discount, rating, contact, other text, logo, watermark, website UI or collage of ads. Full bleed single square poster.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2130527,
+      "integration": "public/assets/portfolio/bd-social/12-professionalservice-hishab.webp"
+    },
+    {
+      "file": "13-service-social-media",
+      "prompt": "Use case: product-mockup. Create ONE sophisticated LANDSCAPE 4:3 (four wide by three high) website service illustration for a Bengali creative agency. Art direction cohesive scarlet red, warm white and charcoal only, with warm natural food colors in photographs. A photorealistic oblique tabletop composition of a small social-media campaign concept printed on thick square matte cards for an invented local Bangladeshi food business. Three clearly designed matching campaign prints arranged in a staggered fan on a scarlet studio surface, front card large and dominant showing gorgeous chicken-rice food photography and exact small Bengali brand \"ভোজ\", the short exact Bengali headline \"স্বাদের গল্প\" in beautiful correctly shaped large white letters. The supporting two cards have related food photo crops and minimalist scarlet graphic elements, no tiny pseudo-text. Premium print texture, elegant cast shadows, clear dimensionality. A charcoal pencil and one small ivory paper circle are subtle props. All card corners fit safely within frame. Tiny exact English label \"CONCEPT DESIGN\" near bottom of front card. No social-media platform logos, phones, website screenshot, real client claims, prices, contact details, percentages, ratings, watermark, or extra words. Single coherent artful photograph of a campaign presentation, no agency website UI. Must be 4:3 landscape composition with generous breathing space and subject large enough for website service card.",
+      "textReview": "Bengali brand and headline visually checked; no obvious broken shaping.",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2355786,
+      "integration": "public/assets/services/social-media-v3.webp"
+    },
+    {
+      "file": "14-service-branding",
+      "prompt": "Use case: product-mockup. Create ONE premium landscape image with EXACT 4:3 composition for a creative agency graphic-design service card. Cohesive palette scarlet red, warm white, charcoal. Photorealistic high-end branding identity stationery composition photographed from a slightly oblique overhead perspective on a warm white tabletop: beautifully arranged ivory letterhead with a single scarlet abstract geometric woven-loop invented symbol, crimson business card with the same abstract mark in white, charcoal envelope, folded scarlet packaging sleeve with a generous white mark. Focus on original clean abstract invented brand MARK ONLY, no invented word name or contact data. Elegant proportions, tactile uncoated papers, restrained Swiss/editorial design and artful intentional spacing, diagonal natural side-light shadows; a small charcoal binder clip. This visually shows a coherent branding system made by designers. All important pieces clearly visible and within margins; lively composition that reads at thumbnail. Tiny readable English \"CONCEPT DESIGN\" on one paper edge is the only text. No software logos, no real brands, no names, addresses, phone numbers, fake clients, offers, results, watermark, UI, people, or collage of unrelated logos. One cohesive stylish stationery mockup photograph. Landscape 4:3.",
+      "textReview": "Only CONCEPT DESIGN label; no Bengali text requested. Visually inspected.",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 2345747,
+      "integration": "public/assets/services/branding-v3.webp"
+    },
+    {
+      "file": "15-service-video-editing",
+      "prompt": "Use case: stylized-concept. Create ONE polished LANDSCAPE 4:3 creative agency video-editing service artwork in a cohesive scarlet-red, warm white, charcoal palette. A striking high-end dimensional editorial composition on a charcoal studio background: three floating photographic film frames of a fictional Bangladesh local food/product shoot, showing close-up steam over a warm plate, a hand placing garnish (hands only), then finished tabletop food still; consistent cinematic warm lighting inside frames. Beneath these frames a refined abstract video-editing timeline made of clean scarlet and ivory horizontal clip blocks with subtle frame thumbnails and a simple waveform line, no actual software UI or interface logos. A minimal scarlet play-triangle motif and a small clean filmstrip edge reinforce the service. Precise beautiful cast shadows, premium print/3D mixed material styling, cinematic graphic design, frame edges sharp, three scenes form one coherent edit. Composition dominant centered, ample outer margins, easy recognition at thumbnail. Tiny exact English label \"CONCEPT DESIGN\" on a small ivory tab. No other text or numbers, no actual software branding, no performance charts, ratings, faces, fake client/work claims, watermark, or website chrome. Must be a wide 4:3 landscape image.",
+      "textReview": "Only CONCEPT DESIGN label; no Bengali text requested. Visually inspected.",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 1994001,
+      "integration": "public/assets/services/video-v3.webp"
+    },
+    {
+      "file": "16-service-website-design",
+      "prompt": "Use case: ui-mockup. Create ONE refined LANDSCAPE 4:3 illustrative service artwork for a Bengali agency's website-design offering, cohesive scarlet red, warm white, charcoal palette. Elegant photorealistic responsive business-site screen mockups: a large slim charcoal desktop screen at a shallow three-quarter angle, one smaller portrait smartphone in front lower right, both with a thoughtfully composed imaginary modern Bangladeshi boutique homeware business website. A simple abstract scarlet monogram mark in the header, white generous layout, large hero photograph of beautiful oak chair and ceramic vase, scarlet accent block and buttons, short charcoal geometric horizontal lines implying very minimal content; use NO readable website text or tiny gibberish letters. Phone clearly reflects same business design with a responsive stacked photo and button layout. Devices grounded with realistic soft shadows on an off-white studio tabletop and one tasteful large scarlet rectangular backdrop; no laptop brand, no OS chrome. Polished premium product mockup, spacious and visually clear at thumbnail, devices/screens dominant and fully within safe margins. Tiny exact English label \"CONCEPT DESIGN\" printed on a small loose ivory card beside device. No other text, no logos of real platforms, no code snippets, fake project claims, contact details, ratings, faces, watermark. One cohesive wide 4:3 artwork, no full agency page screenshot.",
+      "textReview": "Only CONCEPT DESIGN label; no Bengali text requested. Visually inspected.",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 1902922,
+      "integration": "public/assets/services/website-v3.webp"
+    }
+  ],
+  "disclosure": "Original concept artwork for fictional businesses. Do not present as commissioned client work or imply endorsement.",
+  "processing": "Sharp resizing and WebP encoding only; no generated Bengali lettering was retyped or painted over."
+}

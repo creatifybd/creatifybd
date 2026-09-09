@@ -1,46 +1,63 @@
-name: 🚀 Deploy to Hostinger
+name: Deploy approved Bengali release to Hostinger
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch: # Manual trigger option
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: creatifybd-production
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    name: Build & Deploy
-
+    timeout-minutes: 40
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: 📦 Install Dependencies
-        run: npm ci
-
-      - name: 🖼️ Install Sharp for Image Compression
-        run: npm install sharp --no-save
-
-      - name: 🗜️ Compress Portfolio Images
-        run: node scripts/compress-images.mjs
-
-      - name: 🏗️ Build Project
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - run: npm run content:validate
+      - run: npm test -- --run
+      - run: npm run test:rules
+      - name: Build the same approved content into every public route
         run: npm run build
         env:
+          VITE_BUILD_ID: ${{ github.sha }}
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
           VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
           VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-
-      - name: 🚀 Deploy to Hostinger via FTP
+          VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
+      - name: Keep a recoverable build before upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: hostinger-${{ github.sha }}
+          path: dist/
+          include-hidden-files: true
+          retention-days: 30
+      - name: Require protected Firebase access before changing production
+        run: node scripts/configure-firebase-ci.mjs
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      - run: npm run content:prepare
+      - name: Check the database plan before upload
+        run: npm run content:plan
+      - name: Deploy validated form and role rules
+        run: npx firebase deploy --only firestore:rules,storage --project creatify-bd --non-interactive
+      - run: node scripts/stage-deploy.mjs
+      - name: Upload assets while retaining earlier hashed bundles
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -49,11 +66,27 @@ jobs:
           port: 21
           protocol: ftps
           security: loose
-          local-dir: ./dist/
+          local-dir: ./deploy-assets/
           server-dir: /public_html/
+          state-name: .creatifybd-assets-${{ github.sha }}.json
           dangerous-clean-slate: false
           timeout: 180000
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
+      - name: Publish pre-rendered pages after all assets exist
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          protocol: ftps
+          security: loose
+          local-dir: ./deploy-pages/
+          server-dir: /public_html/
+          state-name: .creatifybd-pages.json
+          dangerous-clean-slate: false
+          timeout: 180000
+      - name: Verify every live route, back up records and synchronize Firestore
+        run: npm run sync:firebase -- --apply
+      - name: Remove temporary deployment credential
+        if: always()
+        run: node -e "const fs=require('fs'); const p=process.env.GOOGLE_APPLICATION_CREDENTIALS; if(p)fs.rmSync(p,{force:true});"

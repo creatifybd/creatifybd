@@ -1595,13 +1595,7 @@
     }
   }
 
-  /* ─── PORTFOLIO IMAGES MOBILE ─── */
-  @media (max-width: 640px) {
-    .portfolio-card img,
-    .duck-work-tile img,
-    
-    
-  }
+
 
   /* ─── GIG CARD IMAGES MOBILE ─── */
   @media (max-width: 640px) {

@@ -3,8 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 const SEO = ({
-  title = "CreatifyBD | Social Media Management, Design, Video Editing & Websites",
-  description = "CreatifyBD helps brands grow through digital marketing, branding, social media management, web development, photography, videography and creative content production.",
+  title = "CreatifyBD — কনটেন্ট, ডিজাইন, ভিডিও ও ওয়েবসাইট",
+  description = "বাংলাদেশের ব্যবসার জন্য সোশ্যাল মিডিয়া কনটেন্ট, ব্র্যান্ডিং, ভিডিও ও ওয়েবসাইট। আপনার প্রয়োজন নিয়ে কথা বলুন।",
   keywords = "social media management, creative agency, web design, branding agency, video editing, content production, digital marketing, creatifybd",
   image = "https://creatifybd.com/og-image.png",
   url = null,

@@ -14,20 +14,9 @@
  * Strategy: try gemini-2.0-flash-lite first (cheapest), fall back to gemini-2.0-flash.
  */
 
-// Valid API keys (Key 2 was invalid — removed)
-const GEMINI_KEYS = [
-  'AIzaSyCkkNyYiHexe15FmVojJcONuq4kjGVL0_8', // Key 1
-  // Key 2 removed — "API key not valid"
-  'AIzaSyAQcUqF6evILt2giIz5I-YASz7bhPOwKsU', // Key 3
-  'AIzaSyBiz9pkZolIhqay8OfeMXrTsv2VEiA-NVw', // Key 4
-  'AIzaSyCmjPkvmoWH9JIgjolAVHqzgTX_uBFt3D0', // Key 5
-  'AIzaSyAVJ7maopW0Z8dje4dSkiot7kSO7TPFn6A', // Key 6
-  'AIzaSyDqh9mthWzl3paXjJP1NHvMnRzWz_Uv03k', // Key 7
-  'AIzaSyASj0wR9bfuKJ0Z_NXmXkxOnVIwuKx0A5s', // Key 8
-  'AIzaSyDonKE0LNJ18LJIdbjFIAeuHqUk1yRVQtU', // Key 9
-  'AIzaSyA2RAmceCc5GZSO0wPUXjFxWIELBAxPglA', // Key 10
-  'AIzaSyCoLyzuh_5rFumCwtNHKNsK7HBN8-qB18w', // Key 11
-];
+// Historical built-in keys were removed; rotate them at the provider.
+// Legacy module: provider credentials must never be embedded in source.
+const GEMINI_KEYS = [];
 
 // Models in preference order — both are free-tier on AI Studio keys
 const MODELS = ['gemini-2.0-flash-lite', 'gemini-2.0-flash'];

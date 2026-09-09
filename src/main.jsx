@@ -1,18 +1,12 @@
 import React from 'react';
-  import ReactDOM from 'react-dom/client';
-  import App from './App';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import App from './App';
 import './index.css';
-import './styles/overrides.css';
-import './styles/mobile.css';
 
-  // Embed build identifier so each CI run produces unique bundle output.
-  // Vite replaces import.meta.env.VITE_* at build time with the literal value.
-  if (import.meta.env.VITE_BUILD_ID) {
-    document.documentElement.dataset.buildId = import.meta.env.VITE_BUILD_ID;
-  }
-
-  ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
+const root = document.getElementById('root');
+const path = window.location.pathname.replace(/\/$/, '') || '/';
+const app = <React.StrictMode><App /></React.StrictMode>;
+// Only hydrate HTML produced for this exact route. SPA fallbacks for account
+// and unknown URLs must use a fresh root, not hydrate an unrelated homepage.
+if (root.dataset.route === path) hydrateRoot(root, app);
+else createRoot(root).render(app);

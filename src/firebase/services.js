@@ -27,11 +27,12 @@ const handleServiceError = (error, customMsg) => {
 export const sendMessage = async (messageData) => {
   // Basic client-side rate limiting: max 1 submission per 60 seconds per session
   const lastSentKey = 'creatifybd_last_msg';
-  const lastSent = parseInt(sessionStorage.getItem(lastSentKey) || '0', 10);
+  let lastSent = 0;
+  try { lastSent = parseInt(sessionStorage.getItem(lastSentKey) || '0', 10); } catch { /* Storage can be disabled. */ }
   const now = Date.now();
   if (now - lastSent < 60000) {
     const waitSec = Math.ceil((60000 - (now - lastSent)) / 1000);
-    throw new Error(`Please wait ${waitSec}s before sending another message.`);
+    throw new Error(`আরেকটি বার্তা পাঠানোর আগে ${waitSec} সেকেন্ড অপেক্ষা করুন।`);
   }
 
   try {
@@ -48,10 +49,10 @@ export const sendMessage = async (messageData) => {
       status: 'unread',
       read: false
     });
-    sessionStorage.setItem(lastSentKey, String(now));
+    try { sessionStorage.setItem(lastSentKey, String(now)); } catch { /* Submission already succeeded. */ }
     return docRef.id;
   } catch (error) {
-    handleServiceError(error, 'Failed to send message.');
+    handleServiceError(error, 'বার্তাটি পাঠানো যায়নি। আবার চেষ্টা করুন।');
   }
 };
 

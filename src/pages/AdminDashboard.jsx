@@ -353,6 +353,7 @@ const AdminDashboard = () => {
 
       {/* Main Area */}
       <div className="admin-main-wrapper">
+        <p style={{ margin: 0, padding: '12px 24px', background: '#fff5e9', color: '#6b400f', fontSize: 14 }}>ওয়েবসাইটের লেখা, প্যাকেজ ও পোর্টফোলিওর পরিবর্তন খসড়া হিসেবে থাকে। নতুন প্রকাশিত সংস্করণে অনুমোদিত পরিবর্তন একসঙ্গে দেখা যাবে। অর্ডার ও যোগাযোগের কাজ আগের মতো চলবে।</p>
         {/* Top Header */}
         <header className="admin-header">
           <button

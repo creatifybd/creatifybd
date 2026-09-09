@@ -1,0 +1,672 @@
+{
+  "id": "bn-20260908-01",
+  "locale": "bn-BD",
+  "schemaVersion": 1,
+  "contentVersion": 2026090801,
+  "site": {
+    "site_name": "CreatifyBD",
+    "logo_url": "/assets/brand/creatifybd-logo.webp",
+    "favicon_url": "/favicon.png",
+    "email": "hello@creatifybd.com",
+    "phone": "+8801951676600",
+    "whatsapp": "+8801951676600",
+    "address": "ঢাকা, বাংলাদেশ",
+    "primary_color": "#E8192C",
+    "secondary_color": "#B80F20",
+    "working_hours": "শনিবার–বৃহস্পতিবার, সকাল ১০টা–রাত ৮টা"
+  },
+  "content": {
+    "visibility": {
+      "hero": true,
+      "intro_band": false,
+      "clients": false,
+      "smm_highlight": false,
+      "services": true,
+      "features": false,
+      "about_trust": true,
+      "portfolio": true,
+      "case_studies": false,
+      "process": true,
+      "pricing": true,
+      "testimonials": true,
+      "cta_band": false,
+      "contact": true
+    },
+    "hero": {
+      "eyebrow": "বাংলাদেশের ব্যবসার জন্য নিয়মিত কনটেন্ট",
+      "title": "ব্যবসা সামলান আপনি।",
+      "accent": "আপনার পেজের কনটেন্টের দায়িত্ব আমাদের।",
+      "desc": "পোস্ট ডিজাইন, বাংলা ক্যাপশন ও ভিডিও—আপনার ব্যবসার ধরন বুঝে সাজানো মাসিক পরিকল্পনায়। পণ্য, অফার ও ব্র্যান্ডের গল্প পৌঁছে দিন গ্রাহকের কাছে।",
+      "cta1": "মাসিক প্যাকেজ দেখুন",
+      "cta2": "আপনার পেজ নিয়ে কথা বলুন"
+    },
+    "intro_band": {
+      "title": "আপনার ব্যবসার প্রয়োজন অনুযায়ী সৃজনশীল সহায়তা",
+      "pillars": []
+    },
+    "clients": {
+      "label": "আমাদের কাজের অভিজ্ঞতা",
+      "list": ""
+    },
+    "smm_highlight": {
+      "title": "আপনার পেজে থাকুক নিয়মিত, প্রাসঙ্গিক কনটেন্ট",
+      "lead": "পণ্য ও গ্রাহককে বুঝে পোস্টের বিষয়, ডিজাইন ও ক্যাপশন গুছিয়ে নিন।",
+      "metrics": {},
+      "benefits": []
+    },
+    "features": {
+      "title": "কাজের শুরু থেকেই পরিষ্কার বোঝাপড়া",
+      "subtitle": "কী কাজ হবে, কত খরচ এবং কখন পাবেন—আলোচনায় ঠিক করে নেব।",
+      "badges": [],
+      "stats": [],
+      "items": []
+    },
+    "about_trust": {
+      "title": "আপনার ব্যবসার গল্পটা আগে বুঝতে চাই।",
+      "subtitle": "আপনি কী বিক্রি করেন, কাদের কাছে পৌঁছাতে চান, আর কোথায় আটকে আছেন—ভালো কাজের শুরু এই কথাগুলো থেকেই। CreatifyBD-তে ডিজাইন, ভিডিও ও ওয়েবসাইটের কাজ একসঙ্গে গুছিয়ে নিতে পারেন।",
+      "ceo_name": "এমডি আলামিন আলী",
+      "ceo_title": "প্রতিষ্ঠাতা, CreatifyBD",
+      "ceo_quote": "আমাদের কাছে প্রতিটি কাজের পেছনে একজন উদ্যোক্তার সময়, পরিশ্রম ও স্বপ্ন আছে। সেই দায়িত্ব মাথায় রেখেই আমরা কাজ করতে চাই।",
+      "ceo_image": ""
+    },
+    "process": {
+      "title": "কাজ এগোবে পরিষ্কার পাঁচ ধাপে",
+      "subtitle": "শুরু থেকে শেষ পর্যন্ত জানবেন, কী হচ্ছে এবং আপনার মতামত কখন প্রয়োজন।",
+      "steps": [
+        {
+          "num": "০১",
+          "title": "আপনার কথা শুনি",
+          "desc": "ব্যবসা, গ্রাহক ও কাজের প্রয়োজন নিয়ে আলোচনা করি।"
+        },
+        {
+          "num": "০২",
+          "title": "পরিকল্পনা ঠিক করি",
+          "desc": "কাজের পরিধি, খরচ, সময়সীমা ও সংশোধনের নিয়ম মিলিয়ে নিই।"
+        },
+        {
+          "num": "০৩",
+          "title": "কাজ তৈরি করি",
+          "desc": "সম্মত পরিকল্পনা অনুযায়ী ডিজাইন, লেখা বা ভিডিও প্রস্তুত করি।"
+        },
+        {
+          "num": "০৪",
+          "title": "মতামত নিই",
+          "desc": "খসড়া দেখিয়ে আপনার মতামত অনুযায়ী প্রয়োজনীয় পরিবর্তন করি।"
+        },
+        {
+          "num": "০৫",
+          "title": "কাজ বুঝিয়ে দিই",
+          "desc": "চূড়ান্ত ফাইল এবং সম্মত প্রকাশের কাজ গুছিয়ে দিই।"
+        }
+      ]
+    },
+    "cta_band": {
+      "heading": "আপনার পরের কাজটি নিয়ে কথা বলি",
+      "subheading": "প্রয়োজন জানালে কাজের ধরন ও সম্ভাব্য খরচ বুঝিয়ে বলব।",
+      "btn_primary": "আপনার প্রয়োজন জানান",
+      "btn_secondary": "কাজের নমুনা দেখুন"
+    },
+    "contact": {
+      "heading": "আপনার ব্যবসার জন্য কী করতে পারি?",
+      "subheading": "পেজের লিংক বা কাজের সংক্ষিপ্ত ধারণা পাঠান। আপনার প্রয়োজন বুঝে পরের ধাপ নিয়ে কথা বলব।",
+      "address": "ঢাকা, বাংলাদেশ"
+    }
+  },
+  "offers": [
+    {
+      "id": "smm-regular",
+      "name": "নিয়মিত উপস্থিতি",
+      "amountBDT": 5000,
+      "posters": 60,
+      "videos": 4,
+      "platforms": 1,
+      "billingPeriod": "month",
+      "audience": "একটি পেজে নিয়মিত কনটেন্টের জন্য",
+      "features": [
+        "বাংলা ক্যাপশন ও হ্যাশট্যাগ",
+        "মাসিক কনটেন্ট পরিকল্পনা",
+        "ফেসবুক অথবা ইনস্টাগ্রাম"
+      ]
+    },
+    {
+      "id": "smm-active",
+      "name": "আরও সক্রিয় প্রচার",
+      "amountBDT": 7000,
+      "posters": 90,
+      "videos": 4,
+      "platforms": 2,
+      "billingPeriod": "month",
+      "audience": "দুই মাধ্যমে আরও বেশি পোস্টের জন্য",
+      "features": [
+        "বাংলা ক্যাপশন ও হ্যাশট্যাগ",
+        "কনটেন্ট পরিকল্পনা ও প্রকাশের সূচি",
+        "ফেসবুক ও ইনস্টাগ্রাম"
+      ]
+    },
+    {
+      "id": "smm-extended",
+      "name": "বিস্তৃত প্রচার",
+      "amountBDT": 10000,
+      "posters": 150,
+      "videos": 8,
+      "platforms": 3,
+      "billingPeriod": "month",
+      "audience": "বেশি পণ্য ও প্রচারের কনটেন্টের জন্য",
+      "features": [
+        "বাংলা ক্যাপশন ও হ্যাশট্যাগ",
+        "ক্যাম্পেইনের কনটেন্ট পরিকল্পনা",
+        "প্ল্যাটফর্মের তালিকা আলোচনায় চূড়ান্ত"
+      ]
+    }
+  ],
+  "offerNotes": [
+    "উল্লিখিত সংখ্যা একটি মাসিক প্যাকেজের মোট কাজ। দৈনিক প্রকাশের সূচি প্রয়োজন অনুযায়ী সাজানো হবে।",
+    "ভিডিওর দৈর্ঘ্য, ফুটেজ, সংশোধন, বিজ্ঞাপনের বাজেট ও ইনবক্স পরিচালনার পরিধি কাজ শুরুর আগে লিখিত প্রস্তাবে ঠিক হবে।"
+  ],
+  "services": [
+    {
+      "id": "social-media-management",
+      "category": "social",
+      "title": "সোশ্যাল মিডিয়া ম্যানেজমেন্ট",
+      "description": "আপনার পণ্য, অফার ও ব্র্যান্ডের গল্প নিয়ে নিয়মিত পোস্ট, ক্যাপশন ও ভিডিও।",
+      "image": "/assets/services/social-media-v3.webp",
+      "deliverables": [
+        "মাসিক কনটেন্ট পরিকল্পনা",
+        "পোস্ট ডিজাইন ও বাংলা ক্যাপশন",
+        "ভিডিও ও রিলস",
+        "প্রকাশের সূচি"
+      ],
+      "detail": "পেজে নিয়মিত ভালো কনটেন্ট দিতে সময় লাগে। সেই কাজটি গুছিয়ে নিতে আমরা আপনার ব্যবসা ও গ্রাহককে বুঝে পোস্টের বিষয়, ডিজাইন এবং ভাষা ঠিক করি। তিনটি মাসিক প্যাকেজ থেকে প্রয়োজন অনুযায়ী বেছে নিতে পারেন।"
+    },
+    {
+      "id": "graphic-design",
+      "category": "branding",
+      "title": "গ্রাফিক ডিজাইন ও ব্র্যান্ডিং",
+      "description": "লোগো থেকে প্যাকেজিং—প্রতিটি মাধ্যমে আপনার ব্যবসার পরিচিতি থাকুক একই রকম।",
+      "image": "/assets/services/branding-v3.webp",
+      "deliverables": [
+        "লোগো ও ব্র্যান্ডের রঙ",
+        "সোশ্যাল মিডিয়া ডিজাইন",
+        "প্যাকেজিং ও লেবেল",
+        "প্রিন্টের উপযোগী ফাইল"
+      ],
+      "detail": "নতুন পরিচিতি তৈরি হোক কিংবা পুরোনো ডিজাইন গুছিয়ে নেওয়া—ব্যবসার ধরন ও ব্যবহারের জায়গা মাথায় রেখে কাজ করি। কী কী ডিজাইন ও ফাইল লাগবে, তা শুরুতেই ঠিক করে নিই।"
+    },
+    {
+      "id": "video-editing",
+      "category": "video",
+      "title": "ভিডিও এডিটিং",
+      "description": "আপনার ফুটেজ থেকে তৈরি হোক সহজে বোঝা যায় এমন আকর্ষণীয় ভিডিও।",
+      "image": "/assets/services/video-v3.webp",
+      "deliverables": [
+        "রিলস ও ছোট ভিডিও",
+        "পণ্যের পরিচিতিমূলক ভিডিও",
+        "সাবটাইটেল ও প্রয়োজনীয় গ্রাফিক্স",
+        "শব্দ ও রঙের সমন্বয়"
+      ],
+      "detail": "কোন কথা আগে আসবে, কোথায় ছবি বেশি কাজ করবে, আর কতটুকু লেখা প্রয়োজন—এসব মিলিয়েই ভালো ভিডিও তৈরি হয়। আপনার ফুটেজ, ভিডিওর দৈর্ঘ্য ও প্রকাশের মাধ্যম অনুযায়ী কাজের প্রস্তাব দিই।"
+    },
+    {
+      "id": "website-design",
+      "category": "web",
+      "title": "ওয়েবসাইট ডিজাইন",
+      "description": "গ্রাহক যেন সহজেই আপনার কাজ বুঝতে পারেন এবং যোগাযোগ করতে পারেন।",
+      "image": "/assets/services/website-v3.webp",
+      "deliverables": [
+        "ব্যবসায়িক ওয়েবসাইট",
+        "পণ্য বা প্রচারের ল্যান্ডিং পেজ",
+        "মোবাইল উপযোগী ডিজাইন",
+        "যোগাযোগের ফর্ম ও প্রয়োজনীয় সংযোগ"
+      ],
+      "detail": "ওয়েবসাইটে কোন তথ্য আগে প্রয়োজন, মোবাইলে কীভাবে পড়তে সুবিধা হবে এবং গ্রাহক কীভাবে যোগাযোগ করবেন—সেই অভিজ্ঞতা মাথায় রেখে ডিজাইন করি। পেজ ও সুবিধার তালিকা অনুযায়ী খরচ নির্ধারিত হয়।"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": "bd-social-01",
+      "category": "social",
+      "title": "ভোজ: দুপুরের খাবারের আয়োজন",
+      "industry": "রেস্টুরেন্ট",
+      "description": "খাবারের ছবি ও সংক্ষিপ্ত বাংলা কথায় দুপুরের আয়োজন তুলে ধরা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/01-restaurant-bhoj.webp",
+      "thumbnail": "/assets/portfolio/bd-social/01-restaurant-bhoj-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/01-restaurant-bhoj-360.webp 360w, /assets/portfolio/bd-social/01-restaurant-bhoj-640.webp 640w, /assets/portfolio/bd-social/01-restaurant-bhoj.webp 1080w",
+      "featuredOrder": 0
+    },
+    {
+      "id": "bd-social-02",
+      "category": "social",
+      "title": "বুনন: নিজের মতো সাজুন",
+      "industry": "পোশাক ও বুটিক",
+      "description": "পোশাকের রঙ ও বুনন সামনে রেখে নতুন সংগ্রহের উপস্থাপনা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/02-boutique-bunon.webp",
+      "thumbnail": "/assets/portfolio/bd-social/02-boutique-bunon-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/02-boutique-bunon-360.webp 360w, /assets/portfolio/bd-social/02-boutique-bunon-640.webp 640w, /assets/portfolio/bd-social/02-boutique-bunon.webp 1080w",
+      "featuredOrder": 1
+    },
+    {
+      "id": "bd-social-03",
+      "category": "social",
+      "title": "সংযোগ: কাজ ও গানের সঙ্গী",
+      "industry": "গ্যাজেটের দোকান",
+      "description": "পণ্যের ব্যবহার ও পরিচিতি স্পষ্ট করে হেডফোনের পোস্ট ডিজাইন।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/03-gadget-songjog.webp",
+      "thumbnail": "/assets/portfolio/bd-social/03-gadget-songjog-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/03-gadget-songjog-360.webp 360w, /assets/portfolio/bd-social/03-gadget-songjog-640.webp 640w, /assets/portfolio/bd-social/03-gadget-songjog.webp 1080w",
+      "featuredOrder": 2
+    },
+    {
+      "id": "bd-social-04",
+      "category": "social",
+      "title": "মিষ্টিমুখ: ছোট আনন্দের আয়োজন",
+      "industry": "বেকারি",
+      "description": "কেকের ছবি ও উষ্ণ ভাষায় ছোট উপলক্ষের গল্প।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/04-bakery-mishtimukh.webp",
+      "thumbnail": "/assets/portfolio/bd-social/04-bakery-mishtimukh-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/04-bakery-mishtimukh-360.webp 360w, /assets/portfolio/bd-social/04-bakery-mishtimukh-640.webp 640w, /assets/portfolio/bd-social/04-bakery-mishtimukh.webp 1080w",
+      "featuredOrder": 3
+    },
+    {
+      "id": "bd-social-05",
+      "category": "social",
+      "title": "নির্মল: ঘর থাকুক সতেজ",
+      "industry": "গৃহস্থালি পণ্য",
+      "description": "পরিচ্ছন্ন রঙ ও পণ্যের ছবি দিয়ে দৈনন্দিন প্রয়োজনের কথা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/05-homecare-nirmol.webp",
+      "thumbnail": "/assets/portfolio/bd-social/05-homecare-nirmol-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/05-homecare-nirmol-360.webp 360w, /assets/portfolio/bd-social/05-homecare-nirmol-640.webp 640w, /assets/portfolio/bd-social/05-homecare-nirmol.webp 1080w"
+    },
+    {
+      "id": "bd-social-06",
+      "category": "social",
+      "title": "নিবাস: ঘরের কোণে স্বস্তি",
+      "industry": "আসবাবের ব্যবসা",
+      "description": "বসার ঘরের প্রেক্ষাপটে আসবাবের ব্যবহার ও নকশা তুলে ধরা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/06-furniture-nibas.webp",
+      "thumbnail": "/assets/portfolio/bd-social/06-furniture-nibas-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/06-furniture-nibas-360.webp 360w, /assets/portfolio/bd-social/06-furniture-nibas-640.webp 640w, /assets/portfolio/bd-social/06-furniture-nibas.webp 1080w",
+      "featuredOrder": 4
+    },
+    {
+      "id": "bd-social-07",
+      "category": "social",
+      "title": "পথের ডাক: পাহাড় ডাকছে",
+      "industry": "ভ্রমণসেবা",
+      "description": "সবুজ পাহাড় ও সংক্ষিপ্ত আহ্বানে বেড়ানোর ভাবনা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/07-travel-pother-dak.webp",
+      "thumbnail": "/assets/portfolio/bd-social/07-travel-pother-dak-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/07-travel-pother-dak-360.webp 360w, /assets/portfolio/bd-social/07-travel-pother-dak-640.webp 640w, /assets/portfolio/bd-social/07-travel-pother-dak.webp 1080w",
+      "featuredOrder": 5
+    },
+    {
+      "id": "bd-social-08",
+      "category": "social",
+      "title": "শিখন: শেখার শুরু আজই",
+      "industry": "শিক্ষা ও প্রশিক্ষণ",
+      "description": "কাজে লাগবে এমন নতুন কিছু শেখার আগ্রহ তৈরির পোস্ট।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/08-education-shikhon.webp",
+      "thumbnail": "/assets/portfolio/bd-social/08-education-shikhon-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/08-education-shikhon-360.webp 360w, /assets/portfolio/bd-social/08-education-shikhon-640.webp 640w, /assets/portfolio/bd-social/08-education-shikhon.webp 1080w"
+    },
+    {
+      "id": "bd-social-09",
+      "category": "social",
+      "title": "স্নিগ্ধ: নিজের জন্য সময়",
+      "industry": "ব্যক্তিগত পরিচর্যা",
+      "description": "পণ্য ও সংযত রঙে নিজের যত্নের ভাবনা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/09-personalcare-snigdho.webp",
+      "thumbnail": "/assets/portfolio/bd-social/09-personalcare-snigdho-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/09-personalcare-snigdho-360.webp 360w, /assets/portfolio/bd-social/09-personalcare-snigdho-640.webp 640w, /assets/portfolio/bd-social/09-personalcare-snigdho.webp 1080w",
+      "featuredOrder": 6
+    },
+    {
+      "id": "bd-social-10",
+      "category": "social",
+      "title": "ঠিকানা: নিজের ঘরের স্বপ্ন",
+      "industry": "আবাসন",
+      "description": "বাসস্থানের নকশা ও প্রয়োজনকে সামনে রেখে পরিচিতিমূলক ডিজাইন।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/10-realestate-thikana.webp",
+      "thumbnail": "/assets/portfolio/bd-social/10-realestate-thikana-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/10-realestate-thikana-360.webp 360w, /assets/portfolio/bd-social/10-realestate-thikana-640.webp 640w, /assets/portfolio/bd-social/10-realestate-thikana.webp 1080w"
+    },
+    {
+      "id": "bd-social-11",
+      "category": "social",
+      "title": "মাটির ঘ্রাণ: দেশি স্বাদের ঠিকানা",
+      "industry": "দেশি খাবার ও কৃষিপণ্য",
+      "description": "মৌসুমি ফলের রঙ ও টাটকা অনুভূতিতে স্থানীয় পণ্যের পরিচিতি।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/11-localfood-matir-ghran.webp",
+      "thumbnail": "/assets/portfolio/bd-social/11-localfood-matir-ghran-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/11-localfood-matir-ghran-360.webp 360w, /assets/portfolio/bd-social/11-localfood-matir-ghran-640.webp 640w, /assets/portfolio/bd-social/11-localfood-matir-ghran.webp 1080w",
+      "featuredOrder": 7
+    },
+    {
+      "id": "bd-social-12",
+      "category": "social",
+      "title": "হিসাব: ব্যবসায় মন দিন",
+      "industry": "পেশাগত সেবা",
+      "description": "গুছিয়ে হিসাব রাখার প্রয়োজন সহজ কথায় তুলে ধরা।",
+      "workType": "concept",
+      "published": true,
+      "image": "/assets/portfolio/bd-social/12-professionalservice-hishab.webp",
+      "thumbnail": "/assets/portfolio/bd-social/12-professionalservice-hishab-640.webp",
+      "srcSet": "/assets/portfolio/bd-social/12-professionalservice-hishab-360.webp 360w, /assets/portfolio/bd-social/12-professionalservice-hishab-640.webp 640w, /assets/portfolio/bd-social/12-professionalservice-hishab.webp 1080w"
+    },
+    {
+      "id": "social-media-management-11",
+      "category": "social",
+      "title": "গ্যাজেটের প্রচার",
+      "industry": "গ্যাজেটের দোকান",
+      "description": "গ্যাজেটের দোকান ব্যবসার জন্য গ্যাজেটের প্রচার—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-11.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-11-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-11-360.webp 360w, /assets/portfolio/selected/social-media-management-11-640.webp 640w, /assets/portfolio/selected/social-media-management-11-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-12",
+      "category": "social",
+      "title": "বিরিয়ানির প্রচার",
+      "industry": "রেস্টুরেন্ট",
+      "description": "রেস্টুরেন্ট ব্যবসার জন্য বিরিয়ানির প্রচার—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-12.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-12-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-12-360.webp 360w, /assets/portfolio/selected/social-media-management-12-640.webp 640w, /assets/portfolio/selected/social-media-management-12-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-14",
+      "category": "social",
+      "title": "আবাসনের পরিচিতি",
+      "industry": "আবাসন",
+      "description": "আবাসন ব্যবসার জন্য আবাসনের পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-14.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-14-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-14-360.webp 360w, /assets/portfolio/selected/social-media-management-14-640.webp 640w, /assets/portfolio/selected/social-media-management-14-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-15",
+      "category": "social",
+      "title": "পোশাকের নতুন সংগ্রহ",
+      "industry": "ফ্যাশন",
+      "description": "ফ্যাশন ব্যবসার জন্য পোশাকের নতুন সংগ্রহ—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-15.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-15-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-15-360.webp 360w, /assets/portfolio/selected/social-media-management-15-640.webp 640w, /assets/portfolio/selected/social-media-management-15-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-16",
+      "category": "social",
+      "title": "শেখার সুযোগ",
+      "industry": "শিক্ষা",
+      "description": "শিক্ষা ব্যবসার জন্য শেখার সুযোগ—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-16.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-16-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-16-360.webp 360w, /assets/portfolio/selected/social-media-management-16-640.webp 640w, /assets/portfolio/selected/social-media-management-16-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-17",
+      "category": "social",
+      "title": "সমুদ্রভ্রমণের আয়োজন",
+      "industry": "ভ্রমণসেবা",
+      "description": "ভ্রমণসেবা ব্যবসার জন্য সমুদ্রভ্রমণের আয়োজন—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-17.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-17-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-17-360.webp 360w, /assets/portfolio/selected/social-media-management-17-640.webp 640w, /assets/portfolio/selected/social-media-management-17-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-18",
+      "category": "social",
+      "title": "কৃষিপণ্যের পরিচিতি",
+      "industry": "কৃষিপণ্য",
+      "description": "কৃষিপণ্য ব্যবসার জন্য কৃষিপণ্যের পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-18.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-18-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-18-360.webp 360w, /assets/portfolio/selected/social-media-management-18-640.webp 640w, /assets/portfolio/selected/social-media-management-18-1080.webp 1080w"
+    },
+    {
+      "id": "social-media-management-19",
+      "category": "social",
+      "title": "আসবাবের প্রচার",
+      "industry": "আসবাব",
+      "description": "আসবাব ব্যবসার জন্য আসবাবের প্রচার—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/social-media-management/social-media-management-19.jpg",
+      "thumbnail": "/assets/portfolio/selected/social-media-management-19-640.webp",
+      "srcSet": "/assets/portfolio/selected/social-media-management-19-360.webp 360w, /assets/portfolio/selected/social-media-management-19-640.webp 640w, /assets/portfolio/selected/social-media-management-19-1080.webp 1080w"
+    },
+    {
+      "id": "logo-design-branding-03",
+      "category": "branding",
+      "title": "রেস্টুরেন্টের ব্র্যান্ড পরিচিতি",
+      "industry": "রেস্টুরেন্ট",
+      "description": "রেস্টুরেন্ট ব্যবসার জন্য রেস্টুরেন্টের ব্র্যান্ড পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/logo-design-branding/logo-design-branding-03.jpg",
+      "featuredOrder": 8,
+      "thumbnail": "/assets/portfolio/selected/logo-design-branding-03-640.webp",
+      "srcSet": "/assets/portfolio/selected/logo-design-branding-03-360.webp 360w, /assets/portfolio/selected/logo-design-branding-03-640.webp 640w, /assets/portfolio/selected/logo-design-branding-03-1080.webp 1080w"
+    },
+    {
+      "id": "logo-design-branding-11",
+      "category": "branding",
+      "title": "পোশাকের ব্র্যান্ড পরিচিতি",
+      "industry": "ফ্যাশন",
+      "description": "ফ্যাশন ব্যবসার জন্য পোশাকের ব্র্যান্ড পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/logo-design-branding/logo-design-branding-11.jpg",
+      "thumbnail": "/assets/portfolio/selected/logo-design-branding-11-640.webp",
+      "srcSet": "/assets/portfolio/selected/logo-design-branding-11-360.webp 360w, /assets/portfolio/selected/logo-design-branding-11-640.webp 640w, /assets/portfolio/selected/logo-design-branding-11-1080.webp 1080w"
+    },
+    {
+      "id": "logo-design-branding-14",
+      "category": "branding",
+      "title": "বেকারির ব্র্যান্ড পরিচিতি",
+      "industry": "বেকারি",
+      "description": "বেকারি ব্যবসার জন্য বেকারির ব্র্যান্ড পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/logo-design-branding/logo-design-branding-14.jpg",
+      "thumbnail": "/assets/portfolio/selected/logo-design-branding-14-640.webp",
+      "srcSet": "/assets/portfolio/selected/logo-design-branding-14-360.webp 360w, /assets/portfolio/selected/logo-design-branding-14-640.webp 640w, /assets/portfolio/selected/logo-design-branding-14-1080.webp 1080w"
+    },
+    {
+      "id": "logo-design-branding-19",
+      "category": "branding",
+      "title": "কফির ব্র্যান্ড পরিচিতি",
+      "industry": "কফি",
+      "description": "কফি ব্যবসার জন্য কফির ব্র্যান্ড পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/logo-design-branding/logo-design-branding-19.jpg",
+      "thumbnail": "/assets/portfolio/selected/logo-design-branding-19-640.webp",
+      "srcSet": "/assets/portfolio/selected/logo-design-branding-19-360.webp 360w, /assets/portfolio/selected/logo-design-branding-19-640.webp 640w, /assets/portfolio/selected/logo-design-branding-19-1080.webp 1080w"
+    },
+    {
+      "id": "logo-design-branding-12",
+      "category": "branding",
+      "title": "প্রাকৃতিক পণ্যের ব্র্যান্ড পরিচিতি",
+      "industry": "পণ্য",
+      "description": "পণ্য ব্যবসার জন্য প্রাকৃতিক পণ্যের ব্র্যান্ড পরিচিতি—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/logo-design-branding/logo-design-branding-12.jpg",
+      "thumbnail": "/assets/portfolio/selected/logo-design-branding-12-640.webp",
+      "srcSet": "/assets/portfolio/selected/logo-design-branding-12-360.webp 360w, /assets/portfolio/selected/logo-design-branding-12-640.webp 640w, /assets/portfolio/selected/logo-design-branding-12-1080.webp 1080w"
+    },
+    {
+      "id": "product-packaging-design-08",
+      "category": "packaging",
+      "title": "মসলার প্যাকেজিং",
+      "industry": "খাবার ও মসলা",
+      "description": "খাবার ও মসলা ব্যবসার জন্য মসলার প্যাকেজিং—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/product-packaging-design/product-packaging-design-08.jpg",
+      "featuredOrder": 9,
+      "thumbnail": "/assets/portfolio/selected/product-packaging-design-08-640.webp",
+      "srcSet": "/assets/portfolio/selected/product-packaging-design-08-360.webp 360w, /assets/portfolio/selected/product-packaging-design-08-640.webp 640w, /assets/portfolio/selected/product-packaging-design-08-1080.webp 1080w"
+    },
+    {
+      "id": "product-packaging-design-13",
+      "category": "packaging",
+      "title": "চায়ের প্যাকেজিং",
+      "industry": "চা",
+      "description": "চা ব্যবসার জন্য চায়ের প্যাকেজিং—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/product-packaging-design/product-packaging-design-13.jpg",
+      "thumbnail": "/assets/portfolio/selected/product-packaging-design-13-640.webp",
+      "srcSet": "/assets/portfolio/selected/product-packaging-design-13-360.webp 360w, /assets/portfolio/selected/product-packaging-design-13-640.webp 640w, /assets/portfolio/selected/product-packaging-design-13-1080.webp 1080w"
+    },
+    {
+      "id": "product-packaging-design-14",
+      "category": "packaging",
+      "title": "মধুর প্যাকেজিং",
+      "industry": "খাদ্যপণ্য",
+      "description": "খাদ্যপণ্য ব্যবসার জন্য মধুর প্যাকেজিং—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/product-packaging-design/product-packaging-design-14.jpg",
+      "thumbnail": "/assets/portfolio/selected/product-packaging-design-14-640.webp",
+      "srcSet": "/assets/portfolio/selected/product-packaging-design-14-360.webp 360w, /assets/portfolio/selected/product-packaging-design-14-640.webp 640w, /assets/portfolio/selected/product-packaging-design-14-1080.webp 1080w"
+    },
+    {
+      "id": "product-packaging-design-06",
+      "category": "packaging",
+      "title": "গৃহস্থালি পণ্যের প্যাকেজিং",
+      "industry": "গৃহস্থালি পণ্য",
+      "description": "গৃহস্থালি পণ্য ব্যবসার জন্য গৃহস্থালি পণ্যের প্যাকেজিং—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/product-packaging-design/product-packaging-design-06.jpg",
+      "thumbnail": "/assets/portfolio/selected/product-packaging-design-06-640.webp",
+      "srcSet": "/assets/portfolio/selected/product-packaging-design-06-360.webp 360w, /assets/portfolio/selected/product-packaging-design-06-640.webp 640w, /assets/portfolio/selected/product-packaging-design-06-1080.webp 1080w"
+    },
+    {
+      "id": "website-design-07",
+      "category": "web",
+      "title": "রেস্টুরেন্টের ওয়েবসাইট",
+      "industry": "রেস্টুরেন্ট",
+      "description": "রেস্টুরেন্ট ব্যবসার জন্য রেস্টুরেন্টের ওয়েবসাইট—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/website-design/website-design-07.jpg",
+      "featuredOrder": 10,
+      "thumbnail": "/assets/portfolio/selected/website-design-07-640.webp",
+      "srcSet": "/assets/portfolio/selected/website-design-07-360.webp 360w, /assets/portfolio/selected/website-design-07-640.webp 640w, /assets/portfolio/selected/website-design-07-1080.webp 1080w"
+    },
+    {
+      "id": "website-design-04",
+      "category": "web",
+      "title": "শিক্ষাপ্রতিষ্ঠানের ওয়েবসাইট",
+      "industry": "শিক্ষা",
+      "description": "শিক্ষা ব্যবসার জন্য শিক্ষাপ্রতিষ্ঠানের ওয়েবসাইট—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/website-design/website-design-04.jpg",
+      "thumbnail": "/assets/portfolio/selected/website-design-04-640.webp",
+      "srcSet": "/assets/portfolio/selected/website-design-04-360.webp 360w, /assets/portfolio/selected/website-design-04-640.webp 640w, /assets/portfolio/selected/website-design-04-1080.webp 1080w"
+    },
+    {
+      "id": "website-design-08",
+      "category": "web",
+      "title": "আবাসনের ওয়েবসাইট",
+      "industry": "আবাসন",
+      "description": "আবাসন ব্যবসার জন্য আবাসনের ওয়েবসাইট—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/website-design/website-design-08.jpg",
+      "thumbnail": "/assets/portfolio/selected/website-design-08-640.webp",
+      "srcSet": "/assets/portfolio/selected/website-design-08-360.webp 360w, /assets/portfolio/selected/website-design-08-640.webp 640w, /assets/portfolio/selected/website-design-08-1080.webp 1080w"
+    },
+    {
+      "id": "video-editing-03",
+      "category": "video",
+      "title": "রেস্টুরেন্টের ভিডিও ভাবনা",
+      "industry": "রেস্টুরেন্ট",
+      "description": "রেস্টুরেন্ট ব্যবসার জন্য রেস্টুরেন্টের ভিডিও ভাবনা—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/video-editing/video-editing-03.jpg",
+      "featuredOrder": 11,
+      "thumbnail": "/assets/portfolio/selected/video-editing-03-640.webp",
+      "srcSet": "/assets/portfolio/selected/video-editing-03-360.webp 360w, /assets/portfolio/selected/video-editing-03-640.webp 640w, /assets/portfolio/selected/video-editing-03-1080.webp 1080w"
+    },
+    {
+      "id": "video-editing-07",
+      "category": "video",
+      "title": "ফ্যাশন ভিডিওর ভাবনা",
+      "industry": "ফ্যাশন",
+      "description": "ফ্যাশন ব্যবসার জন্য ফ্যাশন ভিডিওর ভাবনা—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/video-editing/video-editing-07.jpg",
+      "thumbnail": "/assets/portfolio/selected/video-editing-07-640.webp",
+      "srcSet": "/assets/portfolio/selected/video-editing-07-360.webp 360w, /assets/portfolio/selected/video-editing-07-640.webp 640w, /assets/portfolio/selected/video-editing-07-1080.webp 1080w"
+    },
+    {
+      "id": "t-shirt-design-06",
+      "category": "apparel",
+      "title": "ক্যাফের মার্চেন্ডাইজ",
+      "industry": "ক্যাফে",
+      "description": "ক্যাফে ব্যবসার জন্য ক্যাফের মার্চেন্ডাইজ—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/t-shirt-design/t-shirt-design-06.jpg",
+      "thumbnail": "/assets/portfolio/selected/t-shirt-design-06-640.webp",
+      "srcSet": "/assets/portfolio/selected/t-shirt-design-06-360.webp 360w, /assets/portfolio/selected/t-shirt-design-06-640.webp 640w, /assets/portfolio/selected/t-shirt-design-06-1080.webp 1080w"
+    },
+    {
+      "id": "t-shirt-design-20",
+      "category": "apparel",
+      "title": "প্রতিষ্ঠানের পোশাক ডিজাইন",
+      "industry": "প্রতিষ্ঠান",
+      "description": "প্রতিষ্ঠান ব্যবসার জন্য প্রতিষ্ঠানের পোশাক ডিজাইন—নির্বাচিত কাজের নমুনা।",
+      "workType": "sample",
+      "published": true,
+      "image": "/assets/portfolio/t-shirt-design/t-shirt-design-20.jpg",
+      "thumbnail": "/assets/portfolio/selected/t-shirt-design-20-640.webp",
+      "srcSet": "/assets/portfolio/selected/t-shirt-design-20-360.webp 360w, /assets/portfolio/selected/t-shirt-design-20-640.webp 640w, /assets/portfolio/selected/t-shirt-design-20-1080.webp 1080w"
+    }
+  ],
+  "reviews": [],
+  "team": []
+}

@@ -1,3 +1,4 @@
+import release from '../data/publishedRelease.json';
 // CreatifyBD Site Configuration
 // Bangladesh-focused configuration
 
@@ -5,11 +6,11 @@ export const siteConfig = {
   // Business Information
   businessName: 'CreatifyBD',
   websiteUrl: 'https://creatifybd.com',
-  tagline: 'Branding, social media, video, and web for Bangladeshi businesses',
-  email: 'hello@creatifybd.com',
-  phone: '+880 1951 676600',
-  whatsappNumber: '+8801951676600',
-  address: 'Dhaka, Bangladesh',
+  tagline: 'বাংলাদেশের ব্যবসার জন্য কনটেন্ট, ডিজাইন, ভিডিও ও ওয়েবসাইট',
+  email: release.site.email,
+  phone: release.site.phone,
+  whatsappNumber: release.site.whatsapp,
+  address: release.site.address,
 
   targetMarkets: ['Bangladesh'],
   
@@ -65,14 +66,14 @@ export const siteConfig = {
   
   // SEO Configuration
   seo: {
-    defaultTitle: 'CreatifyBD — বাংলাদেশের Trusted Creative Agency | Branding, Social, Video & Web',
-    defaultDescription: 'CreatifyBD হলো বাংলাদেশের একটি full-service creative agency। আমরা branding, social media management, video editing, এবং website design-এ সাহায্য করি। WhatsApp বা Email-এ যোগাযোগ করুন।',
+    defaultTitle: 'CreatifyBD — আপনার ব্যবসার কনটেন্ট, ডিজাইন ও ওয়েবসাইট',
+    defaultDescription: 'বাংলাদেশের ব্যবসার জন্য নিয়মিত সোশ্যাল মিডিয়া কনটেন্ট, ব্র্যান্ডিং, ভিডিও ও ওয়েবসাইট। মাসিক প্যাকেজ ৫,০০০ টাকা থেকে। আপনার প্রয়োজন নিয়ে কথা বলুন।',
     defaultKeywords: 'creative agency bangladesh, branding dhaka, social media management bangladesh, graphic design bangladesh, video editing bangladesh, website design dhaka, digital marketing bangladesh, CreatifyBD',
     canonicalUrl: 'https://creatifybd.com'
   },
   
   // WhatsApp Message Template
-  whatsappMessage: 'Hello CreatifyBD! আমি একটি project নিয়ে আলোচনা করতে চাই।',
+  whatsappMessage: 'CreatifyBD, আমার ব্যবসার পেজ ও কনটেন্ট নিয়ে আলোচনা করতে চাই।',
   
   // Services List (for dropdowns and forms)
   services: [
@@ -94,10 +95,10 @@ export const siteConfig = {
   
   // CTA Button Text
   cta: {
-    getProposal: 'Get a Custom Quote',
-    startProject: 'Start a Project',
-    viewPortfolio: 'See Our Work',
-    contactWhatsApp: 'Chat on WhatsApp',
+    getProposal: 'আপনার কাজের খরচ জানুন',
+    startProject: 'আপনার প্রয়োজন জানান',
+    viewPortfolio: 'কাজের নমুনা দেখুন',
+    contactWhatsApp: 'WhatsApp-এ কথা বলুন',
   }
 };
 
