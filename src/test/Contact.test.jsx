@@ -39,4 +39,25 @@ describe('Bengali inquiry form', () => {
     expect(await screen.findByRole('status')).toHaveTextContent('আপনার বার্তা পেয়েছি।');
     expect(sendMessage).toHaveBeenCalledTimes(2);
   });
+  it('blocks a second submit while the first request is in flight', async () => {
+    let resolve;
+    sendMessage.mockImplementation(() => new Promise(done => { resolve = done; }));
+    openForm(); fillForm();
+    const form = screen.getByLabelText('আপনার নাম').closest('form');
+    fireEvent.submit(form); fireEvent.submit(form);
+    await waitFor(() => expect(sendMessage).toHaveBeenCalledTimes(1));
+    resolve('message-id');
+    await screen.findByRole('status');
+  });
+  it('includes optional business, budget and timeline information', async () => {
+    sendMessage.mockResolvedValue('message-id');
+    openForm(); fillForm();
+    fireEvent.change(screen.getByLabelText(/ব্যবসার নাম/), { target: { value: 'পরীক্ষামূলক প্রতিষ্ঠান' } });
+    fireEvent.change(screen.getByLabelText(/আনুমানিক বাজেট/), { target: { value: '৳১০,০০০' } });
+    fireEvent.change(screen.getByLabelText(/কবে নাগাদ প্রয়োজন/), { target: { value: 'আগামী মাসে' } });
+    fireEvent.click(screen.getByRole('button', { name: 'আপনার প্রয়োজন জানান' }));
+    await waitFor(() => expect(sendMessage).toHaveBeenCalledWith(expect.objectContaining({ company: 'পরীক্ষামূলক প্রতিষ্ঠান', budget: '৳১০,০০০', timeline: 'আগামী মাসে' })));
+    await screen.findByRole('status');
+  });
+
 });

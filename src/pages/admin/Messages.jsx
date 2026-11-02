@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase/config';
+import React, { useState, useEffect, useRef } from 'react';
+import { db, auth } from '../../firebase/config';
 import { collection, deleteDoc, doc, onSnapshot, updateDoc, writeBatch, addDoc, serverTimestamp } from 'firebase/firestore';
 import { Trash2, CheckCircle2, Circle, Search, MailOpen, MailX, Reply, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -16,6 +16,9 @@ const MessagesList = () => {
   const [replyTo, setReplyTo] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [replySending, setReplySending] = useState(false);
+  const [loadError, setLoadError] = useState('');
+  const noteDialog = useRef(null);
+  useEffect(() => { if (replyModalOpen) noteDialog.current?.showModal(); }, [replyModalOpen]);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'messages'), (snap) => {
@@ -28,7 +31,7 @@ const MessagesList = () => {
         });
       setMessages(sorted);
       setLoading(false);
-    });
+    }, () => { setLoading(false); setLoadError('Inquiries could not be loaded. Check your admin access and connection.'); });
     return () => unsub();
   }, []);
 
@@ -72,7 +75,7 @@ const MessagesList = () => {
       m.email?.toLowerCase().includes(q) ||
       m.contact?.toLowerCase().includes(q) ||
       m.service?.toLowerCase().includes(q) ||
-      m.business?.toLowerCase().includes(q) ||
+      m.company?.toLowerCase().includes(q) || m.phone?.includes(q) || m.business?.toLowerCase().includes(q) ||
       m.message?.toLowerCase().includes(q) ||
       m.project?.toLowerCase().includes(q)
     );
@@ -143,30 +146,26 @@ const MessagesList = () => {
 
   const sendReply = async () => {
     if (!replyText.trim()) {
-      toast.error('Please enter a reply message');
+      toast.error('Please enter an internal note');
       return;
     }
     setReplySending(true);
     try {
-      // Save reply to replies subcollection
-      await addDoc(collection(db, 'messages', replyTo.id, 'replies'), {
-        text: replyText,
-        sentAt: serverTimestamp(),
-        sentBy: 'admin'
+      const batch = writeBatch(db);
+      batch.set(doc(collection(db, 'messages', replyTo.id, 'notes')), {
+        text: replyText.trim(), createdAt: serverTimestamp(), createdBy: auth.currentUser.uid
       });
-      // Mark original message as read
-      await updateDoc(doc(db, 'messages', replyTo.id), {
-        read: true,
-        status: 'replied',
-        lastRepliedAt: serverTimestamp()
+      batch.update(doc(db, 'messages', replyTo.id), {
+        read: true, status: 'read', lastNote: replyText.trim(), updatedAt: serverTimestamp()
       });
-      toast.success('Reply sent successfully');
+      await batch.commit();
+      toast.success('Internal note saved. Nothing was sent to the customer.');
       setReplyModalOpen(false);
       setReplyTo(null);
       setReplyText('');
     } catch (err) {
       console.error(err);
-      toast.error('Failed to send reply');
+      toast.error('Failed to save note');
     } finally {
       setReplySending(false);
     }
@@ -199,6 +198,7 @@ const MessagesList = () => {
         </span>
       </div>
 
+      {loadError && <p role="alert">{loadError}</p>}
       {/* Search */}
       <div className="adm-filter-bar" style={{ marginBottom: '1.25rem' }}>
         <div className="adm-search-box" style={{ flex: 1 }}>
@@ -282,6 +282,7 @@ const MessagesList = () => {
                   />
                 </td>
                 <td style={{ verticalAlign: 'top' }}>
+                  <label>Lead stage<select aria-label={`Lead stage for ${m.name}`} value={m.leadStatus || 'new'} onChange={async event => { try { await updateDoc(doc(db, 'messages', m.id), { leadStatus: event.target.value, updatedAt: serverTimestamp() }); } catch { toast.error('Could not save lead stage'); } }}>{['new', 'contacted', 'proposal_sent', 'negotiation', 'won', 'lost'].map(stage => <option value={stage} key={stage}>{stage.replaceAll('_', ' ')}</option>)}</select></label>
                   <button
                     onClick={() => toggleRead(m.id, isRead(m))}
                     style={{ background: 'none', border: 'none', color: isRead(m) ? 'var(--adm-success)' : 'var(--adm-red)', cursor: 'pointer', padding: 0 }}
@@ -305,22 +306,23 @@ const MessagesList = () => {
                   {m.phone && <div style={{ fontSize: '0.8rem', color: 'var(--adm-dim)' }}>{m.phone}</div>}
                 </td>
                 <td style={{ verticalAlign: 'top' }}>
-                  <div style={{ fontWeight: '600', fontSize: '0.85rem', color: 'var(--adm-text)' }}>{m.business || 'Personal'}</div>
+                  <div style={{ fontWeight: '600', fontSize: '0.85rem', color: 'var(--adm-text)' }}>{m.company || m.business || '—'}</div>
                   <div style={{ color: 'var(--adm-red)', fontSize: '0.75rem', fontWeight: '700' }}>{m.service}</div>
+                  {m.timeline && <div>Timeline: {m.timeline}</div>}
                   {m.budget && <div style={{ fontSize: '0.75rem', color: 'var(--adm-dim)' }}>{m.budget}</div>}
                 </td>
                 <td style={{ verticalAlign: 'top' }}>
                   <p style={{ fontSize: '0.85rem', color: 'var(--adm-dim)', maxWidth: '380px', lineHeight: '1.4', margin: 0 }}>
                     {m.message || m.project}
-                  </p>
+                  </p>{m.lastNote && <p><strong>Latest internal note:</strong> {m.lastNote}</p>}
                 </td>
                 <td style={{ verticalAlign: 'top' }}>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
                       onClick={() => openReply(m)}
-                      aria-label="Reply to message"
+                      aria-label="Add internal note"
                       style={{ background: 'none', border: 'none', color: 'var(--adm-info)', cursor: 'pointer', padding: '4px' }}
-                      title="Reply"
+                      title="Internal note"
                     >
                       <Reply size={18} />
                     </button>
@@ -348,7 +350,9 @@ const MessagesList = () => {
 
       {/* Reply Modal */}
       {replyModalOpen && replyTo && (
-        <div style={{
+        <dialog ref={noteDialog} aria-label="Internal inquiry note" onCancel={() => setReplyModalOpen(false)} style={{
+          border: 0,
+          margin: 'auto',
           position: 'fixed',
           inset: 0,
           background: 'rgba(0,0,0,0.5)',
@@ -376,7 +380,7 @@ const MessagesList = () => {
               alignItems: 'center'
             }}>
               <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '700', color: 'var(--adm-text)' }}>
-                Reply to {replyTo.name}
+                Internal note: {replyTo.name}
               </h3>
               <button
                 onClick={() => setReplyModalOpen(false)}
@@ -404,12 +408,14 @@ const MessagesList = () => {
               
               <div>
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--adm-text)', marginBottom: '0.5rem' }}>
-                  Your reply
+                  Your note (visible to admins only)
                 </label>
                 <textarea
+                  maxLength={3000}
+                  aria-label="Internal note"
                   value={replyText}
                   onChange={e => setReplyText(e.target.value)}
-                  placeholder="Type your reply here..."
+                  placeholder="Record your follow-up here. This does not send an email or message."
                   style={{
                     width: '100%',
                     minHeight: '150px',
@@ -464,11 +470,11 @@ const MessagesList = () => {
                   opacity: replySending ? 0.6 : 1
                 }}
               >
-                {replySending ? 'Sending...' : 'Send Reply'}
+                {replySending ? 'Saving...' : 'Save internal note'}
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

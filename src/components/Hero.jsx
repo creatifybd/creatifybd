@@ -15,7 +15,7 @@ export default function Hero() {
           <h1 id="hero-title">{hero.title}<span>{hero.accent}</span></h1>
           <p className="cb-lead">{hero.desc}</p>
           <div className="cb-actions">
-            <Link to="/pricing" className="cb-button cb-button-red">{hero.cta1}<ArrowUpRight size={19} /></Link>
+            <Link to="/contact" className="cb-button cb-button-red">{hero.cta1}<ArrowUpRight size={19} /></Link>
             <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="cb-text-link">{hero.cta2}<ArrowUpRight size={18} /></a>
           </div>
           <ul className="cb-hero-notes" aria-label="কাজের ধরন">

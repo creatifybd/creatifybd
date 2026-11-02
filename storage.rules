@@ -3,11 +3,12 @@ service firebase.storage {
   match /b/{bucket}/o {
     function isLegacyOwner() {
       return request.auth != null && (('admin' in request.auth.token && request.auth.token.admin == true)
-        || request.auth.token.email == 'binashad7@gmail.com'
-        || request.auth.token.email == 'creatifybd@gmail.com');
+        || (request.auth.token.email_verified == true
+          && request.auth.token.email in ['binashad7@gmail.com', 'creatifybd@gmail.com']));
     }
     function isRegisteredAdmin() {
       return request.auth != null
+        && request.auth.token.email_verified == true
         && firestore.exists(/databases/(default)/documents/admins/$(request.auth.token.email));
     }
     function isAdmin() {
@@ -23,27 +24,27 @@ service firebase.storage {
       allow read: if true;
       allow write: if canEdit()
         && request.resource.size < 20 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif|avif)');
     }
 
     // ─── Payment Proof Screenshots ───────────────────────────────────────────
-    // Any unauth user can upload (client proof of payment).
+    // Retained legacy proofs: only editors can add/change files.
     // Only admin can read proof images.
     match /payment-proofs/{allPaths=**} {
       allow read: if isAdmin();
-      allow write: if request.resource.size < 5 * 1024 * 1024
-        && (request.resource.contentType.matches('image/.*')
+      allow write: if canEdit() && request.resource.size < 5 * 1024 * 1024
+        && (request.resource.contentType.matches('image/(jpeg|png|webp|gif|avif)')
           || request.resource.contentType == 'application/pdf');
     }
 
     // ─── Order Requirements Attachments ─────────────────────────────────────
-    // Client submits reference files during order onboarding (any unauthenticated upload).
+    // Retained legacy attachments; inactive public checkout must not accept uploads.
     // Admin reads them to understand project brief.
     match /order-requirements/{allPaths=**} {
       allow read: if isAdmin();
-      allow write: if request.resource.size < 10 * 1024 * 1024
+      allow write: if canEdit() && request.resource.size < 10 * 1024 * 1024
         && (
-          request.resource.contentType.matches('image/.*')
+          request.resource.contentType.matches('image/(jpeg|png|webp|gif|avif)')
           || request.resource.contentType == 'application/pdf'
           || request.resource.contentType == 'application/zip'
           || request.resource.contentType.matches('application/.*word.*')
@@ -68,7 +69,7 @@ service firebase.storage {
       allow read: if true;
       allow write: if canEdit()
         && request.resource.size < 10 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif|avif)');
     }
 
     // ─── Fallback deny ───────────────────────────────────────────────────────

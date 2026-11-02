@@ -4,6 +4,10 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  # Deny legacy exports even when old FTP files remain on disk.
+  RewriteRule ^(?:data|private|backups)(?:/|$) - [F,L,NC]
+  RewriteRule (?:^|/)(?:leads_[^/]*\.json|.*\.(?:xlsx|csv|sql|bak|env))$ - [F,L,NC]
+  RewriteRule ^privacy-policy(?:\.html|/)?$ /privacy [R=301,L]
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
@@ -40,6 +44,8 @@ ErrorDocument 404 /404.html
   <FilesMatch "-[A-Za-z0-9_-]{8,}\.(js|css)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
