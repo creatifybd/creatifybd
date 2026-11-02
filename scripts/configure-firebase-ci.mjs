@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 if (!process.env.RUNNER_TEMP || !process.env.GITHUB_ENV || !process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  throw new Error('Configure the protected FIREBASE_SERVICE_ACCOUNT_JSON deployment secret before publishing. No Hostinger upload has started.');
+  throw new Error('Configure the protected FIREBASE_SERVICE_ACCOUNT_JSON deployment secret before publishing. Full website publication and Firestore sync have not started. The separate data-directory containment step may already have blocked legacy public datasets.');
 }
 const account = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 if (account.project_id !== 'creatify-bd') throw new Error('The Firebase credential belongs to a different project.');

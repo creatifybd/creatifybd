@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
-  signOut 
+import {
+  onIdTokenChanged,
+  signInWithEmailAndPassword,
+  signOut
 } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
     let unsubscribe = () => {};
     try {
-      unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      unsubscribe = onIdTokenChanged(auth, async (currentUser) => {
         window.clearTimeout(timeoutId);
         setUser(currentUser);
         setLoading(false);
@@ -51,19 +51,20 @@ export const AuthProvider = ({ children }) => {
 
         setRoleLoading(true);
         try {
+          const claims = (await currentUser.getIdTokenResult()).claims;
+          if (!currentUser.emailVerified && claims.admin !== true) { setRole(null); return; }
           const email = (currentUser.email || '').toLowerCase();
           const adminSnap = await getDoc(doc(db, 'admins', email));
           if (adminSnap.exists()) {
             setRole(adminSnap.data().role || 'editor');
-          } else if (LEGACY_OWNER_EMAILS.includes(email)) {
+          } else if (claims.admin === true || LEGACY_OWNER_EMAILS.includes(email)) {
             setRole('owner');
           } else {
             setRole(null);
           }
         } catch (err) {
           if (import.meta.env.DEV) console.error('Failed to resolve admin role:', err);
-          const email = (currentUser.email || '').toLowerCase();
-          setRole(LEGACY_OWNER_EMAILS.includes(email) ? 'owner' : null);
+          setRole(null); // Fail closed; never grant owner access after a failed role lookup.
         } finally {
           setRoleLoading(false);
         }

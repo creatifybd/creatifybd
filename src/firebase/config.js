@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
@@ -88,11 +87,8 @@ if (typeof window !== 'undefined') {
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// Analytics (with support check)
-let analytics = null;
-isSupported().then(yes => {
-  if (yes) analytics = getAnalytics(app);
-});
+// Analytics remains disabled until an explicit consent/measurement workflow exists.
+const analytics = null;
 
 export { db, auth, storage, analytics };
 export default app;

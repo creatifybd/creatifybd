@@ -1,70 +1,7 @@
 import React from 'react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import SEO from '../../components/SEO';
 import usePageSEO from '../../hooks/usePageSEO';
-
-const PolicyLayout = ({ title, seoDescription, lastUpdated, children }) => (
-  <div className="policy-page-shell">
-    <SEO title={`${title} | CreatifyBD`} description={seoDescription} />
-    <Navbar />
-    <main id="main-content" className="container" style={{ maxWidth: '780px', margin: '0 auto', padding: '4rem 0 5rem' }}>
-      <div className="policy-header">
-        <h1>{title}</h1>
-        <p className="last-updated">সর্বশেষ আপডেট: {lastUpdated}</p>
-      </div>
-      <div className="policy-body">{children}</div>
-    </main>
-    <Footer />
-    <style>{`
-      .policy-page-shell {
-        min-height: 100vh;
-        background: var(--surface);
-        color: var(--ink);
-      }
-
-      .policy-header {
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid var(--border);
-      }
-      .policy-header h1 {
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        font-weight: 900;
-        color: var(--ink);
-        margin-bottom: 0.5rem;
-      }
-      .last-updated {
-        font-size: 0.85rem;
-        color: var(--ink-soft);
-      }
-      .policy-body h2 {
-        font-size: 1.3rem;
-        font-weight: 800;
-        color: var(--ink);
-        margin: 2.5rem 0 1rem;
-      }
-      .policy-body p, .policy-body li {
-        color: var(--ink-soft);
-        font-size: 0.95rem;
-        line-height: 1.7;
-        margin-bottom: 0.75rem;
-      }
-      .policy-body ul {
-        padding-left: 1.5rem;
-        margin-bottom: 1rem;
-      }
-      .policy-body a {
-        color: var(--brand-red);
-        text-decoration: underline;
-      }
-      .policy-body strong {
-        color: var(--ink);
-        font-weight: 700;
-      }
-    `}</style>
-  </div>
-);
+import PolicyLayout from './PolicyLayout';
+import release from '../../data/publishedRelease.json';
 
 export const PrivacyPolicyPage = () => {
   const seo = usePageSEO('privacy', {
@@ -75,7 +12,8 @@ export const PrivacyPolicyPage = () => {
     <PolicyLayout
       title={seo.title}
       seoDescription={seo.description}
-      lastUpdated="জানুয়ারি ২০২৬"
+      lastUpdated="২ নভেম্বর ২০২৬"
+      canonical="https://creatifybd.com/privacy"
     >
       <p>CreatifyBD ("আমরা", "আমাদের") <strong>creatifybd.com</strong> ওয়েবসাইটটি পরিচালনা করে। এই গোপনীয়তা নীতিমালায় ব্যাখ্যা করা হয়েছে যে আপনি যখন আমাদের ওয়েবসাইট ব্যবহার করেন বা আমাদের সার্ভিস নেন, তখন আমরা কীভাবে আপনার তথ্য সুরক্ষিত রাখি।</p>
 
@@ -84,7 +22,7 @@ export const PrivacyPolicyPage = () => {
       <ul>
         <li>আপনার নাম, ইমেইল, ফোন/হোয়াটসঅ্যাপ নম্বর ও প্রতিষ্ঠানের নাম।</li>
         <li>প্রজেক্ট রিকোয়ারমেন্ট এবং ডিজাইনের প্রয়োজনীয় ফাইল বা ব্রিফ।</li>
-        <li>ওয়েবসাইটের ইউজার এক্সপেরিয়েন্স উন্নয়নের জন্য মৌলিক অ্যানালিটিক্স তথ্য।</li>
+        <li>সাইটের নিরাপত্তা ও পরিচালনার জন্য hosting বা backend সেবায় তৈরি হওয়া প্রযুক্তিগত লগ।</li>
       </ul>
 
       <h2>২. তথ্যের ব্যবহার</h2>
@@ -95,10 +33,14 @@ export const PrivacyPolicyPage = () => {
       </ul>
 
       <h2>৩. তথ্যের সুরক্ষা ও গোপনীয়তা</h2>
-      <p>আমরা <strong>কখনোই আপনার ব্যক্তিগত তথ্য কোনো তৃতীয় পক্ষের কাছে বিক্রি বা অপব্যবহার করি না</strong>। আপনার সমস্ত ফাইল এবং ব্যবসায়িক তথ্য সম্পূর্ণ সুরক্ষিত রাখা হয়।</p>
+      <p>আমরা <strong>কখনোই আপনার ব্যক্তিগত তথ্য কোনো তৃতীয় পক্ষের কাছে বিক্রি বা অপব্যবহার করি না</strong>। ওয়েবসাইটের তথ্য সংরক্ষণ ও অ্যাকাউন্ট পরিচালনায় Firebase এবং সাইট পরিবেশনায় Hostinger ব্যবহার করা হয়। অনুমোদিত ব্যক্তির কাজের প্রয়োজন অনুযায়ী তথ্য ব্যবহারের ব্যবস্থা রাখা হয়। কোনো অনলাইন ব্যবস্থার নিরাপত্তা শতভাগ নিশ্চিত করা যায় না।</p>
 
-      <h2>৪. যোগাযোগ</h2>
-      <p>গোপনীয়তা নীতিমালা সংক্রান্ত যেকোনো তথ্যের জন্য আমাদের ইমেইল করুন <a href="mailto:hello@creatifybd.com">hello@creatifybd.com</a> অথবা সরাসরি <a href="/contact">যোগাযোগ পেজে</a> আসুন।</p>
+      <h2>৪. তথ্য রাখা ও সংশোধনের অনুরোধ</h2>
+      <p>যোগাযোগ, চলমান কাজ, হিসাব ও প্রযোজ্য বাধ্যবাধকতার প্রয়োজন অনুযায়ী তথ্য রাখা হয়। সব ধরনের তথ্যের জন্য এক নির্দিষ্ট স্বয়ংক্রিয় মুছে ফেলার সময়সূচি বর্তমানে নেই। আপনার তথ্য দেখা, ভুল সংশোধন বা মুছে ফেলার অনুরোধ যোগাযোগের মাধ্যমে জানাতে পারেন। পরিচয় ও অনুরোধের প্রযোজ্যতা যাচাই করে ব্যবস্থা নেওয়া হবে; প্রয়োজনীয় হিসাব বা চলমান বিরোধের তথ্য রাখা লাগতে পারে।</p>
+      <h2>৫. বাইরের সেবা ও সংবেদনশীল তথ্য</h2>
+      <p>WhatsApp, ইমেইল বা বাইরের লিংক ব্যবহার করলে সেই সেবার নিজস্ব গোপনীয়তার শর্ত প্রযোজ্য। যোগাযোগের ফর্মে পাসওয়ার্ড, OTP, কার্ডের তথ্য বা পরিচয়পত্রের কপি পাঠাবেন না। প্রকল্পের জন্য কোনো গোপন ফাইল প্রয়োজন হলে আগে নিরাপদ বিনিময়ের পদ্ধতি ঠিক করুন।</p>
+      <h2>৬. যোগাযোগ</h2>
+      <p>গোপনীয়তা নীতিমালা সংক্রান্ত যেকোনো তথ্যের জন্য আমাদের ইমেইল করুন <a href={`mailto:${release.site.email}`}>{release.site.email}</a> অথবা সরাসরি <a href="/contact">যোগাযোগ পেজে</a> আসুন।</p>
     </PolicyLayout>
   );
 };
@@ -112,7 +54,7 @@ export const TermsPage = () => {
     <PolicyLayout
       title={seo.title}
       seoDescription={seo.description}
-      lastUpdated="জানুয়ারি ২০২৬"
+      lastUpdated="২ নভেম্বর ২০২৬"
     >
       <p>CreatifyBD-এর সার্ভিস গ্রহণ করার মাধ্যমে আপনি নিচের শর্তাবলীতে সম্মতি জানাচ্ছেন। অনুগ্রহ করে শর্তগুলো মনোযোগ দিয়ে পড়ুন।</p>
 
@@ -126,14 +68,20 @@ export const TermsPage = () => {
         <li>যেকোনো প্রচলিত স্থানীয় ব্যাংক বা মোবাইল ব্যাংকিং (বিকাশ/নগদ) এর মাধ্যমে পেমেন্ট সম্পন্ন করা যায়।</li>
       </ul>
 
+      <p>পেমেন্টের আগে লিখিত প্রস্তাব, অগ্রিমের পরিমাণ, বাকি টাকা দেওয়ার সময় এবং প্রাপকের পরিচয় মিলিয়ে নিন। ওয়েবসাইটে কোনো অপরিচিত ব্যক্তির পাঠানো payment request গ্রহণ করবেন না।</p>
+
       <h2>৩. মেধাস্বত্ব ও কপিরাইট</h2>
       <p>প্রজেক্টের সম্পূর্ণ পেমেন্ট সম্পন্ন হওয়ার পর ডেলিভারিকৃত ডিজাইনের পূর্ণ বাণিজ্যিক মালিকানা ক্লায়েন্টের কাছে ন্যস্ত হবে। ক্লায়েন্টের বিশেষ আপত্তি না থাকলে CreatifyBD তাদের পোর্টফোলিওতে কাজের নমুনা প্রদর্শন করতে পারবে।</p>
+
+      <p>Editable/source file, তৃতীয় পক্ষের font, ছবি, music এবং অন্য licensed asset-এর তালিকা ও ব্যবহারাধিকার প্রস্তাবে স্পষ্ট করুন। অন্যের মালিকানাধীন উপকরণের নিজস্ব license শর্ত থাকে।</p>
 
       <h2>৪. ক্লায়েন্টের দায়িত্ব</h2>
       <ul>
         <li>কাজের জন্য প্রয়োজনীয় সঠিক ব্রিফ ও তথ্য সময়মতো সরবরাহ করা।</li>
-        <li>ডিজাইন ড্রাফট পাওয়ার পর দ্রুত ফিডব্যাক প্রদান করা।</li>
+        <li>ডিজাইন ড্রাফট পাওয়ার পর একসঙ্গে সুস্পষ্ট ফিডব্যাক প্রদান করা এবং চূড়ান্ত বানান, তথ্য ও মাপ যাচাই করা।</li>
       </ul>
+      <h2>৫. কাজের পরিধি ও মতভেদ</h2>
+      <p>অতিরিক্ত পেজ, নতুন ডিজাইন বা অনুমোদিত ধারণার বাইরে কাজ প্রয়োজন হলে তার মূল্য ও সময় আগে লিখিতভাবে ঠিক করুন। কোনো সমস্যা হলে প্রস্তাব, payment reference এবং সংশ্লিষ্ট কাজের বিবরণ দিয়ে যোগাযোগ করুন, যাতে বিষয়টি যাচাই করা যায়। এই পাতার তথ্য প্রযোজ্য আইনি অধিকার বাতিল করার দাবি করে না।</p>
     </PolicyLayout>
   );
 };
@@ -147,7 +95,7 @@ export const RefundPolicyPage = () => {
     <PolicyLayout
       title={seo.title}
       seoDescription={seo.description}
-      lastUpdated="জানুয়ারি ২০২৬"
+      lastUpdated="২ নভেম্বর ২০২৬"
     >
       <p>আমরা প্রতিটি ক্লায়েন্টকে সেরা ক্রিয়েটিভ কোয়ালিটি দিতে প্রতিশ্রুতিবদ্ধ। রিফান্ড সংক্রান্ত নিয়মাবলী নিচে উল্লেখ করা হলো:</p>
 
@@ -159,12 +107,14 @@ export const RefundPolicyPage = () => {
 
       <h2>২. যেক্ষেত্রে রিফান্ড প্রযোজ্য নয়</h2>
       <ul>
-        <li>কাজ অলরেডি শুরু হয়ে গেলে বা ড্রাফট কনসেপ্ট ডেলিভারি হওয়ার পর।</li>
+        <li>কাজ শুরু হয়ে গেলে বা ড্রাফট কনসেপ্ট ডেলিভারি হওয়ার পর।</li>
         <li>ফাইনাল ফাইল ক্লায়েন্ট গ্রহণ এবং অনুমোদন করার পর।</li>
       </ul>
 
-      <h2>৩. যোগাযোগ</h2>
-      <p>রিফান্ড সংক্রান্ত যেকোনো আলোচনার জন্য আমাদের <a href="mailto:hello@creatifybd.com">hello@creatifybd.com</a> এ ইমেইল করুন অথবা আমাদের হোয়াটসঅ্যাপে যোগাযোগ করুন।</p>
+      <h2>৩. অনুরোধের সঙ্গে যা জানাবেন</h2>
+      <p>কাজের নাম, সম্মত সময়সীমা, payment reference এবং বাতিল বা রিফান্ড চাওয়ার কারণ পাঠান। পূর্ণ payment credentials বা OTP পাঠাবেন না। অনুরোধ যাচাইয়ের পর প্রযোজ্য শর্ত ও পরবর্তী ধাপ জানানো হবে।</p>
+      <h2>৪. যোগাযোগ</h2>
+      <p>রিফান্ড সংক্রান্ত যেকোনো আলোচনার জন্য আমাদের <a href={`mailto:${release.site.email}`}>{release.site.email}</a> এ ইমেইল করুন অথবা আমাদের হোয়াটসঅ্যাপে যোগাযোগ করুন।</p>
     </PolicyLayout>
   );
 };
@@ -178,7 +128,7 @@ export const RevisionPolicyPage = () => {
     <PolicyLayout
       title={seo.title}
       seoDescription={seo.description}
-      lastUpdated="জানুয়ারি ২০২৬"
+      lastUpdated="২ নভেম্বর ২০২৬"
     >
       <p>আমরা বিশ্বাস করি সুন্দর ক্রিয়েটিভ কাজ পারস্পরিক সহযোগিতার মাধ্যমে তৈরি হয়। আপনার সন্তুষ্টি অর্জনে আমাদের রিভিশন নীতিমালা অত্যন্ত সহযোগিতাপূর্ণ।</p>
 
@@ -186,16 +136,17 @@ export const RevisionPolicyPage = () => {
       <ul>
         <li>কালার, ফন্ট বা টাইপোগ্রাফির পরিবর্তন।</li>
         <li>টেক্সট বা বানান সংশোধন।</li>
-        <li>লেআউট এবং অ্যালাইনমেন্ট অ্যাডজাস্টমেন্ট।</li>
+        <li>লেআউট এবং অ্যালাইনমেন্ট ঠিক করা।</li>
         <li>একই কনসেপ্টের মধ্যে ছোটখাটো ছবি বা এলিমেন্ট অদলবদল।</li>
       </ul>
 
       <h2>২. যা রিভিশন হিসেবে গণ্য হবে না</h2>
       <ul>
-        <li>কনসেপ্ট সম্পূর্ণ অ্যাপ্রুভ করার পর সম্পূর্ণ ভিন্ন নতুন কনসেপ্ট দাবি করা।</li>
+        <li>কনসেপ্ট সম্পূর্ণ অনুমোদন করার পর সম্পূর্ণ ভিন্ন নতুন কনসেপ্ট দাবি করা।</li>
         <li>মূল রিকোয়ারমেন্টের বাইরে অতিরিক্ত কাজ যুক্ত করা।</li>
       </ul>
 
+      <p>কত দফা সংশোধন অন্তর্ভুক্ত, কে feedback অনুমোদন করবেন এবং অতিরিক্ত কাজের মূল্য কত হবে, তা প্রস্তাবে লিখে নিন। একই ড্রাফটের feedback একসঙ্গে দিলে অসামঞ্জস্য কমে।</p>
       <h2>৩. রিভিশন পাওয়ার সময়সীমা</h2>
       <p>সাধারণ রিভিশনগুলো সাধারণত ১–২ কর্মদিবসের মধ্যে সম্পন্ন করে ডেলিভারি দেওয়া হয়।</p>
     </PolicyLayout>

@@ -10,6 +10,8 @@ import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
+import BusinessGuide from '../components/BusinessGuide';
+import FAQ from '../components/FAQ';
 import { useSettings } from '../context/SettingsContext';
 import { siteConfig } from '../config/siteConfig';
 
@@ -20,11 +22,13 @@ export default function Home() {
   return <div className="cb-page"><SEO title={siteConfig.seo.defaultTitle} description={siteConfig.seo.defaultDescription} schema={schema} /><Navbar /><main id="main-content">
     {show('hero') && <Hero />}
     {show('portfolio') && <Portfolio highlight />}
+    {show('services') && <Services />}
+    <BusinessGuide />
     {show('pricing') && <Pricing />}
     {show('process') && <Process />}
-    {show('services') && <Services />}
     {show('about_trust') && <AboutTrust />}
     {show('testimonials') && <Testimonials />}
+    <FAQ />
     {show('contact') && <Contact />}
   </main><Footer /></div>;
 }

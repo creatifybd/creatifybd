@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Lock, Mail, ArrowRight, Shield, Sparkles, ArrowLeft } from 'lucide-react';
 import SEO from '../components/SEO';
+import { sendEmailVerification, reload } from 'firebase/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,17 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user, role, roleLoading } = useAuth();
+  const [notice, setNotice] = useState('');
+  useEffect(() => { if (role && !roleLoading) navigate('/admin'); }, [role, roleLoading, navigate]);
+  const verifyEmail = async (refresh = false) => {
+    setIsSubmitting(true); setError('');
+    try {
+      if (refresh) { await reload(user); await user.getIdToken(true); setNotice(user.emailVerified ? 'Email verified. Checking admin access…' : 'Verification is not complete yet. Open the link in your inbox first.'); }
+      else { await sendEmailVerification(user); setNotice('Verification email sent. Open its link, then check verification here.'); }
+    } catch { setError('Could not complete verification. Please wait and try again.'); }
+    finally { setIsSubmitting(false); }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,8 +29,8 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
-      navigate('/admin');
+      const result = await login(email.trim(), password);
+      setNotice(result.user.emailVerified ? 'Signed in. Checking admin access…' : 'Verify your email before accessing the admin dashboard.');
     } catch (err) {
       console.error('Login error:', err);
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
@@ -146,6 +157,9 @@ const Login = () => {
             </div>
           )}
 
+          {notice && <p role="status" style={{ color: '#374151' }}>{notice}</p>}
+          {user && !user.emailVerified && <div style={{ color: '#374151', marginBottom: '1rem' }}><p>Admin access requires a verified email address.</p><button type="button" disabled={isSubmitting} onClick={() => verifyEmail()}>Send verification email</button> <button type="button" disabled={isSubmitting} onClick={() => verifyEmail(true)}>Check verification</button></div>}
+          {user?.emailVerified && !roleLoading && !role && <p role="alert" style={{ color: '#c4101f' }}>This account does not have admin access. Contact the business owner.</p>}
           <form onSubmit={handleLogin} style={{ width: '100%' }}>
             {/* Email Field */}
             <div style={{ marginBottom: '1.25rem' }}>

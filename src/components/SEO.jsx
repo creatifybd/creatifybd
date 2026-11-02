@@ -39,6 +39,7 @@ const SEO = ({
         <meta name="robots" content="noindex, nofollow" />
       )}
 
+      <meta property="og:locale" content="bn_BD" />
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
@@ -59,7 +60,7 @@ const SEO = ({
       {/* Dynamic JSON-LD Schema */}
       {schema && (
         <script type="application/ld+json">
-          {JSON.stringify(schema)}
+          {JSON.stringify(schema).replace(/</g, '\u003c')}
         </script>
       )}
     </Helmet>

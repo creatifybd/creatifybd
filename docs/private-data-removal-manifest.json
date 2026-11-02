@@ -1,0 +1,44 @@
+[
+  {
+    "path": "public/data/leads_4.json",
+    "bytes": 4334330,
+    "sha256": "3a29f91e86db4e3634fc297416f71c7fd6de149ca41c29f50b2ccf37f3d50bb2",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "public/data/leads_3.json",
+    "bytes": 4622681,
+    "sha256": "a1f2bea9c7f62f21f32d263957ef5c90e737476bbc6c1414a02fb53202ebee97",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "public/data/manifest.json",
+    "bytes": 116,
+    "sha256": "f01157a20c9342ab100a600124e80dec395910f40a7dc8e13f84b5050259ffbc",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "public/data/leads_2.json",
+    "bytes": 3930248,
+    "sha256": "37b034112771fdd2b13049e0eb84e7be17c01b1dda6d9841782c93b8e0212761",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "public/data/leads_5.json",
+    "bytes": 3834497,
+    "sha256": "32aed6e376a75958072480a421f7b7f6648629b2b157225a279c7ded9f781761",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "public/data/leads_1.json",
+    "bytes": 4205325,
+    "sha256": "6df6aedfea6e149a68e00e187f4a7e463549054c791a2e91c050fcc20c0aa124",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  },
+  {
+    "path": "Combined_International_Leads.xlsx",
+    "bytes": 14109450,
+    "sha256": "33c00383e4340526326ba649b8b89516961df686776e9cd66a7f0995f0b68f2f",
+    "retainedAtCommit": "f75a5b7631afa8e0f85dbfe25bc5325f1d9f5704"
+  }
+]

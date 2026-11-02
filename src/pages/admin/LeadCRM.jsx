@@ -27,7 +27,7 @@ const STATUS_OPTIONS = [
 ];
 
 const ITEMS_PER_PAGE = 25;
-const HARDCODED_CHUNKS = ['leads_1.json', 'leads_2.json', 'leads_3.json', 'leads_4.json', 'leads_5.json'];
+
 
 const LeadCRM = () => {
   const [leads, setLeads] = useState([]);
@@ -140,64 +140,19 @@ const LeadCRM = () => {
     } catch (e) { console.error('Failed to save leadAudits locally', e); }
   }, [leadAudits]);
 
-  // Progressive Lead Dataset Loading
+  // CRM records come only from the authenticated Firestore collection.
+  // Historical public exports are quarantined; never fall back to static files.
   useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    const loadDataset = async () => {
-      let chunksToFetch = HARDCODED_CHUNKS;
-      try {
-        const cacheBuster = '?v=' + Date.now();
-        const manifestRes = await fetch('/data/manifest.json' + cacheBuster);
-        if (manifestRes.ok) {
-          const manifest = await manifestRes.json();
-          if (Array.isArray(manifest.chunks) && manifest.chunks.length > 0) {
-            chunksToFetch = manifest.chunks;
-          }
-        }
-      } catch {
-        console.warn('Manifest fetch skipped, using default chunks');
-      }
-
-      let allAccumulated = [];
-      let successCount = 0;
-
-      for (let i = 0; i < chunksToFetch.length; i++) {
-        const chunkFile = chunksToFetch[i];
-        try {
-          const cacheBuster = '?v=' + Date.now();
-          const res = await fetch(`/data/${chunkFile}` + cacheBuster);
-          if (res.ok) {
-            const rawText = await res.text();
-            const sanitizedText = rawText.replace(/:\s*NaN\b/g, ':""');
-            const data = JSON.parse(sanitizedText);
-            
-            if (isMounted && Array.isArray(data)) {
-              allAccumulated = [...allAccumulated, ...data];
-              setLeads([...allAccumulated]);
-              successCount++;
-              setLoadedChunkCount(successCount);
-              if (i === 0) setLoading(false);
-            }
-          }
-        } catch (err) {
-          console.error(`Failed loading chunk ${chunkFile}:`, err);
-        }
-      }
-
-      if (isMounted) {
-        setLoading(false);
-        if (allAccumulated.length === 0) {
-          setError('Failed to load leads dataset. Please refresh or check connection.');
-        } else {
-          setError('');
-        }
-      }
-    };
-
-    loadDataset();
-    return () => { isMounted = false; };
+    let active = true;
+    fetchAllLeadRecordsFromFirestore().then(records => {
+      if (!active) return;
+      setLeads(Object.values(records));
+      setLoadedChunkCount(1);
+      setLoading(false);
+    }).catch(() => {
+      if (active) { setError('CRM লোড হয়নি। অ্যাক্সেস যাচাই করে আবার চেষ্টা করুন।'); setLoading(false); }
+    });
+    return () => { active = false; };
   }, []);
 
   // Filter lists

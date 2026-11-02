@@ -46,3 +46,13 @@ firebase-service-account.json
 # Generated deployment staging
 deploy-assets/
 deploy-pages/
+
+# Private CRM exports must never enter source or public builds.
+public/data/*.json
+*Leads*.xlsx
+private/
+backups/
+
+.production-backup/
+.production-verification/
+qa-preview.html

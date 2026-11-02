@@ -24,15 +24,18 @@ before(async () => {
 });
 after(async () => env?.cleanup());
 const visitor = () => env.unauthenticatedContext().firestore();
-const account = role => env.authenticatedContext(`test-${role}`, { email: `${role}@example.test` });
+const account = role => env.authenticatedContext(`test-${role}`, { email: `${role}@example.test`, email_verified: true });
 test('visitors may submit a valid inquiry without email, but cannot read messages', async () => {
-  const data = { name: 'আলিফ', phone: '01712345678', email: '', message: 'কাজের ব্যাপারে আলোচনা করতে চাই।', status: 'unread', read: false };
+  const data = { name: 'আলিফ', phone: '01712345678', email: '', message: 'কাজের ব্যাপারে আলোচনা করতে চাই।', status: 'unread', read: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp() };
   await assertSucceeds(setDoc(doc(visitor(), 'messages', 'valid-inquiry'), data));
   await assertFails(setDoc(doc(visitor(), 'messages', 'bad-phone'), { ...data, phone: 'invalid' }));
+  await assertFails(setDoc(doc(visitor(), 'messages', 'oversized-field'), { ...data, company: 'a'.repeat(151) }));
+  await assertFails(setDoc(doc(visitor(), 'messages', 'injected-field'), { ...data, adminNote: 'not allowed' }));
+  await assertFails(setDoc(doc(visitor(), 'messages', 'invalid-bd-mobile'), { ...data, phone: '01112345678' }));
   await assertFails(getDocs(collection(visitor(), 'messages')));
 });
-test('newsletter is create-only and does not expose addresses', async () => {
-  await assertSucceeds(setDoc(doc(visitor(), 'subscribers', 'new-subscriber'), { email: 'hello@example.test', status: 'pending', consent: true, subscribedAt: serverTimestamp() }));
+test('inactive newsletter does not collect or expose addresses', async () => {
+  await assertFails(setDoc(doc(visitor(), 'subscribers', 'new-subscriber'), { email: 'hello@example.test', status: 'pending', consent: true, subscribedAt: serverTimestamp() }));
   await assertFails(getDocs(collection(visitor(), 'subscribers')));
   await assertFails(updateDoc(doc(visitor(), 'subscribers', 'new-subscriber'), { status: 'active' }));
   await assertFails(setDoc(doc(visitor(), 'subscribers', 'extra-field'), { email: 'hello@example.test', status: 'pending', consent: true, subscribedAt: serverTimestamp(), admin: true }));
@@ -47,6 +50,15 @@ test('roles protect drafts, CRM and immutable publication records', async () => 
   await assertFails(getDoc(doc(visitor(), 'settings', 'payment')));
   await assertFails(getDoc(doc(visitor(), 'settings', 'site')));
   await assertFails(getDocs(collection(visitor(), 'orders')));
+  await assertFails(getDoc(doc(visitor(), 'orders', 'private-test-order')));
+  await assertFails(updateDoc(doc(visitor(), 'orders', 'private-test-order'), { status: 'completed' }));
+  await assertSucceeds(getDoc(doc(account('editor').firestore(), 'orders', 'private-test-order')));
+  await assertFails(getDocs(collection(visitor(), 'reviews')));
+  await assertFails(getDocs(collection(visitor(), 'portfolio_delivered')));
+  const unverified = env.authenticatedContext('unverified', { email: 'editor@example.test', email_verified: false }).firestore();
+  await assertFails(getDocs(collection(unverified, 'lead_crm')));
+  const unverifiedOwner = env.authenticatedContext('unverified-owner', { email: 'binashad7@gmail.com', email_verified: false }).firestore();
+  await assertFails(getDocs(collection(unverifiedOwner, 'orders')));
 });
 test('storage editors can upload; viewers and visitors cannot upload portfolio work', async () => {
   const png = new Uint8Array([137, 80, 78, 71]);
@@ -54,6 +66,18 @@ test('storage editors can upload; viewers and visitors cannot upload portfolio w
   await assertFails(uploadBytes(ref(account('viewer').storage(), 'portfolio/viewer.png'), png, { contentType: 'image/png' }));
   await assertFails(uploadBytes(ref(env.unauthenticatedContext().storage(), 'portfolio/visitor.png'), png, { contentType: 'image/png' }));
   await assertFails(uploadBytes(ref(account('editor').storage(), 'portfolio/script.js'), png, { contentType: 'text/javascript' }));
+  await assertFails(uploadBytes(ref(account('editor').storage(), 'portfolio/active.svg'), png, { contentType: 'image/svg+xml' }));
+  await assertFails(uploadBytes(ref(env.unauthenticatedContext().storage(), 'payment-proofs/anonymous.png'), png, { contentType: 'image/png' }));
+  await assertFails(uploadBytes(ref(env.unauthenticatedContext().storage(), 'order-requirements/anonymous.png'), png, { contentType: 'image/png' }));
+});
+
+
+test('internal notes are authenticated admin records, not outbound messages', async () => {
+  const data = { text: 'Controlled test note', createdAt: serverTimestamp(), createdBy: 'test-editor' };
+  await assertSucceeds(setDoc(doc(account('editor').firestore(), 'messages', 'valid-inquiry', 'notes', 'note-1'), data));
+  await assertFails(getDocs(collection(visitor(), 'messages', 'valid-inquiry', 'notes')));
+  await assertFails(setDoc(doc(account('viewer').firestore(), 'messages', 'valid-inquiry', 'notes', 'note-2'), { ...data, createdBy: 'test-viewer' }));
+  await assertFails(setDoc(doc(account('editor').firestore(), 'messages', 'valid-inquiry', 'notes', 'forged-author'), { ...data, createdBy: 'another-user' }));
 });
 
 test('publication backs up, archives, stays idempotent and preserves unrelated records', async () => {

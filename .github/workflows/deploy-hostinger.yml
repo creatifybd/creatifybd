@@ -26,6 +26,25 @@ jobs:
           distribution: temurin
           java-version: '21'
       - run: npm ci
+      # A missing Firebase credential must not leave legacy public lead files
+      # exposed. This limited action writes only a deny rule, never datasets.
+      - name: Contain legacy public lead data
+        run: node scripts/hostinger-ops.mjs contain
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - name: Preserve original data-directory access rule
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: containment-backup-${{ github.sha }}-${{ github.run_attempt }}
+          path: .production-backup/contain/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Verify private datasets are no longer publicly accessible
+        run: node scripts/verify-live.mjs --containment-only
       - run: npm run content:validate
       - run: npm test -- --run
       - run: npm run test:rules
@@ -51,6 +70,20 @@ jobs:
         run: node scripts/configure-firebase-ci.mjs
         env:
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      - name: Back up current public pages before full publication
+        run: node scripts/hostinger-ops.mjs backup
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - name: Preserve rollback pages and checksum manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-pages-before-${{ github.sha }}-${{ github.run_attempt }}
+          path: .production-backup/backup/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
       - run: npm run content:prepare
       - name: Check the database plan before upload
         run: npm run content:plan
@@ -65,7 +98,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           protocol: ftps
-          security: loose
+          security: strict
           local-dir: ./deploy-assets/
           server-dir: /public_html/
           state-name: .creatifybd-assets-${{ github.sha }}.json
@@ -79,14 +112,24 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           protocol: ftps
-          security: loose
+          security: strict
           local-dir: ./deploy-pages/
           server-dir: /public_html/
           state-name: .creatifybd-pages.json
           dangerous-clean-slate: false
           timeout: 180000
+      - name: Verify deployed release, metadata, routes and data containment
+        run: node scripts/verify-live.mjs
       - name: Verify every live route, back up records and synchronize Firestore
         run: npm run sync:firebase -- --apply
+      - name: Keep public verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-verification-${{ github.sha }}-${{ github.run_attempt }}
+          path: .production-verification/
+          if-no-files-found: ignore
+          retention-days: 30
       - name: Remove temporary deployment credential
         if: always()
         run: node -e "const fs=require('fs'); const p=process.env.GOOGLE_APPLICATION_CREDENTIALS; if(p)fs.rmSync(p,{force:true});"
